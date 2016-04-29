@@ -63,5 +63,6 @@ Gmail Desktop is built with [Electron](https://github.com/electron/electron).
   ```
 
 ## To-Do
-- [ ] Multi Gmail Accounts.
-- [ ] Adjust UI so OS X window buttons don't overlay Google Logo.
+- [ ] Multi Gmail Accounts.
+- [ ] Adjust UI so OS X window buttons don't overlay Google Logo.
+- [ ] Add Auto Updater.
