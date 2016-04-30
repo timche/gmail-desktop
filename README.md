@@ -27,19 +27,13 @@
 ## Development
 Gmail Desktop is built with [Electron](https://github.com/electron/electron).
 
-1. **Clone this repository:**
-
-  ```bash
-  $ git clone git@github.com:timche/gmail-desktop.git
-  $ cd gmail-desktop
-  ```
-1. **Install npm dependencies:**
+#### Commands
+- **Install npm dependencies:**
 
   ```bash
   $ npm install
   ```
-
-#### Commands
+  
 - **Run the app:**
 
   ```bash
@@ -68,3 +62,6 @@ Gmail Desktop is built with [Electron](https://github.com/electron/electron).
 - [ ] Multi Gmail Accounts.
 - [ ] Adjust UI so OS X window buttons don't overlay Google Logo.
 - [ ] Add Auto Updater.
+
+## Contributing
+Feel free to send pull requests :)
