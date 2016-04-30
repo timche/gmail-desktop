@@ -7,8 +7,9 @@
 ![Gmail Desktop Screenshot](.github/screenshot.png)
 
 **Features:**
+- Original Gmail Interface
 - Native Notifications
-- Unread Count Badge (OS X only)
+- Unread Inbox Count (OS X only)
 
 **Supported OS:**
 - [x] OS X 10.9+
