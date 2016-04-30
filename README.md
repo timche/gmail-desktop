@@ -7,12 +7,16 @@
 
 ![Gmail Desktop Screenshot](.github/screenshot.png)
 
-**Features:**
-- Original Gmail Interface
-- Native Notifications
-- Unread Inbox Count (OS X only)
+## Why?
+If you like the simple interface of Gmail and aren't satisfied with any mail apps out there, then Gmail Desktop is the right app for you. It's just a wrapper around the Gmail website with some magic from Electron like native notifications or unread count badge in the dock.
 
-**Supported OS:**
+## Features
+- [x] Original Gmail Interface
+- [x] Native Notifications
+- [x] Unread Inbox Count (OS X only)
+- [ ] Multiple Gmail Account
+
+## Supported OS
 - [x] OS X 10.9+
 - [ ] Windows 7+
 - [ ] Linux
@@ -59,9 +63,9 @@ Gmail Desktop is built with [Electron](https://github.com/electron/electron).
   ```
 
 ## To-Do
-- [ ] Multi Gmail Accounts.
-- [ ] Adjust UI so OS X window buttons don't overlay Google Logo.
+- [ ] Ability to use multiple Gmail accounts.
+- [ ] Adjust OS X window buttons, so they don't overlay the Google Logo.
 - [ ] Add Auto Updater.
 
 ## Contributing
-Feel free to send pull requests :)
+Any contributions and suggestions are greatly appreciated! 🤗 🎉
