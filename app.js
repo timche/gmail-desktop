@@ -37,12 +37,7 @@ function createWindow () {
   mainWindow.on('close', (e) => {
     if (!isQuitting) {
       e.preventDefault()
-
-      if (process.platform === 'darwin') {
-        app.hide()
-      } else {
-        win.hide()
-      }
+      app.hide()
     }
   })
 
