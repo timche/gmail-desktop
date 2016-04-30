@@ -8,7 +8,7 @@ let darwinMenu = [
     submenu: [
       {
         label: `About ${APP_NAME}`,
-        role: 'about',
+        role: 'about'
       },
       {
         label: `Hide ${APP_NAME}`,
@@ -30,7 +30,7 @@ let darwinMenu = [
       {
         label: `Quit ${APP_NAME}`,
         accelerator: 'Cmd+Q',
-        click() {
+        click () {
           app.quit()
         }
       }
@@ -71,7 +71,7 @@ let darwinMenu = [
         label: 'Select All',
         accelerator: 'Cmd+A',
         role: 'selectall'
-      },
+      }
     ]
   },
   {
@@ -96,13 +96,13 @@ let darwinMenu = [
     submenu: [
       {
         label: `${APP_NAME} Website`,
-        click() {
+        click () {
           shell.openExternal('https://github.com/timche/gmail-desktop')
         }
       },
       {
         label: 'Report an issue',
-        click() {
+        click () {
           shell.openExternal('https://github.com/timche/gmail-desktop/issues/new')
         }
       }
