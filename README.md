@@ -1,5 +1,6 @@
 # <img src=".github/gmail-logo.png" width="45"> Gmail Desktop
 
+[![Travis](https://img.shields.io/travis/timche/gmail-desktop.svg?branch=master&maxAge=2592000&style=flat-square)](https://travis-ci.org/timche/gmail-desktop)
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat-square)](http://standardjs.com/)
 
 > An unofficial Gmail Desktop App built with [Electron](https://github.com/electron/electron)
