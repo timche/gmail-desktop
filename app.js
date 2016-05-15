@@ -56,9 +56,12 @@ app.on('ready', () => {
   })
 
   webContents.on('new-window', (e, url) => {
-    if (!/^.*(mail\.google\.com).*/.test(url)) {
+    if (/^(https:\/\/mail\.google\.com).*/.test(url)) {
       e.preventDefault()
-      shell.openExternal(url)
+      mainWindow.loadURL(url)
+    } else {
+        e.preventDefault()
+        shell.openExternal(url)
     }
   })
 })
