@@ -1,10 +1,12 @@
+/* eslint-disable import/no-unresolved */
 import { app, shell, BrowserWindow, Menu } from 'electron'
+/* eslint-enable import/no-unresolved */
 import menu from './menu'
 
 let mainWindow
 let isQuitting = false
 
-let isAlreadyRunning = app.makeSingleInstance(() => {
+const isAlreadyRunning = app.makeSingleInstance(() => {
   if (mainWindow) {
     if (mainWindow.isMinimized()) {
       mainWindow.restore()
@@ -18,13 +20,13 @@ if (isAlreadyRunning) {
   app.quit()
 }
 
-function updateBadge (title) {
-  let unreadCount = (/^.+\s\((\d+)\)/).exec(title)
+function updateBadge(title) {
+  const unreadCount = (/^.+\s\((\d+)\)/).exec(title)
 
   app.dock.setBadge(unreadCount ? unreadCount[1] : '')
 }
 
-function createWindow () {
+function createWindow() {
   mainWindow = new BrowserWindow({
     title: app.getName(),
     width: 1280,
@@ -46,10 +48,9 @@ function createWindow () {
 
 app.on('ready', () => {
   createWindow()
-
   Menu.setApplicationMenu(menu)
 
-  let {webContents} = mainWindow
+  const { webContents } = mainWindow
 
   webContents.on('dom-ready', () => {
     mainWindow.show()
@@ -60,13 +61,13 @@ app.on('ready', () => {
       e.preventDefault()
       mainWindow.loadURL(url)
     } else {
-        e.preventDefault()
-        shell.openExternal(url)
+      e.preventDefault()
+      shell.openExternal(url)
     }
   })
 })
 
-app.on('activate', function () {
+app.on('activate', () => {
   mainWindow.show()
 })
 

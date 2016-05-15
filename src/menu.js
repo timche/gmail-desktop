@@ -1,8 +1,10 @@
+/* eslint-disable import/no-unresolved */
 import { app, shell, Menu } from 'electron'
+/* eslint-enable import/no-unresolved */
 
 const APP_NAME = app.getName()
 
-let darwinMenu = [
+const darwinMenu = [
   {
     label: APP_NAME,
     submenu: [
@@ -30,7 +32,7 @@ let darwinMenu = [
       {
         label: `Quit ${APP_NAME}`,
         accelerator: 'Cmd+Q',
-        click () {
+        click() {
           app.quit()
         }
       }
@@ -96,13 +98,13 @@ let darwinMenu = [
     submenu: [
       {
         label: `${APP_NAME} Website`,
-        click () {
+        click() {
           shell.openExternal('https://github.com/timche/gmail-desktop')
         }
       },
       {
         label: 'Report an issue',
-        click () {
+        click() {
           shell.openExternal('https://github.com/timche/gmail-desktop/issues/new')
         }
       }
