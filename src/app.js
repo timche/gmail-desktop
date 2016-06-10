@@ -57,7 +57,7 @@ app.on('ready', () => {
   })
 
   webContents.on('new-window', (e, url) => {
-    if (/^(https:\/\/mail\.google\.com).*/.test(url)) {
+    if (/^(https:\/\/(mail|accounts)\.google\.com).*/.test(url)) {
       e.preventDefault()
       mainWindow.loadURL(url)
     } else {
