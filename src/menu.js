@@ -3,6 +3,17 @@ import { app, shell, Menu } from 'electron'
 /* eslint-enable import/no-unresolved */
 
 const APP_NAME = app.getName()
+let mailtoStatus = app.isDefaultProtocolClient('mailto')
+
+function toggleMailto() {
+  if (app.isDefaultProtocolClient('mailto')) {
+    app.removeAsDefaultProtocolClient('mailto')
+    mailtoStatus = false
+  } else {
+    app.setAsDefaultProtocolClient('mailto')
+    mailtoStatus = true
+  }
+}
 
 const darwinMenu = [
   {
@@ -42,15 +53,11 @@ const darwinMenu = [
     label: 'Settings',
     submenu: [
       {
-        label: 'Enable MailTo: Support',
+        label: 'Default MailTo: Provider',
+        type: 'checkbox',
+        checked: mailtoStatus,
         click() {
-          app.setAsDefaultProtocolClient('mailto')
-        }
-      },
-      {
-        label: 'Diable MailTo: Support',
-        click() {
-          app.removeAsDefaultProtocolClient('mailto')
+          toggleMailto()
         }
       }
     ]
