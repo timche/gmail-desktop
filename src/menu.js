@@ -39,6 +39,23 @@ const darwinMenu = [
     ]
   },
   {
+    label: 'Settings',
+    submenu: [
+      {
+        label: 'Enable MailTo: Support',
+        click() {
+          app.setAsDefaultProtocolClient('mailto')
+        }
+      },
+      {
+        label: 'Diable MailTo: Support',
+        click() {
+          app.removeAsDefaultProtocolClient('mailto')
+        }
+      }
+    ]
+  },
+  {
     label: 'Edit',
     submenu: [
       {

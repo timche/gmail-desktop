@@ -4,6 +4,7 @@ import { app, shell, BrowserWindow, Menu } from 'electron'
 import menu from './menu'
 
 let mainWindow
+let replyToWindow
 let isQuitting = false
 
 const isAlreadyRunning = app.makeSingleInstance(() => {
@@ -46,6 +47,16 @@ function createWindow() {
   mainWindow.on('page-title-updated', (e, title) => updateBadge(title))
 }
 
+function createMailTo(url) {
+
+  replyToWindow = new BrowserWindow({
+    parent: mainWindow
+  })
+
+  replyToWindow.loadURL('https://mail.google.com/mail/?extsrc=mailto&url='+url)
+
+}
+
 app.on('ready', () => {
   createWindow()
   Menu.setApplicationMenu(menu)
@@ -65,6 +76,11 @@ app.on('ready', () => {
       shell.openExternal(url)
     }
   })
+})
+
+app.on('open-url', (event, url) => {
+  event.preventDefault()
+  createMailTo(url)
 })
 
 app.on('activate', () => {
