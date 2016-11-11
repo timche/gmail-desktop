@@ -48,13 +48,11 @@ function createWindow() {
 }
 
 function createMailTo(url) {
-
   replyToWindow = new BrowserWindow({
     parent: mainWindow
   })
 
-  replyToWindow.loadURL('https://mail.google.com/mail/?extsrc=mailto&url='+url)
-
+  replyToWindow.loadURL(`https://mail.google.com/mail/?extsrc=mailto&url=${url}`)
 }
 
 app.on('ready', () => {
