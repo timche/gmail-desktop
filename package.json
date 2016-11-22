@@ -9,7 +9,7 @@
     "lint": "eslint src",
     "test": "npm run lint",
     "start": "electron .",
-    "build:osx": "electron-packager . --out=build --overwrite --platform=darwin --arch=x64 --icon=src/assets/icons/icon.icns --app-version=$npm_package_version",
+    "build:osx": "electron-packager . --protocol-name=\"Email Address URL\" --protocol=\"mailto\" --out=build --overwrite --platform=darwin --arch=x64 --icon=src/assets/icons/icon.icns --app-version=$npm_package_version",
     "build": "npm run clean && npm run build:osx"
   },
   "repository": {
