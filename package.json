@@ -1,7 +1,7 @@
 {
   "name": "gmail-desktop",
   "productName": "Gmail Desktop",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "An unofficial Gmail Desktop App built with Electron",
   "main": "src/index.js",
   "scripts": {
