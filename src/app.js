@@ -32,7 +32,10 @@ function createWindow() {
     title: app.getName(),
     width: 1280,
     height: 960,
-    titleBarStyle: 'hidden-inset'
+    titleBarStyle: 'hidden-inset',
+    webPreferences: {
+      nodeIntegration: false
+    }
   })
 
   mainWindow.loadURL('https://mail.google.com')
