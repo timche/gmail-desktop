@@ -1,6 +1,4 @@
-/* eslint-disable import/no-unresolved */
-import { app, shell, Menu } from 'electron'
-/* eslint-enable import/no-unresolved */
+const { app, shell, Menu } = require('electron')
 
 const APP_NAME = app.getName()
 let mailtoStatus = app.isDefaultProtocolClient('mailto')
@@ -53,7 +51,7 @@ const darwinMenu = [
     label: 'Settings',
     submenu: [
       {
-        label: 'Default MailTo: Provider',
+        label: 'Default MailTo Client',
         type: 'checkbox',
         checked: mailtoStatus,
         click() {
@@ -129,11 +127,13 @@ const darwinMenu = [
       {
         label: 'Report an issue',
         click() {
-          shell.openExternal('https://github.com/timche/gmail-desktop/issues/new')
+          shell.openExternal(
+            'https://github.com/timche/gmail-desktop/issues/new'
+          )
         }
       }
     ]
   }
 ]
 
-export default Menu.buildFromTemplate(darwinMenu)
+module.exports = Menu.buildFromTemplate(darwinMenu)

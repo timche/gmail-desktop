@@ -1,7 +1,5 @@
-/* eslint-disable import/no-unresolved */
-import { app, shell, BrowserWindow, Menu } from 'electron'
-/* eslint-enable import/no-unresolved */
-import menu from './menu'
+const { app, shell, BrowserWindow, Menu } = require('electron')
+const menu = require('./menu')
 
 let mainWindow
 let replyToWindow
@@ -22,7 +20,7 @@ if (isAlreadyRunning) {
 }
 
 function updateBadge(title) {
-  const unreadCount = (/^.+\s\((\d+[,]?\d+)\)/).exec(title)
+  const unreadCount = /^.+\s\((\d+[,]?\d+)\)/.exec(title)
 
   app.dock.setBadge(unreadCount ? unreadCount[1] : '')
 }
@@ -32,7 +30,6 @@ function createWindow() {
     title: app.getName(),
     width: 1280,
     height: 960,
-    titleBarStyle: 'hidden-inset',
     webPreferences: {
       nodeIntegration: false
     }
@@ -40,7 +37,7 @@ function createWindow() {
 
   mainWindow.loadURL('https://mail.google.com')
 
-  mainWindow.on('close', (e) => {
+  mainWindow.on('close', e => {
     if (!isQuitting) {
       e.preventDefault()
       app.hide()
@@ -55,7 +52,9 @@ function createMailTo(url) {
     parent: mainWindow
   })
 
-  replyToWindow.loadURL(`https://mail.google.com/mail/?extsrc=mailto&url=${url}`)
+  replyToWindow.loadURL(
+    `https://mail.google.com/mail/?extsrc=mailto&url=${url}`
+  )
 }
 
 app.on('ready', () => {
