@@ -1,6 +1,6 @@
 # <img src=".github/gmail-logo.png" width="45"> Gmail Desktop
 
-[![Travis](https://img.shields.io/travis/timche/gmail-desktop.svg?branch=master&maxAge=2592000)](https://travis-ci.org/timche/gmail-desktop) [![XO code style](https://img.shields.io/badge/code_style-XO-5ed9c7.svg)](https://github.com/sindresorhus/xo) [![styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
+[![Travis](https://travis-ci.org/timche/gmail-desktop.svg?branch=master)](https://travis-ci.org/timche/gmail-desktop) [![XO code style](https://img.shields.io/badge/code_style-XO-5ed9c7.svg)](https://github.com/sindresorhus/xo) [![styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 
 > An unofficial Gmail Desktop App built with [Electron](https://github.com/electron/electron)
 
