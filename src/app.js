@@ -20,7 +20,7 @@ if (isAlreadyRunning) {
 }
 
 function updateBadge(title) {
-  const unreadCount = /^.+\s\((\d+[,]?\d+)\)/.exec(title)
+  const unreadCount = /^.+\s\((\d+[,]?\d*)\)/.exec(title)
 
   app.dock.setBadge(unreadCount ? unreadCount[1] : '')
 }
