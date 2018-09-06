@@ -10,7 +10,6 @@ const isAlreadyRunning = app.makeSingleInstance(() => {
     if (mainWindow.isMinimized()) {
       mainWindow.restore()
     }
-
     mainWindow.show()
   }
 })
@@ -21,8 +20,9 @@ if (isAlreadyRunning) {
 
 function updateBadge(title) {
   const unreadCount = /^.+\s\((\d+[,]?\d*)\)/.exec(title)
-
-  app.dock.setBadge(unreadCount ? unreadCount[1] : '')
+  if (process.platform === 'darwin') {
+    app.dock.setBadge(unreadCount ? unreadCount[1] : '')
+  }
 }
 
 function createWindow() {
@@ -40,7 +40,11 @@ function createWindow() {
   mainWindow.on('close', e => {
     if (!isQuitting) {
       e.preventDefault()
-      app.hide()
+      if (process.platform === 'darwin') {
+        app.hide()
+      } else if (process.platform === 'win32') {
+        mainWindow.hide()
+      }
     }
   })
 
