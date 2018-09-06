@@ -11,8 +11,7 @@
     "prettier": "prettier --no-semi --single-quote --write",
     "prettify": "npm run prettier -- src/*.js",
     "start": "electron .",
-    "build:macos": "electron-packager . --out=build --overwrite --platform=darwin --arch=x64 --app-version=$npm_package_version --icon=assets/icon.icns  --protocol-name=\"Email Address URL\" --protocol=\"mailto\"",
-    "build": "npm run build:macos"
+    "build": "electron-packager . --out=build --overwrite --icon=assets/icon.icns --protocol-name=\"Email Address URL\" --protocol=\"mailto\""
   },
   "repository": "timche/gmail-desktop",
   "author": "Tim Cheung <tim@cheung.io>",
@@ -24,7 +23,7 @@
     "husky": "^0.14.3",
     "lint-staged": "^4.0.3",
     "prettier": "^1.5.3",
-    "xo": "^0.18.2"
+    "xo": "^0.23.0"
   },
   "xo": {
     "extends": [
