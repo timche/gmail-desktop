@@ -42,7 +42,7 @@ function createWindow() {
       e.preventDefault()
       if (process.platform === 'darwin') {
         app.hide()
-      } else if (process.platform === 'win32') {
+      } else {
         mainWindow.hide()
       }
     }

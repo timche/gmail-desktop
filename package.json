@@ -11,7 +11,7 @@
     "prettier": "prettier --no-semi --single-quote --write",
     "prettify": "npm run prettier -- src/*.js",
     "start": "electron .",
-    "build": "electron-packager . --out=build --overwrite --icon=assets/icon.icns --protocol-name=\"Email Address URL\" --protocol=\"mailto\""
+    "build": "electron-packager . --all --out=build --overwrite --icon=assets/icon.icns --protocol-name=\"Email Address URL\" --protocol=\"mailto\""
   },
   "repository": "timche/gmail-desktop",
   "author": "Tim Cheung <tim@cheung.io>",
