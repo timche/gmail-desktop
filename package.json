@@ -10,7 +10,7 @@
   "main": "src/app.js",
   "scripts": {
     "precommit": "pretty-quick --staged",
-    "test": "xo",
+    "lint": "xo",
     "prettier": "prettier --no-semi --single-quote --write",
     "prettify": "npm run prettier -- src/*.js",
     "start": "electron .",
@@ -25,16 +25,19 @@
   "devDependencies": {
     "electron": "^4.0.4",
     "electron-builder": "^20.38.5",
-    "eslint-config-prettier": "^2.3.0",
     "husky": "^0.14.3",
     "prettier": "^1.16.4",
     "pretty-quick": "^1.10.0",
-    "xo": "^0.23.0"
+    "xo": "^0.24.0"
+  },
+  "prettier": {
+    "useTabs": false,
+    "semi": false,
+    "bracketSpacing": true,
+    "singleQuote": true
   },
   "xo": {
-    "extends": [
-      "prettier"
-    ]
+    "prettier": true
   },
   "build": {
     "files": [
