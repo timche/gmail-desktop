@@ -1,7 +1,9 @@
-const { app, shell, BrowserWindow, Menu } = require('electron')
+const path = require('path')
+const { app, shell, BrowserWindow, Menu, Tray } = require('electron')
 const electronDebug = require('electron-debug')
 const { autoUpdater } = require('electron-updater')
 const isDev = require('electron-is-dev')
+const { is } = require('electron-util')
 const menu = require('./menu')
 
 electronDebug({
@@ -13,9 +15,12 @@ if (!isDev) {
   autoUpdater.checkForUpdatesAndNotify()
 }
 
+app.setAppUserModelId('io.cheung.gmail-desktop')
+
 let mainWindow
 let replyToWindow
 let isQuitting = false
+let tray
 
 if (!app.requestSingleInstanceLock()) {
   app.quit()
@@ -30,13 +35,6 @@ app.on('second-instance', () => {
     mainWindow.show()
   }
 })
-
-function updateBadge(title) {
-  const unreadCount = /^.+\s\((\d+[,]?\d*)\)/.exec(title)
-  if (process.platform === 'darwin') {
-    app.dock.setBadge(unreadCount ? unreadCount[1] : '')
-  }
-}
 
 function createWindow() {
   mainWindow = new BrowserWindow({
@@ -54,15 +52,26 @@ function createWindow() {
   mainWindow.on('close', e => {
     if (!isQuitting) {
       e.preventDefault()
-      if (process.platform === 'darwin') {
-        app.hide()
-      } else {
-        mainWindow.hide()
-      }
+      mainWindow.blur()
+      mainWindow.hide()
     }
   })
 
-  mainWindow.on('page-title-updated', (e, title) => updateBadge(title))
+  mainWindow.on('page-title-updated', (e, title) => {
+    let unreadCount = /^.+\s\((\d+[,]?\d*)\)/.exec(title)
+    unreadCount = unreadCount && unreadCount[1]
+
+    if (is.macos) {
+      app.dock.setBadge(unreadCount || '')
+    }
+
+    if ((is.linux || is.windows) && tray) {
+      const icon = unreadCount ? 'tray-icon-unread.png' : 'tray-icon.png'
+      const iconPath = path.join(__dirname, '..', 'static', icon)
+
+      tray.setImage(iconPath)
+    }
+  })
 }
 
 function createMailTo(url) {
@@ -77,7 +86,37 @@ function createMailTo(url) {
 
 app.on('ready', () => {
   createWindow()
+
   Menu.setApplicationMenu(menu)
+
+  if ((is.linux || is.windows) && !tray) {
+    const appName = app.getName()
+    const iconPath = path.join(__dirname, '..', 'static', 'tray-icon.png')
+
+    const contextMenuTemplate = [
+      {
+        role: 'quit'
+      }
+    ]
+
+    if (is.linux) {
+      contextMenuTemplate.unshift({
+        label: 'Show',
+        click: () => {
+          mainWindow.show()
+        }
+      })
+    }
+
+    const contextMenu = Menu.buildFromTemplate(contextMenuTemplate)
+
+    tray = new Tray(iconPath)
+    tray.setToolTip(appName)
+    tray.setContextMenu(contextMenu)
+    tray.on('click', () => {
+      mainWindow.show()
+    })
+  }
 
   const { webContents } = mainWindow
 

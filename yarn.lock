@@ -954,6 +954,14 @@ electron-updater@^4.0.6:
     semver "^5.6.0"
     source-map-support "^0.5.9"
 
+electron-util@^0.11.0:
+  version "0.11.0"
+  resolved "https://registry.yarnpkg.com/electron-util/-/electron-util-0.11.0.tgz#d9b71692241598a5f1e2a6866adf7e1589b783fa"
+  integrity sha512-zfFeBdeBgnKQqXUC4ozmcGqbN5bxSVWH82FZ2Ydpo9PPOen77MAFGrd8+KEloUW36bpuSuMYCtlcp4xejWfKjw==
+  dependencies:
+    electron-is-dev "^1.0.1"
+    new-github-issue-url "^0.2.0"
+
 electron@^4.0.4:
   version "4.0.4"
   resolved "https://registry.yarnpkg.com/electron/-/electron-4.0.4.tgz#638e32ccbe9ded1124c3e6dbbaa1e16d37c32019"
@@ -2661,6 +2669,11 @@ natural-compare@^1.4.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/natural-compare/-/natural-compare-1.4.0.tgz#4abebfeed7541f2c27acfb29bdbbd15c8d5ba4f7"
   integrity sha1-Sr6/7tdUHywnrPspvbvRXI1bpPc=
+
+new-github-issue-url@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/new-github-issue-url/-/new-github-issue-url-0.2.0.tgz#41263fa3b9e2d96b29252100fd1ef18274c12a74"
+  integrity sha512-LtOjIk0xghnMVjndjfF9JLc1WIDNmgCAfDtvPMsMJcecBMDziaYOyXkwR8Tgli2ZA2mAOP/6C8DpBq+uCmU5aQ==
 
 nice-try@^1.0.4:
   version "1.0.5"
