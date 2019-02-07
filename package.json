@@ -9,7 +9,7 @@
   "license": "MIT",
   "main": "src/app.js",
   "scripts": {
-    "precommit": "lint-staged",
+    "precommit": "pretty-quick --staged",
     "test": "xo",
     "prettier": "prettier --no-semi --single-quote --write",
     "prettify": "npm run prettier -- src/*.js",
@@ -27,20 +27,13 @@
     "electron-builder": "^20.38.5",
     "eslint-config-prettier": "^2.3.0",
     "husky": "^0.14.3",
-    "lint-staged": "^4.0.3",
-    "prettier": "^1.5.3",
+    "prettier": "^1.16.4",
+    "pretty-quick": "^1.10.0",
     "xo": "^0.23.0"
   },
   "xo": {
     "extends": [
       "prettier"
-    ]
-  },
-  "lint-staged": {
-    "*.js": [
-      "npm test",
-      "npm run prettier",
-      "git add"
     ]
   },
   "build": {
