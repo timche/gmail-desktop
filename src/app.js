@@ -1,11 +1,27 @@
 const { app, shell, BrowserWindow, Menu } = require('electron')
+const electronDebug = require('electron-debug')
+const { autoUpdater } = require('electron-updater')
+const isDev = require('electron-is-dev')
 const menu = require('./menu')
+
+electronDebug({
+  enabled: true,
+  showDevTools: false
+})
+
+if (!isDev) {
+  autoUpdater.checkForUpdatesAndNotify()
+}
 
 let mainWindow
 let replyToWindow
 let isQuitting = false
 
-const isAlreadyRunning = app.makeSingleInstance(() => {
+if (!app.requestSingleInstanceLock()) {
+  app.quit()
+}
+
+app.on('second-instance', () => {
   if (mainWindow) {
     if (mainWindow.isMinimized()) {
       mainWindow.restore()
@@ -13,10 +29,6 @@ const isAlreadyRunning = app.makeSingleInstance(() => {
     mainWindow.show()
   }
 })
-
-if (isAlreadyRunning) {
-  app.quit()
-}
 
 function updateBadge(title) {
   const unreadCount = /^.+\s\((\d+[,]?\d*)\)/.exec(title)
@@ -29,9 +41,10 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     title: app.getName(),
     width: 1280,
-    height: 960,
+    height: 800,
     webPreferences: {
-      nodeIntegration: false
+      nodeIntegration: false,
+      nativeWindowOpen: true
     }
   })
 
@@ -71,15 +84,18 @@ app.on('ready', () => {
     mainWindow.show()
   })
 
-  webContents.on('new-window', (e, url) => {
-    if (/^(https:\/\/(mail|accounts)\.google\.com).*/.test(url)) {
-      e.preventDefault()
-      mainWindow.loadURL(url)
-    } else {
-      e.preventDefault()
-      shell.openExternal(url)
+  webContents.on(
+    'new-window',
+    (event, url, frameName, disposition, options) => {
+      event.preventDefault()
+
+      if (/^(https:\/\/(mail|accounts)\.google\.com).*/.test(url)) {
+        event.newGuest = new BrowserWindow(options)
+      } else {
+        shell.openExternal(url)
+      }
     }
-  })
+  )
 })
 
 app.on('open-url', (event, url) => {

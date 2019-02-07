@@ -2,8 +2,11 @@
   "name": "gmail-desktop",
   "productName": "Gmail Desktop",
   "version": "1.0.1",
-  "description": "An unofficial Gmail Desktop App built with Electron",
+  "description": "Unofficial Gmail Desktop App",
   "private": true,
+  "repository": "timche/gmail-desktop",
+  "author": "Tim Cheung <tim@cheung.io>",
+  "license": "MIT",
   "main": "src/app.js",
   "scripts": {
     "precommit": "lint-staged",
@@ -11,14 +14,17 @@
     "prettier": "prettier --no-semi --single-quote --write",
     "prettify": "npm run prettier -- src/*.js",
     "start": "electron .",
-    "build": "electron-packager . --all --out=build --overwrite --icon=assets/icon.icns --protocol-name=\"Email Address URL\" --protocol=\"mailto\""
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder --macos --linux --windows"
   },
-  "repository": "timche/gmail-desktop",
-  "author": "Tim Cheung <tim@cheung.io>",
-  "license": "MIT",
+  "dependencies": {
+    "electron-debug": "^2.1.0",
+    "electron-is-dev": "^1.0.1",
+    "electron-updater": "^4.0.6"
+  },
   "devDependencies": {
-    "electron": "^1.7.5",
-    "electron-packager": "^8.7.2",
+    "electron": "^4.0.4",
+    "electron-builder": "^20.38.5",
     "eslint-config-prettier": "^2.3.0",
     "husky": "^0.14.3",
     "lint-staged": "^4.0.3",
@@ -36,5 +42,22 @@
       "npm run prettier",
       "git add"
     ]
+  },
+  "build": {
+    "files": [
+      "**/*"
+    ],
+    "appId": "io.cheung.gmail-desktop",
+    "mac": {
+      "category": "public.app-category.productivity",
+      "darkModeSupport": false
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "category": "Network;Office"
+    }
   }
 }
