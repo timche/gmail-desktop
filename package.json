@@ -16,7 +16,7 @@
     "prettify": "npm run prettier -- src/*.js",
     "start": "electron .",
     "pack": "electron-builder --dir",
-    "dist": "electron-builder --macos --linux --windows"
+    "dist": "electron-builder --macos --linux --windows --publish never"
   },
   "dependencies": {
     "electron-debug": "^2.1.0",
