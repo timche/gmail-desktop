@@ -2,7 +2,6 @@ const path = require('path')
 const { app, shell, BrowserWindow, Menu, Tray } = require('electron')
 const electronDebug = require('electron-debug')
 const { autoUpdater } = require('electron-updater')
-const isDev = require('electron-is-dev')
 const { is } = require('electron-util')
 const menu = require('./menu')
 
@@ -11,7 +10,7 @@ electronDebug({
   showDevTools: false
 })
 
-if (!isDev) {
+if (!is.development) {
   autoUpdater.checkForUpdatesAndNotify()
 }
 
