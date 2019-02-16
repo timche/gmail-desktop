@@ -51,7 +51,7 @@ const darwinMenu = [
     label: 'Settings',
     submenu: [
       {
-        label: 'Default MailTo Client',
+        label: 'Default Mailto Client',
         type: 'checkbox',
         checked: mailtoStatus,
         click() {
