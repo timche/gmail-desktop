@@ -1,6 +1,9 @@
 # <img src=".github/logo.png?v1" height="38"> Gmail Desktop
 
-[![Travis](https://travis-ci.org/timche/gmail-desktop.svg?branch=master)](https://travis-ci.org/timche/gmail-desktop) [![XO Code Style](https://img.shields.io/badge/code_style-XO-5ed9c7.svg)](https://github.com/sindresorhus/xo) [![Styled with Prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
+[![Travis](https://travis-ci.org/timche/gmail-desktop.svg?branch=master)](https://travis-ci.org/timche/gmail-desktop)
+[![Latest Tag](https://img.shields.io/github/tag/timche/gmail-desktop.svg?style=flat)](https://github.com/timche/gmail-desktop/releases/latest)
+[![XO Code Style](https://img.shields.io/badge/code_style-XO-5ed9c7.svg)](https://github.com/sindresorhus/xo)
+[![Styled with Prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 
 > Gmail Desktop App built with [Electron](https://github.com/electron/electron)
 
@@ -37,19 +40,19 @@ Built with [Electron](https://github.com/electron/electron).
 #### Install
 
 ```sh
-npm install
+yarn install
 ```
 
 #### Run
 
 ```sh
-npm start
+yarn start
 ```
 
 #### Build
 
 ```sh
-npm run dist
+yarn dist
 ```
 
 ## Disclaimer
