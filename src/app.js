@@ -73,7 +73,7 @@ function createWindow() {
   })
 }
 
-function createMailTo(url) {
+function createMailto(url) {
   replyToWindow = new BrowserWindow({
     parent: mainWindow
   })
@@ -139,7 +139,7 @@ app.on('ready', () => {
 
 app.on('open-url', (event, url) => {
   event.preventDefault()
-  createMailTo(url)
+  createMailto(url)
 })
 
 app.on('activate', () => {
