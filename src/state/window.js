@@ -12,8 +12,6 @@ class WindowState {
     this.stateName = `state.window.${stateName}`
     this.window = window
 
-    console.log(appConfig.get(this.stateName))
-
     // Set the window state from appConfig if available,
     //   otherwise use defaults
     this.state = appConfig.has(this.stateName)
