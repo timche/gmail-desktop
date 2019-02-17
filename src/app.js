@@ -1,5 +1,12 @@
 const path = require('path')
-const { app, shell, BrowserWindow, Menu, Tray } = require('electron')
+const {
+  app,
+  ipcMain: ipc,
+  shell,
+  BrowserWindow,
+  Menu,
+  Tray
+} = require('electron')
 const electronDebug = require('electron-debug')
 const { autoUpdater } = require('electron-updater')
 const { is } = require('electron-util')
@@ -42,7 +49,8 @@ function createWindow() {
     title: app.getName(),
     webPreferences: {
       nodeIntegration: false,
-      nativeWindowOpen: true
+      nativeWindowOpen: true,
+      preload: path.join(__dirname, 'preload.js')
     }
   })
 
@@ -58,12 +66,9 @@ function createWindow() {
     }
   })
 
-  mainWindow.on('page-title-updated', (e, title) => {
-    let unreadCount = /^.+\s\((\d+[,]?\d*)\)/.exec(title)
-    unreadCount = unreadCount && unreadCount[1]
-
+  ipc.on('unread-count', (_, unreadCount) => {
     if (is.macos) {
-      app.dock.setBadge(unreadCount || '')
+      app.dock.setBadge(unreadCount ? unreadCount.toString() : '')
     }
 
     if ((is.linux || is.windows) && tray) {
