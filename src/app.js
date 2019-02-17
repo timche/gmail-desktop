@@ -3,7 +3,9 @@ const { app, shell, BrowserWindow, Menu, Tray } = require('electron')
 const electronDebug = require('electron-debug')
 const { autoUpdater } = require('electron-updater')
 const { is } = require('electron-util')
+
 const menu = require('./menu')
+const WindowState = require('./state/window')
 
 electronDebug({
   enabled: true,
@@ -38,16 +40,16 @@ app.on('second-instance', () => {
 function createWindow() {
   mainWindow = new BrowserWindow({
     title: app.getName(),
-    width: 1280,
-    height: 800,
     webPreferences: {
       nodeIntegration: false,
       nativeWindowOpen: true
     }
   })
 
-  mainWindow.loadURL('https://mail.google.com')
+  // Use the window state to set the mainWindow bounds
+  WindowState.use('main', mainWindow)
 
+  mainWindow.loadURL('https://mail.google.com')
   mainWindow.on('close', e => {
     if (!isQuitting) {
       e.preventDefault()
