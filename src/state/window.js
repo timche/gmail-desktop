@@ -1,8 +1,6 @@
 const appConfig = require('electron-settings')
 
 const defaultBounds = {
-  x: undefined,
-  y: undefined,
   width: 1280,
   height: 800
 }
@@ -16,7 +14,11 @@ class WindowState {
     //   otherwise use defaults
     this.state = appConfig.has(this.stateName)
       ? appConfig.get(this.stateName)
-      : defaultBounds
+      : {
+          ...defaultBounds,
+          x: window.getBounds().x,
+          y: window.getBounds().y
+        }
 
     return this
   }
