@@ -128,7 +128,7 @@ const darwinMenu = [
         label: 'Report an issue',
         click() {
           shell.openExternal(
-            'https://github.com/timche/gmail-desktop/issues/new'
+            'https://github.com/timche/gmail-desktop/issues/new/choose'
           )
         }
       }
