@@ -1,4 +1,6 @@
 const { app, shell, Menu } = require('electron')
+const appConfig = require('electron-settings')
+const { is } = require('electron-util')
 
 const APP_NAME = app.getName()
 let mailtoStatus = app.isDefaultProtocolClient('mailto')
@@ -135,5 +137,24 @@ const darwinMenu = [
     ]
   }
 ]
+
+// Add the develop menu when running in the development environment
+if (is.development) {
+  darwinMenu.splice(-1, 0, {
+    label: 'Develop',
+    submenu: [
+      {
+        label: 'Clear cache and restart',
+        click() {
+          // Clear app config
+          appConfig.deleteAll()
+          // Restart without firing quitting events
+          app.relaunch()
+          app.exit(0)
+        }
+      }
+    ]
+  })
+}
 
 module.exports = Menu.buildFromTemplate(darwinMenu)
