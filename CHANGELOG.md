@@ -13,6 +13,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+## [2.2.0]
+
+### Changed
+
+- Update location of report issue link
+- Default window size to maximized on initial start
+
+### Fixed
+
+- macOS: App is now signed and auto-update working properly
+
 ## [2.1.1]
 
 ### Fixed
@@ -95,7 +106,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[unreleased]: https://github.com/timche/gmail-desktop/compare/v2.1.1...HEAD
+[unreleased]: https://github.com/timche/gmail-desktop/compare/v2.2.0...HEAD
+[2.2.0]: https://github.com/timche/gmail-desktop/compare/v2.1.1...v2.2.0
 [2.1.1]: https://github.com/timche/gmail-desktop/compare/v2.1.0...v2.1.1
 [2.1.0]: https://github.com/timche/gmail-desktop/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/timche/gmail-desktop/compare/v1.0.1...v2.0.0
