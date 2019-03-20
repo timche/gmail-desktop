@@ -15,6 +15,11 @@ function toggleMailto() {
   }
 }
 
+const developerMode = appConfig.get('developer-mode')
+function toggleDeveloperMode() {
+  appConfig.set('developer-mode', !developerMode)
+}
+
 const darwinMenu = [
   {
     label: APP_NAME,
@@ -58,6 +63,14 @@ const darwinMenu = [
         checked: mailtoStatus,
         click() {
           toggleMailto()
+        }
+      },
+      {
+        label: 'Developer Mode',
+        type: 'checkbox',
+        checked: developerMode,
+        click() {
+          toggleDeveloperMode()
         }
       }
     ]
@@ -139,7 +152,8 @@ const darwinMenu = [
 ]
 
 // Add the develop menu when running in the development environment
-if (is.development) {
+//   or if developer mode is enabled
+if (is.development || developerMode) {
   darwinMenu.splice(-1, 0, {
     label: 'Develop',
     submenu: [
