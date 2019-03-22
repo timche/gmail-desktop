@@ -2,6 +2,11 @@ const { app, shell, Menu } = require('electron')
 const appConfig = require('electron-settings')
 const { is } = require('electron-util')
 
+const {
+  CONFIG_KEY: DEBUG_MODE_CONFIG_KEY,
+  showRestartDialog
+} = require('./debug')
+
 const APP_NAME = app.getName()
 let mailtoStatus = app.isDefaultProtocolClient('mailto')
 
@@ -15,9 +20,12 @@ function toggleMailto() {
   }
 }
 
-const developerMode = appConfig.get('developer-mode')
-function toggleDeveloperMode() {
-  appConfig.set('developer-mode', !developerMode)
+const debugMode = appConfig.get(DEBUG_MODE_CONFIG_KEY)
+function toggleDebugMode() {
+  const enabled = !debugMode
+
+  appConfig.set(DEBUG_MODE_CONFIG_KEY, enabled)
+  showRestartDialog(enabled)
 }
 
 const darwinMenu = [
@@ -66,11 +74,11 @@ const darwinMenu = [
         }
       },
       {
-        label: 'Developer Mode',
+        label: 'Debug Mode',
         type: 'checkbox',
-        checked: developerMode,
+        checked: debugMode,
         click() {
-          toggleDeveloperMode()
+          toggleDebugMode()
         }
       }
     ]
@@ -152,8 +160,7 @@ const darwinMenu = [
 ]
 
 // Add the develop menu when running in the development environment
-//   or if developer mode is enabled
-if (is.development || developerMode) {
+if (is.development) {
   darwinMenu.splice(-1, 0, {
     label: 'Develop',
     submenu: [

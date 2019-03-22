@@ -7,22 +7,14 @@ const {
   Menu,
   Tray
 } = require('electron')
-const electronDebug = require('electron-debug')
-const appConfig = require('electron-settings')
 const { autoUpdater } = require('electron-updater')
 const { is } = require('electron-util')
 
+// Initialize the debug mode handler when starting the app
+require('./debug').init()
+
 const menu = require('./menu')
 const WindowState = require('./state/window')
-
-// Debug mode should only be enabled for development mode
-//   or when a user chooses developer mode
-if (is.development || appConfig.get('developer-mode')) {
-  electronDebug({
-    enabled: true,
-    showDevTools: false
-  })
-}
 
 if (!is.development) {
   autoUpdater.checkForUpdatesAndNotify()
