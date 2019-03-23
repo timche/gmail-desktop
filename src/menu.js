@@ -2,6 +2,11 @@ const { app, shell, Menu } = require('electron')
 const appConfig = require('electron-settings')
 const { is } = require('electron-util')
 
+const {
+  CONFIG_KEY: DEBUG_MODE_CONFIG_KEY,
+  showRestartDialog
+} = require('./debug')
+
 const APP_NAME = app.getName()
 let mailtoStatus = app.isDefaultProtocolClient('mailto')
 
@@ -13,6 +18,14 @@ function toggleMailto() {
     app.setAsDefaultProtocolClient('mailto')
     mailtoStatus = true
   }
+}
+
+const debugMode = appConfig.get(DEBUG_MODE_CONFIG_KEY)
+function toggleDebugMode() {
+  const enabled = !debugMode
+
+  appConfig.set(DEBUG_MODE_CONFIG_KEY, enabled)
+  showRestartDialog(enabled)
 }
 
 const darwinMenu = [
@@ -58,6 +71,14 @@ const darwinMenu = [
         checked: mailtoStatus,
         click() {
           toggleMailto()
+        }
+      },
+      {
+        label: 'Debug Mode',
+        type: 'checkbox',
+        checked: debugMode,
+        click() {
+          toggleDebugMode()
         }
       }
     ]
