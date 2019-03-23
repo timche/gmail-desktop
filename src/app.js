@@ -12,6 +12,8 @@ const { is } = require('electron-util')
 
 // Initialize the debug mode handler when starting the app
 require('./debug').init()
+// Initialize the notification handler
+require('./notifications')
 
 const menu = require('./menu')
 const WindowState = require('./state/window')

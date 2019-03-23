@@ -37,3 +37,14 @@ window.addEventListener('load', () => {
   //   the title doesn't change
   setInterval(updateUnreadCount, INTERVAL)
 })
+
+// Send notifications to the Electron app for better control
+class CapturedNotification {
+  constructor(...args) {
+    ipc.send('notification', ...args)
+  }
+}
+
+// Always grant notification permissions
+CapturedNotification.permission = 'granted'
+window.Notification = CapturedNotification
