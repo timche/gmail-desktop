@@ -9,9 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Add debug mode option
+
 ### Changed
 
-### Fixed
+- Updated to Typescript
 
 ## [2.2.0]
 

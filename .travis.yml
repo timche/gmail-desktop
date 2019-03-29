@@ -13,5 +13,3 @@ deploy:
   file: dist/*
   on:
     tags: true
-env:
-  - NODE_ENV=production

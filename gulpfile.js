@@ -1,25 +1,18 @@
 const { src, dest, parallel } = require('gulp')
 const ts = require('gulp-typescript')
-const uglify = require('gulp-uglify')
-const gulpIf = require('gulp-if')
 const prettier = require('gulp-prettier')
 const eslint = require('gulp-eslint')
-
-const isDev = process.env.NODE_ENV !== 'production'
 
 // Get TypeScript config from tsconfig.json
 const tsProject = ts.createProject('tsconfig.json')
 
 function compileJs() {
-  return src('src/**/*.js')
-    .pipe(gulpIf(!isDev, uglify()))
-    .pipe(dest('build'))
+  return src('src/**/*.js').pipe(dest('build'))
 }
 
 function compileTs() {
   return src('src/**/*.ts')
     .pipe(tsProject())
-    .pipe(gulpIf(!isDev, uglify()))
     .pipe(dest('build'))
 }
 

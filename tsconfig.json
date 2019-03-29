@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
     "moduleResolution": "node",
-    "target": "es5",
+    "module": "CommonJS",
+    "target": "es6",
     "noImplicitAny": true,
     "removeComments": true,
     "preserveConstEnums": true,
