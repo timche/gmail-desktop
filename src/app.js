@@ -60,7 +60,7 @@ function createWindow() {
 
   mainWindow.webContents.on('dom-ready', () => {
     fs.readFile(
-      path.join(__dirname, '/../static/style.css'),
+      path.join(__dirname, '..', 'static', 'style.css'),
       'utf-8',
       (error, data) => {
         if (!error) {
