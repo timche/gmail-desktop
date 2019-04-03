@@ -64,7 +64,7 @@ function createWindow() {
       'utf-8',
       (error, data) => {
         if (!error) {
-          let formatedData = data.replace(/\s{2,10}/g, ' ').trim()
+          const formattedData = data.replace(/\s{2,10}/g, ' ').trim()
           mainWindow.webContents.insertCSS(formatedData)
         }
       }
