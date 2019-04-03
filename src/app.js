@@ -9,6 +9,7 @@ const {
 } = require('electron')
 const { autoUpdater } = require('electron-updater')
 const { is } = require('electron-util')
+const fs = require('fs')
 
 // Initialize the debug mode handler when starting the app
 require('./debug').init()
@@ -44,6 +45,7 @@ app.on('second-instance', () => {
 function createWindow() {
   mainWindow = new BrowserWindow({
     title: app.getName(),
+    titleBarStyle: 'hiddenInset',
     webPreferences: {
       nodeIntegration: false,
       nativeWindowOpen: true,
@@ -55,6 +57,19 @@ function createWindow() {
   WindowState.use('main', mainWindow)
 
   mainWindow.loadURL('https://mail.google.com')
+
+  mainWindow.webContents.on('dom-ready', function() {
+    fs.readFile(__dirname + '/../static/style.css', 'utf-8', function(
+      error,
+      data
+    ) {
+      if (!error) {
+        var formatedData = data.replace(/\s{2,10}/g, ' ').trim()
+        mainWindow.webContents.insertCSS(formatedData)
+      }
+    })
+  })
+
   mainWindow.on('close', e => {
     if (!isQuitting) {
       e.preventDefault()

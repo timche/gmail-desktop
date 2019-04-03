@@ -1,0 +1,25 @@
+#gb {
+  padding-left: 60px; /* make room for mac traffic lights */
+  -webkit-app-region: drag; /*make titlebar draggable */
+}
+
+#gbwa, /* google apps */
+#gbwa + div, /* google notifications */
+#gb .gb_yc.gb_Td /* burger menu and logo */
+ {
+  display: none;
+}
+
+#gb .gb_zc.gb_2d {
+  padding-left: 0;
+}
+
+#gb .gb_Bd.gb_8d {
+  /* always use compact header */
+  padding: 4px;
+}
+
+.Xro3Db-nUpftc.ymbhmd {
+  /* move create/edit dialogs down a bit */
+  top: 38px;
+}
