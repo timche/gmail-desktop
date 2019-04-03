@@ -59,16 +59,7 @@ function createWindow() {
   mainWindow.loadURL('https://mail.google.com')
 
   mainWindow.webContents.on('dom-ready', () => {
-    fs.readFile(
-      path.join(__dirname, '..', 'static', 'style.css'),
-      'utf-8',
-      (error, data) => {
-        if (!error) {
-          const formattedData = data.replace(/\s{2,10}/g, ' ').trim()
-          mainWindow.webContents.insertCSS(formattedData)
-        }
-      }
-    )
+    addCustomCss(mainWindow)
   })
 
   mainWindow.on('close', e => {
@@ -150,6 +141,9 @@ app.on('ready', () => {
 
       if (/^(https:\/\/(mail|accounts)\.google\.com).*/.test(url)) {
         event.newGuest = new BrowserWindow(options)
+        event.newGuest.webContents.on('dom-ready', () => {
+          addCustomCss(event.newGuest)
+        })
       } else {
         shell.openExternal(url)
       }
@@ -169,3 +163,16 @@ app.on('activate', () => {
 app.on('before-quit', () => {
   isQuitting = true
 })
+
+function addCustomCss(windowElement) {
+  fs.readFile(
+    path.join(__dirname, '..', 'static', 'style.css'),
+    'utf-8',
+    (error, data) => {
+      if (!error) {
+        const formattedData = data.replace(/\s{2,10}/g, ' ').trim()
+        windowElement.webContents.insertCSS(formattedData)
+      }
+    }
+  )
+}
