@@ -65,7 +65,7 @@ function createWindow() {
       (error, data) => {
         if (!error) {
           const formattedData = data.replace(/\s{2,10}/g, ' ').trim()
-          mainWindow.webContents.insertCSS(formatedData)
+          mainWindow.webContents.insertCSS(formattedData)
         }
       }
     )
