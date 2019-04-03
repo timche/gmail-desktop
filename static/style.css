@@ -19,6 +19,15 @@
   display: none !important;
 }
 
+/* Header */
+.gb_lc {
+  height: 32px !important;
+}
+.gb_Xb {
+  padding: 2px !important;
+  margin-left: 18px !important;
+}
+
 /* Search box */
 .gb_qc {
   min-width: 192px !important;
@@ -45,6 +54,9 @@
 }
 
 /* Account avatar */
+.gb_fa > .gb_Ea {
+  padding: 0 !important;
+}
 .gb_fa {
   border: 0px none !important;
 }
