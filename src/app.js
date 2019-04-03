@@ -7,9 +7,9 @@ const {
   Menu,
   Tray
 } = require('electron')
+const fs = require('fs')
 const { autoUpdater } = require('electron-updater')
 const { is } = require('electron-util')
-const fs = require('fs')
 
 // Initialize the debug mode handler when starting the app
 require('./debug').init()
@@ -58,16 +58,17 @@ function createWindow() {
 
   mainWindow.loadURL('https://mail.google.com')
 
-  mainWindow.webContents.on('dom-ready', function() {
-    fs.readFile(__dirname + '/../static/style.css', 'utf-8', function(
-      error,
-      data
-    ) {
-      if (!error) {
-        var formatedData = data.replace(/\s{2,10}/g, ' ').trim()
-        mainWindow.webContents.insertCSS(formatedData)
+  mainWindow.webContents.on('dom-ready', () => {
+    fs.readFile(
+      path.join(__dirname, '/../static/style.css'),
+      'utf-8',
+      (error, data) => {
+        if (!error) {
+          let formatedData = data.replace(/\s{2,10}/g, ' ').trim()
+          mainWindow.webContents.insertCSS(formatedData)
+        }
       }
-    })
+    )
   })
 
   mainWindow.on('close', e => {
