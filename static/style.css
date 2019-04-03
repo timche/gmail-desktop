@@ -1,6 +1,6 @@
 #gb {
   padding-left: 60px; /* make room for mac traffic lights */
-  -webkit-app-region: drag; /*make titlebar draggable */
+  -webkit-app-region: drag; /* make titlebar draggable */
 }
 
 #gbwa, /* google apps */
