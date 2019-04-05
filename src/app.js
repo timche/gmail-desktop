@@ -165,14 +165,7 @@ app.on('before-quit', () => {
 })
 
 function addCustomCss(windowElement) {
-  fs.readFile(
-    path.join(__dirname, '..', 'static', 'style.css'),
-    'utf-8',
-    (error, data) => {
-      if (!error) {
-        const formattedData = data.replace(/\s{2,10}/g, ' ').trim()
-        windowElement.webContents.insertCSS(formattedData)
-      }
-    }
+  windowElement.webContents.insertCSS(
+    fs.readFileSync(path.join(__dirname, '..', 'css', 'style.css'), 'utf8')
   )
 }
