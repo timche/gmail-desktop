@@ -9,7 +9,7 @@
       "request": "launch",
       "name": "Start",
       "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron",
-      "program": "${workspaceFolder}/build/app.js",
+      "program": "${workspaceFolder}/dist-js/app.js",
       "preLaunchTask": "Build"
     }
   ]
