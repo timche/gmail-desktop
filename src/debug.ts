@@ -1,6 +1,6 @@
 import { app, dialog } from 'electron'
 import { is } from 'electron-util'
-import * as appConfig from 'electron-settings'
+import appConfig from 'electron-settings'
 import electronDebug from 'electron-debug'
 
 export const CONFIG_KEY = 'debug-mode'

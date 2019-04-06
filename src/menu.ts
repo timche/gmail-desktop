@@ -1,5 +1,5 @@
 import { app, shell, Menu, MenuItemConstructorOptions } from 'electron'
-import * as appConfig from 'electron-settings'
+import appConfig from 'electron-settings'
 import { is } from 'electron-util'
 
 import { CONFIG_KEY as DEBUG_MODE_CONFIG_KEY, showRestartDialog } from './debug'

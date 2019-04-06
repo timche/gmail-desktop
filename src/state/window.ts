@@ -1,5 +1,5 @@
 import { BrowserWindow, Rectangle } from 'electron'
-import * as appConfig from 'electron-settings'
+import appConfig from 'electron-settings'
 
 interface State {
   bounds?: Rectangle
