@@ -1,4 +1,4 @@
-import { join as joinPath } from 'path'
+import path from 'path'
 import {
   app,
   ipcMain as ipc,
@@ -49,7 +49,7 @@ function createWindow(): void {
     webPreferences: {
       nodeIntegration: false,
       nativeWindowOpen: true,
-      preload: joinPath(__dirname, 'preload')
+      preload: path.join(__dirname, 'preload')
     }
   })
 
@@ -72,7 +72,7 @@ function createWindow(): void {
 
     if ((is.linux || is.windows) && tray) {
       const icon = unreadCount ? 'tray-icon-unread.png' : 'tray-icon.png'
-      const iconPath = joinPath(__dirname, '..', 'resources', icon)
+      const iconPath = path.join(__dirname, '..', 'static', icon)
 
       tray.setImage(iconPath)
     }
@@ -96,7 +96,7 @@ app.on('ready', () => {
 
   if ((is.linux || is.windows) && !tray) {
     const appName = app.getName()
-    const iconPath = joinPath(__dirname, '..', 'resources', 'tray-icon.png')
+    const iconPath = path.join(__dirname, '..', 'resources', 'tray-icon.png')
 
     const contextMenuTemplate: MenuItemConstructorOptions[] = [
       {
