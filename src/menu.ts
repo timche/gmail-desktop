@@ -17,7 +17,7 @@ function toggleMailto(): void {
   }
 }
 
-const debugMode = !!appConfig.get(DEBUG_MODE_CONFIG_KEY)
+const debugMode = Boolean(appConfig.get(DEBUG_MODE_CONFIG_KEY))
 function toggleDebugMode(): void {
   const enabled = !debugMode
 

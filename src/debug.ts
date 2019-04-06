@@ -29,7 +29,7 @@ export function showRestartDialog(enabled: boolean): void {
 }
 
 export function init(): void {
-  const enabled = !!appConfig.get(CONFIG_KEY, is.development)
+  const enabled = Boolean(appConfig.get(CONFIG_KEY, is.development))
 
   electronDebug({ ...OPTIONS, enabled })
 }

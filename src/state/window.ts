@@ -1,74 +1,67 @@
-import { BrowserWindow } from 'electron'
+import { BrowserWindow, Rectangle } from 'electron'
 import * as appConfig from 'electron-settings'
 
 interface State {
-  height?: number
+  bounds?: Rectangle
   isFullScreen?: boolean
   isMaximized?: boolean
-  width?: number
-  x?: number
-  y?: number
 }
 
 export default class WindowState {
-  private state: State
-  private stateName: string
-  private window: BrowserWindow
+  private _state: State
+
+  private _stateName: string
+
+  private _window: BrowserWindow
 
   public constructor(stateName: string, window: BrowserWindow) {
-    this.stateName = `state.window.${stateName}`
-    this.window = window
+    this._stateName = `state.window.${stateName}`
+    this._window = window
 
     // Set the window state from appConfig if available,
     //   otherwise use defaults
-    this.state = appConfig.has(this.stateName)
-      ? (appConfig.get(this.stateName) as State)
+    this._state = appConfig.has(this._stateName)
+      ? (appConfig.get(this._stateName) as State)
       : { isMaximized: true }
 
     return this
-  }
-
-  private createListeners(): void {
-    ;['resize', 'move', 'close'].forEach((event: any) => {
-      this.window.on(event, this.saveState.bind(this))
-    })
-  }
-
-  private setBounds(): void {
-    if (this.state.isFullScreen) {
-      this.window.setFullScreen(true)
-    } else if (this.state.isMaximized) {
-      this.window.maximize()
-    } else {
-      this.window.setBounds({
-        x: this.state.x,
-        y: this.state.y,
-        width: this.state.width,
-        height: this.state.height
-      })
-    }
-  }
-
-  private saveState(): void {
-    const isMaximized = this.window.isMaximized()
-    const isFullScreen = this.window.isFullScreen()
-
-    this.state = {
-      ...(isMaximized || isFullScreen ? {} : this.window.getBounds()),
-      isFullScreen,
-      isMaximized
-    }
-
-    appConfig.set(this.stateName, this.state as any)
   }
 
   public static use(name: string, window: BrowserWindow): void {
     const windowState = new WindowState(name, window)
 
     // Set the window bounds from state or the defaults
-    windowState.setBounds()
+    windowState._setBounds()
 
     // Setup the event listeners
-    windowState.createListeners()
+    windowState._createListeners()
+  }
+
+  private _createListeners(): void {
+    ;['resize', 'move', 'close'].forEach((event: any) => {
+      this._window.on(event, this._saveState.bind(this))
+    })
+  }
+
+  private _setBounds(): void {
+    if (this._state.isFullScreen) {
+      this._window.setFullScreen(true)
+    } else if (this._state.isMaximized) {
+      this._window.maximize()
+    } else {
+      this._window.setBounds(this._state.bounds!)
+    }
+  }
+
+  private _saveState(): void {
+    const isMaximized = this._window.isMaximized()
+    const isFullScreen = this._window.isFullScreen()
+
+    this._state = { isFullScreen, isMaximized }
+    if (isMaximized || isFullScreen) {
+      this._state.bounds = this._window.getBounds()
+    }
+
+    appConfig.set(this._stateName, this._state as any)
   }
 }
