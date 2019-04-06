@@ -2,7 +2,7 @@ os: osx
 osx_image: xcode10
 language: node_js
 node_js: '10'
-script: yarn validate
+script: yarn lint
 before_deploy: yarn dist
 deploy:
   skip_cleanup: true
