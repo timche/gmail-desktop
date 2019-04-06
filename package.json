@@ -11,8 +11,8 @@
   "scripts": {
     "postinstall": "electron-builder install-app-deps",
     "precommit": "lint-staged",
-    "prettier": "prettier --no-semi --single-quote --write",
-    "prettify": "npm run prettier -- src/**/*.ts",
+    "prettier": "prettier --write",
+    "prettify": "npm run prettier -- 'src/**/*.ts'",
     "lint": "xo",
     "start": "tsc && electron .",
     "pack": "tsc && electron-builder --dir",
