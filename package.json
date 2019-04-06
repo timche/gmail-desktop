@@ -40,7 +40,7 @@
     "xo": "^0.24.0"
   },
   "lint-staged": {
-    "*.{ts,js}": [
+    "*.ts": [
       "prettier --write",
       "xo --fix",
       "git add"

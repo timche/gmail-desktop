@@ -49,7 +49,7 @@ function createWindow(): void {
     webPreferences: {
       nodeIntegration: false,
       nativeWindowOpen: true,
-      preload: joinPath(__dirname, 'preload.js')
+      preload: joinPath(__dirname, 'preload')
     }
   })
 
