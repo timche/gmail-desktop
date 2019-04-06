@@ -112,9 +112,14 @@ const darwinMenu: MenuItemConstructorOptions[] = [
         role: 'paste'
       },
       {
+        label: 'Paste and Match Style',
+        accelerator: 'Shift+Cmd+V',
+        role: 'pasteAndMatchStyle'
+      },
+      {
         label: 'Select All',
         accelerator: 'Cmd+A',
-        role: 'selectall'
+        role: 'selectAll'
       }
     ]
   },
