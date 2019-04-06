@@ -7,13 +7,16 @@
   "repository": "timche/gmail-desktop",
   "author": "Tim Cheung <tim@cheung.io>",
   "license": "MIT",
-  "main": "build/app.js",
+  "main": "dist-js/app.js",
   "scripts": {
     "postinstall": "electron-builder install-app-deps",
     "precommit": "lint-staged",
-    "validate": "gulp validate",
-    "start": "gulp && electron .",
-    "dist": "gulp && electron-builder --macos --linux --windows --publish never"
+    "prettier": "prettier --no-semi --single-quote --write",
+    "prettify": "npm run prettier -- src/**/*.ts",
+    "lint": "xo",
+    "start": "tsc && electron .",
+    "pack": "tsc && electron-builder --dir",
+    "dist": "tsc && electron-builder --macos --linux --windows --publish never"
   },
   "dependencies": {
     "electron-debug": "^2.1.0",
@@ -22,47 +25,46 @@
     "electron-util": "^0.11.0"
   },
   "devDependencies": {
+    "@sindresorhus/tsconfig": "^0.3.0",
     "@types/electron-settings": "^3.1.1",
     "@types/semver": "^5.5.0",
-    "@typescript-eslint/eslint-plugin": "^1.5.0",
-    "@typescript-eslint/parser": "^1.5.0",
+    "@typescript-eslint/eslint-plugin": "^1.6.0",
     "electron": "^4.0.4",
     "electron-builder": "^20.38.5",
-    "eslint": "^5.15.3",
     "eslint-config-prettier": "^4.1.0",
-    "eslint-plugin-prettier": "^3.0.1",
-    "gulp": "^4.0.0",
-    "gulp-eslint": "^5.0.0",
-    "gulp-prettier": "^2.1.0",
-    "gulp-typescript": "^5.0.1",
+    "eslint-config-xo-typescript": "^0.9.0",
     "husky": "^0.14.3",
     "lint-staged": "^8.1.5",
     "prettier": "^1.16.4",
-    "ts-node": "^8.0.3",
-    "tslint": "^5.14.0",
-    "typescript": "^3.3.4000"
+    "typescript": "^3.3.4000",
+    "xo": "^0.24.0"
   },
   "lint-staged": {
     "*.{ts,js}": [
       "prettier --write",
-      "eslint --fix",
+      "xo --fix",
       "git add"
     ]
   },
   "prettier": {
+    "bracketSpacing": true,
     "useTabs": false,
     "semi": false,
     "singleQuote": true
   },
-  "eslintIgnore": [
-    "build/"
-  ],
+  "xo": {
+    "extends": [
+      "xo-typescript",
+      "prettier/@typescript-eslint"
+    ],
+    "extensions": [
+      "ts"
+    ],
+    "prettier": true
+  },
   "build": {
-    "directories": {
-      "buildResources": "src/resources/build"
-    },
     "files": [
-      "build/**/*"
+      "**/*"
     ],
     "appId": "io.cheung.gmail-desktop",
     "mac": {
