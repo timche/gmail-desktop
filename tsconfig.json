@@ -1,14 +1,9 @@
 {
+  "extends": "@sindresorhus/tsconfig",
   "compilerOptions": {
-    "moduleResolution": "node",
-    "module": "CommonJS",
-    "target": "es6",
-    "noImplicitAny": true,
-    "removeComments": true,
-    "preserveConstEnums": true,
-    "outDir": "build",
-    "sourceMap": true
-  },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "**/*.spec.ts"]
+    "outDir": "dist-js",
+    "target": "esnext",
+    "module": "commonjs",
+    "lib": ["esnext", "dom", "dom.iterable"]
+  }
 }
