@@ -14,6 +14,7 @@
     "prettier": "prettier --write",
     "prettify": "npm run prettier -- 'src/**/*.ts'",
     "lint": "xo",
+    "type-check": "tsc --noEmit",
     "start": "tsc && electron .",
     "pack": "tsc && electron-builder --dir",
     "dist": "tsc && electron-builder --macos --linux --windows --publish never"
@@ -59,6 +60,10 @@
     ],
     "extensions": [
       "ts"
+    ],
+    "envs": [
+      "node",
+      "browser"
     ],
     "prettier": true
   },

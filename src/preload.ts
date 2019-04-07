@@ -1,5 +1,3 @@
-/* eslint-env browser */
-
 import { ipcRenderer as ipc } from 'electron'
 
 const INTERVAL = 1000
