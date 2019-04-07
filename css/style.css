@@ -1,5 +1,4 @@
 #gb {
-  padding-left: 60px; /* make room for mac traffic lights */
   -webkit-app-region: drag; /* make titlebar draggable */
 }
 
@@ -53,6 +52,12 @@
   font: normal 14px Roboto, sans-serif !important;
 }
 
+.gssb_e {
+  box-shadow: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) !important;
+  -webkit-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) !important;
+}
+
 /* Account avatar */
 .gb_fa > .gb_Ea {
   padding: 0 !important;
@@ -66,6 +71,10 @@
 .gb_nc {
   text-align: right !important;
   width: 48px !important;
+}
+.gb_mc.gb_Ja.gb_lc {
+  height: 28px !important;
+  margin-top: 1px;
 }
 .gb_fa.gb_7f.gb_f {
   width: 48px !important;
@@ -82,12 +91,6 @@
 .gb_fa:focus {
   border: 0px none !important;
   background-color: transparent !important;
-  box-shadow: none !important;
-  -webkit-box-shadow: none !important;
-}
-
-/* Main area */
-.G-atb::before {
   box-shadow: none !important;
   -webkit-box-shadow: none !important;
 }

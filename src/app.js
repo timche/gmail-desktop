@@ -165,7 +165,20 @@ app.on('before-quit', () => {
 })
 
 function addCustomCss(windowElement) {
+  const cssBaseFile = 'style.css'
+
+  if (is.macos) {
+    var cssOs = 'style.mac.css'
+  } else if (is.linux) {
+    var cssOs = 'style.linux.css'
+  } else if (is.windows) {
+    var cssOs = 'style.windows.css'
+  }
+
   windowElement.webContents.insertCSS(
-    fs.readFileSync(path.join(__dirname, '..', 'css', 'style.css'), 'utf8')
+    fs.readFileSync(path.join(__dirname, '..', 'css', cssBaseFile), 'utf8')
+  )
+  windowElement.webContents.insertCSS(
+    fs.readFileSync(path.join(__dirname, '..', 'css', cssOs), 'utf8')
   )
 }
