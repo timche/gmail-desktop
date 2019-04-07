@@ -1,21 +1,23 @@
-const path = require('path')
-const {
+import * as path from 'path'
+import * as fs from 'fs'
+import {
   app,
-  ipcMain: ipc,
+  ipcMain as ipc,
   shell,
   BrowserWindow,
   Menu,
-  Tray
-} = require('electron')
-const fs = require('fs')
-const { autoUpdater } = require('electron-updater')
-const { is } = require('electron-util')
+  Tray,
+  MenuItemConstructorOptions
+} from 'electron'
+import { autoUpdater } from 'electron-updater'
+import { is } from 'electron-util'
+
+import { init as initDebug } from './debug'
+import menu from './menu'
+import WindowState from './state/window'
 
 // Initialize the debug mode handler when starting the app
-require('./debug').init()
-
-const menu = require('./menu')
-const WindowState = require('./state/window')
+initDebug()
 
 if (!is.development) {
   autoUpdater.checkForUpdatesAndNotify()
@@ -23,10 +25,10 @@ if (!is.development) {
 
 app.setAppUserModelId('io.cheung.gmail-desktop')
 
-let mainWindow
-let replyToWindow
+let mainWindow: BrowserWindow
+let replyToWindow: BrowserWindow
 let isQuitting = false
-let tray
+let tray: Tray
 
 if (!app.requestSingleInstanceLock()) {
   app.quit()
@@ -42,14 +44,14 @@ app.on('second-instance', () => {
   }
 })
 
-function createWindow() {
+function createWindow(): void {
   mainWindow = new BrowserWindow({
     title: app.getName(),
     titleBarStyle: 'hiddenInset',
     webPreferences: {
       nodeIntegration: false,
       nativeWindowOpen: true,
-      preload: path.join(__dirname, 'preload.js')
+      preload: path.join(__dirname, 'preload')
     }
   })
 
@@ -70,7 +72,7 @@ function createWindow() {
     }
   })
 
-  ipc.on('unread-count', (_, unreadCount) => {
+  ipc.on('unread-count', (_: any, unreadCount: number) => {
     if (is.macos) {
       app.dock.setBadge(unreadCount ? unreadCount.toString() : '')
     }
@@ -84,7 +86,7 @@ function createWindow() {
   })
 }
 
-function createMailto(url) {
+function createMailto(url: string): void {
   replyToWindow = new BrowserWindow({
     parent: mainWindow
   })
@@ -94,6 +96,31 @@ function createMailto(url) {
   )
 }
 
+function addCustomCss(windowElement: BrowserWindow): void {
+  const cssBaseFile = 'style.css'
+  let cssOs: string | null = null
+
+  if (is.macos) {
+    cssOs = 'style.mac.css'
+  } else if (is.linux) {
+    cssOs = 'style.linux.css'
+  } else if (is.windows) {
+    cssOs = 'style.windows.css'
+  } else {
+    cssOs = null
+  }
+
+  windowElement.webContents.insertCSS(
+    fs.readFileSync(path.join(__dirname, '..', 'css', cssBaseFile), 'utf8')
+  )
+
+  if (cssOs !== null) {
+    windowElement.webContents.insertCSS(
+      fs.readFileSync(path.join(__dirname, '..', 'css', cssOs), 'utf8')
+    )
+  }
+}
+
 app.on('ready', () => {
   createWindow()
 
@@ -101,9 +128,9 @@ app.on('ready', () => {
 
   if ((is.linux || is.windows) && !tray) {
     const appName = app.getName()
-    const iconPath = path.join(__dirname, '..', 'static', 'tray-icon.png')
+    const iconPath = path.join(__dirname, '..', 'resources', 'tray-icon.png')
 
-    const contextMenuTemplate = [
+    const contextMenuTemplate: MenuItemConstructorOptions[] = [
       {
         role: 'quit'
       }
@@ -111,10 +138,10 @@ app.on('ready', () => {
 
     if (is.linux) {
       contextMenuTemplate.unshift({
-        label: 'Show',
         click: () => {
           mainWindow.show()
-        }
+        },
+        label: 'Show'
       })
     }
 
@@ -134,21 +161,18 @@ app.on('ready', () => {
     mainWindow.show()
   })
 
-  webContents.on(
-    'new-window',
-    (event, url, frameName, disposition, options) => {
-      event.preventDefault()
+  webContents.on('new-window', (event: any, url, _1, _2, options) => {
+    event.preventDefault()
 
-      if (/^(https:\/\/(mail|accounts)\.google\.com).*/.test(url)) {
-        event.newGuest = new BrowserWindow(options)
-        event.newGuest.webContents.on('dom-ready', () => {
-          addCustomCss(event.newGuest)
-        })
-      } else {
-        shell.openExternal(url)
-      }
+    if (/^(https:\/\/(mail|accounts)\.google\.com).*/.test(url)) {
+      event.newGuest = new BrowserWindow(options)
+      event.newGuest.webContents.on('dom-ready', () => {
+        addCustomCss(event.newGuest)
+      })
+    } else {
+      shell.openExternal(url)
     }
-  )
+  })
 })
 
 app.on('open-url', (event, url) => {
@@ -163,22 +187,3 @@ app.on('activate', () => {
 app.on('before-quit', () => {
   isQuitting = true
 })
-
-function addCustomCss(windowElement) {
-  const cssBaseFile = 'style.css'
-
-  if (is.macos) {
-    var cssOs = 'style.mac.css'
-  } else if (is.linux) {
-    var cssOs = 'style.linux.css'
-  } else if (is.windows) {
-    var cssOs = 'style.windows.css'
-  }
-
-  windowElement.webContents.insertCSS(
-    fs.readFileSync(path.join(__dirname, '..', 'css', cssBaseFile), 'utf8')
-  )
-  windowElement.webContents.insertCSS(
-    fs.readFileSync(path.join(__dirname, '..', 'css', cssOs), 'utf8')
-  )
-}
