@@ -1,16 +1,13 @@
-const { app, shell, Menu } = require('electron')
-const appConfig = require('electron-settings')
-const { is } = require('electron-util')
+import { app, shell, Menu, MenuItemConstructorOptions } from 'electron'
+import appConfig from 'electron-settings'
+import { is } from 'electron-util'
 
-const {
-  CONFIG_KEY: DEBUG_MODE_CONFIG_KEY,
-  showRestartDialog
-} = require('./debug')
+import { CONFIG_KEY as DEBUG_MODE_CONFIG_KEY, showRestartDialog } from './debug'
 
 const APP_NAME = app.getName()
 let mailtoStatus = app.isDefaultProtocolClient('mailto')
 
-function toggleMailto() {
+function toggleMailto(): void {
   if (app.isDefaultProtocolClient('mailto')) {
     app.removeAsDefaultProtocolClient('mailto')
     mailtoStatus = false
@@ -20,15 +17,15 @@ function toggleMailto() {
   }
 }
 
-const debugMode = appConfig.get(DEBUG_MODE_CONFIG_KEY)
-function toggleDebugMode() {
+const debugMode = Boolean(appConfig.get(DEBUG_MODE_CONFIG_KEY))
+function toggleDebugMode(): void {
   const enabled = !debugMode
 
   appConfig.set(DEBUG_MODE_CONFIG_KEY, enabled)
   showRestartDialog(enabled)
 }
 
-const darwinMenu = [
+const darwinMenu: MenuItemConstructorOptions[] = [
   {
     label: APP_NAME,
     submenu: [
@@ -183,4 +180,5 @@ if (is.development) {
   })
 }
 
-module.exports = Menu.buildFromTemplate(darwinMenu)
+const menu = Menu.buildFromTemplate(darwinMenu)
+export default menu

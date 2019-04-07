@@ -2,13 +2,17 @@
 .DS_Store
 
 # Node
-npm-debug.log
 node_modules/
+npm-debug.log
+yarn-error.log
 
 # Editors
 .idea/
-.vscode/
+.vscode/*
+!.vscode/tasks.json
+!.vscode/launch.json
 
 # Build and distribution files
 dist/
+dist-js/
 *.tgz

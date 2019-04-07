@@ -1,20 +1,22 @@
-const path = require('path')
-const {
+import path from 'path'
+import {
   app,
-  ipcMain: ipc,
+  ipcMain as ipc,
   shell,
   BrowserWindow,
   Menu,
-  Tray
-} = require('electron')
-const { autoUpdater } = require('electron-updater')
-const { is } = require('electron-util')
+  Tray,
+  MenuItemConstructorOptions
+} from 'electron'
+import { autoUpdater } from 'electron-updater'
+import { is } from 'electron-util'
+
+import { init as initDebug } from './debug'
+import menu from './menu'
+import WindowState from './state/window'
 
 // Initialize the debug mode handler when starting the app
-require('./debug').init()
-
-const menu = require('./menu')
-const WindowState = require('./state/window')
+initDebug()
 
 if (!is.development) {
   autoUpdater.checkForUpdatesAndNotify()
@@ -22,10 +24,10 @@ if (!is.development) {
 
 app.setAppUserModelId('io.cheung.gmail-desktop')
 
-let mainWindow
-let replyToWindow
+let mainWindow: BrowserWindow
+let replyToWindow: BrowserWindow
 let isQuitting = false
-let tray
+let tray: Tray
 
 if (!app.requestSingleInstanceLock()) {
   app.quit()
@@ -41,13 +43,13 @@ app.on('second-instance', () => {
   }
 })
 
-function createWindow() {
+function createWindow(): void {
   mainWindow = new BrowserWindow({
     title: app.getName(),
     webPreferences: {
       nodeIntegration: false,
       nativeWindowOpen: true,
-      preload: path.join(__dirname, 'preload.js')
+      preload: path.join(__dirname, 'preload')
     }
   })
 
@@ -63,7 +65,7 @@ function createWindow() {
     }
   })
 
-  ipc.on('unread-count', (_, unreadCount) => {
+  ipc.on('unread-count', (_: any, unreadCount: number) => {
     if (is.macos) {
       app.dock.setBadge(unreadCount ? unreadCount.toString() : '')
     }
@@ -77,7 +79,7 @@ function createWindow() {
   })
 }
 
-function createMailto(url) {
+function createMailto(url: string): void {
   replyToWindow = new BrowserWindow({
     parent: mainWindow
   })
@@ -94,9 +96,9 @@ app.on('ready', () => {
 
   if ((is.linux || is.windows) && !tray) {
     const appName = app.getName()
-    const iconPath = path.join(__dirname, '..', 'static', 'tray-icon.png')
+    const iconPath = path.join(__dirname, '..', 'resources', 'tray-icon.png')
 
-    const contextMenuTemplate = [
+    const contextMenuTemplate: MenuItemConstructorOptions[] = [
       {
         role: 'quit'
       }
@@ -104,10 +106,10 @@ app.on('ready', () => {
 
     if (is.linux) {
       contextMenuTemplate.unshift({
-        label: 'Show',
         click: () => {
           mainWindow.show()
-        }
+        },
+        label: 'Show'
       })
     }
 
@@ -127,18 +129,15 @@ app.on('ready', () => {
     mainWindow.show()
   })
 
-  webContents.on(
-    'new-window',
-    (event, url, frameName, disposition, options) => {
-      event.preventDefault()
+  webContents.on('new-window', (event: any, url, _1, _2, options) => {
+    event.preventDefault()
 
-      if (/^(https:\/\/(mail|accounts)\.google\.com).*/.test(url)) {
-        event.newGuest = new BrowserWindow(options)
-      } else {
-        shell.openExternal(url)
-      }
+    if (/^(https:\/\/(mail|accounts)\.google\.com).*/.test(url)) {
+      event.newGuest = new BrowserWindow(options)
+    } else {
+      shell.openExternal(url)
     }
-  )
+  })
 })
 
 app.on('open-url', (event, url) => {
