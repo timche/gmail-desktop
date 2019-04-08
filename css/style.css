@@ -41,7 +41,7 @@
 }
 
 .gb_wd.gb_Fd .gb_td .gb_ne {
-  margin-top: 10px;
+  margin-top: 9px;
 }
 
 .gb_ne,
@@ -101,4 +101,11 @@
   background-color: transparent !important;
   box-shadow: none !important;
   -webkit-box-shadow: none !important;
+}
+
+.gb_x:active,
+.gb_x:focus,
+.gb_x:focus:hover
+{
+  background: transparent none !important;
 }
