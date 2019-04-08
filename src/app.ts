@@ -10,7 +10,7 @@ import {
   MenuItemConstructorOptions
 } from 'electron'
 import { autoUpdater } from 'electron-updater'
-import { is } from 'electron-util'
+import utils, { is } from 'electron-util'
 
 import { init as initDebug } from './debug'
 import menu from './menu'
@@ -29,6 +29,12 @@ let mainWindow: BrowserWindow
 let replyToWindow: BrowserWindow
 let isQuitting = false
 let tray: Tray
+
+const platform = utils.platform({
+  macos: 'macos',
+  linux: 'linux',
+  windows: 'windows'
+})
 
 if (!app.requestSingleInstanceLock()) {
   app.quit()
@@ -61,7 +67,7 @@ function createWindow(): void {
   mainWindow.loadURL('https://mail.google.com')
 
   mainWindow.webContents.on('dom-ready', () => {
-    addCustomCss(mainWindow)
+    addCustomCSS(mainWindow)
   })
 
   mainWindow.on('close', e => {
@@ -96,27 +102,20 @@ function createMailto(url: string): void {
   )
 }
 
-function addCustomCss(windowElement: BrowserWindow): void {
-  const cssBaseFile = 'style.css'
-  let cssOs: string | null = null
-
-  if (is.macos) {
-    cssOs = 'style.mac.css'
-  } else if (is.linux) {
-    cssOs = 'style.linux.css'
-  } else if (is.windows) {
-    cssOs = 'style.windows.css'
-  } else {
-    cssOs = null
-  }
-
+function addCustomCSS(windowElement: BrowserWindow): void {
   windowElement.webContents.insertCSS(
-    fs.readFileSync(path.join(__dirname, '..', 'css', cssBaseFile), 'utf8')
+    fs.readFileSync(path.join(__dirname, '..', 'css', 'style.css'), 'utf8')
   )
 
-  if (cssOs !== null) {
+  const platformCSSFile = path.join(
+    __dirname,
+    '..',
+    'css',
+    `style.${platform}.css`
+  )
+  if (fs.existsSync(platformCSSFile)) {
     windowElement.webContents.insertCSS(
-      fs.readFileSync(path.join(__dirname, '..', 'css', cssOs), 'utf8')
+      fs.readFileSync(platformCSSFile, 'utf8')
     )
   }
 }
@@ -167,7 +166,7 @@ app.on('ready', () => {
     if (/^(https:\/\/(mail|accounts)\.google\.com).*/.test(url)) {
       event.newGuest = new BrowserWindow(options)
       event.newGuest.webContents.on('dom-ready', () => {
-        addCustomCss(event.newGuest)
+        addCustomCSS(event.newGuest)
       })
     } else {
       shell.openExternal(url)
