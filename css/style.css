@@ -2,6 +2,14 @@
   -webkit-app-region: drag; /* make titlebar draggable */
 }
 
+/* make this elements not draggable */
+.gb_Xb, /* hamburger menu */
+.gb_td, /* search box */
+.gb_nc /* avatar */
+{
+  -webkit-app-region: no-drag;
+}
+
 #gbwa, /* google apps */
 #gbwa + div /* google notifications */
  {
