@@ -96,7 +96,7 @@ app.on('ready', () => {
 
   if ((is.linux || is.windows) && !tray) {
     const appName = app.getName()
-    const iconPath = path.join(__dirname, '..', 'resources', 'tray-icon.png')
+    const iconPath = path.join(__dirname, '..', 'static', 'tray-icon.png')
 
     const contextMenuTemplate: MenuItemConstructorOptions[] = [
       {
