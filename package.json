@@ -10,7 +10,6 @@
   "main": "dist-js/app.js",
   "scripts": {
     "postinstall": "electron-builder install-app-deps",
-    "postversion": "git push && git push --tags",
     "precommit": "lint-staged",
     "prettier": "prettier --write",
     "prettify": "npm run prettier -- 'src/**/*.ts'",
