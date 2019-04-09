@@ -1,4 +1,5 @@
 import path from 'path'
+import fs from 'fs'
 import {
   app,
   ipcMain as ipc,
@@ -9,7 +10,7 @@ import {
   MenuItemConstructorOptions
 } from 'electron'
 import { autoUpdater } from 'electron-updater'
-import { is } from 'electron-util'
+import utils, { is } from 'electron-util'
 
 import { init as initDebug } from './debug'
 import menu from './menu'
@@ -29,6 +30,12 @@ let replyToWindow: BrowserWindow
 let isQuitting = false
 let tray: Tray
 
+const platform = utils.platform({
+  macos: 'macos',
+  linux: 'linux',
+  windows: 'windows'
+})
+
 if (!app.requestSingleInstanceLock()) {
   app.quit()
 }
@@ -46,6 +53,7 @@ app.on('second-instance', () => {
 function createWindow(): void {
   mainWindow = new BrowserWindow({
     title: app.getName(),
+    titleBarStyle: 'hiddenInset',
     webPreferences: {
       nodeIntegration: false,
       nativeWindowOpen: true,
@@ -57,6 +65,11 @@ function createWindow(): void {
   WindowState.use('main', mainWindow)
 
   mainWindow.loadURL('https://mail.google.com')
+
+  mainWindow.webContents.on('dom-ready', () => {
+    addCustomCSS(mainWindow)
+  })
+
   mainWindow.on('close', e => {
     if (!isQuitting) {
       e.preventDefault()
@@ -87,6 +100,24 @@ function createMailto(url: string): void {
   replyToWindow.loadURL(
     `https://mail.google.com/mail/?extsrc=mailto&url=${url}`
   )
+}
+
+function addCustomCSS(windowElement: BrowserWindow): void {
+  windowElement.webContents.insertCSS(
+    fs.readFileSync(path.join(__dirname, '..', 'css', 'style.css'), 'utf8')
+  )
+
+  const platformCSSFile = path.join(
+    __dirname,
+    '..',
+    'css',
+    `style.${platform}.css`
+  )
+  if (fs.existsSync(platformCSSFile)) {
+    windowElement.webContents.insertCSS(
+      fs.readFileSync(platformCSSFile, 'utf8')
+    )
+  }
 }
 
 app.on('ready', () => {
@@ -134,6 +165,9 @@ app.on('ready', () => {
 
     if (/^(https:\/\/(mail|accounts)\.google\.com).*/.test(url)) {
       event.newGuest = new BrowserWindow(options)
+      event.newGuest.webContents.on('dom-ready', () => {
+        addCustomCSS(event.newGuest)
+      })
     } else {
       shell.openExternal(url)
     }

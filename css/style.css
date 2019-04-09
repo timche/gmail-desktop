@@ -1,0 +1,111 @@
+#gb {
+  -webkit-app-region: drag; /* make titlebar draggable */
+}
+
+/* make this elements not draggable */
+.gb_Xb, /* hamburger menu */
+.gb_td, /* search box */
+.gb_nc /* avatar */
+{
+  -webkit-app-region: no-drag;
+}
+
+#gbwa, /* google apps */
+#gbwa + div /* google notifications */
+ {
+  display: none;
+}
+
+#gb .gb_gd {
+  /* Compact header */
+  padding: 4px;
+}
+
+/* Remove gmail logo */
+.gb_ja:not(.gb_ka) .gb_qc .gb_Rb {
+  display: none !important;
+}
+
+/* Header */
+.gb_lc {
+  height: 32px !important;
+}
+.gb_Xb {
+  padding: 2px !important;
+  margin-left: 18px !important;
+}
+
+/* Search box */
+.gb_qc {
+  min-width: 192px !important;
+}
+
+.gb_wd.gb_Fd .gb_td .gb_ne {
+  margin-top: 9px;
+}
+
+.gb_ne,
+.gb_2e,
+.gb_Ie {
+  height: 28px !important;
+}
+
+.gb_ne button svg,
+.gb_ne button img {
+  padding: 2px !important;
+  margin: 0 !important;
+}
+
+.gb_Ie {
+  font: normal 14px Roboto, sans-serif !important;
+}
+
+.gssb_e {
+  box-shadow: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) !important;
+  -webkit-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Account avatar */
+.gb_fa > .gb_Ea {
+  padding: 0 !important;
+}
+.gb_fa {
+  border: 0px none !important;
+}
+.gb_ga {
+  display: none !important;
+}
+.gb_nc {
+  text-align: right !important;
+  width: 48px !important;
+}
+.gb_mc.gb_Ja.gb_lc {
+  height: 28px !important;
+  margin-top: 1px;
+}
+.gb_fa.gb_7f.gb_f {
+  width: 48px !important;
+}
+
+.gb_ja:not(.gb_ka) .gb_fa {
+  width: auto !important;
+  margin-left: 0px !important;
+}
+.gb_fa:hover {
+  border: 0x none !important;
+  background-color: transparent !important;
+}
+.gb_fa:focus {
+  border: 0px none !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+  -webkit-box-shadow: none !important;
+}
+
+.gb_x:active,
+.gb_x:focus,
+.gb_x:focus:hover
+{
+  background: transparent none !important;
+}
