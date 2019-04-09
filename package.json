@@ -13,7 +13,9 @@
     "precommit": "lint-staged",
     "prettier": "prettier --write",
     "prettify": "npm run prettier -- 'src/**/*.ts'",
-    "lint": "xo",
+    "lint": "run-p lint:*",
+    "lint:ts": "xo",
+    "lint:css": "stylelint 'css/*.css'",
     "type-check": "tsc --noEmit",
     "start": "tsc && electron .",
     "pack": "tsc && electron-builder --dir",
@@ -37,7 +39,11 @@
     "eslint-config-xo-typescript": "^0.9.0",
     "husky": "^0.14.3",
     "lint-staged": "^8.1.5",
+    "npm-run-all": "^4.1.5",
     "prettier": "^1.16.4",
+    "stylelint": "^9.10.1",
+    "stylelint-config-prettier": "^5.0.0",
+    "stylelint-config-xo": "^0.13.0",
     "typescript": "^3.3.4000",
     "xo": "^0.24.0"
   },
@@ -45,6 +51,11 @@
     "*.ts": [
       "prettier --write",
       "xo --fix",
+      "git add"
+    ],
+    "*.css": [
+      "prettier --write",
+      "stylelint --fix",
       "git add"
     ]
   },
@@ -67,6 +78,15 @@
       "browser"
     ],
     "prettier": true
+  },
+  "stylelint": {
+    "extends": "stylelint-config-xo",
+    "rules": {
+      "declaration-no-important": null,
+      "selector-class-pattern": null,
+      "indentation": 2,
+      "property-no-vendor-prefix": null
+    }
   },
   "build": {
     "files": [
