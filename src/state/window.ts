@@ -58,7 +58,7 @@ export default class WindowState {
     const isFullScreen = this._window.isFullScreen()
 
     this._state = { isFullScreen, isMaximized }
-    if (isMaximized || isFullScreen) {
+    if (!(isMaximized || isFullScreen)) {
       this._state.bounds = this._window.getBounds()
     }
 
