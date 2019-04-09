@@ -11,7 +11,7 @@ import {
 } from 'electron'
 import { autoUpdater } from 'electron-updater'
 import utils, { is } from 'electron-util'
-
+import log from 'electron-log'
 import { init as initDebug } from './debug'
 import menu from './menu'
 import WindowState from './state/window'
@@ -20,7 +20,15 @@ import WindowState from './state/window'
 initDebug()
 
 if (!is.development) {
-  autoUpdater.checkForUpdatesAndNotify()
+  log.transports.file.level = 'info'
+  autoUpdater.logger = log
+
+  const UPDATE_CHECK_INTERVAL = 60000 * 60 * 3 // 3 Hours
+  setInterval(() => {
+    autoUpdater.checkForUpdates()
+  }, UPDATE_CHECK_INTERVAL)
+
+  autoUpdater.checkForUpdates()
 }
 
 app.setAppUserModelId('io.cheung.gmail-desktop')
