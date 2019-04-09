@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.5.0]
+
+### Added
+
+-  Add logging to auto-updater
+    - It writes logs to the following locations:
+        - macOS: `~/Library/Logs/Gmail Desktop/log.log`
+        - Windows: `%USERPROFILE%\AppData\Roaming\Gmail Desktop\log.log`
+        - Linux: `~/.config/Gmail Desktop/log.log`
+
 ## [2.4.0]
 
 ### Added
@@ -123,7 +133,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[unreleased]: https://github.com/timche/gmail-desktop/compare/v2.4.0...HEAD
+[unreleased]: https://github.com/timche/gmail-desktop/compare/v2.5.0...HEAD
+[2.5.0]: https://github.com/timche/gmail-desktop/compare/v2.4.0...v2.5.0
 [2.4.0]: https://github.com/timche/gmail-desktop/compare/v2.3.1...v2.4.0
 [2.3.1]: https://github.com/timche/gmail-desktop/compare/v2.3.0...v2.3.1
 [2.3.0]: https://github.com/timche/gmail-desktop/compare/v2.2.0...v2.3.0
