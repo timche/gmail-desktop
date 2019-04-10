@@ -89,6 +89,7 @@
     }
   },
   "build": {
+    "artifactName": "${name}-${version}-${os}.${ext}",
     "files": [
       "**/*"
     ],
