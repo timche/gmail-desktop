@@ -177,6 +177,7 @@ app.on('ready', () => {
     event.preventDefault()
 
     if (/^(https:\/\/(mail|accounts)\.google\.com).*/.test(url)) {
+      // Center the new window on the screen
       event.newGuest = new BrowserWindow({
         ...options,
         x: null,
