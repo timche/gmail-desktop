@@ -177,7 +177,11 @@ app.on('ready', () => {
     event.preventDefault()
 
     if (/^(https:\/\/(mail|accounts)\.google\.com).*/.test(url)) {
-      event.newGuest = new BrowserWindow(options)
+      event.newGuest = new BrowserWindow({
+        ...options,
+        x: null,
+        y: null
+      })
       event.newGuest.webContents.on('dom-ready', () => {
         addCustomCSS(event.newGuest)
       })
