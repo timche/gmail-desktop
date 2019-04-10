@@ -25,6 +25,12 @@
   padding: 4px;
 }
 
+/* Compact header for new windows */
+body.xE .G-atb {
+  padding-bottom: 6px;
+  padding-top: 6px;
+}
+
 /* Remove Gmail logo */
 .gb_ja:not(.gb_ka) .gb_qc .gb_Rb {
   display: none !important;
