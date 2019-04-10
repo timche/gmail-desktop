@@ -1,5 +1,7 @@
 /* Make titlebar draggable */
-#gb {
+#gb,
+/* Message toolbar in new window */
+body.xE .G-atb {
   -webkit-app-region: drag;
 }
 
@@ -9,7 +11,9 @@
 /* Search box */
 .gb_td,
 /* Account avatar */
-.gb_nc {
+.gb_nc,
+/* Message toolbar button strip in new window */
+body.xE .G-atb .G-tF {
   -webkit-app-region: no-drag;
 }
 
