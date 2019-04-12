@@ -14,6 +14,15 @@
         "code",
         "ideas"
       ]
+    },
+    {
+      "login": "cdloh",
+      "name": "Callum Loh",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/883577?v=4",
+      "profile": "https://github.com/cdloh",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
