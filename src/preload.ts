@@ -1,6 +1,8 @@
 import { ipcRenderer as ipc } from 'electron'
 
-const INTERVAL = 1000
+const UNREAD_INTERVAL = 1000
+const ATTACH_BUTTON_INTERVAL = 200
+
 let count: number
 
 function getUnreadCount(): number {
@@ -33,6 +35,33 @@ function updateUnreadCount(): void {
   }
 }
 
+function attachButtonListeners(): void {
+  let buttonsFound = false
+
+  const selectors = [
+    'lR', // Archive
+    'nN', // Spam
+    'nX' // Delete
+  ]
+
+  // Close the new windows when specific action buttons are clicked
+  selectors.forEach(selector => {
+    // Scope the selector to only new windows
+    const button = document.querySelector(`body.xE .G-atb .${selector}`)
+
+    // Close the window when the button is clicked
+    if (button) {
+      button.addEventListener('click', () => window.close())
+      buttonsFound = true
+    }
+  })
+
+  // If the buttons were not found, sleep and then try again
+  if (!buttonsFound) {
+    setTimeout(attachButtonListeners, ATTACH_BUTTON_INTERVAL)
+  }
+}
+
 window.addEventListener('load', () => {
   // Set the initial unread count
   updateUnreadCount()
@@ -47,7 +76,10 @@ window.addEventListener('load', () => {
 
   // Check the unread count on an interval timer for instances where
   //   the title doesn't change
-  setInterval(updateUnreadCount, INTERVAL)
+  setInterval(updateUnreadCount, UNREAD_INTERVAL)
+
+  // Wait for the page content to load before attaching the button listeners
+  setTimeout(attachButtonListeners, ATTACH_BUTTON_INTERVAL)
 })
 
 // Toggle the minimal mode class when a message is
