@@ -55,6 +55,11 @@ yarn start
 yarn dist
 ```
 
+## Maintainers
+
+- [Tim Cheung](https://github.com/timche)
+- [Mark Skelton](https://github.com/markypython)
+
 ## Disclaimer
 
 Gmail Desktop is a third-party app and not affiliated with Google.
