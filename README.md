@@ -1,10 +1,10 @@
 # <img src="media/logo.png" height="38"> Gmail Desktop
-[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors)
 
 [![Travis](https://travis-ci.org/timche/gmail-desktop.svg?branch=master)](https://travis-ci.org/timche/gmail-desktop)
 [![Latest Tag](https://img.shields.io/github/tag/timche/gmail-desktop.svg?style=flat)](https://github.com/timche/gmail-desktop/releases/latest)
 [![XO Code Style](https://img.shields.io/badge/code_style-XO-5ed9c7.svg)](https://github.com/sindresorhus/xo)
 [![Styled with Prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
+[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg)](#contributors)
 
 > Gmail Desktop App built with [Electron](https://github.com/electron/electron)
 
@@ -61,10 +61,6 @@ yarn dist
 - [Tim Cheung](https://github.com/timche)
 - [Mark Skelton](https://github.com/markypython)
 
-## Disclaimer
-
-Gmail Desktop is a third-party app and not affiliated with Google.
-
 ## Contributors
 
 Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
@@ -76,3 +72,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
+
+## Disclaimer
+
+Gmail Desktop is a third-party app and not affiliated with Google.
