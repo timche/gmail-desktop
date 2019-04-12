@@ -3,6 +3,11 @@
   padding-left: 60px;
 }
 
+/* Add space for traffic lights in PDF viewer */
+.aLF-aPX-aPU-J6 {
+  margin-left: 75px;
+}
+
 /* Pad emails in new windows to match the main window padding
    between the traffic lights and hamburger menu */
 body.xE .G-atb {
