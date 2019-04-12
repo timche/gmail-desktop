@@ -183,9 +183,18 @@ app.on('ready', () => {
         x: null,
         y: null
       })
+
       event.newGuest.webContents.on('dom-ready', () => {
         addCustomCSS(event.newGuest)
       })
+
+      event.newGuest.webContents.on(
+        'new-window',
+        (event: Event, url: string) => {
+          event.preventDefault()
+          shell.openExternal(url)
+        }
+      )
     } else {
       shell.openExternal(url)
     }
