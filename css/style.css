@@ -1,7 +1,11 @@
 /* Make titlebar draggable */
 #gb,
 /* Message toolbar in new window */
-body.xE .G-atb {
+body.xE .G-atb,
+/* Compose in new window */
+.Io,
+/* PDF viewer */
+.aLF-aPX-aPU-J6 {
   -webkit-app-region: drag;
 }
 
@@ -13,7 +17,13 @@ body.xE .G-atb {
 /* Account avatar */
 .gb_nc,
 /* Message toolbar button strip in new window */
-body.xE .G-atb .G-tF {
+body.xE .G-atb .G-tF,
+/* Minimize compose button in new compose window */
+.Io > .HF,
+/* PDF viewer back button */
+.aLF-aPX-aPU-J6 .aLF-aPX-Jq-I,
+/* PDF viewer right action buttons */
+.aLF-aPX-aPU-J6 .aLF-aPX-aPU-a6I-P6 {
   -webkit-app-region: no-drag;
 }
 
