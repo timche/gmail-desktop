@@ -119,3 +119,16 @@
 .gb_x:focus:hover {
   background: transparent none !important;
 }
+
+/* Minimal mode */
+
+/* Footer text */
+.minimal-mode .aeG,
+/* Support question mark */
+.minimal-mode .gb_fe,
+/* Side panel */
+.minimal-mode .bAw,
+/* Keyboard button */
+.minimal-mode .aBS {
+  display: none;
+}
