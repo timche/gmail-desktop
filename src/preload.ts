@@ -49,3 +49,9 @@ window.addEventListener('load', () => {
   //   the title doesn't change
   setInterval(updateUnreadCount, INTERVAL)
 })
+
+// Toggle the minimal mode class when a message is
+//   received from the main process
+ipc.on('set-minimal-mode', (_: Event, enabled: boolean) => {
+  document.body.classList[enabled ? 'add' : 'remove']('minimal-mode')
+})

@@ -3,27 +3,12 @@ import appConfig from 'electron-settings'
 import { is } from 'electron-util'
 
 import { CONFIG_KEY as DEBUG_MODE_CONFIG_KEY, showRestartDialog } from './debug'
+import {
+  CONFIG_KEY as MINIMAL_MODE_CONFIG_KEY,
+  setMinimalMode
+} from './minimal-mode'
 
 const APP_NAME = app.getName()
-let mailtoStatus = app.isDefaultProtocolClient('mailto')
-
-function toggleMailto(): void {
-  if (app.isDefaultProtocolClient('mailto')) {
-    app.removeAsDefaultProtocolClient('mailto')
-    mailtoStatus = false
-  } else {
-    app.setAsDefaultProtocolClient('mailto')
-    mailtoStatus = true
-  }
-}
-
-const debugMode = Boolean(appConfig.get(DEBUG_MODE_CONFIG_KEY))
-function toggleDebugMode(): void {
-  const enabled = !debugMode
-
-  appConfig.set(DEBUG_MODE_CONFIG_KEY, enabled)
-  showRestartDialog(enabled)
-}
 
 const darwinMenu: MenuItemConstructorOptions[] = [
   {
@@ -65,17 +50,31 @@ const darwinMenu: MenuItemConstructorOptions[] = [
       {
         label: 'Default Mailto Client',
         type: 'checkbox',
-        checked: mailtoStatus,
+        checked: app.isDefaultProtocolClient('mailto'),
         click() {
-          toggleMailto()
+          if (app.isDefaultProtocolClient('mailto')) {
+            app.removeAsDefaultProtocolClient('mailto')
+          } else {
+            app.setAsDefaultProtocolClient('mailto')
+          }
+        }
+      },
+      {
+        label: 'Minimal Mode',
+        type: 'checkbox',
+        checked: Boolean(appConfig.get(MINIMAL_MODE_CONFIG_KEY)),
+        click({ checked }) {
+          appConfig.set(MINIMAL_MODE_CONFIG_KEY, checked)
+          setMinimalMode(checked)
         }
       },
       {
         label: 'Debug Mode',
         type: 'checkbox',
-        checked: debugMode,
-        click() {
-          toggleDebugMode()
+        checked: Boolean(appConfig.get(DEBUG_MODE_CONFIG_KEY)),
+        click({ checked }) {
+          appConfig.set(DEBUG_MODE_CONFIG_KEY, checked)
+          showRestartDialog(checked)
         }
       }
     ]

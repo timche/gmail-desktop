@@ -12,8 +12,10 @@ import {
 import { autoUpdater } from 'electron-updater'
 import utils, { is } from 'electron-util'
 import log from 'electron-log'
+
 import { init as initDebug } from './debug'
 import menu from './menu'
+import { init as initMinimalMode } from './minimal-mode'
 import WindowState from './state/window'
 
 // Initialize the debug mode handler when starting the app
@@ -76,6 +78,9 @@ function createWindow(): void {
 
   mainWindow.webContents.on('dom-ready', () => {
     addCustomCSS(mainWindow)
+
+    // Initialize minimal mode if the setting is turned on
+    initMinimalMode()
   })
 
   mainWindow.on('close', e => {
