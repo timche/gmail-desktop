@@ -12,11 +12,12 @@
 
 ## Features
 
-- Native Gmail Interface
-- Desktop Notifications
-- Unread Badge in macOS Dock & Windows/Linux Tray
-- Cross-Platform
-- Auto-Updates
+- Native Gmail interface
+- Cross-platform
+- Desktop notifications
+- Unread badge in macOS dock & icon Windows/Linux tray
+- Minimal design mode
+- Silent auto-updates
 
 ## Installation
 
