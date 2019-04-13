@@ -1,9 +1,12 @@
 import { BrowserWindow } from 'electron'
 
-export function getWindow(): BrowserWindow {
+export function getMainWindow(): BrowserWindow {
   return BrowserWindow.getAllWindows()[0]
 }
 
-export function sendAction(action: string, ...args: unknown[]): void {
-  getWindow().webContents.send(action, ...args)
+export function sendChannelToMainWindow(
+  channel: string,
+  ...args: unknown[]
+): void {
+  getMainWindow().webContents.send(channel, ...args)
 }
