@@ -183,6 +183,7 @@ app.on('ready', () => {
         x: null,
         y: null
       })
+
       event.newGuest.webContents.on('dom-ready', () => {
         addCustomCSS(event.newGuest)
       })
