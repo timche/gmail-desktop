@@ -38,9 +38,9 @@ function updateUnreadCount(): void {
 function attachButtonListeners(): void {
   // For windows that won't include the selectors we are expecting,
   //   don't wait for them appear as they never will
-  // if (!window.location.search.includes('&search=inbox')) {
-  //   return
-  // }
+  if (!window.location.search.includes('&search=inbox')) {
+    return
+  }
 
   const promise = elementReady('body.xE .G-atb .lR')
 
