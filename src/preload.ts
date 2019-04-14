@@ -1,8 +1,8 @@
 import { ipcRenderer as ipc } from 'electron'
+import elementReady from 'element-ready'
+import log from 'electron-log'
 
-const UNREAD_INTERVAL = 1000
-const ATTACH_BUTTON_INTERVAL = 200
-
+const INTERVAL = 1000
 let count: number
 
 function getUnreadCount(): number {
@@ -36,30 +36,40 @@ function updateUnreadCount(): void {
 }
 
 function attachButtonListeners(): void {
-  let buttonsFound = false
+  // For windows that won't include the selectors we are expecting,
+  //   don't wait for them appear as they never will
+  // if (!window.location.search.includes('&search=inbox')) {
+  //   return
+  // }
 
-  const selectors = [
-    'lR', // Archive
-    'nN', // Spam
-    'nX' // Delete
-  ]
+  const promise = elementReady('body.xE .G-atb .lR')
 
-  // Close the new windows when specific action buttons are clicked
-  selectors.forEach(selector => {
-    // Scope the selector to only new windows
-    const button = document.querySelector(`body.xE .G-atb .${selector}`)
+  promise
+    .then(() => {
+      const selectors = [
+        'lR', // Archive
+        'nN', // Spam
+        'nX' // Delete
+      ]
 
-    // Close the window when the button is clicked
-    if (button) {
-      button.addEventListener('click', () => window.close())
-      buttonsFound = true
-    }
-  })
+      // Close the new windows when specific action buttons are clicked
+      selectors.forEach(selector => {
+        // Scope the selector to only new windows
+        const button = document.querySelector(`body.xE .G-atb .${selector}`)
 
-  // If the buttons were not found, sleep and then try again
-  if (!buttonsFound) {
-    setTimeout(attachButtonListeners, ATTACH_BUTTON_INTERVAL)
-  }
+        // Close the window when the button is clicked
+        if (button) {
+          button.addEventListener('click', () => window.close())
+        }
+      })
+    })
+    .catch(log.warn)
+
+  // Cancel the element-ready promise after 10 seconds to prevent
+  //   a possible runaway check loop
+  setTimeout(() => {
+    promise.cancel('Canceling runaway element-ready check loop')
+  }, 10000)
 }
 
 window.addEventListener('load', () => {
@@ -76,10 +86,11 @@ window.addEventListener('load', () => {
 
   // Check the unread count on an interval timer for instances where
   //   the title doesn't change
-  setInterval(updateUnreadCount, UNREAD_INTERVAL)
+  setInterval(updateUnreadCount, INTERVAL)
 
-  // Wait for the page content to load before attaching the button listeners
-  setTimeout(attachButtonListeners, ATTACH_BUTTON_INTERVAL)
+  // Attaching the button listeners to the buttons
+  //   that should close the new window
+  attachButtonListeners()
 })
 
 // Toggle the minimal mode class when a message is
