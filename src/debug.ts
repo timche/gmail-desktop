@@ -16,7 +16,7 @@ export function showRestartDialog(enabled: boolean): void {
       type: 'info',
       buttons: ['Restart', 'Cancel'],
       message: 'Restart required',
-      detail: `To ${state} debug mode, please restart Gmail Desktop`
+      detail: `To ${state} debug mode, please restart ${app.getName()}`
     },
     response => {
       // If restart was clicked (index of 0), restart the app
