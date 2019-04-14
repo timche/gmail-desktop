@@ -48,7 +48,6 @@ function attachButtonListeners(): void {
     .then(() => {
       const selectors = [
         'lR', // Archive
-        'nN', // Spam
         'nX' // Delete
       ]
 
