@@ -42,33 +42,27 @@ function attachButtonListeners(): void {
     return
   }
 
-  const promise = elementReady('body.xE .G-atb .lR')
+  const selectors = [
+    'lR', // Archive
+    'nX' // Delete
+  ]
 
-  promise
-    .then(() => {
-      const selectors = [
-        'lR', // Archive
-        'nX' // Delete
-      ]
+  selectors.forEach(async selector => {
+    try {
+      const buttonReady = elementReady(`body.xE .G-atb .${selector}`)
 
-      // Close the new windows when specific action buttons are clicked
-      selectors.forEach(selector => {
-        // Scope the selector to only new windows
-        const button = document.querySelector(`body.xE .G-atb .${selector}`)
+      const readyTimeout = setTimeout(() => {
+        buttonReady.cancel(`Detect button "${selector}" timed out`)
+      }, 10000)
 
-        // Close the window when the button is clicked
-        if (button) {
-          button.addEventListener('click', () => window.close())
-        }
-      })
-    })
-    .catch(log.warn)
+      const button = await buttonReady
+      clearTimeout(readyTimeout)
 
-  // Cancel the element-ready promise after 10 seconds to prevent
-  //   a possible runaway check loop
-  setTimeout(() => {
-    promise.cancel('Canceling runaway element-ready check loop')
-  }, 10000)
+      button.addEventListener('click', () => window.close())
+    } catch (error) {
+      log.error(error)
+    }
+  })
 }
 
 window.addEventListener('load', () => {
