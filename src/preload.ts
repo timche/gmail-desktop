@@ -1,4 +1,6 @@
 import { ipcRenderer as ipc } from 'electron'
+import elementReady from 'element-ready'
+import log from 'electron-log'
 
 const INTERVAL = 1000
 let count: number
@@ -33,6 +35,36 @@ function updateUnreadCount(): void {
   }
 }
 
+function attachButtonListeners(): void {
+  // For windows that won't include the selectors we are expecting,
+  //   don't wait for them appear as they never will
+  if (!window.location.search.includes('&search=inbox')) {
+    return
+  }
+
+  const selectors = [
+    'lR', // Archive
+    'nX' // Delete
+  ]
+
+  selectors.forEach(async selector => {
+    try {
+      const buttonReady = elementReady(`body.xE .G-atb .${selector}`)
+
+      const readyTimeout = setTimeout(() => {
+        buttonReady.cancel(`Detect button "${selector}" timed out`)
+      }, 10000)
+
+      const button = await buttonReady
+      clearTimeout(readyTimeout)
+
+      button.addEventListener('click', () => window.close())
+    } catch (error) {
+      log.error(error)
+    }
+  })
+}
+
 window.addEventListener('load', () => {
   // Set the initial unread count
   updateUnreadCount()
@@ -48,6 +80,10 @@ window.addEventListener('load', () => {
   // Check the unread count on an interval timer for instances where
   //   the title doesn't change
   setInterval(updateUnreadCount, INTERVAL)
+
+  // Attaching the button listeners to the buttons
+  //   that should close the new window
+  attachButtonListeners()
 })
 
 // Toggle the minimal mode class when a message is
