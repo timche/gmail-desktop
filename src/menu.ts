@@ -24,7 +24,7 @@ const darwinMenu: MenuItemConstructorOptions[] = [
         role: 'hide'
       },
       {
-        label: 'Hide others',
+        label: 'Hide Others',
         accelerator: 'Cmd+Shift+H',
         role: 'hideothers'
       },
@@ -149,7 +149,7 @@ const darwinMenu: MenuItemConstructorOptions[] = [
         }
       },
       {
-        label: 'Report an issue',
+        label: 'Report an Issue',
         click() {
           shell.openExternal(
             'https://github.com/timche/gmail-desktop/issues/new/choose'
@@ -166,7 +166,7 @@ if (is.development) {
     label: 'Develop',
     submenu: [
       {
-        label: 'Clear cache and restart',
+        label: 'Clear Cache and Restart',
         click() {
           // Clear app config
           appConfig.deleteAll()
