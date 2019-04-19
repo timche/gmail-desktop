@@ -33,7 +33,7 @@ if (!is.development) {
   autoUpdater.checkForUpdates()
 }
 
-app.setAppUserModelId('io.cheung.gmail-desktop')
+app.setAppUserModelId('dev.timche.gmail-desktop')
 
 let mainWindow: BrowserWindow
 let replyToWindow: BrowserWindow
