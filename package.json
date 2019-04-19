@@ -105,6 +105,9 @@
         "deb"
       ],
       "category": "Network;Office"
+    },
+    "win": {
+      "verifyUpdateCodeSignature": false
     }
   }
 }
