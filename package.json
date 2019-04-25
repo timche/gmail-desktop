@@ -1,10 +1,10 @@
 {
-  "name": "gmail-desktop",
-  "productName": "Gmail Desktop",
+  "name": "mailtron",
+  "productName": "Mailtron",
   "version": "2.7.1",
-  "description": "Unofficial Gmail Desktop App",
+  "description": "Productive Gmail desktop app",
   "private": true,
-  "repository": "timche/gmail-desktop",
+  "repository": "timche/mailtron",
   "author": "Tim Cheung <tim@cheung.io>",
   "license": "MIT",
   "main": "dist-js/app.js",
@@ -90,11 +90,11 @@
     }
   },
   "build": {
-    "artifactName": "${name}-${version}-${os}.${ext}",
     "files": [
-      "**/*"
+      "**/*",
+      "!media${/*}"
     ],
-    "appId": "dev.timche.gmail-desktop",
+    "appId": "dev.timche.mailtron",
     "mac": {
       "category": "public.app-category.productivity",
       "darkModeSupport": false
