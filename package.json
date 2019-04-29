@@ -22,6 +22,7 @@
     "dist": "tsc && electron-builder --macos --linux --windows --publish never"
   },
   "dependencies": {
+    "electron-context-menu": "^0.12.0",
     "electron-debug": "^2.1.0",
     "electron-dl": "^1.14.0",
     "electron-log": "^3.0.5",

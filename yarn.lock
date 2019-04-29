@@ -1277,6 +1277,14 @@ electron-builder@^20.38.5:
     update-notifier "^2.5.0"
     yargs "^12.0.5"
 
+electron-context-menu@^0.12.0:
+  version "0.12.0"
+  resolved "https://registry.yarnpkg.com/electron-context-menu/-/electron-context-menu-0.12.0.tgz#ee882a3e9bf219df0e0b9473ca041ef40940fccd"
+  integrity sha512-kZEPG3a864UQOZDJnfsVUiWjhonIpfPPtH8Z7luvPUf7sra/Sz1x2n3aRnyzGN8jQhgRvQomJg/QKXHNbZZ/+g==
+  dependencies:
+    electron-dl "^1.2.0"
+    electron-is-dev "^1.0.1"
+
 electron-debug@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/electron-debug/-/electron-debug-2.1.0.tgz#8a926a37a7b2db77d35063ba1362c05e0fb78bda"
@@ -1285,7 +1293,7 @@ electron-debug@^2.1.0:
     electron-is-dev "^0.3.0"
     electron-localshortcut "^3.0.0"
 
-electron-dl@^1.14.0:
+electron-dl@^1.14.0, electron-dl@^1.2.0:
   version "1.14.0"
   resolved "https://registry.yarnpkg.com/electron-dl/-/electron-dl-1.14.0.tgz#1466f1b945664ca3d784268307c2b935728177bf"
   integrity sha512-4okyei42a1mLsvLK7hLrIfd20EQzB18nIlLTwBV992aMSmTGLUEFRTmO1MfSslGNrzD8nuPuy1l/VxO8so4lig==
