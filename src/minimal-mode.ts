@@ -1,13 +1,11 @@
-import appConfig from 'electron-settings'
+import config from './config'
 
 import { sendChannelToMainWindow } from './utils'
-
-export const CONFIG_KEY = 'minimal-mode'
 
 export function setMinimalMode(enabled: boolean): void {
   sendChannelToMainWindow('set-minimal-mode', enabled)
 }
 
 export function init(): void {
-  setMinimalMode(Boolean(appConfig.get(CONFIG_KEY, false)))
+  setMinimalMode(config.get('minimalMode'))
 }

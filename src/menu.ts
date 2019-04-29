@@ -1,12 +1,9 @@
 import { app, shell, Menu, MenuItemConstructorOptions } from 'electron'
-import appConfig from 'electron-settings'
 import { is } from 'electron-util'
 
-import { CONFIG_KEY as DEBUG_MODE_CONFIG_KEY, showRestartDialog } from './debug'
-import {
-  CONFIG_KEY as MINIMAL_MODE_CONFIG_KEY,
-  setMinimalMode
-} from './minimal-mode'
+import config from './config'
+import { showRestartDialog } from './debug'
+import { setMinimalMode } from './minimal-mode'
 
 const APP_NAME = app.getName()
 
@@ -62,18 +59,18 @@ const darwinMenu: MenuItemConstructorOptions[] = [
       {
         label: 'Minimal Mode',
         type: 'checkbox',
-        checked: Boolean(appConfig.get(MINIMAL_MODE_CONFIG_KEY)),
+        checked: config.get('minimalMode'),
         click({ checked }) {
-          appConfig.set(MINIMAL_MODE_CONFIG_KEY, checked)
+          config.set('minimalMode', checked)
           setMinimalMode(checked)
         }
       },
       {
         label: 'Debug Mode',
         type: 'checkbox',
-        checked: Boolean(appConfig.get(DEBUG_MODE_CONFIG_KEY)),
+        checked: config.get('debugMode'),
         click({ checked }) {
-          appConfig.set(DEBUG_MODE_CONFIG_KEY, checked)
+          config.set('debugMode', checked)
           showRestartDialog(checked)
         }
       }
@@ -169,7 +166,7 @@ if (is.development) {
         label: 'Clear Cache and Restart',
         click() {
           // Clear app config
-          appConfig.deleteAll()
+          config.clear()
           // Restart without firing quitting events
           app.relaunch()
           app.exit(0)
