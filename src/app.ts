@@ -10,13 +10,14 @@ import {
   MenuItemConstructorOptions
 } from 'electron'
 import { autoUpdater } from 'electron-updater'
-import utils, { is } from 'electron-util'
+import { is } from 'electron-util'
 import log from 'electron-log'
 
 import { init as initDebug } from './debug'
 import menu from './menu'
 import { init as initMinimalMode } from './minimal-mode'
 import WindowState from './state/window'
+import { platform, getUrlAccountId } from './helpers'
 
 // Initialize the debug mode handler when starting the app
 initDebug()
@@ -39,12 +40,6 @@ let mainWindow: BrowserWindow
 let replyToWindow: BrowserWindow
 let isQuitting = false
 let tray: Tray
-
-const platform = utils.platform({
-  macos: 'macos',
-  linux: 'linux',
-  windows: 'windows'
-})
 
 if (!app.requestSingleInstanceLock()) {
   app.quit()
@@ -176,7 +171,19 @@ app.on('ready', () => {
   webContents.on('new-window', (event: any, url, _1, _2, options) => {
     event.preventDefault()
 
-    if (/^(https:\/\/(mail|accounts)\.google\.com).*/.test(url)) {
+    // `Add account` opens `accounts.google.com`
+    if (/^https:\/\/accounts\.google\.com/.test(url)) {
+      mainWindow.loadURL(url)
+    } else if (/^https:\/\/mail\.google\.com/.test(url)) {
+      // Check if the user switches accounts which is determined
+      // by the URL: `mail.google.com/mail/u/<local_account_id>/...`
+      const currentAccountId = getUrlAccountId(mainWindow.webContents.getURL())
+      const targetAccountId = getUrlAccountId(url)
+
+      if (targetAccountId !== currentAccountId) {
+        return mainWindow.loadURL(url)
+      }
+
       // Center the new window on the screen
       event.newGuest = new BrowserWindow({
         ...options,
