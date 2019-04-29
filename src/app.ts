@@ -12,6 +12,7 @@ import {
 import { autoUpdater } from 'electron-updater'
 import utils, { is } from 'electron-util'
 import log from 'electron-log'
+import electronDl from 'electron-dl'
 
 import { init as initDebug } from './debug'
 import menu from './menu'
@@ -20,6 +21,8 @@ import WindowState from './state/window'
 
 // Initialize the debug mode handler when starting the app
 initDebug()
+
+electronDl({ showBadge: false })
 
 if (!is.development) {
   log.transports.file.level = 'info'
