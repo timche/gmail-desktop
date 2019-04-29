@@ -13,6 +13,7 @@ import { autoUpdater } from 'electron-updater'
 import utils, { is } from 'electron-util'
 import log from 'electron-log'
 import electronDl from 'electron-dl'
+import electronContextMenu from 'electron-context-menu'
 
 import { init as initDebug } from './debug'
 import menu from './menu'
@@ -23,6 +24,7 @@ import WindowState from './state/window'
 initDebug()
 
 electronDl({ showBadge: false })
+electronContextMenu()
 
 if (!is.development) {
   log.transports.file.level = 'info'
