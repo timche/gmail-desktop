@@ -24,7 +24,7 @@ import WindowState from './state/window'
 initDebug()
 
 electronDl({ showBadge: false })
-electronContextMenu()
+electronContextMenu({ showCopyImageAddress: true, showSaveImageAs: true })
 
 if (!is.development) {
   log.transports.file.level = 'info'
