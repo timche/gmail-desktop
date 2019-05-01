@@ -96,7 +96,7 @@
     "files": [
       "**/*"
     ],
-    "appId": "dev.timche.gmail-desktop",
+    "appId": "io.cheung.gmail-desktop",
     "mac": {
       "category": "public.app-category.productivity",
       "darkModeSupport": false
