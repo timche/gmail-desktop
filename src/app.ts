@@ -78,7 +78,7 @@ function createWindow(): void {
     }
   })
 
-  if (lastWindowState.maximized && !mainWindow.isMaximized) {
+  if (lastWindowState.maximized && !mainWindow.isMaximized()) {
     mainWindow.maximize()
   }
 
