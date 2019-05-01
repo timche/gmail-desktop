@@ -67,23 +67,27 @@ body.xE .G-atb {
   min-width: 192px !important;
 }
 
-.gb_wd.gb_Fd .gb_td .gb_ne {
-  margin-top: 9px;
+.gb_td.gb_la {
+  margin-top: -3px !important;
 }
 
-.gb_ne,
-.gb_2e,
-.gb_Ie {
+.gb_wd.gb_Fd .gb_td .gb_ne {
+  margin-top: 9px !important;
+}
+
+.gb_td,
+.gb_3e,
+.gb_Je {
   height: 28px !important;
 }
 
-.gb_ne button svg,
-.gb_ne button img {
+.gb_td button svg,
+.gb_td button img {
   padding: 2px !important;
   margin: 0 !important;
 }
 
-.gb_Ie {
+.gb_Je {
   font: normal 14px Roboto, sans-serif !important;
 }
 
