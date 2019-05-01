@@ -15,10 +15,10 @@ import log from 'electron-log'
 import electronDl from 'electron-dl'
 import electronContextMenu from 'electron-context-menu'
 
+import config from './config'
 import { init as initDebug } from './debug'
 import menu from './menu'
 import { init as initMinimalMode } from './minimal-mode'
-import WindowState from './state/window'
 import { platform, getUrlAccountId } from './helpers'
 
 // Initialize the debug mode handler when starting the app
@@ -61,9 +61,16 @@ app.on('second-instance', () => {
 })
 
 function createWindow(): void {
+  const lastWindowState = config.get('lastWindowState')
+
   mainWindow = new BrowserWindow({
     title: app.getName(),
     titleBarStyle: 'hiddenInset',
+    width: lastWindowState.bounds.width,
+    height: lastWindowState.bounds.height,
+    x: lastWindowState.bounds.x,
+    y: lastWindowState.bounds.y,
+    fullscreen: lastWindowState.fullscreen,
     webPreferences: {
       nodeIntegration: false,
       nativeWindowOpen: true,
@@ -71,8 +78,9 @@ function createWindow(): void {
     }
   })
 
-  // Use the window state to set the mainWindow bounds
-  WindowState.use('main', mainWindow)
+  if (lastWindowState.maximized && !mainWindow.isMaximized) {
+    mainWindow.maximize()
+  }
 
   mainWindow.loadURL('https://mail.google.com')
 
@@ -224,4 +232,12 @@ app.on('activate', () => {
 
 app.on('before-quit', () => {
   isQuitting = true
+
+  if (mainWindow) {
+    config.set('lastWindowState', {
+      bounds: mainWindow.getBounds(),
+      fullscreen: mainWindow.isFullScreen(),
+      maximized: mainWindow.isMaximized()
+    })
+  }
 })

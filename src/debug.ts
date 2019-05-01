@@ -1,9 +1,7 @@
 import { app, dialog } from 'electron'
-import { is } from 'electron-util'
-import appConfig from 'electron-settings'
 import electronDebug from 'electron-debug'
+import config from './config'
 
-export const CONFIG_KEY = 'debug-mode'
 const OPTIONS = {
   showDevTools: false
 }
@@ -29,7 +27,7 @@ export function showRestartDialog(enabled: boolean): void {
 }
 
 export function init(): void {
-  const enabled = Boolean(appConfig.get(CONFIG_KEY, is.development))
+  const enabled = config.get('debugMode')
 
   electronDebug({ ...OPTIONS, enabled })
 }
