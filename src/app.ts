@@ -70,13 +70,16 @@ function createWindow(): void {
     height: lastWindowState.bounds.height,
     x: lastWindowState.bounds.x,
     y: lastWindowState.bounds.y,
-    fullscreen: lastWindowState.fullscreen,
     webPreferences: {
       nodeIntegration: false,
       nativeWindowOpen: true,
       preload: path.join(__dirname, 'preload')
     }
   })
+
+  if (lastWindowState.fullscreen && !mainWindow.isFullScreen()) {
+    mainWindow.setFullScreen(lastWindowState.fullscreen)
+  }
 
   if (lastWindowState.maximized && !mainWindow.isMaximized()) {
     mainWindow.maximize()
