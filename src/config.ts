@@ -1,6 +1,7 @@
 import fs from 'fs'
 import Store from 'electron-store'
 import oldConfig from 'electron-settings'
+import { is } from 'electron-util'
 
 export interface LastWindowState {
   bounds: {
@@ -28,7 +29,10 @@ const defaults = {
   debugMode: false
 }
 
-const config = new Store({ defaults })
+const config = new Store({
+  defaults,
+  name: is.development ? 'config.dev' : 'config'
+})
 
 // @TODO: Remove `electron-settings` in future version
 function migrate(): void {
