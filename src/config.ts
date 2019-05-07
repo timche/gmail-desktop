@@ -26,7 +26,8 @@ const defaults = {
     maximized: true
   } as unknown) as LastWindowState,
   minimalMode: false,
-  debugMode: false
+  debugMode: false,
+  customStyles: true
 }
 
 const config = new Store({
