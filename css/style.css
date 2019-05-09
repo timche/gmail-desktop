@@ -37,8 +37,8 @@ body.xE .G-atb .G-tF,
 }
 
 /* Compact Header */
-#gb .gb_gd {
-  padding: 4px;
+#gb .gb_jd {
+  padding: 5px;
 }
 
 /* Compact header for new windows */
@@ -48,13 +48,13 @@ body.xE .G-atb {
 }
 
 /* Remove Gmail logo */
-.gb_ja:not(.gb_ka) .gb_qc .gb_Rb {
+.gb_jd .gb_Rb {
   display: none !important;
 }
 
 /* Header */
-.gb_lc {
-  height: 32px !important;
+.gb_jd {
+  height: 40px !important;
 }
 
 .gb_Xb {
@@ -63,32 +63,31 @@ body.xE .G-atb {
 }
 
 /* Search box */
-.gb_qc {
+.gb_ce {
   min-width: 192px !important;
+}
+
+/* Search box input */
+.gb_Je {
+  font: normal 14px Roboto, sans-serif !important;
+  height: 100% !important;
 }
 
 .gb_td.gb_la {
   margin-top: -3px !important;
 }
 
-.gb_wd.gb_Fd .gb_td .gb_ne {
-  margin-top: 9px !important;
-}
-
-.gb_td,
-.gb_3e,
-.gb_Je {
+/* hamburger menu */
+.gb_tc,
+/* search box */
+.gb_3e {
   height: 28px !important;
 }
 
-.gb_td button svg,
-.gb_td button img {
+.gb_2e > svg,
+.gb_Ve > svg {
   padding: 2px !important;
   margin: 0 !important;
-}
-
-.gb_Je {
-  font: normal 14px Roboto, sans-serif !important;
 }
 
 .gssb_e {
@@ -97,7 +96,7 @@ body.xE .G-atb {
 }
 
 /* Account avatar */
-.gb_fa > .gb_Ea {
+.gb_Da {
   padding: 0 !important;
 }
 
@@ -153,7 +152,7 @@ body.xE .G-atb {
 /* Footer text */
 .minimal-mode .aeG,
 /* Support question mark */
-.minimal-mode .gb_ge,
+.minimal-mode .gb_Zd,
 /* Side panel */
 .minimal-mode .bAw,
 /* Keyboard button */

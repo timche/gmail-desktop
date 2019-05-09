@@ -2,7 +2,7 @@ import { app, shell, Menu, MenuItemConstructorOptions } from 'electron'
 import { is } from 'electron-util'
 
 import config from './config'
-import { showRestartDialog } from './debug'
+import { showRestartDialog } from './utils'
 import { setMinimalMode } from './minimal-mode'
 
 const APP_NAME = app.getName()
@@ -45,6 +45,29 @@ const darwinMenu: MenuItemConstructorOptions[] = [
     label: 'Settings',
     submenu: [
       {
+        label: 'Appearance',
+        submenu: [
+          {
+            label: 'Custom styles',
+            type: 'checkbox',
+            checked: config.get('customStyles'),
+            click({ checked }) {
+              config.set('customStyles', checked)
+              showRestartDialog(checked, 'custom styles')
+            }
+          },
+          {
+            label: 'Minimal Mode',
+            type: 'checkbox',
+            checked: config.get('minimalMode'),
+            click({ checked }) {
+              config.set('minimalMode', checked)
+              setMinimalMode(checked)
+            }
+          }
+        ]
+      },
+      {
         label: 'Default Mailto Client',
         type: 'checkbox',
         checked: app.isDefaultProtocolClient('mailto'),
@@ -57,21 +80,12 @@ const darwinMenu: MenuItemConstructorOptions[] = [
         }
       },
       {
-        label: 'Minimal Mode',
-        type: 'checkbox',
-        checked: config.get('minimalMode'),
-        click({ checked }) {
-          config.set('minimalMode', checked)
-          setMinimalMode(checked)
-        }
-      },
-      {
         label: 'Debug Mode',
         type: 'checkbox',
         checked: config.get('debugMode'),
         click({ checked }) {
           config.set('debugMode', checked)
-          showRestartDialog(checked)
+          showRestartDialog(checked, 'debug mode')
         }
       }
     ]

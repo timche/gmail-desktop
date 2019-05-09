@@ -65,7 +65,7 @@ function createWindow(): void {
 
   mainWindow = new BrowserWindow({
     title: app.getName(),
-    titleBarStyle: 'hiddenInset',
+    titleBarStyle: config.get('customStyles') ? 'hiddenInset' : 'default',
     width: lastWindowState.bounds.width,
     height: lastWindowState.bounds.height,
     x: lastWindowState.bounds.x,
@@ -127,6 +127,10 @@ function createMailto(url: string): void {
 }
 
 function addCustomCSS(windowElement: BrowserWindow): void {
+  if (!config.get('customStyles')) {
+    return
+  }
+
   windowElement.webContents.insertCSS(
     fs.readFileSync(path.join(__dirname, '..', 'css', 'style.css'), 'utf8')
   )
