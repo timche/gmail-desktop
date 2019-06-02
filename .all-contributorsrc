@@ -51,6 +51,17 @@
       "contributions": [
         "ideas"
       ]
+    },
+    {
+      "login": "markypython",
+      "name": "Mark Skelton",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/25914066?v=4",
+      "profile": "https://github.com/markypython",
+      "contributions": [
+        "code",
+        "ideas",
+        "maintenance"
+      ]
     }
   ],
   "contributorsPerLine": 7,
