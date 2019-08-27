@@ -3,7 +3,7 @@
  * ----------------------------------------
  */
 
- header {
+header {
   -webkit-app-region: drag;
 }
 
@@ -61,12 +61,14 @@ header > div:nth-child(2) > div:nth-child(2) > div:nth-child(3) a {
 }
 
 /* Header search box height */
+/* stylelint-disable selector-id-pattern */
 header > div:nth-child(2) > div:nth-child(2) > div:nth-child(2),
 header > div:nth-child(2) > div:nth-child(2) form > div:first-of-type,
 /* Initial header search box must be 100% to prevent height flashing */
 header > div:nth-child(2) > div:nth-child(2) form:not(#aso_search_form_anchor) {
   height: 100%;
 }
+/* stylelint-enable selector-id-pattern */
 
 /* Initial header search box input styles to prevent flashing */
 header > div:nth-child(2) > div:nth-child(2) form > div:first-of-type > input {
@@ -94,7 +96,7 @@ header > div:nth-child(2) > div:nth-child(2) form input {
 /* Support question mark */
 .minimal-mode header > div:nth-child(2) > div:nth-child(2) > div:nth-child(3),
 /* Footer text */
-.minimal-mode div[role="contentinfo"],
+.minimal-mode div[role='contentinfo'],
 /* Footer loading text */
 .minimal-mode #loading #stb,
 /* Side panel */
