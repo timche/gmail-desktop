@@ -1,18 +1,4 @@
-/* Add space for traffic lights */
-
-/* Main window */
-#gb {
-  padding-left: 60px;
-}
-
-/* Email viewer */
-body.xE .G-atb,
-/* Compose window */
-.Io {
-  padding-left: 85px !important;
-}
-
-/* PDF viewier */
-.aLF-aPX-aPU-J6 {
+/* Move hamburger menu over so it isn't under the traffic lights */
+header > div:nth-child(2) > div:first-child > div:first-child {
   margin-left: 75px;
 }
