@@ -1,4 +1,20 @@
-/* Move hamburger menu over so it isn't under the traffic lights */
-header > div:nth-child(2) > div:first-child > div:first-child {
+/**
+ * TRAFFIC LIGHT POSITION
+ * ----------------------------------------
+ */
+
+/* Hamburger menu */
+header > div:nth-child(2) > div:first-child > div:first-child,
+/* "New Message" header in compose new message window */
+.Io > div:last-child,
+/* Message toolbar button strip in new window */
+body.xE .G-atb .G-tF,
+/* PDF viewer header back button */
+div[aria-label='Showing viewer.'] > div:nth-child(3) > div {
   margin-left: 75px;
+}
+
+/* Don't set explicit width for "New Message" header in compose new message window */
+.Io > div:last-child {
+  width: auto;
 }

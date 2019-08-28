@@ -3,7 +3,13 @@
  * ----------------------------------------
  */
 
-header {
+header,
+/* Compose in new window */
+.Io,
+/* Message toolbar in new window */
+body.xE .G-atb,
+/* PDF viewer header */
+div[aria-label='Showing viewer.'] > div:nth-child(3) > div {
   -webkit-app-region: drag;
 }
 
@@ -19,7 +25,13 @@ header > div:nth-child(2) > div:nth-child(2) form,
 /* Support question mark */
 header > div:nth-child(2) > div:nth-child(2) > div:nth-child(3) a,
 /* User avatar */
-header > div:nth-child(2) > div:nth-child(3) a {
+header > div:nth-child(2) > div:nth-child(3) a,
+/* Minimize button in new compose window header */
+.Io > div:first-child,
+/* Message toolbar button strip in new window */
+body.xE .G-atb .G-tF,
+/* PDF viewer header elements (buttons, text, etc.) */
+div[aria-label='Showing viewer.'] > div:nth-child(3) > div > div {
   -webkit-app-region: no-drag;
 }
 
@@ -39,6 +51,12 @@ header > div:nth-child(2) > div:first-child > div:nth-child(4),
 header > div:nth-child(2) {
   height: 40px;
   padding: 5px !important;
+}
+
+/* Decrease padding for message toolbar button strip in new window */
+body.xE .G-atb {
+  padding-top: 6px;
+  padding-bottom: 6px;
 }
 
 /* Header items height (hamburger menu, search box, profile image) */
@@ -85,7 +103,59 @@ header > div:nth-child(2) > div:nth-child(2) form > button > svg {
 
 /* Header search box input */
 header > div:nth-child(2) > div:nth-child(2) form input {
+  font-size: 14px;
   top: -9px !important;
+}
+
+/* Account information popup (when you click the user avatar) */
+header > div:nth-child(2) > div:nth-child(5) {
+  height: auto;
+  top: 48px;
+}
+
+/**
+ * ACCOUNT LINK FOR G SUITE ACCOUNTS
+ * ----------------------------------------
+ * Note: The [role='button'] selector on all of the following styles is necessary
+ * to ensure that these styles are only applied to G Suite account links and not
+ * normal account avatars.
+ */
+
+/* Account link container height */
+header > div:nth-child(2) > div:nth-child(3) > div > div:last-child[role='button'] {
+  max-height: 32px !important;
+}
+
+/* Remove padding and line height from account logo and avatar to fix vertical alignment */
+header > div:nth-child(2) > div:nth-child(3) > div > div:last-child[role='button'] > div {
+  line-height: unset !important;
+  padding-bottom: 0;
+  padding-top: 0;
+}
+
+/* Shrink account logo to fit properly in the container while maintaining the aspect ratio */
+header > div:nth-child(2) > div:nth-child(3) > div > div:last-child[role='button'] > div:first-child > img {
+  width: 73px !important;
+  max-height: 30px !important;
+}
+
+/* Account avatar link */
+header > div:nth-child(2) > div:nth-child(3) > div > div:last-child[role='button'] a {
+  height: 28px;
+  padding: 0 4px;
+}
+
+/* Account avatar background image size */
+header > div:nth-child(2) > div:nth-child(3) > div > div:last-child[role='button'] a > span {
+  background-size: 28px 28px;
+  box-shadow: none;
+  height: 28px;
+  width: 28px;
+}
+
+/* Account avatar background image origin */
+header > div:nth-child(2) > div:nth-child(3) > div > div:last-child[role='button'] a > span::before {
+  transform-origin: -4px -4px;
 }
 
 /**
