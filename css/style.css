@@ -53,6 +53,12 @@ header > div:nth-child(2) {
   padding: 5px !important;
 }
 
+/* Decrease padding for message toolbar button strip in new window */
+body.xE .G-atb {
+  padding-top: 6px;
+  padding-bottom: 6px;
+}
+
 /* Header items height (hamburger menu, search box, profile image) */
 header > div:nth-child(2) > div {
   height: 28px;
