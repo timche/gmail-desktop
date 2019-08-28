@@ -54,6 +54,7 @@ header > div:nth-child(2) {
 }
 
 /* Header items height (hamburger menu, search box, profile image) */
+/* The :not(:nth-child(5)) selector prevents setting an explicit height for the account information popup */
 header > div:nth-child(2) > div:not(:nth-child(5)) {
   height: 28px;
 }
