@@ -54,7 +54,6 @@ header > div:nth-child(2) {
 }
 
 /* Header items height (hamburger menu, search box, profile image) */
-/* The not selector is to prevent the account switcher height from being affected */
 header > div:nth-child(2) > div:not(:nth-child(5)) {
   height: 28px;
 }
@@ -107,9 +106,49 @@ header > div:nth-child(2) > div:nth-child(5) {
   top: 48px;
 }
 
-/* Fix height of message toolbar button strip in new window */
-body.xE .G-atb {
-  padding: 6px 15px;
+/**
+ * ACCOUNT LINK FOR G SUITE ACCOUNTS
+ * ----------------------------------------
+ * Note: The [role='button'] selector on all of the following styles is necessary
+ * to ensure that these styles are only applied to G Suite account links and not
+ * normal account avatars.
+ */
+
+/* Account link container height */
+header > div:nth-child(2) > div:nth-child(3) > div > div:last-child[role='button'] {
+  max-height: 32px !important;
+}
+
+/* Remove padding and line height from account logo and avatar to fix vertical alignment */
+header > div:nth-child(2) > div:nth-child(3) > div > div:last-child[role='button'] > div {
+  line-height: unset !important;
+  padding-bottom: 0;
+  padding-top: 0;
+}
+
+/* Shrink account logo to fit properly in the container while maintaining the aspect ratio */
+header > div:nth-child(2) > div:nth-child(3) > div > div:last-child[role='button'] > div:first-child > img {
+  width: 73px !important;
+  max-height: 30px !important;
+}
+
+/* Account avatar link */
+header > div:nth-child(2) > div:nth-child(3) > div > div:last-child[role='button'] a {
+  height: 28px;
+  padding: 0 4px;
+}
+
+/* Account avatar background image size */
+header > div:nth-child(2) > div:nth-child(3) > div > div:last-child[role='button'] a > span {
+  background-size: 28px 28px;
+  box-shadow: none;
+  height: 28px;
+  width: 28px;
+}
+
+/* Account avatar background image origin */
+header > div:nth-child(2) > div:nth-child(3) > div > div:last-child[role='button'] a > span::before {
+  transform-origin: -4px -4px;
 }
 
 /**
