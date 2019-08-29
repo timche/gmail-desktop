@@ -2,6 +2,8 @@ import { ipcRenderer as ipc } from 'electron'
 import elementReady from 'element-ready'
 import log from 'electron-log'
 
+import { ConfigKey } from './config'
+
 const INTERVAL = 1000
 let count: number
 
@@ -86,8 +88,7 @@ window.addEventListener('load', () => {
   attachButtonListeners()
 })
 
-// Toggle the minimal mode class when a message is
-//   received from the main process
-ipc.on('set-minimal-mode', (_: Event, enabled: boolean) => {
-  document.body.classList[enabled ? 'add' : 'remove']('minimal-mode')
+// Toggle a custom style class when a message is received from the main process
+ipc.on('set-custom-style', (_: Event, key: ConfigKey, enabled: boolean) => {
+  document.body.classList[enabled ? 'add' : 'remove'](key)
 })

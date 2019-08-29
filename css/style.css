@@ -3,13 +3,13 @@
  * ----------------------------------------
  */
 
-header,
+.compactHeader header,
 /* Compose in new window */
-.Io,
+.compactHeader .Io,
 /* Message toolbar in new window */
-body.xE .G-atb,
+body.compactHeader.xE .G-atb,
 /* PDF viewer header */
-div[aria-label='Showing viewer.'] > div:nth-child(3) > div {
+.compactHeader div[aria-label='Showing viewer.'] > div:nth-child(3) > div {
   -webkit-app-region: drag;
 }
 
@@ -19,21 +19,21 @@ div[aria-label='Showing viewer.'] > div:nth-child(3) > div {
  */
 
 /* Hamburger menu */
-header > div:nth-child(2) > div:first-child > div:first-child,
+.compactHeader header > div:nth-child(2) > div:first-child > div:first-child,
 /* Search box */
-header > div:nth-child(2) > div:nth-child(2) form,
+.compactHeader header > div:nth-child(2) > div:nth-child(2) form,
 /* Support question mark */
-header > div:nth-child(2) > div:nth-child(2) > div:nth-child(3) a,
+.compactHeader header > div:nth-child(2) > div:nth-child(2) > div:nth-child(3) a,
+/* User avatar */
+.compactHeader header > div:nth-child(2) > div:nth-child(3) a,
 /* User avatar for G Suite accounts */
 header > div:nth-child(2) > div:nth-child(3) > div > div:last-child[role='button'],
-/* User avatar */
-header > div:nth-child(2) > div:nth-child(3) a,
 /* Minimize button in new compose window header */
-.Io > div:first-child,
+.compactHeader .Io > div:first-child,
 /* Message toolbar button strip in new window */
-body.xE .G-atb .G-tF,
+body.compactHeader.xE .G-atb .G-tF,
 /* PDF viewer header elements (buttons, text, etc.) */
-div[aria-label='Showing viewer.'] > div:nth-child(3) > div > div {
+.compactHeader div[aria-label='Showing viewer.'] > div:nth-child(3) > div > div {
   -webkit-app-region: no-drag;
 }
 
@@ -43,31 +43,31 @@ div[aria-label='Showing viewer.'] > div:nth-child(3) > div > div {
  */
 
 /* Gmail icon and name */
-header > div:nth-child(2) > div:first-child > div:nth-child(4),
+.compactHeader header > div:nth-child(2) > div:first-child > div:nth-child(4),
 /* Google Apps button */
-#gbwa {
+.compactHeader #gbwa {
   display: none !important;
 }
 
 /* Header height */
-header > div:nth-child(2) {
+.compactHeader header > div:nth-child(2) {
   height: 40px;
   padding: 5px !important;
 }
 
 /* Decrease padding for message toolbar button strip in new window */
-body.xE .G-atb {
+body.compactHeader.xE .G-atb {
   padding-top: 6px;
   padding-bottom: 6px;
 }
 
 /* Header items height (hamburger menu, search box, profile image) */
-header > div:nth-child(2) > div {
+.compactHeader header > div:nth-child(2) > div {
   height: 28px;
 }
 
 /* Hamburger menu padding (this affects the hover size) */
-header > div:nth-child(2) > div:first-child > div:first-child {
+.compactHeader header > div:nth-child(2) > div:first-child > div:first-child {
   margin: 0;
   padding: 4px;
   /* Align the hamburger menu with the compose button */
@@ -75,42 +75,42 @@ header > div:nth-child(2) > div:first-child > div:first-child {
 }
 
 /* Decrease support question mark padding to prevent the hover from touching the edge */
-header > div:nth-child(2) > div:nth-child(2) > div:nth-child(3) a {
+.compactHeader header > div:nth-child(2) > div:nth-child(2) > div:nth-child(3) a {
   margin: 2px 6px;
   padding: 4px !important;
 }
 
 /* Header search box height */
 /* stylelint-disable selector-id-pattern */
-header > div:nth-child(2) > div:nth-child(2) > div:nth-child(2),
-header > div:nth-child(2) > div:nth-child(2) form > div:first-of-type,
+.compactHeader header > div:nth-child(2) > div:nth-child(2) > div:nth-child(2),
+.compactHeader header > div:nth-child(2) > div:nth-child(2) form > div:first-of-type,
 /* Initial header search box must be 100% to prevent height flashing */
-header > div:nth-child(2) > div:nth-child(2) form:not(#aso_search_form_anchor) {
+.compactHeader header > div:nth-child(2) > div:nth-child(2) form:not(#aso_search_form_anchor) {
   height: 100%;
 }
 /* stylelint-enable selector-id-pattern */
 
 /* Initial header search box input styles to prevent flashing */
-header > div:nth-child(2) > div:nth-child(2) form > div:first-of-type > input {
+.compactHeader header > div:nth-child(2) > div:nth-child(2) form > div:first-of-type > input {
   height: 100%;
   padding: 0;
   padding-top: 1px;
 }
 
 /* Header search box icons */
-header > div:nth-child(2) > div:nth-child(2) form > button > svg {
+.compactHeader header > div:nth-child(2) > div:nth-child(2) form > button > svg {
   margin: 0;
   padding: 2px;
 }
 
 /* Header search box input */
-header > div:nth-child(2) > div:nth-child(2) form input {
+.compactHeader header > div:nth-child(2) > div:nth-child(2) form input {
   font-size: 14px;
   top: -8px !important;
 }
 
 /* Account information popup (when you click the user avatar) */
-header > div:nth-child(2) > div:nth-child(5) {
+.compactHeader header > div:nth-child(2) > div:nth-child(5) {
   height: auto;
   top: 48px;
 }
@@ -124,31 +124,31 @@ header > div:nth-child(2) > div:nth-child(5) {
  */
 
 /* Account link container height */
-header > div:nth-child(2) > div:nth-child(3) > div > div:last-child[role='button'] {
+.compactHeader header > div:nth-child(2) > div:nth-child(3) > div > div:last-child[role='button'] {
   max-height: 32px !important;
 }
 
 /* Remove padding and line height from account logo and avatar to fix vertical alignment */
-header > div:nth-child(2) > div:nth-child(3) > div > div:last-child[role='button'] > div {
+.compactHeader header > div:nth-child(2) > div:nth-child(3) > div > div:last-child[role='button'] > div {
   line-height: unset !important;
   padding-bottom: 0;
   padding-top: 0;
 }
 
 /* Shrink account logo to fit properly in the container while maintaining the aspect ratio */
-header > div:nth-child(2) > div:nth-child(3) > div > div:last-child[role='button'] > div:first-child > img {
+.compactHeader header > div:nth-child(2) > div:nth-child(3) > div > div:last-child[role='button'] > div:first-child > img {
   width: 73px !important;
   max-height: 30px !important;
 }
 
 /* Account avatar link */
-header > div:nth-child(2) > div:nth-child(3) > div > div:last-child[role='button'] a {
+.compactHeader header > div:nth-child(2) > div:nth-child(3) > div > div:last-child[role='button'] a {
   height: 28px;
   padding: 0 4px;
 }
 
 /* Account avatar background image size */
-header > div:nth-child(2) > div:nth-child(3) > div > div:last-child[role='button'] a > span {
+.compactHeader header > div:nth-child(2) > div:nth-child(3) > div > div:last-child[role='button'] a > span {
   background-size: 28px 28px;
   box-shadow: none;
   height: 28px;
@@ -156,7 +156,7 @@ header > div:nth-child(2) > div:nth-child(3) > div > div:last-child[role='button
 }
 
 /* Account avatar background image origin */
-header > div:nth-child(2) > div:nth-child(3) > div > div:last-child[role='button'] a > span::before {
+.compactHeader header > div:nth-child(2) > div:nth-child(3) > div > div:last-child[role='button'] a > span::before {
   transform-origin: -4px -4px;
 }
 
@@ -166,14 +166,12 @@ header > div:nth-child(2) > div:nth-child(3) > div > div:last-child[role='button
  */
 
 /* Support question mark */
-.minimal-mode header > div:nth-child(2) > div:nth-child(2) > div:nth-child(3),
+.hideSupport header > div:nth-child(2) > div:nth-child(2) > div:nth-child(3),
 /* Footer text */
-.minimal-mode div[role='contentinfo'],
+.hideFooter div[role='contentinfo'],
 /* Footer loading text */
-.minimal-mode #loading #stb,
+.hideFooter #loading #stb,
 /* Side panel */
-.minimal-mode div.nH > div > div:nth-child(2) > div:first-child > div:nth-child(3),
-/* Keyboard button */
-.minimal-mode #itamenu {
+.hideRightSidebar div.nH > div > div:nth-child(2) > div:first-child > div:nth-child(3) {
   display: none !important;
 }
