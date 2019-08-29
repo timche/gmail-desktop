@@ -27,7 +27,7 @@ body.compactHeader.xE .G-atb,
 /* User avatar */
 .compactHeader header > div:nth-child(2) > div:nth-child(3) a,
 /* User avatar for G Suite accounts */
-header > div:nth-child(2) > div:nth-child(3) > div > div:last-child[role='button'],
+.compactHeader header > div:nth-child(2) > div:nth-child(3) > div > div:last-child[role='button'],
 /* Minimize button in new compose window header */
 .compactHeader .Io > div:first-child,
 /* Message toolbar button strip in new window */
