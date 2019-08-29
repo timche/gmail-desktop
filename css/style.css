@@ -24,6 +24,8 @@ header > div:nth-child(2) > div:first-child > div:first-child,
 header > div:nth-child(2) > div:nth-child(2) form,
 /* Support question mark */
 header > div:nth-child(2) > div:nth-child(2) > div:nth-child(3) a,
+/* User avatar for G Suite accounts */
+header > div:nth-child(2) > div:nth-child(3) > div > div:last-child[role='button'],
 /* User avatar */
 header > div:nth-child(2) > div:nth-child(3) a,
 /* Minimize button in new compose window header */
@@ -104,7 +106,7 @@ header > div:nth-child(2) > div:nth-child(2) form > button > svg {
 /* Header search box input */
 header > div:nth-child(2) > div:nth-child(2) form input {
   font-size: 14px;
-  top: -9px !important;
+  top: -8px !important;
 }
 
 /* Account information popup (when you click the user avatar) */
