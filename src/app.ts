@@ -15,10 +15,10 @@ import log from 'electron-log'
 import electronDl from 'electron-dl'
 import electronContextMenu from 'electron-context-menu'
 
-import config from './config'
+import config, { ConfigKey } from './config'
 import { init as initDebug } from './debug'
 import menu from './menu'
-import { init as initMinimalMode } from './minimal-mode'
+import { init as initCustomStyles } from './custom-styles'
 import { platform, getUrlAccountId } from './helpers'
 
 // Initialize the debug mode handler when starting the app
@@ -65,7 +65,9 @@ function createWindow(): void {
 
   mainWindow = new BrowserWindow({
     title: app.getName(),
-    titleBarStyle: config.get('customStyles') ? 'hiddenInset' : 'default',
+    titleBarStyle: config.get(ConfigKey.CompactHeader)
+      ? 'hiddenInset'
+      : 'default',
     width: lastWindowState.bounds.width,
     height: lastWindowState.bounds.height,
     x: lastWindowState.bounds.x,
@@ -89,9 +91,7 @@ function createWindow(): void {
 
   mainWindow.webContents.on('dom-ready', () => {
     addCustomCSS(mainWindow)
-
-    // Initialize minimal mode if the setting is turned on
-    initMinimalMode()
+    initCustomStyles()
   })
 
   mainWindow.on('close', e => {
@@ -127,10 +127,6 @@ function createMailto(url: string): void {
 }
 
 function addCustomCSS(windowElement: BrowserWindow): void {
-  if (!config.get('customStyles')) {
-    return
-  }
-
   windowElement.webContents.insertCSS(
     fs.readFileSync(path.join(__dirname, '..', 'css', 'style.css'), 'utf8')
   )
