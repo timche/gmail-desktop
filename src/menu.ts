@@ -1,11 +1,58 @@
 import { app, shell, Menu, MenuItemConstructorOptions } from 'electron'
 import { is } from 'electron-util'
 
-import config from './config'
+import config, { ConfigKey } from './config'
 import { showRestartDialog } from './utils'
-import { setMinimalMode } from './minimal-mode'
+import { setCustomStyle } from './custom-styles'
 
 const APP_NAME = app.getName()
+
+interface AppearanceMenuItem {
+  key: ConfigKey
+  label: string
+  restartDialogText?: string
+}
+
+const appearanceMenuItems: AppearanceMenuItem[] = [
+  {
+    key: ConfigKey.CompactHeader,
+    label: 'Compact Header',
+    restartDialogText: 'compact header'
+  },
+  {
+    key: ConfigKey.HideFooter,
+    label: 'Hide Footer'
+  },
+  {
+    key: ConfigKey.HideRightSidebar,
+    label: 'Hide Right Sidebar'
+  },
+  {
+    key: ConfigKey.HideSupport,
+    label: 'Hide Support'
+  }
+]
+
+const createAppearanceMenuItem = ({
+  key,
+  label,
+  restartDialogText
+}: AppearanceMenuItem): MenuItemConstructorOptions => ({
+  label,
+  type: 'checkbox',
+  checked: config.get(key as string),
+  click({ checked }: { checked: boolean }) {
+    config.set(key, checked)
+
+    // If the style changes requires a restart, don't add or remove the class
+    // name from the DOM
+    if (restartDialogText) {
+      showRestartDialog(checked, restartDialogText)
+    } else {
+      setCustomStyle(key, checked)
+    }
+  }
+})
 
 const darwinMenu: MenuItemConstructorOptions[] = [
   {
@@ -46,26 +93,7 @@ const darwinMenu: MenuItemConstructorOptions[] = [
     submenu: [
       {
         label: 'Appearance',
-        submenu: [
-          {
-            label: 'Custom styles',
-            type: 'checkbox',
-            checked: config.get('customStyles'),
-            click({ checked }) {
-              config.set('customStyles', checked)
-              showRestartDialog(checked, 'custom styles')
-            }
-          },
-          {
-            label: 'Minimal Mode',
-            type: 'checkbox',
-            checked: config.get('minimalMode'),
-            click({ checked }) {
-              config.set('minimalMode', checked)
-              setMinimalMode(checked)
-            }
-          }
-        ]
+        submenu: appearanceMenuItems.map(createAppearanceMenuItem)
       },
       {
         label: 'Default Mailto Client',
@@ -82,9 +110,9 @@ const darwinMenu: MenuItemConstructorOptions[] = [
       {
         label: 'Debug Mode',
         type: 'checkbox',
-        checked: config.get('debugMode'),
+        checked: config.get(ConfigKey.DebugMode),
         click({ checked }) {
-          config.set('debugMode', checked)
+          config.set(ConfigKey.DebugMode, checked)
           showRestartDialog(checked, 'debug mode')
         }
       }
