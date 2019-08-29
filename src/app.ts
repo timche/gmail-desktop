@@ -61,7 +61,7 @@ app.on('second-instance', () => {
 })
 
 function createWindow(): void {
-  const lastWindowState = config.get('lastWindowState')
+  const lastWindowState = config.get(ConfigKey.LastWindowState)
 
   mainWindow = new BrowserWindow({
     title: app.getName(),
@@ -237,7 +237,7 @@ app.on('before-quit', () => {
   isQuitting = true
 
   if (mainWindow) {
-    config.set('lastWindowState', {
+    config.set(ConfigKey.LastWindowState, {
       bounds: mainWindow.getBounds(),
       fullscreen: mainWindow.isFullScreen(),
       maximized: mainWindow.isMaximized()

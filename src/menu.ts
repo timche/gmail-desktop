@@ -110,9 +110,9 @@ const darwinMenu: MenuItemConstructorOptions[] = [
       {
         label: 'Debug Mode',
         type: 'checkbox',
-        checked: config.get('debugMode'),
+        checked: config.get(ConfigKey.DebugMode),
         click({ checked }) {
-          config.set('debugMode', checked)
+          config.set(ConfigKey.DebugMode, checked)
           showRestartDialog(checked, 'debug mode')
         }
       }
