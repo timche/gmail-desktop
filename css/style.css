@@ -26,6 +26,8 @@ body.compactHeader.xE .G-atb,
 .compactHeader header > div:nth-child(2) > div:nth-child(2) > div:nth-child(3) a,
 /* User avatar */
 .compactHeader header > div:nth-child(2) > div:nth-child(3) a,
+/* User avatar for G Suite accounts */
+.compactHeader header > div:nth-child(2) > div:nth-child(3) > div > div:last-child[role='button'],
 /* Minimize button in new compose window header */
 .compactHeader .Io > div:first-child,
 /* Message toolbar button strip in new window */
@@ -104,7 +106,7 @@ body.compactHeader.xE .G-atb {
 /* Header search box input */
 .compactHeader header > div:nth-child(2) > div:nth-child(2) form input {
   font-size: 14px;
-  top: -9px !important;
+  top: -8px !important;
 }
 
 /* Account information popup (when you click the user avatar) */
