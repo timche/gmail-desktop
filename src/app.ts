@@ -1,5 +1,5 @@
-import { readFileSync, existsSync } from 'fs'
-import { join } from 'path'
+import * as fs from 'fs'
+import * as path from 'path'
 import {
   app,
   ipcMain as ipc,
@@ -78,7 +78,7 @@ function createWindow(): void {
     webPreferences: {
       nodeIntegration: false,
       nativeWindowOpen: true,
-      preload: join(__dirname, 'preload')
+      preload: path.join(__dirname, 'preload')
     }
   })
 
@@ -112,7 +112,7 @@ function createWindow(): void {
 
     if ((is.linux || is.windows) && tray) {
       const icon = unreadCount ? 'tray-icon-unread.png' : 'tray-icon.png'
-      const iconPath = join(__dirname, '..', 'static', icon)
+      const iconPath = path.join(__dirname, '..', 'static', icon)
 
       tray.setImage(iconPath)
     }
@@ -131,12 +131,19 @@ function createMailto(url: string): void {
 
 function addCustomCSS(windowElement: BrowserWindow): void {
   windowElement.webContents.insertCSS(
-    readFileSync(join(__dirname, '..', 'css', 'style.css'), 'utf8')
+    fs.readFileSync(path.join(__dirname, '..', 'css', 'style.css'), 'utf8')
   )
 
-  const platformCSSFile = join(__dirname, '..', 'css', `style.${platform}.css`)
-  if (existsSync(platformCSSFile)) {
-    windowElement.webContents.insertCSS(readFileSync(platformCSSFile, 'utf8'))
+  const platformCSSFile = path.join(
+    __dirname,
+    '..',
+    'css',
+    `style.${platform}.css`
+  )
+  if (fs.existsSync(platformCSSFile)) {
+    windowElement.webContents.insertCSS(
+      fs.readFileSync(platformCSSFile, 'utf8')
+    )
   }
 }
 
@@ -147,7 +154,7 @@ app.on('ready', () => {
 
   if ((is.linux || is.windows) && !tray) {
     const appName = app.getName()
-    const iconPath = join(__dirname, '..', 'static', 'tray-icon.png')
+    const iconPath = path.join(__dirname, '..', 'static', 'tray-icon.png')
 
     const contextMenuTemplate: MenuItemConstructorOptions[] = [
       {
