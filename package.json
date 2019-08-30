@@ -47,7 +47,7 @@
     "stylelint": "^10.1.0",
     "stylelint-config-prettier": "^5.0.0",
     "stylelint-config-xo": "^0.15.0",
-    "typescript": "^3.5.3",
+    "typescript": "~3.5.3",
     "xo": "^0.24.0"
   },
   "lint-staged": {
