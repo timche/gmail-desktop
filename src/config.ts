@@ -1,5 +1,6 @@
-import Store from 'electron-store'
 import { is } from 'electron-util'
+
+import Store = require('electron-store')
 
 export interface LastWindowState {
   bounds: {

@@ -1,4 +1,4 @@
-import electronUtils from 'electron-util'
+import { platform as selectPlatform } from 'electron-util'
 
 // URL: `mail.google.com/mail/u/<local_account_id>`
 export function getUrlAccountId(url: string): null | string {
@@ -7,7 +7,7 @@ export function getUrlAccountId(url: string): null | string {
   return res && res[1]
 }
 
-export const platform = electronUtils.platform({
+export const platform = selectPlatform({
   macos: 'macos',
   linux: 'linux',
   windows: 'windows'
