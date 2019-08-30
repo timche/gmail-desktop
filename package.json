@@ -10,7 +10,6 @@
   "main": "dist-js/app.js",
   "scripts": {
     "postinstall": "electron-builder install-app-deps",
-    "precommit": "lint-staged",
     "prettier": "prettier --write",
     "prettify": "yarn prettier -- 'src/**/*.ts'",
     "lint": "run-p lint:*",
@@ -49,6 +48,11 @@
     "stylelint-config-xo": "^0.15.0",
     "typescript": "~3.5.3",
     "xo": "^0.24.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   },
   "lint-staged": {
     "*.ts": [
