@@ -12,7 +12,7 @@
     "postinstall": "electron-builder install-app-deps",
     "precommit": "lint-staged",
     "prettier": "prettier --write",
-    "prettify": "npm run prettier -- 'src/**/*.ts'",
+    "prettify": "yarn prettier -- 'src/**/*.ts'",
     "lint": "run-p lint:*",
     "lint:ts": "xo",
     "lint:css": "stylelint 'css/*.css'",
