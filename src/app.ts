@@ -12,19 +12,18 @@ import {
 import { autoUpdater } from 'electron-updater'
 import { is } from 'electron-util'
 import log from 'electron-log'
-import electronDl from 'electron-dl'
 import electronContextMenu from 'electron-context-menu'
 
 import config, { ConfigKey } from './config'
 import { init as initDebug } from './debug'
+import { init as initDownloads } from './downloads'
 import menu from './menu'
 import { init as initCustomStyles } from './custom-styles'
 import { platform, getUrlAccountId } from './helpers'
 
-// Initialize the debug mode handler when starting the app
 initDebug()
+initDownloads()
 
-electronDl({ showBadge: false })
 electronContextMenu({ showCopyImageAddress: true, showSaveImageAs: true })
 
 if (!is.development) {
