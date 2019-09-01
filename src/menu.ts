@@ -40,7 +40,7 @@ const createAppearanceMenuItem = ({
 }: AppearanceMenuItem): MenuItemConstructorOptions => ({
   label,
   type: 'checkbox',
-  checked: config.get(key as string),
+  checked: config.get(key as string) as boolean,
   click({ checked }: { checked: boolean }) {
     config.set(key, checked)
 
@@ -110,7 +110,7 @@ const darwinMenu: MenuItemConstructorOptions[] = [
       {
         label: 'Debug Mode',
         type: 'checkbox',
-        checked: config.get(ConfigKey.DebugMode),
+        checked: config.get(ConfigKey.DebugMode) as boolean,
         click({ checked }) {
           config.set(ConfigKey.DebugMode, checked)
           showRestartDialog(checked, 'debug mode')
