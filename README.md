@@ -60,6 +60,7 @@ yarn dist
 ## Maintainers
 
 - [Tim Cheung](https://github.com/timche)
+- [Mark Skelton](https://github.com/markypython)
 
 ## Contributors
 
