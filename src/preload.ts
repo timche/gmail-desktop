@@ -1,8 +1,9 @@
 import { ipcRenderer as ipc } from 'electron'
-import elementReady from 'element-ready'
 import log from 'electron-log'
 
 import { ConfigKey } from './config'
+
+import elementReady = require('element-ready')
 
 const INTERVAL = 1000
 let count: number
@@ -20,7 +21,7 @@ function getUnreadCount(): number {
 
     // Return the unread count (0 by default)
     if (label) {
-      return Number(label.innerText.match(/\d/))
+      return Number(/\d/.exec(label.innerText))
     }
   }
 
@@ -49,21 +50,19 @@ function attachButtonListeners(): void {
     'nX' // Delete
   ]
 
-  selectors.forEach(async selector => {
-    try {
-      const buttonReady = elementReady(`body.xE .G-atb .${selector}`)
+  selectors.forEach(selector => {
+    const buttonReady = elementReady(`body.xE .G-atb .${selector}`)
+    const readyTimeout = setTimeout(() => buttonReady.stop(), 10000)
 
-      const readyTimeout = setTimeout(() => {
-        buttonReady.cancel(`Detect button "${selector}" timed out`)
-      }, 10000)
-
-      const button = await buttonReady
+    buttonReady.then(button => {
       clearTimeout(readyTimeout)
 
-      button.addEventListener('click', () => window.close())
-    } catch (error) {
-      log.error(error)
-    }
+      if (button) {
+        button.addEventListener('click', () => window.close())
+      } else {
+        log.error(`Detect button "${selector}" timed out`)
+      }
+    })
   })
 }
 
