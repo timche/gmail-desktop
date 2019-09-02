@@ -9,35 +9,23 @@ import {
   Tray,
   MenuItemConstructorOptions
 } from 'electron'
-import { autoUpdater } from 'electron-updater'
 import { is } from 'electron-util'
-import log from 'electron-log'
 
+import { init as initAutoUpdates } from './auto-updates'
 import config, { ConfigKey, LastWindowState } from './config'
+import { init as initCustomStyles } from './custom-styles'
 import { init as initDebug } from './debug'
 import { init as initDownloads } from './downloads'
-import menu from './menu'
-import { init as initCustomStyles } from './custom-styles'
 import { platform, getUrlAccountId } from './helpers'
+import menu from './menu'
 
 import electronContextMenu = require('electron-context-menu')
 
 initDebug()
 initDownloads()
+initAutoUpdates()
 
 electronContextMenu({ showCopyImageAddress: true, showSaveImageAs: true })
-
-if (!is.development) {
-  log.transports.file.level = 'info'
-  autoUpdater.logger = log
-
-  const UPDATE_CHECK_INTERVAL = 60000 * 60 * 3 // 3 Hours
-  setInterval(() => {
-    autoUpdater.checkForUpdates()
-  }, UPDATE_CHECK_INTERVAL)
-
-  autoUpdater.checkForUpdates()
-}
 
 app.setAppUserModelId('io.cheung.gmail-desktop')
 
