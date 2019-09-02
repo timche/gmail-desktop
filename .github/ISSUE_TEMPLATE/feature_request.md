@@ -1,6 +1,7 @@
 ---
 name: Feature request
 about: Suggest an idea for this project
+labels: enhancement
 ---
 
 <!-- Please search existing issues to avoid creating duplicates. -->
