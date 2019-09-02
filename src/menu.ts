@@ -1,7 +1,7 @@
 import { app, shell, Menu, MenuItemConstructorOptions } from 'electron'
 import log from 'electron-log'
-import { is } from 'electron-util'
 
+import { is } from 'electron-util'
 import config, { ConfigKey } from './config'
 import { showRestartDialog } from './utils'
 import { setCustomStyle } from './custom-styles'
@@ -188,22 +188,6 @@ const applicationMenu: MenuItemConstructorOptions[] = [
     ]
   },
   {
-    label: 'Develop',
-    visible: is.development,
-    submenu: [
-      {
-        label: 'Clear Cache and Restart',
-        click() {
-          // Clear app config
-          config.clear()
-          // Restart without firing quitting events
-          app.relaunch()
-          app.exit(0)
-        }
-      }
-    ]
-  },
-  {
     label: 'Help',
     role: 'help',
     submenu: [
@@ -231,6 +215,25 @@ const applicationMenu: MenuItemConstructorOptions[] = [
     ]
   }
 ]
+
+// Add the develop menu when running in the development environment
+if (is.development) {
+  applicationMenu.splice(-1, 0, {
+    label: 'Develop',
+    submenu: [
+      {
+        label: 'Clear Cache and Restart',
+        click() {
+          // Clear app config
+          config.clear()
+          // Restart without firing quitting events
+          app.relaunch()
+          app.exit(0)
+        }
+      }
+    ]
+  })
+}
 
 const menu = Menu.buildFromTemplate(applicationMenu)
 export default menu
