@@ -1,4 +1,5 @@
 import { app, shell, Menu, MenuItemConstructorOptions } from 'electron'
+import log from 'electron-log'
 import { is } from 'electron-util'
 
 import config, { ConfigKey } from './config'
@@ -54,7 +55,7 @@ const createAppearanceMenuItem = ({
   }
 })
 
-const darwinMenu: MenuItemConstructorOptions[] = [
+const applicationMenu: MenuItemConstructorOptions[] = [
   {
     label: APP_NAME,
     submenu: [
@@ -94,6 +95,15 @@ const darwinMenu: MenuItemConstructorOptions[] = [
       {
         label: 'Appearance',
         submenu: appearanceMenuItems.map(createAppearanceMenuItem)
+      },
+      {
+        label: 'Auto Update',
+        type: 'checkbox',
+        checked: config.get(ConfigKey.AutoUpdate) as boolean,
+        click({ checked }: { checked: boolean }) {
+          config.set(ConfigKey.AutoUpdate, checked)
+          showRestartDialog(checked, 'auto updates')
+        }
       },
       {
         label: 'Default Mailto Client',
@@ -178,6 +188,22 @@ const darwinMenu: MenuItemConstructorOptions[] = [
     ]
   },
   {
+    label: 'Develop',
+    visible: is.development,
+    submenu: [
+      {
+        label: 'Clear Cache and Restart',
+        click() {
+          // Clear app config
+          config.clear()
+          // Restart without firing quitting events
+          app.relaunch()
+          app.exit(0)
+        }
+      }
+    ]
+  },
+  {
     label: 'Help',
     role: 'help',
     submenu: [
@@ -194,29 +220,17 @@ const darwinMenu: MenuItemConstructorOptions[] = [
             'https://github.com/timche/gmail-desktop/issues/new/choose'
           )
         }
+      },
+      {
+        label: 'View Logs',
+        visible: config.get(ConfigKey.DebugMode) as boolean,
+        click() {
+          shell.openItem(log.transports.file.findLogPath())
+        }
       }
     ]
   }
 ]
 
-// Add the develop menu when running in the development environment
-if (is.development) {
-  darwinMenu.splice(-1, 0, {
-    label: 'Develop',
-    submenu: [
-      {
-        label: 'Clear Cache and Restart',
-        click() {
-          // Clear app config
-          config.clear()
-          // Restart without firing quitting events
-          app.relaunch()
-          app.exit(0)
-        }
-      }
-    ]
-  })
-}
-
-const menu = Menu.buildFromTemplate(darwinMenu)
+const menu = Menu.buildFromTemplate(applicationMenu)
 export default menu
