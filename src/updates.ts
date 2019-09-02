@@ -1,4 +1,4 @@
-import { app } from 'electron'
+import { app, dialog } from 'electron'
 import log from 'electron-log'
 import { autoUpdater } from 'electron-updater'
 import { is } from 'electron-util'
@@ -39,7 +39,15 @@ export function init(): void {
 
 export async function checkForUpdates(): Promise<void> {
   try {
-    await autoUpdater.checkForUpdates()
+    const { downloadPromise } = await autoUpdater.checkForUpdates()
+
+    // If there isn't an update, notify the user
+    if (!downloadPromise) {
+      dialog.showMessageBox({
+        type: 'info',
+        message: 'There are currently no updates available.'
+      })
+    }
   } catch (error) {
     log.error('Check for updates failed', error)
 
