@@ -11,7 +11,7 @@ import {
 } from 'electron'
 import { is } from 'electron-util'
 
-import { init as initAutoUpdates } from './auto-updates'
+import { init as initAutoUpdates } from './updates'
 import config, { ConfigKey, LastWindowState } from './config'
 import { init as initCustomStyles } from './custom-styles'
 import { init as initDebug } from './debug'

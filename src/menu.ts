@@ -1,7 +1,7 @@
 import { app, shell, Menu, MenuItemConstructorOptions } from 'electron'
 import { is } from 'electron-util'
 
-import { checkForUpdates } from './auto-updates'
+import { checkForUpdates } from './updates'
 import config, { ConfigKey } from './config'
 import { setCustomStyle } from './custom-styles'
 import { viewLogs } from './logs'
