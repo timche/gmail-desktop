@@ -3,6 +3,7 @@ import log from 'electron-log'
 import { autoUpdater } from 'electron-updater'
 import { is } from 'electron-util'
 
+import config, { ConfigKey } from './config'
 import { viewLogs } from './logs'
 import { createNotification } from './notifications'
 
@@ -29,8 +30,10 @@ export function init(): void {
 
     autoUpdater.on('update-downloaded', onUpdateAvailable)
 
-    setInterval(() => autoUpdater.checkForUpdates, UPDATE_CHECK_INTERVAL)
-    autoUpdater.checkForUpdates()
+    if (config.get(ConfigKey.AutoUpdate)) {
+      setInterval(() => autoUpdater.checkForUpdates, UPDATE_CHECK_INTERVAL)
+      autoUpdater.checkForUpdates()
+    }
   }
 }
 
