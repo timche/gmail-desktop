@@ -14,6 +14,7 @@ export interface LastWindowState {
 }
 
 export enum ConfigKey {
+  AutoUpdate = 'autoUpdate',
   CompactHeader = 'compactHeader',
   DebugMode = 'debugMode',
   HideFooter = 'hideFooter',
@@ -23,6 +24,7 @@ export enum ConfigKey {
 }
 
 const defaults = {
+  [ConfigKey.AutoUpdate]: true,
   [ConfigKey.LastWindowState]: ({
     bounds: {
       width: 800,

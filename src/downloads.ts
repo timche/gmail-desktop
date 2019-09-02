@@ -1,6 +1,8 @@
-import { Notification, shell, app } from 'electron'
+import { shell, app } from 'electron'
 import * as path from 'path'
 import electronDl from 'electron-dl'
+
+import { createNotification } from './notifications'
 
 type State = 'cancelled' | 'completed' | 'interrupted'
 
@@ -11,22 +13,16 @@ const messages = {
 }
 
 function onDownloadComplete(filename: string, state: State): void {
-  const notification = new Notification({
-    actions: [
-      {
-        type: 'button',
-        text: 'Open'
-      }
-    ],
-    body: `Download of file ${filename} ${messages[state]}.`,
-    title: `Download ${state}`
-  })
-
-  notification.on('action', () => {
-    shell.openItem(path.join(app.getPath('downloads'), filename))
-  })
-
-  notification.show()
+  createNotification(
+    `Download ${state}`,
+    `Download of file ${filename} ${messages[state]}.`,
+    {
+      action: () => {
+        shell.openItem(path.join(app.getPath('downloads'), filename))
+      },
+      text: 'Open'
+    }
+  )
 }
 
 export function init(): void {

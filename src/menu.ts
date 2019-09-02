@@ -1,9 +1,11 @@
 import { app, shell, Menu, MenuItemConstructorOptions } from 'electron'
 import { is } from 'electron-util'
 
+import { checkForUpdates } from './updates'
 import config, { ConfigKey } from './config'
-import { showRestartDialog } from './utils'
 import { setCustomStyle } from './custom-styles'
+import { viewLogs } from './logs'
+import { showRestartDialog } from './utils'
 
 const APP_NAME = app.getName()
 
@@ -54,13 +56,22 @@ const createAppearanceMenuItem = ({
   }
 })
 
-const darwinMenu: MenuItemConstructorOptions[] = [
+const applicationMenu: MenuItemConstructorOptions[] = [
   {
     label: APP_NAME,
     submenu: [
       {
         label: `About ${APP_NAME}`,
         role: 'about'
+      },
+      {
+        label: 'Check for Updates...',
+        click() {
+          checkForUpdates()
+        }
+      },
+      {
+        type: 'separator'
       },
       {
         label: `Hide ${APP_NAME}`,
@@ -94,6 +105,15 @@ const darwinMenu: MenuItemConstructorOptions[] = [
       {
         label: 'Appearance',
         submenu: appearanceMenuItems.map(createAppearanceMenuItem)
+      },
+      {
+        label: 'Auto Update',
+        type: 'checkbox',
+        checked: config.get(ConfigKey.AutoUpdate) as boolean,
+        click({ checked }: { checked: boolean }) {
+          config.set(ConfigKey.AutoUpdate, checked)
+          showRestartDialog(checked, 'auto updates')
+        }
       },
       {
         label: 'Default Mailto Client',
@@ -194,6 +214,13 @@ const darwinMenu: MenuItemConstructorOptions[] = [
             'https://github.com/timche/gmail-desktop/issues/new/choose'
           )
         }
+      },
+      {
+        label: 'View Logs',
+        visible: config.get(ConfigKey.DebugMode) as boolean,
+        click() {
+          viewLogs()
+        }
       }
     ]
   }
@@ -201,7 +228,7 @@ const darwinMenu: MenuItemConstructorOptions[] = [
 
 // Add the develop menu when running in the development environment
 if (is.development) {
-  darwinMenu.splice(-1, 0, {
+  applicationMenu.splice(-1, 0, {
     label: 'Develop',
     submenu: [
       {
@@ -218,5 +245,5 @@ if (is.development) {
   })
 }
 
-const menu = Menu.buildFromTemplate(darwinMenu)
+const menu = Menu.buildFromTemplate(applicationMenu)
 export default menu
