@@ -1,10 +1,11 @@
 import { app, shell, Menu, MenuItemConstructorOptions } from 'electron'
-import log from 'electron-log'
 import { is } from 'electron-util'
 
+import { checkForUpdates } from './auto-updates'
 import config, { ConfigKey } from './config'
-import { showRestartDialog } from './utils'
 import { setCustomStyle } from './custom-styles'
+import { viewLogs } from './logs'
+import { showRestartDialog } from './utils'
 
 const APP_NAME = app.getName()
 
@@ -62,6 +63,15 @@ const applicationMenu: MenuItemConstructorOptions[] = [
       {
         label: `About ${APP_NAME}`,
         role: 'about'
+      },
+      {
+        label: 'Check for Updates...',
+        click() {
+          checkForUpdates()
+        }
+      },
+      {
+        type: 'separator'
       },
       {
         label: `Hide ${APP_NAME}`,
@@ -209,7 +219,7 @@ const applicationMenu: MenuItemConstructorOptions[] = [
         label: 'View Logs',
         visible: config.get(ConfigKey.DebugMode) as boolean,
         click() {
-          shell.openItem(log.transports.file.findLogPath())
+          viewLogs()
         }
       }
     ]
