@@ -1,7 +1,7 @@
 import { app, shell, Menu, MenuItemConstructorOptions } from 'electron'
 import log from 'electron-log'
-
 import { is } from 'electron-util'
+
 import config, { ConfigKey } from './config'
 import { showRestartDialog } from './utils'
 import { setCustomStyle } from './custom-styles'
