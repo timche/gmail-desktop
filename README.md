@@ -10,14 +10,15 @@
 
 ![Gmail Desktop Screenshot](media/screenshot.png)
 
-## Features
+## Highlights
 
 - Native Gmail interface
 - Cross-platform
 - Desktop notifications
 - Unread badge in macOS dock & icon Windows/Linux tray
-- Minimal design mode
 - Silent auto-updates
+- [Appearance customizations](#appearance-customizations)
+- [Custom styles](#custom-styles)
 
 ## Installation
 
@@ -34,6 +35,21 @@ _macOS 10.10+, Linux and Windows 7+ are supported._
 #### Windows
 
 [**Download**](https://github.com/timche/gmail-desktop/releases/latest) the latest `.exe` file.
+
+## Features
+
+### Appearance Customizations
+
+Gmail Desktop provides a number of appearance customizations to improve and simplify the default Gmail styles. These customizations are listed under the `Settings` → `Appearance` menu.
+
+- Compact Header - Customizes the Gmail header to use a more compact style to provide a more native feel. This setting requires a restart to be applied.
+- Hide Footer - Hides footer information text (storage used, terms links, etc.).
+- Hide Right Sidebar - Hides the Google apps sidebar on the right side of the interface.
+- Hide Support - Hides the support button in the header.
+
+### Custom styles
+
+In addition to the available appearance customizations, users can add additional custom styles. Click the menu item `Settings` → `Appearance` → `Custom Styles` to open the custom css file in the default editor for CSS files.
 
 ## Developing
 

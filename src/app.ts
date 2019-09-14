@@ -13,7 +13,10 @@ import { is } from 'electron-util'
 
 import { init as initAutoUpdates } from './updates'
 import config, { ConfigKey, LastWindowState } from './config'
-import { init as initCustomStyles } from './custom-styles'
+import {
+  init as initCustomStyles,
+  USER_CUSTOM_STYLE_PATH
+} from './custom-styles'
 import { init as initDebug } from './debug'
 import { init as initDownloads } from './downloads'
 import { platform, getUrlAccountId } from './helpers'
@@ -120,6 +123,12 @@ function addCustomCSS(windowElement: BrowserWindow): void {
   windowElement.webContents.insertCSS(
     fs.readFileSync(path.join(__dirname, '..', 'css', 'style.css'), 'utf8')
   )
+
+  if (fs.existsSync(USER_CUSTOM_STYLE_PATH)) {
+    windowElement.webContents.insertCSS(
+      fs.readFileSync(USER_CUSTOM_STYLE_PATH, 'utf8')
+    )
+  }
 
   const platformCSSFile = path.join(
     __dirname,
