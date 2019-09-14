@@ -1,9 +1,10 @@
 import { app, shell, Menu, MenuItemConstructorOptions } from 'electron'
+import * as fs from 'fs'
 import { is } from 'electron-util'
 
 import { checkForUpdates } from './updates'
 import config, { ConfigKey } from './config'
-import { setCustomStyle } from './custom-styles'
+import { setCustomStyle, USER_CUSTOM_STYLE_PATH } from './custom-styles'
 import { viewLogs } from './logs'
 import { showRestartDialog } from './utils'
 
@@ -104,7 +105,20 @@ const applicationMenu: MenuItemConstructorOptions[] = [
     submenu: [
       {
         label: 'Appearance',
-        submenu: appearanceMenuItems.map(createAppearanceMenuItem)
+        submenu: [
+          ...appearanceMenuItems.map(createAppearanceMenuItem),
+          {
+            label: 'Custom Styles',
+            click() {
+              // Create the custom style file if it doesn't exist
+              if (!fs.existsSync(USER_CUSTOM_STYLE_PATH)) {
+                fs.closeSync(fs.openSync(USER_CUSTOM_STYLE_PATH, 'w'))
+              }
+
+              shell.openItem(USER_CUSTOM_STYLE_PATH)
+            }
+          }
+        ]
       },
       {
         label: 'Auto Update',
