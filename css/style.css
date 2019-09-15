@@ -7,7 +7,7 @@
 /* Compose in new window */
 .compactHeader .Io,
 /* Message toolbar in new window */
-body.compactHeader.xE .G-atb,
+.compactHeader.xE .G-atb,
 /* PDF viewer header */
 .compactHeader div[aria-label='Showing viewer.'] > div:nth-child(3) > div {
   -webkit-app-region: drag;
@@ -31,7 +31,7 @@ body.compactHeader.xE .G-atb,
 /* Minimize button in new compose window header */
 .compactHeader .Io > div:first-child,
 /* Message toolbar button strip in new window */
-body.compactHeader.xE .G-atb .G-tF,
+.compactHeader.xE .G-atb .G-tF,
 /* PDF viewer header elements (buttons, text, etc.) */
 .compactHeader div[aria-label='Showing viewer.'] > div:nth-child(3) > div > div {
   -webkit-app-region: no-drag;
@@ -56,7 +56,7 @@ body.compactHeader.xE .G-atb .G-tF,
 }
 
 /* Decrease padding for message toolbar button strip in new window */
-body.compactHeader.xE .G-atb {
+.compactHeader.xE .G-atb {
   padding-top: 6px;
   padding-bottom: 6px;
 }

@@ -2,7 +2,7 @@ import { app } from 'electron'
 import * as path from 'path'
 
 import config, { ConfigKey } from './config'
-import { sendChannelToMainWindow } from './utils'
+import { sendChannelToMainWindow, getMainWindow } from './utils'
 
 export const USER_CUSTOM_STYLE_PATH = path.join(
   app.getPath('userData'),
@@ -13,6 +13,18 @@ export function setCustomStyle(key: ConfigKey, enabled: boolean): void {
   sendChannelToMainWindow('set-custom-style', key, enabled)
 }
 
+function initFullScreenStyles(): void {
+  const mainWindow = getMainWindow()
+
+  mainWindow.on('enter-full-screen', () =>
+    sendChannelToMainWindow('set-full-screen', true)
+  )
+
+  mainWindow.on('leave-full-screen', () =>
+    sendChannelToMainWindow('set-full-screen', false)
+  )
+}
+
 export function init(): void {
   ;[
     ConfigKey.CompactHeader,
@@ -20,4 +32,6 @@ export function init(): void {
     ConfigKey.HideRightSidebar,
     ConfigKey.HideSupport
   ].forEach(key => setCustomStyle(key, config.get(key as string) as boolean))
+
+  initFullScreenStyles()
 }
