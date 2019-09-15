@@ -204,6 +204,7 @@ app.on('ready', () => {
       // Center the new window on the screen
       event.newGuest = new BrowserWindow({
         ...options,
+        titleBarStyle: 'default',
         x: null,
         y: null
       })
