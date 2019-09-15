@@ -35,7 +35,7 @@
     "@types/semver": "^6.0.1",
     "@typescript-eslint/eslint-plugin": "^2.0.0",
     "@typescript-eslint/parser": "^2.0.0",
-    "electron": "3.0.4",
+    "electron": "^6.0.9",
     "electron-builder": "^21.2.0",
     "eslint-config-prettier": "^6.1.0",
     "eslint-config-xo-typescript": "^0.17.0",
@@ -118,10 +118,10 @@
     },
     "win": {
       "verifyUpdateCodeSignature": false,
-       "target": [
-         "nsis",
-         "zip"
-       ]
+      "target": [
+        "nsis",
+        "zip"
+      ]
     }
   }
 }
