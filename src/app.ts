@@ -197,12 +197,14 @@ app.on('ready', () => {
       const targetAccountId = getUrlAccountId(url)
 
       if (targetAccountId !== currentAccountId) {
-        return mainWindow.loadURL(url)
+        mainWindow.loadURL(url)
+        return
       }
 
       // Center the new window on the screen
       event.newGuest = new BrowserWindow({
         ...options,
+        titleBarStyle: 'default',
         x: null,
         y: null
       })

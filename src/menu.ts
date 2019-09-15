@@ -82,7 +82,7 @@ const applicationMenu: MenuItemConstructorOptions[] = [
       {
         label: 'Hide Others',
         accelerator: 'Cmd+Shift+H',
-        role: 'hideothers'
+        role: 'hideOthers'
       },
       {
         label: 'Show All',

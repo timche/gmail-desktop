@@ -11,22 +11,22 @@ export function sendChannelToMainWindow(
   getMainWindow().webContents.send(channel, ...args)
 }
 
-export function showRestartDialog(enabled: boolean, name: string): void {
+export async function showRestartDialog(
+  enabled: boolean,
+  name: string
+): Promise<void> {
   const state = enabled ? 'enable' : 'disable'
 
-  dialog.showMessageBox(
-    {
-      type: 'info',
-      buttons: ['Restart', 'Cancel'],
-      message: 'Restart required',
-      detail: `To ${state} ${name}, please restart ${app.getName()}`
-    },
-    response => {
-      // If restart was clicked (index of 0), restart the app
-      if (response === 0) {
-        app.relaunch()
-        app.quit()
-      }
-    }
-  )
+  const { response } = await dialog.showMessageBox({
+    type: 'info',
+    buttons: ['Restart', 'Cancel'],
+    message: 'Restart required',
+    detail: `To ${state} ${name}, please restart ${app.getName()}`
+  })
+
+  // If restart was clicked (index of 0), restart the app
+  if (response === 0) {
+    app.relaunch()
+    app.quit()
+  }
 }
