@@ -109,12 +109,19 @@
       "target": [
         "AppImage",
         "deb",
-        "rpm"
+        "rpm",
+        "pacman",
+        "snap",
+        "tar.bz2"
       ],
       "category": "Network;Office"
     },
     "win": {
-      "verifyUpdateCodeSignature": false
+      "verifyUpdateCodeSignature": false,
+       "target": [
+         "nsis",
+         "zip"
+       ]
     }
   }
 }
