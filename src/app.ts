@@ -197,7 +197,8 @@ app.on('ready', () => {
       const targetAccountId = getUrlAccountId(url)
 
       if (targetAccountId !== currentAccountId) {
-        return mainWindow.loadURL(url)
+        mainWindow.loadURL(url)
+        return
       }
 
       // Center the new window on the screen
