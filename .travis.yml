@@ -6,7 +6,7 @@ script:
   - yarn lint
   - yarn type-check
 before_deploy:
-  - brew install rpm
+  - HOMEBREW_NO_AUTO_UPDATE=1 brew install rpm
   - yarn dist
 deploy:
   skip_cleanup: true
