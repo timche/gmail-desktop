@@ -31,7 +31,7 @@ export function init(): void {
     ConfigKey.HideFooter,
     ConfigKey.HideRightSidebar,
     ConfigKey.HideSupport
-  ].forEach(key => setCustomStyle(key, config.get(key as string) as boolean))
+  ].forEach(key => setCustomStyle(key, config.get(key) as boolean))
 
   initFullScreenStyles()
 }

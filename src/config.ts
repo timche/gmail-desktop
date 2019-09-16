@@ -2,7 +2,7 @@ import { is } from 'electron-util'
 
 import Store = require('electron-store')
 
-export interface LastWindowState {
+interface LastWindowState {
   bounds: {
     width: number
     height: number
@@ -23,18 +23,28 @@ export enum ConfigKey {
   LastWindowState = 'lastWindowState'
 }
 
+type TypedStore = {
+  [ConfigKey.AutoUpdate]: boolean
+  [ConfigKey.LastWindowState]: LastWindowState
+  [ConfigKey.CompactHeader]: boolean
+  [ConfigKey.HideFooter]: boolean
+  [ConfigKey.HideRightSidebar]: boolean
+  [ConfigKey.HideSupport]: boolean
+  [ConfigKey.DebugMode]: boolean
+}
+
 const defaults = {
   [ConfigKey.AutoUpdate]: true,
-  [ConfigKey.LastWindowState]: ({
+  [ConfigKey.LastWindowState]: {
     bounds: {
       width: 800,
       height: 600,
-      x: undefined as number | undefined,
-      y: undefined as number | undefined
+      x: undefined,
+      y: undefined
     },
     fullscreen: false,
     maximized: true
-  } as unknown) as LastWindowState,
+  },
   [ConfigKey.CompactHeader]: true,
   [ConfigKey.HideFooter]: true,
   [ConfigKey.HideRightSidebar]: true,
@@ -42,7 +52,7 @@ const defaults = {
   [ConfigKey.DebugMode]: false
 }
 
-const config = new Store({
+const config = new Store<TypedStore>({
   defaults,
   name: is.development ? 'config.dev' : 'config'
 })

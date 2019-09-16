@@ -12,7 +12,7 @@ import {
 import { is } from 'electron-util'
 
 import { init as initAutoUpdates } from './updates'
-import config, { ConfigKey, LastWindowState } from './config'
+import config, { ConfigKey } from './config'
 import {
   init as initCustomStyles,
   USER_CUSTOM_STYLE_PATH
@@ -52,9 +52,7 @@ app.on('second-instance', () => {
 })
 
 function createWindow(): void {
-  const lastWindowState = config.get(
-    ConfigKey.LastWindowState
-  ) as LastWindowState
+  const lastWindowState = config.get(ConfigKey.LastWindowState)
 
   mainWindow = new BrowserWindow({
     title: app.getName(),
@@ -183,7 +181,7 @@ app.on('ready', () => {
     mainWindow.show()
   })
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any, max-params
+  // eslint-disable-next-line max-params
   webContents.on('new-window', (event: any, url, _1, _2, options) => {
     event.preventDefault()
 
