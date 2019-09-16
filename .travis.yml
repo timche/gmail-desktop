@@ -5,7 +5,9 @@ node_js: '10'
 script:
   - yarn lint
   - yarn type-check
-before_deploy: yarn dist
+before_deploy:
+  - brew install rpm
+  - yarn dist
 deploy:
   skip_cleanup: true
   provider: releases
