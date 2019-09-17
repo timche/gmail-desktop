@@ -7,6 +7,5 @@ const OPTIONS = {
 }
 
 export function init(): void {
-  const isEnabled = config.get(ConfigKey.DebugMode) as boolean
-  electronDebug({ ...OPTIONS, isEnabled })
+  electronDebug({ ...OPTIONS, isEnabled: config.get(ConfigKey.DebugMode) })
 }

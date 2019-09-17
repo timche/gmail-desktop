@@ -43,7 +43,7 @@ const createAppearanceMenuItem = ({
 }: AppearanceMenuItem): MenuItemConstructorOptions => ({
   label,
   type: 'checkbox',
-  checked: config.get(key as string) as boolean,
+  checked: config.get(key) as boolean,
   click({ checked }: { checked: boolean }) {
     config.set(key, checked)
 
@@ -123,7 +123,7 @@ const applicationMenu: MenuItemConstructorOptions[] = [
       {
         label: 'Auto Update',
         type: 'checkbox',
-        checked: config.get(ConfigKey.AutoUpdate) as boolean,
+        checked: config.get(ConfigKey.AutoUpdate),
         click({ checked }: { checked: boolean }) {
           config.set(ConfigKey.AutoUpdate, checked)
           showRestartDialog(checked, 'auto updates')
@@ -144,7 +144,7 @@ const applicationMenu: MenuItemConstructorOptions[] = [
       {
         label: 'Debug Mode',
         type: 'checkbox',
-        checked: config.get(ConfigKey.DebugMode) as boolean,
+        checked: config.get(ConfigKey.DebugMode),
         click({ checked }) {
           config.set(ConfigKey.DebugMode, checked)
           showRestartDialog(checked, 'debug mode')
@@ -231,7 +231,7 @@ const applicationMenu: MenuItemConstructorOptions[] = [
       },
       {
         label: 'View Logs',
-        visible: config.get(ConfigKey.DebugMode) as boolean,
+        visible: config.get(ConfigKey.DebugMode),
         click() {
           viewLogs()
         }
