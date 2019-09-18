@@ -101,7 +101,7 @@ function createWindow(): void {
 
   mainWindow.on('show', () => toggleAppVisiblityTrayItem(true))
 
-  function toggleAppVisiblityTrayItem(isMainWindowVisible: boolean) {
+  function toggleAppVisiblityTrayItem(isMainWindowVisible: boolean): void {
     trayContextMenu.getMenuItemById('show-win').visible = !isMainWindowVisible
     trayContextMenu.getMenuItemById('hide-win').visible = isMainWindowVisible
     tray.setContextMenu(trayContextMenu)
@@ -171,7 +171,8 @@ app.on('ready', () => {
     ]
 
     if (is.linux) {
-      contextMenuTemplate.unshift({
+      contextMenuTemplate.unshift(
+        {
           click: () => {
             mainWindow.show()
           },
@@ -186,7 +187,8 @@ app.on('ready', () => {
             mainWindow.hide()
           },
           id: 'hide-win'
-        })
+        }
+      )
     }
 
     trayContextMenu = Menu.buildFromTemplate(contextMenuTemplate)
