@@ -30,12 +30,15 @@ initAutoUpdates()
 
 electronContextMenu({ showCopyImageAddress: true, showSaveImageAs: true })
 
+const shouldStartMinimized = app.commandLine.hasSwitch('start-minimized')
+
 app.setAppUserModelId('io.cheung.gmail-desktop')
 
 let mainWindow: BrowserWindow
 let replyToWindow: BrowserWindow
 let isQuitting = false
 let tray: Tray
+let trayContextMenu: Menu
 
 if (!app.requestSingleInstanceLock()) {
   app.quit()
@@ -67,7 +70,8 @@ function createWindow(): void {
       nodeIntegration: false,
       nativeWindowOpen: true,
       preload: path.join(__dirname, 'preload')
-    }
+    },
+    show: !shouldStartMinimized
   })
 
   if (lastWindowState.fullscreen && !mainWindow.isFullScreen()) {
@@ -92,6 +96,16 @@ function createWindow(): void {
       mainWindow.hide()
     }
   })
+
+  mainWindow.on('hide', () => toggleAppVisiblityTrayItem(false))
+
+  mainWindow.on('show', () => toggleAppVisiblityTrayItem(true))
+
+  function toggleAppVisiblityTrayItem(isMainWindowVisible: boolean) {
+    trayContextMenu.getMenuItemById('show-win').visible = !isMainWindowVisible
+    trayContextMenu.getMenuItemById('hide-win').visible = isMainWindowVisible
+    tray.setContextMenu(trayContextMenu)
+  }
 
   ipc.on('unread-count', (_: Event, unreadCount: number) => {
     if (is.macos) {
@@ -158,18 +172,28 @@ app.on('ready', () => {
 
     if (is.linux) {
       contextMenuTemplate.unshift({
-        click: () => {
-          mainWindow.show()
+          click: () => {
+            mainWindow.show()
+          },
+          label: 'Show',
+          visible: shouldStartMinimized,
+          id: 'show-win'
         },
-        label: 'Show'
-      })
+        {
+          label: 'Hide',
+          visible: !shouldStartMinimized,
+          click: () => {
+            mainWindow.hide()
+          },
+          id: 'hide-win'
+        })
     }
 
-    const contextMenu = Menu.buildFromTemplate(contextMenuTemplate)
+    trayContextMenu = Menu.buildFromTemplate(contextMenuTemplate)
 
     tray = new Tray(iconPath)
     tray.setToolTip(appName)
-    tray.setContextMenu(contextMenu)
+    tray.setContextMenu(trayContextMenu)
     tray.on('click', () => {
       mainWindow.show()
     })
@@ -178,7 +202,9 @@ app.on('ready', () => {
   const { webContents } = mainWindow
 
   webContents.on('dom-ready', () => {
-    mainWindow.show()
+    if (!shouldStartMinimized) {
+      mainWindow.show()
+    }
   })
 
   // eslint-disable-next-line max-params
