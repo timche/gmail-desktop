@@ -130,6 +130,14 @@ const applicationMenu: MenuItemConstructorOptions[] = [
         }
       },
       {
+        label: 'Launch minimized',
+        type: 'checkbox',
+        checked: config.get(ConfigKey.LaunchMinimized),
+        click({ checked }: { checked: boolean }) {
+          config.set(ConfigKey.LaunchMinimized, checked)
+        }
+      },
+      {
         label: 'Default Mailto Client',
         type: 'checkbox',
         checked: app.isDefaultProtocolClient('mailto'),

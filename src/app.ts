@@ -30,7 +30,9 @@ initAutoUpdates()
 
 electronContextMenu({ showCopyImageAddress: true, showSaveImageAs: true })
 
-const shouldStartMinimized = app.commandLine.hasSwitch('start-minimized')
+const shouldStartMinimized =
+  app.commandLine.hasSwitch('start-minimized') ||
+  config.get(ConfigKey.LaunchMinimized)
 
 app.setAppUserModelId('io.cheung.gmail-desktop')
 
