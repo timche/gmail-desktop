@@ -104,6 +104,10 @@ function createWindow(): void {
   mainWindow.on('show', () => toggleAppVisiblityTrayItem(true))
 
   function toggleAppVisiblityTrayItem(isMainWindowVisible: boolean): void {
+    if (is.macos) {
+      return
+    }
+
     trayContextMenu.getMenuItemById('show-win').visible = !isMainWindowVisible
     trayContextMenu.getMenuItemById('hide-win').visible = isMainWindowVisible
     tray.setContextMenu(trayContextMenu)
