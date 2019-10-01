@@ -63,7 +63,7 @@ const createAppearanceMenuItem = ({
     }
 
     if (setMenuBarVisibility) {
-      setAppMenuBarVisibility()
+      setAppMenuBarVisibility(true)
     }
   }
 })

@@ -5,13 +5,13 @@ export function getMainWindow(): BrowserWindow {
   return BrowserWindow.getAllWindows()[0]
 }
 
-export function setAppMenuBarVisibility(): void {
+export function setAppMenuBarVisibility(showTip?: boolean): void {
   const mainWindow = getMainWindow()
   const isAppMenuBarVisible = config.get(ConfigKey.AutoHideMenuBar)
   mainWindow.setMenuBarVisibility(!isAppMenuBarVisible)
   mainWindow.setAutoHideMenuBar(isAppMenuBarVisible)
 
-  if (isAppMenuBarVisible) {
+  if (isAppMenuBarVisible && showTip) {
     dialog.showMessageBox({
       type: 'info',
       buttons: ['OK'],
