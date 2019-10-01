@@ -14,6 +14,7 @@ interface AppearanceMenuItem {
   key: ConfigKey
   label: string
   restartDialogText?: string
+  setMenuBarVisibility?: boolean
 }
 
 const appearanceMenuItems: AppearanceMenuItem[] = [
@@ -21,6 +22,11 @@ const appearanceMenuItems: AppearanceMenuItem[] = [
     key: ConfigKey.CompactHeader,
     label: 'Compact Header',
     restartDialogText: 'compact header'
+  },
+  {
+    key: ConfigKey.AutoHideMenuBar,
+    label: 'Hide Menu bar',
+    setMenuBarVisibility: true
   },
   {
     key: ConfigKey.HideFooter,
@@ -39,7 +45,8 @@ const appearanceMenuItems: AppearanceMenuItem[] = [
 const createAppearanceMenuItem = ({
   key,
   label,
-  restartDialogText
+  restartDialogText,
+  setMenuBarVisibility
 }: AppearanceMenuItem): MenuItemConstructorOptions => ({
   label,
   type: 'checkbox',
@@ -53,6 +60,10 @@ const createAppearanceMenuItem = ({
       showRestartDialog(checked, restartDialogText)
     } else {
       setCustomStyle(key, checked)
+    }
+
+    if (setMenuBarVisibility) {
+      setAppMenuBarVisibility()
     }
   }
 })
@@ -135,15 +146,6 @@ const applicationMenu: MenuItemConstructorOptions[] = [
         checked: config.get(ConfigKey.LaunchMinimized),
         click({ checked }: { checked: boolean }) {
           config.set(ConfigKey.LaunchMinimized, checked)
-        }
-      },
-      {
-        label: 'Hide Menu bar',
-        type: 'checkbox',
-        checked: config.get(ConfigKey.AutoHideMenuBar),
-        click({ checked }: { checked: boolean }) {
-          config.set(ConfigKey.AutoHideMenuBar, checked)
-          setAppMenuBarVisibility()
         }
       },
       {
