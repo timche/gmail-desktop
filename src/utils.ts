@@ -7,10 +7,16 @@ export function getMainWindow(): BrowserWindow {
 
 export function setAppMenuBarVisibility(): void {
   const mainWindow = getMainWindow()
-  if (mainWindow) {
-    const isAppMenuBarVisible = config.get(ConfigKey.AutoHideMenuBar)
-    mainWindow.setMenuBarVisibility(!isAppMenuBarVisible)
-    mainWindow.setAutoHideMenuBar(isAppMenuBarVisible)
+  const isAppMenuBarVisible = config.get(ConfigKey.AutoHideMenuBar)
+  mainWindow.setMenuBarVisibility(!isAppMenuBarVisible)
+  mainWindow.setAutoHideMenuBar(isAppMenuBarVisible)
+
+  if (isAppMenuBarVisible) {
+    dialog.showMessageBox({
+      type: 'info',
+      buttons: ['OK'],
+      message: 'Tip: You can press the Alt key to see the Menu bar again.'
+    })
   }
 }
 
