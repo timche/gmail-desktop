@@ -6,7 +6,7 @@ import { checkForUpdates } from './updates'
 import config, { ConfigKey } from './config'
 import { setCustomStyle, USER_CUSTOM_STYLE_PATH } from './custom-styles'
 import { viewLogs } from './logs'
-import { showRestartDialog } from './utils'
+import { showRestartDialog, setAppMenuBarVisibility } from './utils'
 
 const APP_NAME = app.getName()
 
@@ -135,6 +135,15 @@ const applicationMenu: MenuItemConstructorOptions[] = [
         checked: config.get(ConfigKey.LaunchMinimized),
         click({ checked }: { checked: boolean }) {
           config.set(ConfigKey.LaunchMinimized, checked)
+        }
+      },
+      {
+        label: 'Hide Menu bar',
+        type: 'checkbox',
+        checked: config.get(ConfigKey.AutoHideMenuBar),
+        click({ checked }: { checked: boolean }) {
+          config.set(ConfigKey.AutoHideMenuBar, checked)
+          setAppMenuBarVisibility()
         }
       },
       {

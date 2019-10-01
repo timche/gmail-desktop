@@ -1,7 +1,17 @@
 import { app, BrowserWindow, dialog } from 'electron'
+import config, { ConfigKey } from './config'
 
 export function getMainWindow(): BrowserWindow {
   return BrowserWindow.getAllWindows()[0]
+}
+
+export function setAppMenuBarVisibility(): void {
+  const mainWindow = getMainWindow()
+  if (mainWindow) {
+    const isAppMenuBarVisible = config.get(ConfigKey.AutoHideMenuBar)
+    mainWindow.setMenuBarVisibility(!isAppMenuBarVisible)
+    mainWindow.setAutoHideMenuBar(isAppMenuBarVisible)
+  }
 }
 
 export function sendChannelToMainWindow(

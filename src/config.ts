@@ -21,7 +21,8 @@ export enum ConfigKey {
   HideRightSidebar = 'hideRightSidebar',
   HideSupport = 'hideSupport',
   LastWindowState = 'lastWindowState',
-  LaunchMinimized = 'launchMinimized'
+  LaunchMinimized = 'launchMinimized',
+  AutoHideMenuBar = 'autoHideMenuBar'
 }
 
 type TypedStore = {
@@ -33,6 +34,7 @@ type TypedStore = {
   [ConfigKey.HideSupport]: boolean
   [ConfigKey.DebugMode]: boolean
   [ConfigKey.LaunchMinimized]: boolean
+  [ConfigKey.AutoHideMenuBar]: boolean
 }
 
 const defaults = {
@@ -52,7 +54,8 @@ const defaults = {
   [ConfigKey.HideRightSidebar]: true,
   [ConfigKey.HideSupport]: true,
   [ConfigKey.DebugMode]: false,
-  [ConfigKey.LaunchMinimized]: false
+  [ConfigKey.LaunchMinimized]: false,
+  [ConfigKey.AutoHideMenuBar]: false
 }
 
 const config = new Store<TypedStore>({
