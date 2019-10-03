@@ -24,11 +24,6 @@ const appearanceMenuItems: AppearanceMenuItem[] = [
     restartDialogText: 'compact header'
   },
   {
-    key: ConfigKey.AutoHideMenuBar,
-    label: 'Hide Menu bar',
-    setMenuBarVisibility: true
-  },
-  {
     key: ConfigKey.HideFooter,
     label: 'Hide Footer'
   },
@@ -67,6 +62,14 @@ const createAppearanceMenuItem = ({
     }
   }
 })
+
+if (is.linux || is.windows) {
+  appearanceMenuItems.unshift({
+    key: ConfigKey.AutoHideMenuBar,
+    label: 'Hide Menu bar',
+    setMenuBarVisibility: true
+  })
+}
 
 const applicationMenu: MenuItemConstructorOptions[] = [
   {

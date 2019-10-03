@@ -85,7 +85,9 @@ function createWindow(): void {
     mainWindow.maximize()
   }
 
-  setAppMenuBarVisibility()
+  if (is.linux || is.windows) {
+    setAppMenuBarVisibility()
+  }
 
   mainWindow.loadURL('https://mail.google.com')
 
