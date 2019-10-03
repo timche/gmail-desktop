@@ -51,6 +51,16 @@
       "contributions": [
         "ideas"
       ]
+    },
+    {
+      "login": "cyfrost",
+      "name": "Cyrus Frost",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/12471103?v=4",
+      "profile": "https://github.com/cyfrost",
+      "contributions": [
+        "code",
+        "maintenance"
+      ]
     }
   ],
   "contributorsPerLine": 7,
