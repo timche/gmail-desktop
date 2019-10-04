@@ -1,7 +1,23 @@
 import { app, BrowserWindow, dialog } from 'electron'
+import config, { ConfigKey } from './config'
 
 export function getMainWindow(): BrowserWindow {
   return BrowserWindow.getAllWindows()[0]
+}
+
+export function setAppMenuBarVisibility(showTip?: boolean): void {
+  const mainWindow = getMainWindow()
+  const isAppMenuBarVisible = config.get(ConfigKey.AutoHideMenuBar)
+  mainWindow.setMenuBarVisibility(!isAppMenuBarVisible)
+  mainWindow.setAutoHideMenuBar(isAppMenuBarVisible)
+
+  if (isAppMenuBarVisible && showTip) {
+    dialog.showMessageBox({
+      type: 'info',
+      buttons: ['OK'],
+      message: 'Tip: You can press the Alt key to see the Menu bar again.'
+    })
+  }
 }
 
 export function sendChannelToMainWindow(

@@ -6,7 +6,7 @@ import { checkForUpdates } from './updates'
 import config, { ConfigKey } from './config'
 import { setCustomStyle, USER_CUSTOM_STYLE_PATH } from './custom-styles'
 import { viewLogs } from './logs'
-import { showRestartDialog } from './utils'
+import { showRestartDialog, setAppMenuBarVisibility } from './utils'
 
 const APP_NAME = app.getName()
 
@@ -14,6 +14,7 @@ interface AppearanceMenuItem {
   key: ConfigKey
   label: string
   restartDialogText?: string
+  setMenuBarVisibility?: boolean
 }
 
 const appearanceMenuItems: AppearanceMenuItem[] = [
@@ -39,7 +40,8 @@ const appearanceMenuItems: AppearanceMenuItem[] = [
 const createAppearanceMenuItem = ({
   key,
   label,
-  restartDialogText
+  restartDialogText,
+  setMenuBarVisibility
 }: AppearanceMenuItem): MenuItemConstructorOptions => ({
   label,
   type: 'checkbox',
@@ -54,8 +56,20 @@ const createAppearanceMenuItem = ({
     } else {
       setCustomStyle(key, checked)
     }
+
+    if (setMenuBarVisibility) {
+      setAppMenuBarVisibility(true)
+    }
   }
 })
+
+if (is.linux || is.windows) {
+  appearanceMenuItems.unshift({
+    key: ConfigKey.AutoHideMenuBar,
+    label: 'Hide Menu bar',
+    setMenuBarVisibility: true
+  })
+}
 
 const applicationMenu: MenuItemConstructorOptions[] = [
   {

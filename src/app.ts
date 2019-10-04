@@ -21,6 +21,7 @@ import { init as initDebug } from './debug'
 import { init as initDownloads } from './downloads'
 import { platform, getUrlAccountId } from './helpers'
 import menu from './menu'
+import { setAppMenuBarVisibility } from './utils'
 
 import electronContextMenu = require('electron-context-menu')
 
@@ -82,6 +83,10 @@ function createWindow(): void {
 
   if (lastWindowState.maximized && !mainWindow.isMaximized()) {
     mainWindow.maximize()
+  }
+
+  if (is.linux || is.windows) {
+    setAppMenuBarVisibility()
   }
 
   mainWindow.loadURL('https://mail.google.com')
