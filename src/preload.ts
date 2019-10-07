@@ -21,7 +21,7 @@ function getUnreadCount(): number {
 
     // Return the unread count (0 by default)
     if (label) {
-      return Number(/\d/.exec(label.innerText))
+      return Number(/\d*/.exec(label.innerText))
     }
   }
 
