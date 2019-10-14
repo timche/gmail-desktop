@@ -7,7 +7,8 @@ import {
   BrowserWindow,
   Menu,
   Tray,
-  MenuItemConstructorOptions
+  MenuItemConstructorOptions,
+  nativeImage
 } from 'electron'
 import { is } from 'electron-util'
 
@@ -34,6 +35,22 @@ electronContextMenu({ showCopyImageAddress: true, showSaveImageAs: true })
 const shouldStartMinimized =
   app.commandLine.hasSwitch('launch-minimized') ||
   config.get(ConfigKey.LaunchMinimized)
+const trayIcon = nativeImage.createFromPath(
+  path.join(
+    __dirname,
+    '..',
+    'static',
+    is.macos ? 'tray-icon.macos.png' : 'tray-icon.png'
+  )
+)
+const trayIconUnread = nativeImage.createFromPath(
+  path.join(
+    __dirname,
+    '..',
+    'static',
+    is.macos ? 'tray-icon-unread.macos.png' : 'tray-icon-unread.png'
+  )
+)
 
 app.setAppUserModelId('io.cheung.gmail-desktop')
 
@@ -109,10 +126,6 @@ function createWindow(): void {
   mainWindow.on('show', () => toggleAppVisiblityTrayItem(true))
 
   function toggleAppVisiblityTrayItem(isMainWindowVisible: boolean): void {
-    if (is.macos) {
-      return
-    }
-
     trayContextMenu.getMenuItemById('show-win').visible = !isMainWindowVisible
     trayContextMenu.getMenuItemById('hide-win').visible = isMainWindowVisible
     tray.setContextMenu(trayContextMenu)
@@ -123,11 +136,8 @@ function createWindow(): void {
       app.dock.setBadge(unreadCount ? unreadCount.toString() : '')
     }
 
-    if ((is.linux || is.windows) && tray) {
-      const icon = unreadCount ? 'tray-icon-unread.png' : 'tray-icon.png'
-      const iconPath = path.join(__dirname, '..', 'static', icon)
-
-      tray.setImage(iconPath)
+    if (tray) {
+      tray.setImage(unreadCount ? trayIconUnread : trayIcon)
     }
   })
 }
@@ -171,9 +181,8 @@ app.on('ready', () => {
 
   Menu.setApplicationMenu(menu)
 
-  if ((is.linux || is.windows) && !tray) {
+  if (!tray) {
     const appName = app.getName()
-    const iconPath = path.join(__dirname, '..', 'static', 'tray-icon.png')
 
     const contextMenuTemplate: MenuItemConstructorOptions[] = [
       {
@@ -204,7 +213,7 @@ app.on('ready', () => {
 
     trayContextMenu = Menu.buildFromTemplate(contextMenuTemplate)
 
-    tray = new Tray(iconPath)
+    tray = new Tray(trayIcon)
     tray.setToolTip(appName)
     tray.setContextMenu(trayContextMenu)
     tray.on('click', () => {
