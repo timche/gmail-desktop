@@ -152,6 +152,18 @@ const applicationMenu: MenuItemConstructorOptions[] = [
         }
       },
       {
+        label: is.macos ? 'Hide Menu Bar Icon' : 'Hide System Tray Icon',
+        type: 'checkbox',
+        checked: config.get(ConfigKey.HideTrayIcon),
+        click({ checked }: { checked: boolean }) {
+          config.set(ConfigKey.HideTrayIcon, checked)
+          showRestartDialog(
+            checked,
+            is.macos ? 'hiding menu bar icon' : 'hiding system tray icon'
+          )
+        }
+      },
+      {
         label: 'Default Mailto Client',
         type: 'checkbox',
         checked: app.isDefaultProtocolClient('mailto'),

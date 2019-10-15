@@ -126,9 +126,11 @@ function createWindow(): void {
   mainWindow.on('show', () => toggleAppVisiblityTrayItem(true))
 
   function toggleAppVisiblityTrayItem(isMainWindowVisible: boolean): void {
-    trayContextMenu.getMenuItemById('show-win').visible = !isMainWindowVisible
-    trayContextMenu.getMenuItemById('hide-win').visible = isMainWindowVisible
-    tray.setContextMenu(trayContextMenu)
+    if (!config.get(ConfigKey.HideTrayIcon)) {
+      trayContextMenu.getMenuItemById('show-win').visible = !isMainWindowVisible
+      trayContextMenu.getMenuItemById('hide-win').visible = isMainWindowVisible
+      tray.setContextMenu(trayContextMenu)
+    }
   }
 
   ipc.on('unread-count', (_: Event, unreadCount: number) => {
@@ -181,7 +183,7 @@ app.on('ready', () => {
 
   Menu.setApplicationMenu(menu)
 
-  if (!tray) {
+  if (!config.get(ConfigKey.HideTrayIcon) && !tray) {
     const appName = app.getName()
 
     const contextMenuTemplate: MenuItemConstructorOptions[] = [
