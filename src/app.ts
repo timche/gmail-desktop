@@ -35,6 +35,7 @@ electronContextMenu({ showCopyImageAddress: true, showSaveImageAs: true })
 const shouldStartMinimized =
   app.commandLine.hasSwitch('launch-minimized') ||
   config.get(ConfigKey.LaunchMinimized)
+
 const trayIcon = nativeImage.createFromPath(
   path.join(
     __dirname,
@@ -126,7 +127,7 @@ function createWindow(): void {
   mainWindow.on('show', () => toggleAppVisiblityTrayItem(true))
 
   function toggleAppVisiblityTrayItem(isMainWindowVisible: boolean): void {
-    if (!config.get(ConfigKey.HideTrayIcon)) {
+    if (config.get(ConfigKey.EnableTrayIcon)) {
       trayContextMenu.getMenuItemById('show-win').visible = !isMainWindowVisible
       trayContextMenu.getMenuItemById('hide-win').visible = isMainWindowVisible
       tray.setContextMenu(trayContextMenu)
@@ -140,6 +141,9 @@ function createWindow(): void {
 
     if (tray) {
       tray.setImage(unreadCount ? trayIconUnread : trayIcon)
+      if (is.macos) {
+        tray.setTitle(unreadCount.toString())
+      }
     }
   })
 }
@@ -183,7 +187,7 @@ app.on('ready', () => {
 
   Menu.setApplicationMenu(menu)
 
-  if (!config.get(ConfigKey.HideTrayIcon) && !tray) {
+  if (config.get(ConfigKey.EnableTrayIcon) && !tray) {
     const appName = app.getName()
 
     const contextMenuTemplate: MenuItemConstructorOptions[] = [

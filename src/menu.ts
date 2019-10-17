@@ -152,14 +152,14 @@ const applicationMenu: MenuItemConstructorOptions[] = [
         }
       },
       {
-        label: is.macos ? 'Hide Menu Bar Icon' : 'Hide System Tray Icon',
+        label: is.macos ? 'Enable Menu Bar Icon' : 'Enable System Tray Icon',
         type: 'checkbox',
-        checked: config.get(ConfigKey.HideTrayIcon),
+        checked: config.get(ConfigKey.EnableTrayIcon),
         click({ checked }: { checked: boolean }) {
-          config.set(ConfigKey.HideTrayIcon, checked)
+          config.set(ConfigKey.EnableTrayIcon, checked)
           showRestartDialog(
             checked,
-            is.macos ? 'hiding menu bar icon' : 'hiding system tray icon'
+            is.macos ? 'the menu bar icon' : 'the system tray icon'
           )
         }
       },
