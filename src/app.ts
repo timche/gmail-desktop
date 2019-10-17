@@ -7,8 +7,7 @@ import {
   BrowserWindow,
   Menu,
   Tray,
-  MenuItemConstructorOptions,
-  nativeImage
+  MenuItemConstructorOptions
 } from 'electron'
 import { is } from 'electron-util'
 
@@ -20,7 +19,7 @@ import {
 } from './custom-styles'
 import { init as initDebug } from './debug'
 import { init as initDownloads } from './downloads'
-import { platform, getUrlAccountId } from './helpers'
+import { platform, getUrlAccountId, createTrayIcon } from './helpers'
 import menu from './menu'
 import { setAppMenuBarVisibility } from './utils'
 
@@ -36,22 +35,8 @@ const shouldStartMinimized =
   app.commandLine.hasSwitch('launch-minimized') ||
   config.get(ConfigKey.LaunchMinimized)
 
-const trayIcon = nativeImage.createFromPath(
-  path.join(
-    __dirname,
-    '..',
-    'static',
-    is.macos ? 'tray-icon.macos.png' : 'tray-icon.png'
-  )
-)
-const trayIconUnread = nativeImage.createFromPath(
-  path.join(
-    __dirname,
-    '..',
-    'static',
-    is.macos ? 'tray-icon-unread.macos.png' : 'tray-icon-unread.png'
-  )
-)
+const trayIcon = createTrayIcon(false)
+const trayIconUnread = createTrayIcon(true)
 
 app.setAppUserModelId('io.cheung.gmail-desktop')
 
