@@ -1,5 +1,5 @@
 import * as path from 'path'
-import { nativeImage } from 'electron'
+import { nativeImage, NativeImage } from 'electron'
 import { platform as selectPlatform, is } from 'electron-util'
 
 // URL: `mail.google.com/mail/u/<local_account_id>`
@@ -20,7 +20,7 @@ export const platform = selectPlatform({
  *
  * @param unread True to create the unead icon; false to create the normal icon.
  */
-export function createTrayIcon(unread: boolean): nativeImage {
+export function createTrayIcon(unread: boolean): NativeImage {
   let iconFileName
 
   if (is.macos) {
