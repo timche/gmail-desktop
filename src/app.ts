@@ -181,7 +181,7 @@ app.on('ready', () => {
       }
     ]
 
-    if (is.linux) {
+    if (is.linux || is.windows) {
       contextMenuTemplate.unshift(
         {
           click: () => {
