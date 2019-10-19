@@ -47,7 +47,7 @@
     "stylelint-config-prettier": "^6.0.0",
     "stylelint-config-xo": "^0.15.0",
     "typescript": "~3.6.4",
-    "xo": "^0.25.3"
+    "xo": "^0.24.0"
   },
   "husky": {
     "hooks": {
