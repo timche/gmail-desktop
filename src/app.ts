@@ -127,7 +127,7 @@ function createWindow(): void {
     if (tray) {
       tray.setImage(unreadCount ? trayIconUnread : trayIcon)
       if (is.macos) {
-        tray.setTitle(unreadCount.toString())
+        tray.setTitle(unreadCount ? unreadCount.toString() : '')
       }
     }
   })
