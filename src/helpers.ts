@@ -24,7 +24,7 @@ export function createTrayIcon(unread: boolean): NativeImage {
   let iconFileName
 
   if (is.macos) {
-    iconFileName = 'tray-icon.macos.png'
+    iconFileName = 'tray-icon.macos.Template.png'
   } else {
     iconFileName = unread ? 'tray-icon-unread.png' : 'tray-icon.png'
   }
