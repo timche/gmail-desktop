@@ -58,7 +58,7 @@ const defaults = {
   [ConfigKey.DebugMode]: false,
   [ConfigKey.LaunchMinimized]: false,
   [ConfigKey.AutoHideMenuBar]: false,
-  [ConfigKey.EnableTrayIcon]: true
+  [ConfigKey.EnableTrayIcon]: !is.macos
 }
 
 const config = new Store<TypedStore>({
