@@ -152,6 +152,18 @@ const applicationMenu: MenuItemConstructorOptions[] = [
         }
       },
       {
+        label: is.macos ? 'Enable Menu Bar Icon' : 'Enable System Tray Icon',
+        type: 'checkbox',
+        checked: config.get(ConfigKey.EnableTrayIcon),
+        click({ checked }: { checked: boolean }) {
+          config.set(ConfigKey.EnableTrayIcon, checked)
+          showRestartDialog(
+            checked,
+            is.macos ? 'the menu bar icon' : 'the system tray icon'
+          )
+        }
+      },
+      {
         label: 'Default Mailto Client',
         type: 'checkbox',
         checked: app.isDefaultProtocolClient('mailto'),

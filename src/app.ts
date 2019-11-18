@@ -19,7 +19,7 @@ import {
 } from './custom-styles'
 import { init as initDebug } from './debug'
 import { init as initDownloads } from './downloads'
-import { platform, getUrlAccountId } from './helpers'
+import { platform, getUrlAccountId, createTrayIcon } from './helpers'
 import menu from './menu'
 import { setAppMenuBarVisibility } from './utils'
 
@@ -34,6 +34,9 @@ electronContextMenu({ showCopyImageAddress: true, showSaveImageAs: true })
 const shouldStartMinimized =
   app.commandLine.hasSwitch('launch-minimized') ||
   config.get(ConfigKey.LaunchMinimized)
+
+const trayIcon = createTrayIcon(false)
+const trayIconUnread = createTrayIcon(true)
 
 app.setAppUserModelId('io.cheung.gmail-desktop')
 
@@ -109,13 +112,11 @@ function createWindow(): void {
   mainWindow.on('show', () => toggleAppVisiblityTrayItem(true))
 
   function toggleAppVisiblityTrayItem(isMainWindowVisible: boolean): void {
-    if (is.macos) {
-      return
+    if (config.get(ConfigKey.EnableTrayIcon)) {
+      trayContextMenu.getMenuItemById('show-win').visible = !isMainWindowVisible
+      trayContextMenu.getMenuItemById('hide-win').visible = isMainWindowVisible
+      tray.setContextMenu(trayContextMenu)
     }
-
-    trayContextMenu.getMenuItemById('show-win').visible = !isMainWindowVisible
-    trayContextMenu.getMenuItemById('hide-win').visible = isMainWindowVisible
-    tray.setContextMenu(trayContextMenu)
   }
 
   ipc.on('unread-count', (_: Event, unreadCount: number) => {
@@ -123,11 +124,11 @@ function createWindow(): void {
       app.dock.setBadge(unreadCount ? unreadCount.toString() : '')
     }
 
-    if ((is.linux || is.windows) && tray) {
-      const icon = unreadCount ? 'tray-icon-unread.png' : 'tray-icon.png'
-      const iconPath = path.join(__dirname, '..', 'static', icon)
-
-      tray.setImage(iconPath)
+    if (tray) {
+      tray.setImage(unreadCount ? trayIconUnread : trayIcon)
+      if (is.macos) {
+        tray.setTitle(unreadCount ? unreadCount.toString() : '')
+      }
     }
   })
 }
@@ -171,40 +172,34 @@ app.on('ready', () => {
 
   Menu.setApplicationMenu(menu)
 
-  if ((is.linux || is.windows) && !tray) {
+  if (config.get(ConfigKey.EnableTrayIcon) && !tray) {
     const appName = app.getName()
-    const iconPath = path.join(__dirname, '..', 'static', 'tray-icon.png')
 
     const contextMenuTemplate: MenuItemConstructorOptions[] = [
+      {
+        click: () => {
+          mainWindow.show()
+        },
+        label: 'Show',
+        visible: shouldStartMinimized,
+        id: 'show-win'
+      },
+      {
+        label: 'Hide',
+        visible: !shouldStartMinimized,
+        click: () => {
+          mainWindow.hide()
+        },
+        id: 'hide-win'
+      },
       {
         role: 'quit'
       }
     ]
 
-    if (is.linux || is.windows) {
-      contextMenuTemplate.unshift(
-        {
-          click: () => {
-            mainWindow.show()
-          },
-          label: 'Show',
-          visible: shouldStartMinimized,
-          id: 'show-win'
-        },
-        {
-          label: 'Hide',
-          visible: !shouldStartMinimized,
-          click: () => {
-            mainWindow.hide()
-          },
-          id: 'hide-win'
-        }
-      )
-    }
-
     trayContextMenu = Menu.buildFromTemplate(contextMenuTemplate)
 
-    tray = new Tray(iconPath)
+    tray = new Tray(trayIcon)
     tray.setToolTip(appName)
     tray.setContextMenu(trayContextMenu)
     tray.on('click', () => {
