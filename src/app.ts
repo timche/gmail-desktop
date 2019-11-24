@@ -64,7 +64,7 @@ function createWindow(): void {
   const lastWindowState = config.get(ConfigKey.LastWindowState)
 
   mainWindow = new BrowserWindow({
-    title: app.getName(),
+    title: app.name,
     titleBarStyle: config.get(ConfigKey.CompactHeader)
       ? 'hiddenInset'
       : 'default',
@@ -173,7 +173,7 @@ app.on('ready', () => {
   Menu.setApplicationMenu(menu)
 
   if (config.get(ConfigKey.EnableTrayIcon) && !tray) {
-    const appName = app.getName()
+    const appName = app.name
 
     const contextMenuTemplate: MenuItemConstructorOptions[] = [
       {
@@ -237,8 +237,8 @@ app.on('ready', () => {
       event.newGuest = new BrowserWindow({
         ...options,
         titleBarStyle: 'default',
-        x: null,
-        y: null
+        x: undefined,
+        y: undefined
       })
 
       event.newGuest.webContents.on('dom-ready', () => {
