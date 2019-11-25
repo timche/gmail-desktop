@@ -8,7 +8,7 @@ import { setCustomStyle, USER_CUSTOM_STYLE_PATH } from './custom-styles'
 import { viewLogs } from './logs'
 import { showRestartDialog, setAppMenuBarVisibility } from './utils'
 
-const APP_NAME = app.getName()
+const APP_NAME = app.name
 
 interface AppearanceMenuItem {
   key: ConfigKey

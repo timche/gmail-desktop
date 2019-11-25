@@ -9,7 +9,7 @@ export function setAppMenuBarVisibility(showTip?: boolean): void {
   const mainWindow = getMainWindow()
   const isAppMenuBarVisible = config.get(ConfigKey.AutoHideMenuBar)
   mainWindow.setMenuBarVisibility(!isAppMenuBarVisible)
-  mainWindow.setAutoHideMenuBar(isAppMenuBarVisible)
+  mainWindow.autoHideMenuBar = isAppMenuBarVisible
 
   if (isAppMenuBarVisible && showTip) {
     dialog.showMessageBox({
@@ -37,7 +37,7 @@ export async function showRestartDialog(
     type: 'info',
     buttons: ['Restart', 'Cancel'],
     message: 'Restart required',
-    detail: `To ${state} ${name}, please restart ${app.getName()}`
+    detail: `To ${state} ${name}, please restart ${app.name}`
   })
 
   // If restart was clicked (index of 0), restart the app
