@@ -2,11 +2,11 @@ os: osx
 osx_image: xcode11.2
 language: node_js
 node_js: '12'
+before_script:
+  - HOMEBREW_NO_AUTO_UPDATE=1 brew install rpm
 script:
   - yarn lint
   - yarn type-check
-before_deploy:
-  - HOMEBREW_NO_AUTO_UPDATE=1 brew install rpm
   - yarn dist
 deploy:
   skip_cleanup: true
