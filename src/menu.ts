@@ -198,47 +198,7 @@ const applicationMenu: MenuItemConstructorOptions[] = [
     ]
   },
   {
-    label: 'Edit',
-    submenu: [
-      {
-        label: 'Undo Typing',
-        accelerator: 'Cmd+Z',
-        role: 'undo'
-      },
-      {
-        label: 'Redo',
-        accelerator: 'Shift+Cmd+Z',
-        role: 'redo'
-      },
-      {
-        type: 'separator'
-      },
-      {
-        label: 'Cut',
-        accelerator: 'Cmd+X',
-        role: 'cut'
-      },
-      {
-        label: 'Copy',
-        accelerator: 'Cmd+C',
-        role: 'copy'
-      },
-      {
-        label: 'Paste',
-        accelerator: 'Cmd+V',
-        role: 'paste'
-      },
-      {
-        label: 'Paste and Match Style',
-        accelerator: 'Shift+Cmd+V',
-        role: 'pasteAndMatchStyle'
-      },
-      {
-        label: 'Select All',
-        accelerator: 'Cmd+A',
-        role: 'selectAll'
-      }
-    ]
+    role: 'editMenu'
   },
   {
     label: 'Window',
