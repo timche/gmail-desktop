@@ -15,7 +15,6 @@
     "lint": "run-p lint:*",
     "lint:ts": "xo",
     "lint:css": "stylelint 'css/*.css'",
-    "type-check": "tsc --noEmit",
     "start": "tsc && electron .",
     "pack": "tsc && electron-builder --dir",
     "dist": "tsc && electron-builder --macos --linux --windows --publish never"
