@@ -1,10 +1,11 @@
 # <img src="media/logo.png" height="38"> Gmail Desktop
 
 [![Travis](https://travis-ci.org/timche/gmail-desktop.svg?branch=master)](https://travis-ci.org/timche/gmail-desktop)
-[![Latest Tag](https://img.shields.io/github/tag/timche/gmail-desktop.svg?style=flat)](https://github.com/timche/gmail-desktop/releases/latest)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/timche/gmail-desktop)
+![GitHub Release Date](https://img.shields.io/github/release-date/timche/gmail-desktop)
+![GitHub All Releases](https://img.shields.io/github/downloads/timche/gmail-desktop/total)
 [![XO Code Style](https://img.shields.io/badge/code_style-XO-5ed9c7.svg)](https://github.com/sindresorhus/xo)
 [![Styled with Prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
-[![All Contributors](https://img.shields.io/badge/all_contributors-6-orange.svg?style=popout)](#contributors)
 
 > Gmail Desktop App built with [Electron](https://github.com/electron/electron)
 
