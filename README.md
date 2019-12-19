@@ -71,6 +71,8 @@ Example:
 
 Save the file, restart Gmail Desktop and sign in again.
 
+**Note:** If your user agent is not working, try one from a [different browser](https://www.whatismybrowser.com/guides/the-latest-user-agent).
+
 ## Developing
 
 Built with [Electron](https://github.com/electron/electron).
