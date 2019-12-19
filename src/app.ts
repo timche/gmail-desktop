@@ -22,6 +22,7 @@ import { init as initDownloads } from './downloads'
 import { platform, getUrlAccountId, createTrayIcon } from './helpers'
 import menu from './menu'
 import { setAppMenuBarVisibility, cleanURLFromGoogle } from './utils'
+import ensureOnline from './ensure-online'
 
 import electronContextMenu = require('electron-context-menu')
 
@@ -43,7 +44,7 @@ app.setAppUserModelId('io.cheung.gmail-desktop')
 let mainWindow: BrowserWindow
 let replyToWindow: BrowserWindow
 let isQuitting = false
-let tray: Tray
+let tray: Tray | undefined
 let trayContextMenu: Menu
 
 if (!app.requestSingleInstanceLock()) {
@@ -114,7 +115,7 @@ function createWindow(): void {
   mainWindow.on('show', () => toggleAppVisiblityTrayItem(true))
 
   function toggleAppVisiblityTrayItem(isMainWindowVisible: boolean): void {
-    if (config.get(ConfigKey.EnableTrayIcon)) {
+    if (config.get(ConfigKey.EnableTrayIcon) && tray) {
       trayContextMenu.getMenuItemById('show-win').visible = !isMainWindowVisible
       trayContextMenu.getMenuItemById('hide-win').visible = isMainWindowVisible
       tray.setContextMenu(trayContextMenu)
@@ -169,7 +170,31 @@ function addCustomCSS(windowElement: BrowserWindow): void {
   }
 }
 
-app.on('ready', () => {
+app.on('open-url', (event, url) => {
+  event.preventDefault()
+  createMailto(url)
+})
+
+app.on('activate', () => {
+  if (mainWindow) {
+    mainWindow.show()
+  }
+})
+
+app.on('before-quit', () => {
+  isQuitting = true
+
+  if (mainWindow) {
+    config.set(ConfigKey.LastWindowState, {
+      bounds: mainWindow.getBounds(),
+      fullscreen: mainWindow.isFullScreen(),
+      maximized: mainWindow.isMaximized()
+    })
+  }
+})
+;(async () => {
+  await Promise.all([ensureOnline(), app.whenReady()])
+
   createWindow()
 
   Menu.setApplicationMenu(menu)
@@ -205,11 +230,13 @@ app.on('ready', () => {
     tray.setToolTip(appName)
     tray.setContextMenu(trayContextMenu)
     tray.on('click', () => {
-      mainWindow.show()
+      if (mainWindow) {
+        mainWindow.show()
+      }
     })
   }
 
-  const { webContents } = mainWindow
+  const { webContents } = mainWindow!
 
   webContents.on('dom-ready', () => {
     if (!shouldStartMinimized) {
@@ -277,25 +304,4 @@ app.on('ready', () => {
 
     shell.openExternal(cleanURLFromGoogle(url))
   })
-})
-
-app.on('open-url', (event, url) => {
-  event.preventDefault()
-  createMailto(url)
-})
-
-app.on('activate', () => {
-  mainWindow.show()
-})
-
-app.on('before-quit', () => {
-  isQuitting = true
-
-  if (mainWindow) {
-    config.set(ConfigKey.LastWindowState, {
-      bounds: mainWindow.getBounds(),
-      fullscreen: mainWindow.isFullScreen(),
-      maximized: mainWindow.isMaximized()
-    })
-  }
-})
+})()

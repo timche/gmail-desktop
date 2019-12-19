@@ -27,7 +27,9 @@
     "electron-store": "5.0.0",
     "electron-updater": "^4.0.6",
     "electron-util": "^0.12.1",
-    "element-ready": "^4.1.0"
+    "element-ready": "^4.1.0",
+    "is-online": "^8.2.1",
+    "p-wait-for": "^3.1.0"
   },
   "devDependencies": {
     "@sindresorhus/tsconfig": "^0.4.0",
