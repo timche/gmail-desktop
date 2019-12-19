@@ -21,7 +21,7 @@ import { init as initDebug } from './debug'
 import { init as initDownloads } from './downloads'
 import { platform, getUrlAccountId, createTrayIcon } from './helpers'
 import menu from './menu'
-import { setAppMenuBarVisibility } from './utils'
+import { setAppMenuBarVisibility, cleanURLFromGoogle } from './utils'
 
 import electronContextMenu = require('electron-context-menu')
 
@@ -275,7 +275,7 @@ app.on('ready', () => {
       event.newGuest = win
     }
 
-    shell.openExternal(url)
+    shell.openExternal(cleanURLFromGoogle(url))
   })
 })
 

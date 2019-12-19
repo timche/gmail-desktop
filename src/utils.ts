@@ -46,3 +46,12 @@ export async function showRestartDialog(
     app.quit()
   }
 }
+
+export function cleanURLFromGoogle(url: string): string {
+  if (!url.includes('google.com/url')) {
+    return url
+  }
+
+  const parsedUrl = new URL(url)
+  return parsedUrl.searchParams.get('q') || url
+}
