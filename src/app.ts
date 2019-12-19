@@ -93,9 +93,7 @@ function createWindow(): void {
     setAppMenuBarVisibility()
   }
 
-  mainWindow.loadURL('https://mail.google.com', {
-    userAgent: config.get(ConfigKey.OverrideUserAgent)
-  })
+  mainWindow.loadURL('https://mail.google.com')
 
   mainWindow.webContents.on('dom-ready', () => {
     addCustomCSS(mainWindow)
@@ -194,6 +192,11 @@ app.on('before-quit', () => {
 })
 ;(async () => {
   await Promise.all([ensureOnline(), app.whenReady()])
+
+  const overrideUserAgent = config.get(ConfigKey.OverrideUserAgent)
+  if (overrideUserAgent) {
+    app.userAgentFallback = overrideUserAgent
+  }
 
   createWindow()
 
