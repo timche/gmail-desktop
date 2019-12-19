@@ -224,7 +224,10 @@ app.on('ready', () => {
     // `Add account` opens `accounts.google.com`
     if (url.startsWith('https://accounts.google.com')) {
       mainWindow.loadURL(url)
-    } else if (url.startsWith('https://mail.google.com')) {
+      return
+    }
+
+    if (url.startsWith('https://mail.google.com')) {
       // Check if the user switches accounts which is determined
       // by the URL: `mail.google.com/mail/u/<local_account_id>/...`
       const currentAccountId = getUrlAccountId(mainWindow.webContents.getURL())
@@ -254,9 +257,25 @@ app.on('ready', () => {
           shell.openExternal(url)
         }
       )
-    } else {
-      shell.openExternal(url)
+
+      return
     }
+
+    if (url.startsWith('about:blank')) {
+      const win = new BrowserWindow({
+        ...options,
+        show: false
+      })
+
+      win.webContents.once('will-redirect', (_event, url) => {
+        shell.openExternal(url)
+        win.destroy()
+      })
+
+      event.newGuest = win
+    }
+
+    shell.openExternal(url)
   })
 })
 
