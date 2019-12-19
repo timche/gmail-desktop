@@ -51,6 +51,26 @@ Gmail Desktop provides a number of appearance customizations to improve and simp
 
 In addition to the available appearance customizations, users can add additional custom styles. Click the menu item `Settings` → `Appearance` → `Custom Styles` to open the custom css file in the default editor for CSS files.
 
+## Troubleshooting
+
+#### I can't sign in: `This browser or app may not be secure`
+
+In December 2019 Google has decided to block non-browser user agents, such as `Electron`, from signing in to the Google accounts for security reasons ([related issue](https://github.com/timche/gmail-desktop/issues/174)).
+
+Until we find a solution, you are able to override the user agent via the menu `Settings` → `Advanced` → `Edit Config File`, which opens the JSON config file in your editor.
+
+In the config file, add a new key `overrideUserAgent` and set your user agent from [whatsmyua.info](https://www.whatsmyua.info/) as value.
+
+Example:
+
+```json
+{
+  "overrideUserAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36"
+}
+```
+
+Save the file, restart Gmail Desktop and sign in again.
+
 ## Developing
 
 Built with [Electron](https://github.com/electron/electron).

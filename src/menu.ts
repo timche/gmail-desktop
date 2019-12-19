@@ -176,13 +176,24 @@ const applicationMenu: MenuItemConstructorOptions[] = [
         }
       },
       {
-        label: 'Debug Mode',
-        type: 'checkbox',
-        checked: config.get(ConfigKey.DebugMode),
-        click({ checked }) {
-          config.set(ConfigKey.DebugMode, checked)
-          showRestartDialog(checked, 'debug mode')
-        }
+        label: 'Advanced',
+        submenu: [
+          {
+            label: 'Debug Mode',
+            type: 'checkbox',
+            checked: config.get(ConfigKey.DebugMode),
+            click({ checked }) {
+              config.set(ConfigKey.DebugMode, checked)
+              showRestartDialog(checked, 'debug mode')
+            }
+          },
+          {
+            label: 'Edit Config File',
+            click() {
+              config.openInEditor()
+            }
+          }
+        ]
       }
     ]
   },

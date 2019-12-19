@@ -92,7 +92,9 @@ function createWindow(): void {
     setAppMenuBarVisibility()
   }
 
-  mainWindow.loadURL('https://mail.google.com')
+  mainWindow.loadURL('https://mail.google.com', {
+    userAgent: config.get(ConfigKey.OverrideUserAgent)
+  })
 
   mainWindow.webContents.on('dom-ready', () => {
     addCustomCSS(mainWindow)

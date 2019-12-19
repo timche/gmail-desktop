@@ -23,7 +23,8 @@ export enum ConfigKey {
   LastWindowState = 'lastWindowState',
   LaunchMinimized = 'launchMinimized',
   AutoHideMenuBar = 'autoHideMenuBar',
-  EnableTrayIcon = 'enableTrayIcon'
+  EnableTrayIcon = 'enableTrayIcon',
+  OverrideUserAgent = 'overrideUserAgent'
 }
 
 type TypedStore = {
@@ -37,6 +38,7 @@ type TypedStore = {
   [ConfigKey.LaunchMinimized]: boolean
   [ConfigKey.AutoHideMenuBar]: boolean
   [ConfigKey.EnableTrayIcon]: boolean
+  [ConfigKey.OverrideUserAgent]?: string
 }
 
 const defaults = {
