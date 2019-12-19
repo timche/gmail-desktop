@@ -90,12 +90,12 @@ const applicationMenu: MenuItemConstructorOptions[] = [
       },
       {
         label: `Hide ${APP_NAME}`,
-        accelerator: 'Cmd+H',
+        accelerator: 'CommandOrControl+H',
         role: 'hide'
       },
       {
         label: 'Hide Others',
-        accelerator: 'Cmd+Shift+H',
+        accelerator: 'CommandOrControl+Shift+H',
         role: 'hideOthers'
       },
       {
@@ -107,7 +107,7 @@ const applicationMenu: MenuItemConstructorOptions[] = [
       },
       {
         label: `Quit ${APP_NAME}`,
-        accelerator: 'Cmd+Q',
+        accelerator: 'CommandOrControl+Q',
         click() {
           app.quit()
         }
@@ -206,12 +206,12 @@ const applicationMenu: MenuItemConstructorOptions[] = [
     submenu: [
       {
         label: 'Minimize',
-        accelerator: 'Cmd+M',
+        accelerator: 'CommandOrControl+M',
         role: 'minimize'
       },
       {
         label: 'Close',
-        accelerator: 'Cmd+W',
+        accelerator: 'CommandOrControl+W',
         role: 'close'
       }
     ]
