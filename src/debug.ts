@@ -1,11 +1,10 @@
-import config, { ConfigKey } from './config'
-
 import electronDebug = require('electron-debug')
 
 const OPTIONS = {
-  showDevTools: false
+  showDevTools: false,
+  isEnabled: true
 }
 
 export function init(): void {
-  electronDebug({ ...OPTIONS, isEnabled: config.get(ConfigKey.DebugMode) })
+  electronDebug(OPTIONS)
 }
