@@ -284,7 +284,7 @@ app.on('before-quit', () => {
         'new-window',
         (event: Event, url: string) => {
           event.preventDefault()
-          shell.openExternal(url)
+          shell.openExternal(cleanURLFromGoogle(url))
         }
       )
 
