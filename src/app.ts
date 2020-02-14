@@ -23,6 +23,7 @@ import { platform, getUrlAccountId, createTrayIcon } from './helpers'
 import menu from './menu'
 import { setAppMenuBarVisibility, cleanURLFromGoogle } from './utils'
 import ensureOnline from './ensure-online'
+import { buildDockMenu } from './dock-menu'
 
 import electronContextMenu = require('electron-context-menu')
 
@@ -132,6 +133,10 @@ function createWindow(): void {
       }
     }
   })
+
+  if (is.macos) {
+    app.dock.setMenu(buildDockMenu(mainWindow))
+  }
 }
 
 function createMailto(url: string): void {
