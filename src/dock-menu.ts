@@ -1,22 +1,25 @@
-import { Menu, BrowserWindow, MenuItemConstructorOptions } from 'electron'
+import {
+  BrowserWindow,
+  Menu,
+  MenuItemConstructorOptions,
+  ipcRenderer as ipc
+} from 'electron'
 
 const baseGmailUrl = 'https://mail.google.com'
 
 export function buildDockMenu(mainWindow: BrowserWindow): Menu {
-  const inboxButton = createInboxButton(mainWindow)
+  const inboxButton = createInboxButton()
   const composeButton = createComposeButton(mainWindow)
   const sentButton = createSentButton(mainWindow)
   return Menu.buildFromTemplate([inboxButton, composeButton, sentButton])
 }
 
-function createInboxButton(
-  mainWindow: BrowserWindow
-): MenuItemConstructorOptions {
+function createInboxButton(): MenuItemConstructorOptions {
   return {
     label: 'Inbox',
-    async click() {
-      await mainWindow.loadURL(`${baseGmailUrl}/#inbox`)
-      mainWindow.show()
+    click() {
+      // TODO: investigate why ipc is undefined here
+      ipc.send('open-inbox-view')
     }
   }
 }

@@ -2,7 +2,7 @@ import * as fs from 'fs'
 import * as path from 'path'
 import {
   app,
-  ipcMain as ipc,
+  ipcMain,
   shell,
   BrowserWindow,
   Menu,
@@ -121,7 +121,7 @@ function createWindow(): void {
     }
   }
 
-  ipc.on('unread-count', (_: Event, unreadCount: number) => {
+  ipcMain.on('unread-count', (_: Event, unreadCount: number) => {
     if (is.macos) {
       app.dock.setBadge(unreadCount ? unreadCount.toString() : '')
     }
@@ -137,6 +137,11 @@ function createWindow(): void {
   if (is.macos) {
     app.dock.setMenu(buildDockMenu(mainWindow))
   }
+
+  // TODO: create ipcMain.on(..) events for opening inbox,compose, and sent views
+  ipcMain.on('open-inbox-view', () => {
+    console.log('INBOX VIEW CLICKED')
+  })
 }
 
 function createMailto(url: string): void {
