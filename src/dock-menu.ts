@@ -1,5 +1,7 @@
 import { Menu, BrowserWindow, MenuItemConstructorOptions } from 'electron'
 
+const baseGmailUrl = 'https://mail.google.com'
+
 export function buildDockMenu(mainWindow: BrowserWindow): Menu {
   const inboxButton = createInboxButton(mainWindow)
   const composeButton = createComposeButton(mainWindow)
@@ -13,7 +15,7 @@ function createInboxButton(
   return {
     label: 'Inbox',
     async click() {
-      await mainWindow.loadURL('https://mail.google.com/#inbox')
+      await mainWindow.loadURL(`${baseGmailUrl}/#inbox`)
       mainWindow.show()
     }
   }
@@ -25,7 +27,7 @@ function createComposeButton(
   return {
     label: 'Compose',
     async click() {
-      await mainWindow.loadURL('https://mail.google.com/#inbox?compose=new')
+      await mainWindow.loadURL(`${baseGmailUrl}/#inbox?compose=new`)
       mainWindow.show()
     }
   }
@@ -37,7 +39,7 @@ function createSentButton(
   return {
     label: 'Sent',
     async click() {
-      await mainWindow.loadURL('https://mail.google.com/#sent')
+      await mainWindow.loadURL(`${baseGmailUrl}/#sent`)
       mainWindow.show()
     }
   }
