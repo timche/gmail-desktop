@@ -7,7 +7,8 @@ import {
   BrowserWindow,
   Menu,
   Tray,
-  MenuItemConstructorOptions
+  MenuItemConstructorOptions,
+  dialog
 } from 'electron'
 import { is } from 'electron-util'
 
@@ -305,6 +306,12 @@ app.on('before-quit', () => {
       event.newGuest = win
     }
 
-    shell.openExternal(cleanURLFromGoogle(url))
+    dialog.showMessageBox({
+      type: 'info',
+      buttons: ['Yes', 'No'],
+      message: `Open the link ${cleanURLFromGoogle(url)} ?`
+    }).then(({ response }) => {
+      if (response === 0) shell.openExternal(cleanURLFromGoogle(url))
+    })
   })
 })()
