@@ -306,12 +306,30 @@ app.on('before-quit', () => {
       event.newGuest = win
     }
 
-    dialog.showMessageBox({
-      type: 'info',
-      buttons: ['Yes', 'No'],
-      message: `Open the link ${cleanURLFromGoogle(url)} ?`
-    }).then(({ response }) => {
-      if (response === 0) shell.openExternal(cleanURLFromGoogle(url))
-    })
+    const cleanURL = cleanURLFromGoogle(url)
+    const { origin } = new URL(cleanURL)
+    const trustedHosts = config.get(ConfigKey.TrustedHosts)
+
+    if (trustedHosts.includes(origin)) {
+      shell.openExternal(cleanURL)
+      return
+    }
+
+    dialog
+      .showMessageBox({
+        type: 'info',
+        buttons: ['Open Link', 'Cancel'],
+        title: `Do you want to open the external website "${cleanURL}" in your default browser?`,
+        checkboxLabel: `Trust all links on ${origin}`,
+        message: cleanURL
+      })
+      .then(({ response, checkboxChecked }) => {
+        if (response !== 0) return
+
+        if (checkboxChecked)
+          config.set(ConfigKey.TrustedHosts, [...trustedHosts, origin])
+
+        shell.openExternal(cleanURL)
+      })
   })
 })()
