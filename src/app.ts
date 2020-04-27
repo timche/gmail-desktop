@@ -319,9 +319,9 @@ app.on('before-quit', () => {
       .showMessageBox({
         type: 'info',
         buttons: ['Open Link', 'Cancel'],
-        title: `Do you want to open the external website "${cleanURL}" in your default browser?`,
+        message: `Do you want to open the external website "${cleanURL}" in your default browser?`,
         checkboxLabel: `Trust all links on ${origin}`,
-        message: cleanURL
+        detail: cleanURL
       })
       .then(({ response, checkboxChecked }) => {
         if (response !== 0) return
