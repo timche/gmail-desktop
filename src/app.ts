@@ -169,6 +169,10 @@ function addCustomCSS(windowElement: BrowserWindow): void {
   }
 }
 
+function openExternalUrl(url: string): void {
+  shell.openExternal(url)
+}
+
 app.on('open-url', (event, url) => {
   event.preventDefault()
   createMailto(url)
@@ -285,7 +289,7 @@ app.on('before-quit', () => {
         'new-window',
         (event: Event, url: string) => {
           event.preventDefault()
-          shell.openExternal(cleanURLFromGoogle(url))
+          openExternalUrl(cleanURLFromGoogle(url))
         }
       )
 
@@ -299,7 +303,7 @@ app.on('before-quit', () => {
       })
 
       win.webContents.once('will-redirect', (_event, url) => {
-        shell.openExternal(url)
+        openExternalUrl(url)
         win.destroy()
       })
 
@@ -311,7 +315,7 @@ app.on('before-quit', () => {
     const trustedHosts = config.get(ConfigKey.TrustedHosts)
 
     if (trustedHosts.includes(origin)) {
-      shell.openExternal(cleanURL)
+      openExternalUrl(cleanURL)
       return
     }
 
@@ -329,7 +333,7 @@ app.on('before-quit', () => {
         if (checkboxChecked)
           config.set(ConfigKey.TrustedHosts, [...trustedHosts, origin])
 
-        shell.openExternal(cleanURL)
+        openExternalUrl(cleanURL)
       })
   })
 })()
