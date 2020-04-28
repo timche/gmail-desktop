@@ -170,7 +170,30 @@ function addCustomCSS(windowElement: BrowserWindow): void {
 }
 
 function openExternalUrl(url: string): void {
-  shell.openExternal(url)
+  const { origin } = new URL(url)
+  const trustedHosts = config.get(ConfigKey.TrustedHosts)
+
+  if (trustedHosts.includes(origin)) {
+    shell.openExternal(url)
+    return
+  }
+
+  dialog
+    .showMessageBox({
+      type: 'info',
+      buttons: ['Open Link', 'Cancel'],
+      message: `Do you want to open the external website "${url}" in your default browser?`,
+      checkboxLabel: `Trust all links on ${origin}`,
+      detail: url
+    })
+    .then(({ response, checkboxChecked }) => {
+      if (response !== 0) return
+
+      if (checkboxChecked)
+        config.set(ConfigKey.TrustedHosts, [...trustedHosts, origin])
+
+      shell.openExternal(url)
+    })
 }
 
 app.on('open-url', (event, url) => {
@@ -310,30 +333,6 @@ app.on('before-quit', () => {
       event.newGuest = win
     }
 
-    const cleanURL = cleanURLFromGoogle(url)
-    const { origin } = new URL(cleanURL)
-    const trustedHosts = config.get(ConfigKey.TrustedHosts)
-
-    if (trustedHosts.includes(origin)) {
-      openExternalUrl(cleanURL)
-      return
-    }
-
-    dialog
-      .showMessageBox({
-        type: 'info',
-        buttons: ['Open Link', 'Cancel'],
-        message: `Do you want to open the external website "${cleanURL}" in your default browser?`,
-        checkboxLabel: `Trust all links on ${origin}`,
-        detail: cleanURL
-      })
-      .then(({ response, checkboxChecked }) => {
-        if (response !== 0) return
-
-        if (checkboxChecked)
-          config.set(ConfigKey.TrustedHosts, [...trustedHosts, origin])
-
-        openExternalUrl(cleanURL)
-      })
+    openExternalUrl(cleanURLFromGoogle(url))
   })
 })()
