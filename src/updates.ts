@@ -12,17 +12,24 @@ const UPDATE_CHECK_INTERVAL = 60000 * 60 * 3 // 3 Hours
 function onUpdateAvailable(): void {
   createNotification(
     'Update available',
-    'Please restart to update to the latest version',
-    {
-      action: () => {
-        app.relaunch()
-        app.quit()
-      },
-      text: 'Restart'
+    `Please restart ${app.name} to update to the latest version`,
+    () => {
+      app.relaunch()
+      app.quit()
     }
   )
 }
 
+setTimeout(() => {
+  createNotification(
+    'Update available',
+    `Please restart ${app.name} to update to the latest version`,
+    () => {
+      app.relaunch()
+      app.quit()
+    }
+  )
+}, 5000)
 export function init(): void {
   if (!is.development) {
     log.transports.file.level = 'info'
@@ -54,10 +61,7 @@ export async function checkForUpdates(): Promise<void> {
     createNotification(
       'Check for updates failed',
       'View the logs for more information',
-      {
-        action: viewLogs,
-        text: 'View Logs'
-      }
+      viewLogs
     )
   }
 }

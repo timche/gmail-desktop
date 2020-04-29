@@ -1,26 +1,18 @@
 import { Notification } from 'electron'
 
-interface Action {
-  action: () => void
-  text: string
-}
-
 export function createNotification(
   title: string,
   body: string,
-  { action, text: actionText }: Action
+  action?: () => void
 ): void {
   const notification = new Notification({
-    actions: [
-      {
-        type: 'button',
-        text: actionText
-      }
-    ],
     body,
     title
   })
 
-  notification.on('action', () => action())
+  if (action) {
+    notification.on('click', action)
+  }
+
   notification.show()
 }

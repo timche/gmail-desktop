@@ -16,11 +16,8 @@ function onDownloadComplete(filename: string, state: State): void {
   createNotification(
     `Download ${state}`,
     `Download of file ${filename} ${messages[state]}.`,
-    {
-      action: () => {
-        shell.openItem(path.join(app.getPath('downloads'), filename))
-      },
-      text: 'Open'
+    () => {
+      shell.openItem(path.join(app.getPath('downloads'), filename))
     }
   )
 }
