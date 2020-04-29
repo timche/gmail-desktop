@@ -7,7 +7,8 @@ import {
   BrowserWindow,
   Menu,
   Tray,
-  MenuItemConstructorOptions
+  MenuItemConstructorOptions,
+  dialog
 } from 'electron'
 import { is } from 'electron-util'
 
@@ -168,6 +169,33 @@ function addCustomCSS(windowElement: BrowserWindow): void {
   }
 }
 
+function openExternalUrl(url: string): void {
+  const { origin } = new URL(url)
+  const trustedHosts = config.get(ConfigKey.TrustedHosts)
+
+  if (trustedHosts.includes(origin)) {
+    shell.openExternal(url)
+    return
+  }
+
+  dialog
+    .showMessageBox({
+      type: 'info',
+      buttons: ['Open Link', 'Cancel'],
+      message: `Do you want to open the external website "${url}" in your default browser?`,
+      checkboxLabel: `Trust all links on ${origin}`,
+      detail: url
+    })
+    .then(({ response, checkboxChecked }) => {
+      if (response !== 0) return
+
+      if (checkboxChecked)
+        config.set(ConfigKey.TrustedHosts, [...trustedHosts, origin])
+
+      shell.openExternal(url)
+    })
+}
+
 app.on('open-url', (event, url) => {
   event.preventDefault()
   createMailto(url)
@@ -284,7 +312,7 @@ app.on('before-quit', () => {
         'new-window',
         (event: Event, url: string) => {
           event.preventDefault()
-          shell.openExternal(cleanURLFromGoogle(url))
+          openExternalUrl(cleanURLFromGoogle(url))
         }
       )
 
@@ -298,13 +326,13 @@ app.on('before-quit', () => {
       })
 
       win.webContents.once('will-redirect', (_event, url) => {
-        shell.openExternal(url)
+        openExternalUrl(url)
         win.destroy()
       })
 
       event.newGuest = win
     }
 
-    shell.openExternal(cleanURLFromGoogle(url))
+    openExternalUrl(cleanURLFromGoogle(url))
   })
 })()
