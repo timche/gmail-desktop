@@ -62,7 +62,7 @@
 }
 
 /* Header items height (hamburger menu, search box, profile image) */
-.compactHeader header > div:nth-child(2) > div {
+.compactHeader header > div:nth-child(2) > div:not([aria-hidden]) {
   height: 28px;
 }
 
