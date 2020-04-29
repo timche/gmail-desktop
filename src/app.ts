@@ -332,6 +332,8 @@ app.on('before-quit', () => {
       })
 
       event.newGuest = win
+
+      return
     }
 
     openExternalUrl(url)
