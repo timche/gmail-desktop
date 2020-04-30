@@ -20,16 +20,6 @@ function onUpdateAvailable(): void {
   )
 }
 
-setTimeout(() => {
-  createNotification(
-    'Update available',
-    `Please restart ${app.name} to update to the latest version`,
-    () => {
-      app.relaunch()
-      app.quit()
-    }
-  )
-}, 5000)
 export function init(): void {
   if (!is.development) {
     log.transports.file.level = 'info'
