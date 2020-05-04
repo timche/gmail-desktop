@@ -8,8 +8,6 @@ import { setCustomStyle, USER_CUSTOM_STYLE_PATH } from './custom-styles'
 import { viewLogs } from './logs'
 import { showRestartDialog, setAppMenuBarVisibility } from './utils'
 
-const APP_NAME = app.name
-
 interface AppearanceMenuItem {
   key: ConfigKey
   label: string
@@ -73,10 +71,10 @@ if (is.linux || is.windows) {
 
 const applicationMenu: MenuItemConstructorOptions[] = [
   {
-    label: APP_NAME,
+    label: app.name,
     submenu: [
       {
-        label: `About ${APP_NAME}`,
+        label: `About ${app.name}`,
         role: 'about'
       },
       {
@@ -89,7 +87,7 @@ const applicationMenu: MenuItemConstructorOptions[] = [
         type: 'separator'
       },
       {
-        label: `Hide ${APP_NAME}`,
+        label: `Hide ${app.name}`,
         accelerator: 'CommandOrControl+H',
         role: 'hide'
       },
@@ -106,7 +104,7 @@ const applicationMenu: MenuItemConstructorOptions[] = [
         type: 'separator'
       },
       {
-        label: `Quit ${APP_NAME}`,
+        label: `Quit ${app.name}`,
         accelerator: 'CommandOrControl+Q',
         click() {
           app.quit()
@@ -143,24 +141,7 @@ const applicationMenu: MenuItemConstructorOptions[] = [
         }
       },
       {
-        label: 'Auto Update',
-        type: 'checkbox',
-        checked: config.get(ConfigKey.AutoUpdate),
-        click({ checked }: { checked: boolean }) {
-          config.set(ConfigKey.AutoUpdate, checked)
-          showRestartDialog(checked, 'auto updates')
-        }
-      },
-      {
-        label: 'Launch minimized',
-        type: 'checkbox',
-        checked: config.get(ConfigKey.LaunchMinimized),
-        click({ checked }: { checked: boolean }) {
-          config.set(ConfigKey.LaunchMinimized, checked)
-        }
-      },
-      {
-        label: is.macos ? 'Enable Menu Bar Icon' : 'Enable System Tray Icon',
+        label: is.macos ? 'Show Menu Bar Icon' : 'Show System Tray Icon',
         type: 'checkbox',
         checked: config.get(ConfigKey.EnableTrayIcon),
         click({ checked }: { checked: boolean }) {
@@ -182,6 +163,26 @@ const applicationMenu: MenuItemConstructorOptions[] = [
             app.setAsDefaultProtocolClient('mailto')
           }
         }
+      },
+      {
+        label: 'Auto Update',
+        type: 'checkbox',
+        checked: config.get(ConfigKey.AutoUpdate),
+        click({ checked }: { checked: boolean }) {
+          config.set(ConfigKey.AutoUpdate, checked)
+          showRestartDialog(checked, 'auto updates')
+        }
+      },
+      {
+        label: 'Launch Minimized',
+        type: 'checkbox',
+        checked: config.get(ConfigKey.LaunchMinimized),
+        click({ checked }: { checked: boolean }) {
+          config.set(ConfigKey.LaunchMinimized, checked)
+        }
+      },
+      {
+        type: 'separator'
       },
       {
         label: 'Advanced',
@@ -229,7 +230,7 @@ const applicationMenu: MenuItemConstructorOptions[] = [
     role: 'help',
     submenu: [
       {
-        label: `${APP_NAME} Website`,
+        label: `${app.name} Website`,
         click() {
           shell.openExternal('https://github.com/timche/gmail-desktop')
         }
@@ -273,4 +274,5 @@ if (is.development) {
 }
 
 const menu = Menu.buildFromTemplate(applicationMenu)
+
 export default menu
