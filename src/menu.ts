@@ -135,6 +135,14 @@ const applicationMenu: MenuItemConstructorOptions[] = [
         ]
       },
       {
+        label: 'Confirm External Links before Opening',
+        type: 'checkbox',
+        checked: config.get(ConfigKey.ConfirmExternalLinks),
+        click({ checked }: { checked: boolean }) {
+          config.set(ConfigKey.ConfirmExternalLinks, checked)
+        }
+      },
+      {
         label: 'Auto Update',
         type: 'checkbox',
         checked: config.get(ConfigKey.AutoUpdate),

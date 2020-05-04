@@ -169,32 +169,31 @@ function addCustomCSS(windowElement: BrowserWindow): void {
   }
 }
 
-function openExternalUrl(url: string): void {
+async function openExternalUrl(url: string): Promise<void> {
   const cleanURL = cleanURLFromGoogle(url)
-  const { origin } = new URL(cleanURL)
-  const trustedHosts = config.get(ConfigKey.TrustedHosts)
 
-  if (trustedHosts.includes(origin)) {
-    shell.openExternal(cleanURL)
-    return
-  }
+  if (config.get(ConfigKey.ConfirmExternalLinks)) {
+    const { origin } = new URL(cleanURL)
+    const trustedHosts = config.get(ConfigKey.TrustedHosts)
 
-  dialog
-    .showMessageBox({
-      type: 'info',
-      buttons: ['Open Link', 'Cancel'],
-      message: `Do you want to open the external website "${cleanURL}" in your default browser?`,
-      checkboxLabel: `Trust all links on ${origin}`,
-      detail: cleanURL
-    })
-    .then(({ response, checkboxChecked }) => {
+    if (!trustedHosts.includes(origin)) {
+      const { response, checkboxChecked } = await dialog.showMessageBox({
+        type: 'info',
+        buttons: ['Open Link', 'Cancel'],
+        message: `Do you want to open the external link "${cleanURL}" in your default browser?`,
+        checkboxLabel: `Trust all links on ${origin}`,
+        detail: cleanURL
+      })
+
       if (response !== 0) return
 
-      if (checkboxChecked)
+      if (checkboxChecked) {
         config.set(ConfigKey.TrustedHosts, [...trustedHosts, origin])
+      }
+    }
+  }
 
-      shell.openExternal(cleanURL)
-    })
+  shell.openExternal(cleanURL)
 }
 
 app.on('open-url', (event, url) => {
