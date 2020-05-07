@@ -9,7 +9,7 @@ export function getUrlAccountId(url: string): null | string {
   return res && res[1]
 }
 
-export const platform = selectPlatform({
+export const platform: 'macos' | 'linux' | 'windows' = selectPlatform({
   macos: 'macos',
   linux: 'linux',
   windows: 'windows'

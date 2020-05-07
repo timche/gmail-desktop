@@ -25,6 +25,7 @@ export enum ConfigKey {
   AutoHideMenuBar = 'autoHideMenuBar',
   EnableTrayIcon = 'enableTrayIcon',
   OverrideUserAgent = 'overrideUserAgent',
+  AutoFixUserAgent = 'autoFixUserAgent',
   TrustedHosts = 'trustedHosts',
   ConfirmExternalLinks = 'confirmExternalLinks'
 }
@@ -41,6 +42,7 @@ type TypedStore = {
   [ConfigKey.AutoHideMenuBar]: boolean
   [ConfigKey.EnableTrayIcon]: boolean
   [ConfigKey.OverrideUserAgent]?: string
+  [ConfigKey.AutoFixUserAgent]: boolean
   [ConfigKey.TrustedHosts]: string[]
   [ConfigKey.ConfirmExternalLinks]: boolean
 }
@@ -65,6 +67,7 @@ const defaults = {
   [ConfigKey.LaunchMinimized]: false,
   [ConfigKey.AutoHideMenuBar]: false,
   [ConfigKey.EnableTrayIcon]: !is.macos,
+  [ConfigKey.AutoFixUserAgent]: false,
   [ConfigKey.TrustedHosts]: [],
   [ConfigKey.ConfirmExternalLinks]: true
 }

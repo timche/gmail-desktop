@@ -24,6 +24,7 @@ import { platform, getUrlAccountId, createTrayIcon } from './helpers'
 import menu from './menu'
 import { setAppMenuBarVisibility, cleanURLFromGoogle } from './utils'
 import ensureOnline from './ensure-online'
+import { getCustomUserAgent, autoFixUserAgent } from './user-agent'
 
 import electronContextMenu = require('electron-context-menu')
 
@@ -99,6 +100,30 @@ function createWindow(): void {
   mainWindow.webContents.on('dom-ready', () => {
     addCustomCSS(mainWindow)
     initCustomStyles()
+  })
+
+  mainWindow.webContents.on('did-finish-load', async () => {
+    if (mainWindow.webContents.getURL().includes('signin/rejected')) {
+      const { response } = await dialog.showMessageBox({
+        type: 'info',
+        message: `It looks like you are unable to sign-in, because ${app.name} is using a non-supported user agent and Gmail is blocking it.`,
+        detail: `Do you want ${app.name} try to fix it automatically? Otherwise you can set your own user agent (see "Troubleshoot").`,
+        buttons: ['Yes', 'No', 'Troubleshoot']
+      })
+
+      if (response === 2) {
+        openExternalUrl(
+          'https://github.com/timche/gmail-desktop#i-cant-sign-in-this-browser-or-app-may-not-be-secure'
+        )
+        return
+      }
+
+      if (response === 1) {
+        return
+      }
+
+      autoFixUserAgent()
+    }
   })
 
   mainWindow.on('close', e => {
@@ -221,9 +246,10 @@ app.on('before-quit', () => {
 ;(async () => {
   await Promise.all([ensureOnline(), app.whenReady()])
 
-  const overrideUserAgent = config.get(ConfigKey.OverrideUserAgent)
-  if (overrideUserAgent) {
-    app.userAgentFallback = overrideUserAgent
+  const userAgent = await getCustomUserAgent()
+
+  if (userAgent) {
+    app.userAgentFallback = userAgent
   }
 
   createWindow()

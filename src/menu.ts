@@ -7,6 +7,7 @@ import config, { ConfigKey } from './config'
 import { setCustomStyle, USER_CUSTOM_STYLE_PATH } from './custom-styles'
 import { viewLogs } from './logs'
 import { showRestartDialog, setAppMenuBarVisibility } from './utils'
+import { autoFixUserAgent, resetUserAgent } from './user-agent'
 
 interface AppearanceMenuItem {
   key: ConfigKey
@@ -201,6 +202,22 @@ const applicationMenu: MenuItemConstructorOptions[] = [
             click() {
               config.openInEditor()
             }
+          },
+          {
+            type: 'separator'
+          },
+          {
+            label: 'User Agent',
+            submenu: [
+              {
+                label: 'Try To Fix Automatically',
+                click: autoFixUserAgent
+              },
+              {
+                label: 'Reset To Default',
+                click: resetUserAgent
+              }
+            ]
           }
         ]
       }
