@@ -7,23 +7,25 @@
 [![XO Code Style](https://img.shields.io/badge/code_style-XO-5ed9c7.svg)](https://github.com/sindresorhus/xo)
 [![Styled with Prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 
-> Gmail Desktop App built with [Electron](https://github.com/electron/electron)
+> Refined Gmail desktop app
 
-![Gmail Desktop Screenshot](media/screenshot.png)
+![](media/screenshot.png)
 
 ## Highlights
 
-- Native Gmail interface
-- Cross-platform
-- Desktop notifications
-- Unread badge in macOS dock & icon Windows/Linux tray
-- Silent auto-updates
 - [Appearance customizations](#appearance-customizations)
 - [Custom styles](#custom-styles)
+- Desktop notifications
+- macOS: Unread badge in dock
+- Windows/Linux: Unread icon tray
+- Silent auto-updates
+- [Clean email links from Google](#clean-email-links-from-google)
+- [Confirm email links before opening to prevent phishing](#confirm-email-links-before-opening-to-prevent-phishing)
+- Cross-platform
 
 ## Installation
 
-_macOS 10.10+, Linux and Windows 7+ are supported._
+_macOS 10.13+, Linux and Windows 8+ are supported (64-bit only)._
 
 #### macOS
 
@@ -39,30 +41,52 @@ _macOS 10.10+, Linux and Windows 7+ are supported._
 
 ## Features
 
-### Appearance Customizations
+### Appearance customizations
 
-Gmail Desktop provides a number of appearance customizations to improve and simplify the default Gmail styles. These customizations are listed under the `Settings` → `Appearance` menu.
+Gmail Desktop provides a number of appearance customizations to improve and simplify the default Gmail styles. These customizations are enabled by default and configurable under the `Settings` → `Appearance` menu.
 
-- Compact Header - Customizes the Gmail header to use a more compact style to provide a more native feel. This setting requires a restart to be applied.
-- Hide Footer - Hides footer information text (storage used, terms links, etc.).
-- Hide Right Sidebar - Hides the Google apps sidebar on the right side of the interface.
-- Hide Support - Hides the support button in the header.
+- `Compact Header`: Customizes the Gmail header to use a more compact style to provide a more native feel. This setting requires a restart to be applied.
+- `Hide Footer`: Hides footer information text (storage used, terms links, etc.).
+- `Hide Right Sidebar`: Hides the Google apps sidebar on the right side of the interface.
+- `Hide Support`: Hides the support button in the header.
+
+![](media/appearancecustomization.gif)
 
 ### Custom styles
 
-In addition to the available appearance customizations, users can add additional custom styles. Click the menu item `Settings` → `Appearance` → `Custom Styles` to open the custom css file in the default editor for CSS files.
+In addition to the available appearance customizations, custom user styles can be applied. Click the menu item `Settings` → `Appearance` → `Custom Styles` to open the custom CSS file in the default editor for CSS files.
+
+### Confirm email links before opening to prevent phishing
+
+Confirm email links can be disabled at `Settings` → `Confirm External Links before Opening`.
+
+![](media/confirmlinkdialog.png)
+
+### Clean email links from Google
+
+Email links in Gmail are usually prepended with `https://google.com/url?q=<actual_url>`, which is not visible to the user. While we don't know exactly why or what it does, it's unnecesary and we believe it does some tracking stuff. Gmail Desktop automatically cleans links from this, so the actual URL will be directly opened in the browser.
 
 ## Troubleshooting
 
 #### I can't sign in: `This browser or app may not be secure`
 
-In December 2019 Google has decided to block non-browser user agents, such as `Electron`, from signing in to the Google accounts for security reasons ([related issue](https://github.com/timche/gmail-desktop/issues/174)).
+In December 2019 Google has decided to block unsupported user agents, such as `Electron`, from signing in to Google accounts for security reasons (related issue: [#174](https://github.com/timche/gmail-desktop/issues/174)).
 
-Until we find a solution, you are able to override the user agent via the menu `Settings` → `Advanced` → `Edit Config File`, which opens the JSON config file in your editor.
+We doubt this will ever change, so we are required to override the Electron default user agent with a supported user agent in order to sign in successfully.
 
-In the config file, add a new key `overrideUserAgent` and set your user agent from [whatsmyua.info](https://www.whatsmyua.info/) as value.
+Gmail Desktop offers to try to automatically fix the user agent when the issue above occurs:
 
-Example:
+![](media/signinfixdialog.png)
+
+Clicking on `Yes` will restart Gmail Desktop and fetches a suitable user agent based on the OS from https://www.whatismybrowser.com/guides/the-latest-user-agent/firefox that will be set in the app config. In our experience Firefox works well and consistent across all OS.
+
+In case the user agent fix isn't working anymore, you can trigger an automatic user agent fix again in the menu `Settings` → `Advanced` → `User Agent` → `Try To Fix Automatically`
+
+If the automatic user agent fix isn't working at all or you want to set your own user agent, you are able to override the user agent via the menu `Settings` → `Advanced` → `Edit Config File`, which opens the JSON config file in your editor.
+
+In the config file, add a new key `overrideUserAgent` and set an user agent as string (e.g. from https://www.whatismybrowser.com/guides/the-latest-user-agent).
+
+Example _(do not copy user agent)_:
 
 ```json
 {
@@ -71,8 +95,6 @@ Example:
 ```
 
 Save the file, restart Gmail Desktop and sign in again.
-
-**Note:** If your user agent is not working, try one from a [different browser](https://www.whatismybrowser.com/guides/the-latest-user-agent).
 
 ## Developing
 
