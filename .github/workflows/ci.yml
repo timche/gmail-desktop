@@ -1,0 +1,23 @@
+name: CI
+
+on:
+  - push
+  - pull_request
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - run: yarn --frozen-lockfile
+    - run: yarn lint
+  build:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v2
+    - run: HOMEBREW_NO_AUTO_UPDATE=1 brew install rpm
+    - run: yarn --frozen-lockfile
+    - run: yarn dist
+      env:
+        CSC_LINK: ${{ secrets.CSC_LINK }}
+        CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
