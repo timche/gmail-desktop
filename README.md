@@ -30,6 +30,8 @@ _macOS 10.13+, Linux and Windows 8+ are supported (64-bit only)._
 
 [**Download**](https://github.com/timche/gmail-desktop/releases/latest) the latest `.dmg` file.
 
+or via [cask](http://caskroom.github.io/): `brew cask install timche-gmail-desktop`
+
 #### Linux
 
 [**Download**](https://github.com/timche/gmail-desktop/releases/latest) the latest `.AppImage` or `.deb` file.
@@ -146,6 +148,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
