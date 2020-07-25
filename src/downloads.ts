@@ -17,7 +17,7 @@ function onDownloadComplete(filename: string, state: State): void {
     `Download ${state}`,
     `Download of file ${filename} ${messages[state]}.`,
     () => {
-      shell.openItem(path.join(app.getPath('downloads'), filename))
+      shell.openPath(path.join(app.getPath('downloads'), filename))
     }
   )
 }

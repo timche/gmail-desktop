@@ -128,7 +128,7 @@ const applicationMenu: MenuItemConstructorOptions[] = [
                 fs.closeSync(fs.openSync(USER_CUSTOM_STYLE_PATH, 'w'))
               }
 
-              shell.openItem(USER_CUSTOM_STYLE_PATH)
+              shell.openPath(USER_CUSTOM_STYLE_PATH)
             }
           }
         ]
