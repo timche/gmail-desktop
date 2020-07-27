@@ -30,6 +30,8 @@ _macOS 10.13+, Linux and Windows 8+ are supported (64-bit only)._
 
 [**Download**](https://github.com/timche/gmail-desktop/releases/latest) the latest `.dmg` file.
 
+Or with [Homebrew-Cask](https://caskroom.github.io/): `brew cask install timche-gmail-desktop`
+
 #### Linux
 
 [**Download**](https://github.com/timche/gmail-desktop/releases/latest) the latest `.AppImage` or `.deb` file.
