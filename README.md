@@ -143,6 +143,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
   </tr>
   <tr>
     <td align="center"><a href="https://github.com/hell0-Wor1d"><img src="https://avatars2.githubusercontent.com/u/24373583?v=4" width="100px;" alt=""/><br /><sub><b>Jérôme Lemaire</b></sub></a><br /><a href="https://github.com/timche/gmail-desktop/commits?author=hell0-Wor1d" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/weichenw"><img src="https://avatars0.githubusercontent.com/u/9876456?v=4" width="100px;" alt=""/><br /><sub><b>Wei Chen</b></sub></a><br /><a href="#platform-weichenw" title="Packaging/porting to new platform">📦</a></td>
   </tr>
 </table>
 
