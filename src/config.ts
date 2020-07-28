@@ -63,7 +63,7 @@ const defaults = {
   [ConfigKey.HideFooter]: true,
   [ConfigKey.HideRightSidebar]: true,
   [ConfigKey.HideSupport]: true,
-  [ConfigKey.DebugMode]: false,
+  [ConfigKey.DebugMode]: is.development,
   [ConfigKey.LaunchMinimized]: false,
   [ConfigKey.AutoHideMenuBar]: false,
   [ConfigKey.EnableTrayIcon]: !is.macos,
