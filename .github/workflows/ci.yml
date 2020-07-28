@@ -25,3 +25,15 @@ jobs:
         env:
           CSC_LINK: ${{ secrets.CSC_LINK }}
           CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
+      - uses: actions/upload-artifact@v2
+        with:
+          name: gmail-desktop-macos
+          path: dist/*-mac.*
+      - uses: actions/upload-artifact@v2
+        with:
+          name: gmail-desktop-linux
+          path: dist/*-linux.*
+      - uses: actions/upload-artifact@v2
+        with:
+          name: gmail-desktop-windows
+          path: dist/*-win.*
