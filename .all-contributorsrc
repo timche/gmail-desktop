@@ -79,6 +79,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "weichenw",
+      "name": "Wei Chen",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/9876456?v=4",
+      "profile": "https://github.com/weichenw",
+      "contributions": [
+        "platform"
+      ]
     }
   ],
   "contributorsPerLine": 7,
