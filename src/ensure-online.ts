@@ -1,8 +1,7 @@
 // From: https://github.com/sindresorhus/caprine/blob/v2.41.1/source/ensure-online.ts
 import { app, dialog } from 'electron'
+import isOnline from 'is-online'
 import pWaitFor from 'p-wait-for'
-
-import isOnline = require('is-online')
 
 function showWaitDialog(): void {
   const buttonIndex = dialog.showMessageBoxSync({

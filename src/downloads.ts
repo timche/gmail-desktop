@@ -1,9 +1,8 @@
 import { shell, app } from 'electron'
 import * as path from 'path'
+import electronDl from 'electron-dl'
 
 import { createNotification } from './notifications'
-
-import electronDl = require('electron-dl')
 
 type State = 'cancelled' | 'completed' | 'interrupted'
 
