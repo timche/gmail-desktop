@@ -97,6 +97,17 @@ function createWindow(): void {
 
   mainWindow.loadURL('https://mail.google.com')
 
+  mainWindow.on('app-command', (_event, command) => {
+    if (command === 'browser-backward' && mainWindow.webContents.canGoBack()) {
+      mainWindow.webContents.goBack()
+    } else if (
+      command === 'browser-forward' &&
+      mainWindow.webContents.canGoForward()
+    ) {
+      mainWindow.webContents.goForward()
+    }
+  })
+
   mainWindow.webContents.on('dom-ready', () => {
     addCustomCSS(mainWindow)
     initCustomStyles()
