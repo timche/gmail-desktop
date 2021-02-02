@@ -165,11 +165,32 @@
  * ----------------------------------------
  */
 
-/* Support question mark */
-.hideSupport header > div:nth-child(2) > div:nth-child(2) > div:nth-child(3),
 /* Footer text */
 .hideFooter div[role='contentinfo'],
 /* Footer loading text */
 .hideFooter #loading #stb {
   display: none !important;
+}
+
+/* Gmail Logo (top left) */
+.gb_oc,
+/* Support */
+.zo,
+/* Google Apps */
+.gb_Pc,
+/* Google Logo (top right) */
+.gb_la,
+/* Footer */
+.aeG {
+  display: none !important;
+}
+
+/* Account */
+.gb_i {
+  width: auto !important;
+  border: none !important;
+}
+
+.gb_Mf {
+  padding-left: 2px !important;
 }
