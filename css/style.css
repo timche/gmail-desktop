@@ -1,193 +1,29 @@
 /**
- * DRAGGABLE HEADERS
- * ----------------------------------------
- */
+  * Remove unnecessary elements
+  * ===========================
+  */
 
-.compactHeader header,
-/* Compose in new window */
-.compactHeader .Io,
-/* Message toolbar in new window */
-.compactHeader.xE .G-atb,
-/* PDF viewer header */
-.compactHeader div[aria-label='Showing viewer.'] > div:nth-child(3) > div {
-  -webkit-app-region: drag;
-}
-
-/**
- * NON-DRAGGABLE ELEMENTS
- * ----------------------------------------
- */
-
-/* Hamburger menu */
-.compactHeader header > div:nth-child(2) > div:first-child > div:first-child,
-/* Search box */
-.compactHeader header > div:nth-child(2) > div:nth-child(2) form,
-/* Support question mark */
-.compactHeader header > div:nth-child(2) > div:nth-child(2) > div:nth-child(3) a,
-/* User avatar */
-.compactHeader header > div:nth-child(2) > div:nth-child(3) a,
-/* User avatar for G Suite accounts */
-.compactHeader header > div:nth-child(2) > div:nth-child(3) > div > div:last-child[role='button'],
-/* Minimize button in new compose window header */
-.compactHeader .Io > div:first-child,
-/* Message toolbar button strip in new window */
-.compactHeader.xE .G-atb .G-tF,
-/* PDF viewer header elements (buttons, text, etc.) */
-.compactHeader div[aria-label='Showing viewer.'] > div:nth-child(3) > div > div {
-  -webkit-app-region: no-drag;
-}
-
-/**
- * SIMPLIFIED HEADER STYLES
- * ----------------------------------------
- */
-
-/* Gmail icon and name */
-.compactHeader header > div:nth-child(2) > div:first-child > div:nth-child(4),
-/* Google Apps button */
-.compactHeader #gbwa {
-  display: none !important;
-}
-
-/* Header height */
-.compactHeader header > div:nth-child(2) {
-  height: 40px;
-  padding: 5px !important;
-}
-
-/* Decrease padding for message toolbar button strip in new window */
-.compactHeader.xE .G-atb {
-  padding-top: 6px;
-  padding-bottom: 6px;
-}
-
-/* Header items height (hamburger menu, search box, profile image) */
-.compactHeader header > div:nth-child(2) > div:not([aria-hidden]) {
-  height: 28px;
-}
-
-/* Hamburger menu padding (this affects the hover size) */
-.compactHeader header > div:nth-child(2) > div:first-child > div:first-child {
-  margin: 0;
-  padding: 4px;
-  /* Align the hamburger menu with the compose button */
-  margin-left: 15px;
-}
-
-/* Decrease support question mark padding to prevent the hover from touching the edge */
-.compactHeader header > div:nth-child(2) > div:nth-child(2) > div:nth-child(3) a {
-  margin: 2px 6px;
-  padding: 4px !important;
-}
-
-/* Header search box height */
-/* stylelint-disable selector-id-pattern */
-.compactHeader header > div:nth-child(2) > div:nth-child(2) > div:nth-child(2),
-.compactHeader header > div:nth-child(2) > div:nth-child(2) form > div:first-of-type,
-/* Initial header search box must be 100% to prevent height flashing */
-.compactHeader header > div:nth-child(2) > div:nth-child(2) form:not(#aso_search_form_anchor) {
-  height: 100%;
-}
-/* stylelint-enable selector-id-pattern */
-
-/* Initial header search box input styles to prevent flashing */
-.compactHeader header > div:nth-child(2) > div:nth-child(2) form > div:first-of-type > input {
-  height: 100%;
-  padding: 0;
-  padding-top: 1px;
-}
-
-/* Header search box icons */
-.compactHeader header > div:nth-child(2) > div:nth-child(2) form > button > svg {
-  margin: 0;
-  padding: 2px;
-}
-
-/* Header search box input */
-.compactHeader header > div:nth-child(2) > div:nth-child(2) form input {
-  font-size: 14px;
-  top: -8px !important;
-}
-
-/* Account information popup (when you click the user avatar) */
-.compactHeader header > div:nth-child(2) > div:nth-child(5) {
-  height: auto;
-  top: 48px;
-}
-
-/**
- * ACCOUNT LINK FOR G SUITE ACCOUNTS
- * ----------------------------------------
- * Note: The [role='button'] selector on all of the following styles is necessary
- * to ensure that these styles are only applied to G Suite account links and not
- * normal account avatars.
- */
-
-/* Account link container height */
-.compactHeader header > div:nth-child(2) > div:nth-child(3) > div > div:last-child[role='button'] {
-  max-height: 32px !important;
-}
-
-/* Remove padding and line height from account logo and avatar to fix vertical alignment */
-.compactHeader header > div:nth-child(2) > div:nth-child(3) > div > div:last-child[role='button'] > div {
-  line-height: unset !important;
-  padding-bottom: 0;
-  padding-top: 0;
-}
-
-/* Shrink account logo to fit properly in the container while maintaining the aspect ratio */
-.compactHeader header > div:nth-child(2) > div:nth-child(3) > div > div:last-child[role='button'] > div:first-child > img {
-  width: 73px !important;
-  max-height: 30px !important;
-}
-
-/* Account avatar link */
-.compactHeader header > div:nth-child(2) > div:nth-child(3) > div > div:last-child[role='button'] a {
-  height: 28px;
-  padding: 0 4px;
-}
-
-/* Account avatar background image size */
-.compactHeader header > div:nth-child(2) > div:nth-child(3) > div > div:last-child[role='button'] a > span {
-  background-size: 28px 28px;
-  box-shadow: none;
-  height: 28px;
-  width: 28px;
-}
-
-/* Account avatar background image origin */
-.compactHeader header > div:nth-child(2) > div:nth-child(3) > div > div:last-child[role='button'] a > span::before {
-  transform-origin: -4px -4px;
-}
-
-/**
- * MINIMAL MODE
- * ----------------------------------------
- */
-
-/* Footer text */
-.hideFooter div[role='contentinfo'],
-/* Footer loading text */
-.hideFooter #loading #stb {
-  display: none !important;
-}
-
-/* Gmail Logo (top left) */
+/* Header: Gmail logo */
 .gb_oc,
-/* Support */
+/* Header: Support */
 .zo,
-/* Google Apps */
+/* Header: Google apps */
 .gb_Pc,
-/* Google Logo (top right) */
+/* Header: Google logo (Google Workspace) */
 .gb_la,
 /* Footer */
 .aeG {
   display: none !important;
 }
 
-/* Account */
+/**
+  * Adjustments
+  * ===========
+  */
+
+/* Header: Account */
 .gb_i {
-  width: auto !important;
+  width: initial !important;
   border: none !important;
 }
 
