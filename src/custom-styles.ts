@@ -29,7 +29,6 @@ export function init(): void {
   ;[
     ConfigKey.CompactHeader,
     ConfigKey.HideFooter,
-    ConfigKey.HideRightSidebar,
     ConfigKey.HideSupport
   ].forEach(key => setCustomStyle(key, config.get(key) as boolean))
 

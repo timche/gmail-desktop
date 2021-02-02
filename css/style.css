@@ -170,8 +170,6 @@
 /* Footer text */
 .hideFooter div[role='contentinfo'],
 /* Footer loading text */
-.hideFooter #loading #stb,
-/* Side panel */
-.hideRightSidebar div.bAw {
+.hideFooter #loading #stb {
   display: none !important;
 }

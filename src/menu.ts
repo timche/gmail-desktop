@@ -27,10 +27,6 @@ const appearanceMenuItems: AppearanceMenuItem[] = [
     label: 'Hide Footer'
   },
   {
-    key: ConfigKey.HideRightSidebar,
-    label: 'Hide Right Sidebar'
-  },
-  {
     key: ConfigKey.HideSupport,
     label: 'Hide Support'
   }

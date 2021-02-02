@@ -48,7 +48,6 @@ Gmail Desktop provides a number of appearance customizations to improve and simp
 
 - `Compact Header`: Customizes the Gmail header to use a more compact style to provide a more native feel. This setting requires a restart to be applied.
 - `Hide Footer`: Hides footer information text (storage used, terms links, etc.).
-- `Hide Right Sidebar`: Hides the Google apps sidebar on the right side of the interface.
 - `Hide Support`: Hides the support button in the header.
 
 ![](media/appearancecustomization.gif)
@@ -149,6 +148,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!

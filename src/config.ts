@@ -18,7 +18,6 @@ export enum ConfigKey {
   CompactHeader = 'compactHeader',
   DebugMode = 'debugMode',
   HideFooter = 'hideFooter',
-  HideRightSidebar = 'hideRightSidebar',
   HideSupport = 'hideSupport',
   LastWindowState = 'lastWindowState',
   LaunchMinimized = 'launchMinimized',
@@ -35,7 +34,6 @@ type TypedStore = {
   [ConfigKey.LastWindowState]: LastWindowState
   [ConfigKey.CompactHeader]: boolean
   [ConfigKey.HideFooter]: boolean
-  [ConfigKey.HideRightSidebar]: boolean
   [ConfigKey.HideSupport]: boolean
   [ConfigKey.DebugMode]: boolean
   [ConfigKey.LaunchMinimized]: boolean
@@ -61,7 +59,6 @@ const defaults = {
   },
   [ConfigKey.CompactHeader]: true,
   [ConfigKey.HideFooter]: true,
-  [ConfigKey.HideRightSidebar]: true,
   [ConfigKey.HideSupport]: true,
   [ConfigKey.DebugMode]: is.development,
   [ConfigKey.LaunchMinimized]: false,
