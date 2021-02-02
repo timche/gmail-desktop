@@ -32,7 +32,8 @@ export enum ConfigKey {
   HardwareAcceleration = 'hardwareAcceleration',
   DownloadsShowSaveAs = 'downloadsShowSaveAs',
   DownloadsOpenFolderWhenDone = 'downloadsOpenFolderWhenDone',
-  DownloadsLocation = 'downloadsLocation'
+  DownloadsLocation = 'downloadsLocation',
+  DarkMode = 'darkMode'
 }
 
 type TypedStore = {
@@ -54,9 +55,10 @@ type TypedStore = {
   [ConfigKey.DownloadsShowSaveAs]: boolean
   [ConfigKey.DownloadsOpenFolderWhenDone]: boolean
   [ConfigKey.DownloadsLocation]: string
+  [ConfigKey.DarkMode]: 'system' | boolean
 }
 
-const defaults = {
+const defaults: TypedStore = {
   [ConfigKey.AutoUpdate]: true,
   [ConfigKey.LastWindowState]: {
     bounds: {
@@ -83,7 +85,8 @@ const defaults = {
   [ConfigKey.HardwareAcceleration]: true,
   [ConfigKey.DownloadsShowSaveAs]: false,
   [ConfigKey.DownloadsOpenFolderWhenDone]: false,
-  [ConfigKey.DownloadsLocation]: app.getPath('downloads')
+  [ConfigKey.DownloadsLocation]: app.getPath('downloads'),
+  [ConfigKey.DarkMode]: 'system'
 }
 
 const config = new Store<TypedStore>({

@@ -1630,6 +1630,11 @@ cssesc@^3.0.0:
   resolved "https://registry.yarnpkg.com/cssesc/-/cssesc-3.0.0.tgz#37741919903b868565e1c09ea747445cd18983ee"
   integrity sha512-/Tb/JcjK111nNScGob5MNtsntNM1aCNUDipB/TkwZFhyDrrE47SOx/18wF2bbjgc3ZzCSKW1T5nt5EbFoAz/Vg==
 
+darkreader@^4.9.27:
+  version "4.9.27"
+  resolved "https://registry.yarnpkg.com/darkreader/-/darkreader-4.9.27.tgz#69b641d6a3c22b07fb0424406dfd9a3661b37197"
+  integrity sha512-DG8zsicuCbAYKaKvLUaiikeei5jN5dIpe0jyaPw4kDa2L5zVnWc/ZxNUYOFriKVAmicwqE5gH5EOfyI0MVt3KA==
+
 debounce-fn@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/debounce-fn/-/debounce-fn-4.0.0.tgz#ed76d206d8a50e60de0dd66d494d82835ffe61c7"

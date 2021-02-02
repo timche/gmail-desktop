@@ -8,7 +8,8 @@ import {
   Menu,
   Tray,
   MenuItemConstructorOptions,
-  dialog
+  dialog,
+  nativeTheme
 } from 'electron'
 import { is } from 'electron-util'
 
@@ -25,7 +26,8 @@ import menu from './menu'
 import {
   setAppMenuBarVisibility,
   cleanURLFromGoogle,
-  sendChannelToMainWindow
+  sendChannelToMainWindow,
+  sendChannelToAllWindows
 } from './utils'
 import ensureOnline from './ensure-online'
 import { autoFixUserAgent, removeCustomUserAgent } from './user-agent'
@@ -70,6 +72,17 @@ app.on('second-instance', () => {
     mainWindow.show()
   }
 })
+
+switch (config.get(ConfigKey.DarkMode)) {
+  case 'system':
+    nativeTheme.themeSource = 'system'
+    break
+  case true:
+    nativeTheme.themeSource = 'dark'
+    break
+  default:
+    nativeTheme.themeSource = 'light'
+}
 
 function createWindow(): void {
   const lastWindowState = config.get(ConfigKey.LastWindowState)
@@ -316,6 +329,17 @@ app.on('before-quit', () => {
   if (customUserAgent) {
     app.userAgentFallback = customUserAgent
   }
+
+  ipc.handle('dark-mode', () => {
+    return nativeTheme.shouldUseDarkColors
+  })
+
+  nativeTheme.on('updated', () => {
+    sendChannelToAllWindows(
+      'dark-mode:updated',
+      nativeTheme.shouldUseDarkColors
+    )
+  })
 
   createWindow()
 

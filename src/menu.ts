@@ -1,4 +1,11 @@
-import { app, shell, Menu, MenuItemConstructorOptions, dialog } from 'electron'
+import {
+  app,
+  shell,
+  Menu,
+  MenuItemConstructorOptions,
+  dialog,
+  nativeTheme
+} from 'electron'
 import * as fs from 'fs'
 import { is } from 'electron-util'
 
@@ -112,6 +119,38 @@ const appMenu: MenuItemConstructorOptions[] = [
   {
     label: 'Settings',
     submenu: [
+      {
+        label: 'Dark Mode',
+        submenu: [
+          {
+            label: 'Follow System Appearance',
+            type: 'radio',
+            checked: config.get(ConfigKey.DarkMode) === 'system',
+            click() {
+              nativeTheme.themeSource = 'system'
+              config.set(ConfigKey.DarkMode, 'system')
+            }
+          },
+          {
+            label: 'Enabled',
+            type: 'radio',
+            checked: config.get(ConfigKey.DarkMode) === true,
+            click() {
+              nativeTheme.themeSource = 'dark'
+              config.set(ConfigKey.DarkMode, true)
+            }
+          },
+          {
+            label: 'Disabled',
+            type: 'radio',
+            checked: config.get(ConfigKey.DarkMode) === false,
+            click() {
+              nativeTheme.themeSource = 'light'
+              config.set(ConfigKey.DarkMode, false)
+            }
+          }
+        ]
+      },
       {
         label: 'Appearance',
         submenu: [

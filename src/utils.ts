@@ -34,6 +34,17 @@ export function sendChannelToMainWindow(
   }
 }
 
+export function sendChannelToAllWindows(
+  channel: string,
+  ...args: unknown[]
+): void {
+  const windows = BrowserWindow.getAllWindows()
+
+  for (const window of windows) {
+    window.webContents.send(channel, ...args)
+  }
+}
+
 export async function showRestartDialog(
   enabled?: boolean,
   name?: string
