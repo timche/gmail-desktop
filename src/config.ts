@@ -27,7 +27,8 @@ export enum ConfigKey {
   AutoFixUserAgent = 'autoFixUserAgent',
   TrustedHosts = 'trustedHosts',
   ConfirmExternalLinks = 'confirmExternalLinks',
-  HardwareAcceleration = 'hardwareAcceleration'
+  HardwareAcceleration = 'hardwareAcceleration',
+  DarkMode = 'darkMode'
 }
 
 type TypedStore = {
@@ -45,9 +46,10 @@ type TypedStore = {
   [ConfigKey.TrustedHosts]: string[]
   [ConfigKey.ConfirmExternalLinks]: boolean
   [ConfigKey.HardwareAcceleration]: boolean
+  [ConfigKey.DarkMode]: 'system' | boolean
 }
 
-const defaults = {
+const defaults: TypedStore = {
   [ConfigKey.AutoUpdate]: true,
   [ConfigKey.LastWindowState]: {
     bounds: {
@@ -69,7 +71,8 @@ const defaults = {
   [ConfigKey.AutoFixUserAgent]: false,
   [ConfigKey.TrustedHosts]: [],
   [ConfigKey.ConfirmExternalLinks]: true,
-  [ConfigKey.HardwareAcceleration]: true
+  [ConfigKey.HardwareAcceleration]: true,
+  [ConfigKey.DarkMode]: 'system'
 }
 
 const config = new Store<TypedStore>({
