@@ -179,6 +179,15 @@ const applicationMenu: MenuItemConstructorOptions[] = [
         }
       },
       {
+        label: 'Hardware Acceleration',
+        type: 'checkbox',
+        checked: config.get(ConfigKey.HardwareAcceleration),
+        click({ checked }: { checked: boolean }) {
+          config.set(ConfigKey.HardwareAcceleration, checked)
+          showRestartDialog(checked, 'hardware acceleration')
+        }
+      },
+      {
         type: 'separator'
       },
       {

@@ -34,6 +34,10 @@ initAutoUpdates()
 
 electronContextMenu({ showCopyImageAddress: true, showSaveImageAs: true })
 
+if (!config.get(ConfigKey.HardwareAcceleration)) {
+  app.disableHardwareAcceleration()
+}
+
 const shouldStartMinimized =
   app.commandLine.hasSwitch('launch-minimized') ||
   config.get(ConfigKey.LaunchMinimized)

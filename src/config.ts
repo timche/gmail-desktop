@@ -26,7 +26,8 @@ export enum ConfigKey {
   OverrideUserAgent = 'overrideUserAgent',
   AutoFixUserAgent = 'autoFixUserAgent',
   TrustedHosts = 'trustedHosts',
-  ConfirmExternalLinks = 'confirmExternalLinks'
+  ConfirmExternalLinks = 'confirmExternalLinks',
+  HardwareAcceleration = 'hardwareAcceleration'
 }
 
 type TypedStore = {
@@ -43,6 +44,7 @@ type TypedStore = {
   [ConfigKey.AutoFixUserAgent]: boolean
   [ConfigKey.TrustedHosts]: string[]
   [ConfigKey.ConfirmExternalLinks]: boolean
+  [ConfigKey.HardwareAcceleration]: boolean
 }
 
 const defaults = {
@@ -66,7 +68,8 @@ const defaults = {
   [ConfigKey.EnableTrayIcon]: !is.macos,
   [ConfigKey.AutoFixUserAgent]: false,
   [ConfigKey.TrustedHosts]: [],
-  [ConfigKey.ConfirmExternalLinks]: true
+  [ConfigKey.ConfirmExternalLinks]: true,
+  [ConfigKey.HardwareAcceleration]: true
 }
 
 const config = new Store<TypedStore>({
