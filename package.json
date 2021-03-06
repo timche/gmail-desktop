@@ -48,7 +48,7 @@
     "stylelint": "^11.0.0",
     "stylelint-config-prettier": "^5.0.0",
     "stylelint-config-xo": "^0.15.0",
-    "typescript": "~4.0.5",
+    "typescript": "^4.2.3",
     "xo": "^0.24.0"
   },
   "husky": {
