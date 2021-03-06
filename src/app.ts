@@ -155,8 +155,16 @@ function createWindow(): void {
 
   function toggleAppVisiblityTrayItem(isMainWindowVisible: boolean): void {
     if (config.get(ConfigKey.EnableTrayIcon) && tray) {
-      trayContextMenu.getMenuItemById('show-win').visible = !isMainWindowVisible
-      trayContextMenu.getMenuItemById('hide-win').visible = isMainWindowVisible
+      const showWin = trayContextMenu.getMenuItemById('show-win')
+      if (showWin) {
+        showWin.visible = !isMainWindowVisible
+      }
+
+      const hideWin = trayContextMenu.getMenuItemById('hide-win')
+      if (hideWin) {
+        hideWin.visible = isMainWindowVisible
+      }
+
       tray.setContextMenu(trayContextMenu)
     }
   }
