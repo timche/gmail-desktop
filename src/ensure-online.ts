@@ -19,7 +19,7 @@ function showWaitDialog(): void {
   }
 }
 
-export default async (): Promise<void> => {
+export default async function ensureOnline(): Promise<void> {
   if (!(await isOnline())) {
     const connectivityTimeout = setTimeout(showWaitDialog, 15000)
 

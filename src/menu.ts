@@ -66,7 +66,7 @@ if (is.linux || is.windows) {
   })
 }
 
-const applicationMenu: MenuItemConstructorOptions[] = [
+const appMenu: MenuItemConstructorOptions[] = [
   {
     label: app.name,
     submenu: [
@@ -115,7 +115,7 @@ const applicationMenu: MenuItemConstructorOptions[] = [
       {
         label: 'Appearance',
         submenu: [
-          ...appearanceMenuItems.map(createAppearanceMenuItem),
+          ...appearanceMenuItems.map((item) => createAppearanceMenuItem(item)),
           {
             label: 'Custom Styles',
             click() {
@@ -278,7 +278,7 @@ const applicationMenu: MenuItemConstructorOptions[] = [
 
 // Add the develop menu when running in the development environment
 if (is.development) {
-  applicationMenu.splice(-1, 0, {
+  appMenu.splice(-1, 0, {
     label: 'Develop',
     submenu: [
       {
@@ -295,6 +295,6 @@ if (is.development) {
   })
 }
 
-const menu = Menu.buildFromTemplate(applicationMenu)
+const menu = Menu.buildFromTemplate(appMenu)
 
 export default menu

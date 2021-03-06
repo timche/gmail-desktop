@@ -3,10 +3,9 @@ import { nativeImage, NativeImage } from 'electron'
 import { platform as selectPlatform, is } from 'electron-util'
 
 // URL: `mail.google.com/mail/u/<local_account_id>`
-export function getUrlAccountId(url: string): null | string {
-  const accountIdRegExp = /mail\/u\/(\d+)/
-  const res = accountIdRegExp.exec(url)
-  return res && res[1]
+export function getUrlAccountId(url: string): string | undefined {
+  const accountIdRegExpResult = /mail\/u\/(\d+)/.exec(url)
+  return accountIdRegExpResult?.[1]
 }
 
 export const platform: 'macos' | 'linux' | 'windows' = selectPlatform({

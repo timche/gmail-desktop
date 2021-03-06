@@ -20,8 +20,8 @@ function getUnreadCount(): number {
     )
 
     // Return the unread count (0 by default)
-    if (label) {
-      return Number(/\d*/.exec(label.innerText))
+    if (label?.textContent) {
+      return Number(/\d*/.exec(label.textContent))
     }
   }
 
@@ -50,20 +50,24 @@ function attachButtonListeners(): void {
     'nX' // Delete
   ]
 
-  selectors.forEach(selector => {
+  for (const selector of selectors) {
     const buttonReady = elementReady(`body.xE .G-atb .${selector}`)
-    const readyTimeout = setTimeout(() => buttonReady.stop(), 10000)
+    const readyTimeout = setTimeout(() => {
+      buttonReady.stop()
+    }, 10000)
 
-    buttonReady.then(button => {
+    buttonReady.then((button) => {
       clearTimeout(readyTimeout)
 
       if (button) {
-        button.addEventListener('click', () => window.close())
+        button.addEventListener('click', () => {
+          window.close()
+        })
       } else {
         log.error(`Detect button "${selector}" timed out`)
       }
     })
-  })
+  }
 }
 
 window.addEventListener('load', () => {

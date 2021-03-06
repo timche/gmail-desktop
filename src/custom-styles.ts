@@ -16,21 +16,24 @@ export function setCustomStyle(key: ConfigKey, enabled: boolean): void {
 function initFullScreenStyles(): void {
   const mainWindow = getMainWindow()
 
-  mainWindow.on('enter-full-screen', () =>
-    sendChannelToMainWindow('set-full-screen', true)
-  )
+  if (mainWindow) {
+    mainWindow.on('enter-full-screen', () => {
+      sendChannelToMainWindow('set-full-screen', true)
+    })
 
-  mainWindow.on('leave-full-screen', () =>
-    sendChannelToMainWindow('set-full-screen', false)
-  )
+    mainWindow.on('leave-full-screen', () => {
+      sendChannelToMainWindow('set-full-screen', false)
+    })
+  }
 }
 
 export function init(): void {
-  ;[
+  for (const key of [
     ConfigKey.CompactHeader,
     ConfigKey.HideFooter,
     ConfigKey.HideSupport
-  ].forEach(key => setCustomStyle(key, config.get(key) as boolean))
+  ])
+    setCustomStyle(key, config.get(key) as boolean)
 
   initFullScreenStyles()
 }

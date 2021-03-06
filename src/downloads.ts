@@ -26,7 +26,7 @@ function onDownloadComplete(filename: string, state: State): void {
 export function init(): void {
   electronDl({
     showBadge: false,
-    onStarted: item => {
+    onStarted: (item) => {
       item.on('done', (_, state) => {
         onDownloadComplete(item.getFilename(), state)
       })

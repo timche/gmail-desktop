@@ -141,17 +141,21 @@ function createWindow(): void {
     }
   })
 
-  mainWindow.on('close', e => {
+  mainWindow.on('close', (error) => {
     if (!isQuitting) {
-      e.preventDefault()
+      error.preventDefault()
       mainWindow.blur()
       mainWindow.hide()
     }
   })
 
-  mainWindow.on('hide', () => toggleAppVisiblityTrayItem(false))
+  mainWindow.on('hide', () => {
+    toggleAppVisiblityTrayItem(false)
+  })
 
-  mainWindow.on('show', () => toggleAppVisiblityTrayItem(true))
+  mainWindow.on('show', () => {
+    toggleAppVisiblityTrayItem(true)
+  })
 
   function toggleAppVisiblityTrayItem(isMainWindowVisible: boolean): void {
     if (config.get(ConfigKey.EnableTrayIcon) && tray) {

@@ -45,7 +45,7 @@ export async function checkForUpdates(): Promise<void> {
         message: 'There are currently no updates available.'
       })
     }
-  } catch (error) {
+  } catch (error: unknown) {
     log.error('Check for updates failed', error)
 
     createNotification(
