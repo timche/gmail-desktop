@@ -18,7 +18,9 @@
     "lint:css": "stylelint 'css/*.css'",
     "start": "tsc && electron .",
     "pack": "tsc && electron-builder --dir",
-    "dist": "tsc && electron-builder --macos --linux --windows --publish never"
+    "dist:macos": "electron-builder --macos --universal --publish never",
+    "dist:others": "electron-builder --linux --windows --publish never",
+    "dist": "tsc && run-s dist:*"
   },
   "dependencies": {
     "electron-context-menu": "^2.5.0",
