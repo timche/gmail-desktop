@@ -21,17 +21,17 @@
     "dist": "tsc && electron-builder --macos --linux --windows --publish never"
   },
   "dependencies": {
-    "electron-context-menu": "^2.3.0",
-    "electron-debug": "^3.1.0",
-    "electron-dl": "^3.0.2",
-    "electron-log": "^4.3.0",
-    "electron-store": "6.0.1",
-    "electron-updater": "^4.3.5",
+    "electron-context-menu": "^2.5.0",
+    "electron-debug": "^3.2.0",
+    "electron-dl": "^3.2.0",
+    "electron-log": "^4.3.2",
+    "electron-store": "^7.0.2",
+    "electron-updater": "^4.3.8",
     "electron-util": "^0.14.2",
-    "element-ready": "^4.1.1",
-    "got": "^11.8.0",
+    "element-ready": "^5.0.0",
+    "got": "^11.8.2",
     "is-online": "^9.0.0",
-    "p-wait-for": "^3.1.0"
+    "p-wait-for": "^3.2.0"
   },
   "devDependencies": {
     "@sindresorhus/tsconfig": "^0.9.0",
