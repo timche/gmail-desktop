@@ -84,7 +84,10 @@ function createWindow(): void {
       nativeWindowOpen: true,
       preload: path.join(__dirname, 'preload')
     },
-    show: !shouldStartMinimized
+    show: !shouldStartMinimized,
+    icon: is.linux
+      ? path.join(__dirname, '..', 'static', 'icon.png')
+      : undefined
   })
 
   if (lastWindowState.fullscreen && !mainWindow.isFullScreen()) {
