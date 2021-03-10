@@ -89,8 +89,13 @@
   "build": {
     "artifactName": "${name}-${version}-${os}.${ext}",
     "files": [
-      "**/*"
+      "**/*",
+      "./build/**/*"
     ],
+    
+  "directories": {
+    "buildResources": "build"
+  },
     "appId": "io.cheung.gmail-desktop",
     "mac": {
       "category": "public.app-category.productivity",
@@ -105,7 +110,8 @@
         "snap",
         "tar.bz2"
       ],
-      "category": "Network;Office"
+      "category": "Network;Office",
+      "icon": "build/icon.png"
     },
     "win": {
       "verifyUpdateCodeSignature": false,

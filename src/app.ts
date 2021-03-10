@@ -77,6 +77,7 @@ function createWindow(): void {
       : 'default',
     width: lastWindowState.bounds.width,
     height: lastWindowState.bounds.height,
+    icon: path.join(__dirname, '../build/icon.png'),
     x: lastWindowState.bounds.x,
     y: lastWindowState.bounds.y,
     webPreferences: {

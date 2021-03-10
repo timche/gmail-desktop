@@ -16,3 +16,4 @@ yarn-error.log
 dist/
 dist-js/
 *.tgz
+package-lock.json
