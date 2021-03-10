@@ -23,6 +23,7 @@ export enum ConfigKey {
   LaunchMinimized = 'launchMinimized',
   AutoHideMenuBar = 'autoHideMenuBar',
   EnableTrayIcon = 'enableTrayIcon',
+  ShowDockIcon = 'showDockIcon',
   CustomUserAgent = 'customUserAgent',
   AutoFixUserAgent = 'autoFixUserAgent',
   TrustedHosts = 'trustedHosts',
@@ -40,6 +41,7 @@ type TypedStore = {
   [ConfigKey.LaunchMinimized]: boolean
   [ConfigKey.AutoHideMenuBar]: boolean
   [ConfigKey.EnableTrayIcon]: boolean
+  [ConfigKey.ShowDockIcon]: boolean
   [ConfigKey.CustomUserAgent]: string
   [ConfigKey.AutoFixUserAgent]: boolean
   [ConfigKey.TrustedHosts]: string[]
@@ -66,6 +68,7 @@ const defaults = {
   [ConfigKey.LaunchMinimized]: false,
   [ConfigKey.AutoHideMenuBar]: false,
   [ConfigKey.EnableTrayIcon]: !is.macos,
+  [ConfigKey.ShowDockIcon]: true,
   [ConfigKey.CustomUserAgent]: '',
   [ConfigKey.AutoFixUserAgent]: false,
   [ConfigKey.TrustedHosts]: [],

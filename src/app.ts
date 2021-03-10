@@ -307,6 +307,10 @@ app.on('before-quit', () => {
 ;(async () => {
   await Promise.all([ensureOnline(), app.whenReady()])
 
+  if (is.macos && !config.get(ConfigKey.ShowDockIcon)) {
+    app.dock.hide()
+  }
+
   const customUserAgent = config.get(ConfigKey.CustomUserAgent)
 
   if (customUserAgent) {
