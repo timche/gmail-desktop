@@ -70,31 +70,31 @@ Email links in Gmail are usually prepended with `https://google.com/url?q=<actua
 
 #### I can't sign in: `This browser or app may not be secure`
 
-In December 2019 Google has decided to block unsupported user agents, such as `Electron`, from signing in to Google accounts for security reasons (related issue: [#174](https://github.com/timche/gmail-desktop/issues/174)).
+In December 2019 Google has decided to block unsupported user agents, such as Electron, from signing in to Google accounts for security reasons (related issue: [#174](https://github.com/timche/gmail-desktop/issues/174)). This only affects some users, but not all.
 
 We doubt this will ever change, so we are required to override the Electron default user agent with a supported user agent in order to sign in successfully.
 
-Gmail Desktop offers to try to automatically fix the user agent when the issue above occurs:
+Gmail Desktop offers to attempt to automatically fix the user agent when the issue above occurs:
 
 ![](media/signinfixdialog.png)
 
-Clicking on `Yes` will restart Gmail Desktop and fetches a suitable user agent based on the OS from https://www.whatismybrowser.com/guides/the-latest-user-agent/firefox that will be set in the app config. In our experience Firefox works well and consistent across all OS.
+Clicking on `Yes` will set a [custom user agent (based on Firefox)](https://github.com/timche/gmail-desktop/blob/master/src/user-agents.json) in the app config we think should work and Gmail Desktop will be restarted.
 
-In case the user agent fix isn't working anymore, you can trigger an automatic user agent fix again in the menu `Settings` → `Advanced` → `User Agent` → `Try To Fix Automatically`
+In case the custom user agent isn't working anymore, you'll be offered to let Gmail Desktop to attempt to fix it again or trigger it manually at `Settings` → `Advanced` → `User Agent` → `Attempt User Agent Fix`.
 
-If the automatic user agent fix isn't working at all or you want to set your own user agent, you are able to override the user agent via the menu `Settings` → `Advanced` → `Edit Config File`, which opens the JSON config file in your editor.
+If the automatic user agent fix isn't working at all or you want to set your own custom user agent, you are able to set the user agent at `Settings` → `Advanced` → `User Agent` → `Set Custom User Agent`, which opens the app config in your editor.
 
-In the config file, add a new key `overrideUserAgent` and set an user agent as string (e.g. from https://www.whatismybrowser.com/guides/the-latest-user-agent).
+In the app config, edit the `customUserAgent` value with an user agent from e.g. https://www.whatismybrowser.com/guides/the-latest-user-agent.
 
-Example _(do not copy user agent)_:
+Example:
 
 ```json
 {
-  "overrideUserAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36"
+  "customUserAgent": "Some User Agent"
 }
 ```
 
-Save the file, restart Gmail Desktop and sign in again.
+Save the config, restart Gmail Desktop and sign in again.
 
 ## Developing
 

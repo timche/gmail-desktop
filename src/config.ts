@@ -23,7 +23,7 @@ export enum ConfigKey {
   LaunchMinimized = 'launchMinimized',
   AutoHideMenuBar = 'autoHideMenuBar',
   EnableTrayIcon = 'enableTrayIcon',
-  OverrideUserAgent = 'overrideUserAgent',
+  CustomUserAgent = 'customUserAgent',
   AutoFixUserAgent = 'autoFixUserAgent',
   TrustedHosts = 'trustedHosts',
   ConfirmExternalLinks = 'confirmExternalLinks',
@@ -40,7 +40,7 @@ type TypedStore = {
   [ConfigKey.LaunchMinimized]: boolean
   [ConfigKey.AutoHideMenuBar]: boolean
   [ConfigKey.EnableTrayIcon]: boolean
-  [ConfigKey.OverrideUserAgent]?: string
+  [ConfigKey.CustomUserAgent]: string
   [ConfigKey.AutoFixUserAgent]: boolean
   [ConfigKey.TrustedHosts]: string[]
   [ConfigKey.ConfirmExternalLinks]: boolean
@@ -66,6 +66,7 @@ const defaults = {
   [ConfigKey.LaunchMinimized]: false,
   [ConfigKey.AutoHideMenuBar]: false,
   [ConfigKey.EnableTrayIcon]: !is.macos,
+  [ConfigKey.CustomUserAgent]: '',
   [ConfigKey.AutoFixUserAgent]: false,
   [ConfigKey.TrustedHosts]: [],
   [ConfigKey.ConfirmExternalLinks]: true,
@@ -77,8 +78,28 @@ const config = new Store<TypedStore>({
   name: is.development ? 'config.dev' : 'config',
   migrations: {
     '>=2.21.2': (store) => {
-      // @ts-expect-error
-      store.delete('hideRightSidebar')
+      const hideRightSidebar: boolean | undefined = store.get(
+        'hideRightSidebar'
+      )
+
+      if (typeof hideRightSidebar === 'boolean') {
+        // @ts-expect-error
+        store.delete('hideRightSidebar')
+      }
+    },
+    '>2.21.2': (store) => {
+      const overrideUserAgent: string | undefined = store.get(
+        'overrideUserAgent'
+      )
+
+      if (typeof overrideUserAgent === 'string') {
+        if (overrideUserAgent.length > 0) {
+          store.set(ConfigKey.CustomUserAgent, overrideUserAgent)
+        }
+
+        // @ts-expect-error
+        store.delete('overrideUserAgent')
+      }
     }
   }
 })

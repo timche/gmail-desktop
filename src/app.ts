@@ -24,7 +24,7 @@ import { platform, getUrlAccountId, createTrayIcon } from './helpers'
 import menu from './menu'
 import { setAppMenuBarVisibility, cleanURLFromGoogle } from './utils'
 import ensureOnline from './ensure-online'
-import { getCustomUserAgent, autoFixUserAgent } from './user-agent'
+import { autoFixUserAgent, removeCustomUserAgent } from './user-agent'
 
 import electronContextMenu = require('electron-context-menu')
 
@@ -122,17 +122,48 @@ function createWindow(): void {
 
   mainWindow.webContents.on('did-finish-load', async () => {
     if (mainWindow.webContents.getURL().includes('signin/rejected')) {
-      const { response } = await dialog.showMessageBox({
-        type: 'info',
-        message: `It looks like you are unable to sign-in, because ${app.name} is using a non-supported user agent and Gmail is blocking it.`,
-        detail: `Do you want ${app.name} try to fix it automatically? Otherwise you can set your own user agent (see "Troubleshoot").`,
-        buttons: ['Yes', 'No', 'Troubleshoot']
-      })
-
-      if (response === 2) {
+      const message = `It looks like you are unable to sign-in, because Gmail is blocking the user agent ${app.name} is using.`
+      const askAutoFixMessage = `Do you want ${app.name} to attempt to fix it automatically?`
+      const troubleshoot = () => {
         openExternalUrl(
           'https://github.com/timche/gmail-desktop#i-cant-sign-in-this-browser-or-app-may-not-be-secure'
         )
+      }
+
+      if (config.get(ConfigKey.CustomUserAgent)) {
+        const { response } = await dialog.showMessageBox({
+          type: 'info',
+          message,
+          detail: `You're currently using a custom user agent. ${askAutoFixMessage} Alternatively you can try the default user agent or set another custom user agent (see "Troubleshoot").`,
+          buttons: ['Yes', 'Cancel', 'Use Default User Agent', 'Troubleshoot']
+        })
+
+        if (response === 3) {
+          troubleshoot()
+          return
+        }
+
+        if (response === 2) {
+          removeCustomUserAgent()
+          return
+        }
+
+        if (response === 1) {
+          return
+        }
+
+        return
+      }
+
+      const { response } = await dialog.showMessageBox({
+        type: 'info',
+        message,
+        detail: `${askAutoFixMessage} Alternatively you can set a custom user agent (see "Troubleshoot").`,
+        buttons: ['Yes', 'Cancel', 'Troubleshoot']
+      })
+
+      if (response === 2) {
+        troubleshoot()
         return
       }
 
@@ -276,10 +307,10 @@ app.on('before-quit', () => {
 ;(async () => {
   await Promise.all([ensureOnline(), app.whenReady()])
 
-  const userAgent = await getCustomUserAgent()
+  const customUserAgent = config.get(ConfigKey.CustomUserAgent)
 
-  if (userAgent) {
-    app.userAgentFallback = userAgent
+  if (customUserAgent) {
+    app.userAgentFallback = customUserAgent
   }
 
   createWindow()
