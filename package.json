@@ -17,10 +17,11 @@
     "lint:ts": "xo",
     "lint:css": "stylelint 'css/*.css'",
     "start": "tsc && electron .",
-    "pack": "tsc && electron-builder --dir",
-    "dist:macos": "electron-builder --macos --universal --publish never",
-    "dist:others": "electron-builder --linux --windows --publish never",
-    "dist": "tsc && run-s dist:*"
+    "build:macos": "electron-builder --macos --universal --publish never",
+    "build:linux": "electron-builder --linux --publish never",
+    "build:windows": "electron-builder --windows --publish never",
+    "compile": "tsc",
+    "build": "run-s compile build:*"
   },
   "dependencies": {
     "electron-context-menu": "^2.5.0",

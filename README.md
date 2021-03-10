@@ -115,8 +115,17 @@ yarn start
 #### Build
 
 ```sh
-yarn dist
+# Compile TypeScript files
+yarn compile
+
+# Build app for all targets
+yarn build
+
+# Or build app for specific target
+yarn build:<macos|linux|windows>
 ```
+
+The build output can be found in the `dist/` folder.
 
 ## Maintainers
 
