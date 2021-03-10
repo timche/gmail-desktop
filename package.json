@@ -90,7 +90,7 @@
     "artifactName": "${name}-${version}-${os}.${ext}",
     "files": [
       "**/*",
-			"!media${/*}"
+      "!media${/*}"
     ],
     "appId": "io.cheung.gmail-desktop",
     "mac": {
