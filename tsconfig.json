@@ -1,5 +1,6 @@
 {
   "extends": "@sindresorhus/tsconfig",
+  "include": ["src/**/*"],
   "compilerOptions": {
     "outDir": "dist-js",
     "target": "es2018",
