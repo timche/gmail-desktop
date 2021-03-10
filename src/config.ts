@@ -74,7 +74,13 @@ const defaults = {
 
 const config = new Store<TypedStore>({
   defaults,
-  name: is.development ? 'config.dev' : 'config'
+  name: is.development ? 'config.dev' : 'config',
+  migrations: {
+    '>=2.21.2': (store) => {
+      // @ts-expect-error
+      store.delete('hideRightSidebar')
+    }
+  }
 })
 
 export default config
