@@ -266,7 +266,7 @@ async function openExternalUrl(url: string): Promise<void> {
       const { response, checkboxChecked } = await dialog.showMessageBox({
         type: 'info',
         buttons: ['Open Link', 'Cancel'],
-        message: `Do you want to open the external link "${cleanURL}" in your default browser?`,
+        message: `Do you want to open this external link in your default browser?`,
         checkboxLabel: `Trust all links on ${origin}`,
         detail: cleanURL
       })
