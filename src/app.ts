@@ -324,6 +324,31 @@ app.on('before-quit', () => {
   if (config.get(ConfigKey.EnableTrayIcon) && !tray) {
     const appName = app.name
 
+    const macosMenuItems: MenuItemConstructorOptions[] = is.macos
+      ? [
+          {
+            label: 'Show Dock Icon',
+            type: 'checkbox',
+            checked: config.get(ConfigKey.ShowDockIcon),
+            click({ checked }: { checked: boolean }) {
+              config.set(ConfigKey.ShowDockIcon, checked)
+
+              if (checked) {
+                app.dock.show()
+              } else {
+                app.dock.hide()
+              }
+
+              const menu = trayContextMenu.getMenuItemById('menu')
+
+              if (menu) {
+                menu.visible = !checked
+              }
+            }
+          }
+        ]
+      : []
+
     const contextMenuTemplate: MenuItemConstructorOptions[] = [
       {
         click: () => {
@@ -340,6 +365,10 @@ app.on('before-quit', () => {
           mainWindow.hide()
         },
         id: 'hide-win'
+      },
+      ...macosMenuItems,
+      {
+        type: 'separator'
       },
       {
         role: 'quit'

@@ -150,19 +150,6 @@ const appMenu: MenuItemConstructorOptions[] = [
         }
       },
       {
-        label: 'Show Dock Icon',
-        type: 'checkbox',
-        checked: config.get(ConfigKey.ShowDockIcon),
-        click({ checked }: { checked: boolean }) {
-          config.set(ConfigKey.ShowDockIcon, checked)
-          if (checked) {
-            app.dock.show()
-          } else {
-            app.dock.hide()
-          }
-        }
-      },
-      {
         label: 'Default Mailto Client',
         type: 'checkbox',
         checked: app.isDefaultProtocolClient('mailto'),
