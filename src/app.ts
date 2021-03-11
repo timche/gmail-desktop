@@ -345,6 +345,15 @@ app.on('before-quit', () => {
                 menu.visible = !checked
               }
             }
+          },
+          {
+            type: 'separator'
+          },
+          {
+            id: 'menu',
+            label: 'Menu',
+            visible: !config.get(ConfigKey.ShowDockIcon),
+            submenu: Menu.getApplicationMenu()!
           }
         ]
       : []
