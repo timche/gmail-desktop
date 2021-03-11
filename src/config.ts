@@ -64,13 +64,13 @@ const defaults: TypedStore = {
   [ConfigKey.AutoUpdate]: true,
   [ConfigKey.LastWindowState]: {
     bounds: {
-      width: 800,
+      width: 860,
       height: 600,
       x: undefined,
       y: undefined
     },
     fullscreen: false,
-    maximized: true
+    maximized: false
   },
   [ConfigKey.CompactHeader]: true,
   [ConfigKey.HideFooter]: true,
