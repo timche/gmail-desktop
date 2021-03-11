@@ -55,7 +55,7 @@ type TypedStore = {
   [ConfigKey.DownloadsShowSaveAs]: boolean
   [ConfigKey.DownloadsOpenFolderWhenDone]: boolean
   [ConfigKey.DownloadsLocation]: string
-  [ConfigKey.DarkMode]: 'system' | boolean
+  [ConfigKey.DarkMode]?: 'system' | boolean
 }
 
 const defaults: TypedStore = {
@@ -85,8 +85,7 @@ const defaults: TypedStore = {
   [ConfigKey.HardwareAcceleration]: true,
   [ConfigKey.DownloadsShowSaveAs]: false,
   [ConfigKey.DownloadsOpenFolderWhenDone]: false,
-  [ConfigKey.DownloadsLocation]: app.getPath('downloads'),
-  [ConfigKey.DarkMode]: 'system'
+  [ConfigKey.DownloadsLocation]: app.getPath('downloads')
 }
 
 const config = new Store<TypedStore>({

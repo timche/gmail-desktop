@@ -123,6 +123,7 @@ const appMenu: MenuItemConstructorOptions[] = [
         label: 'Dark Mode',
         submenu: [
           {
+            id: 'dark-mode-system',
             label: 'Follow System Appearance',
             type: 'radio',
             checked: config.get(ConfigKey.DarkMode) === 'system',
@@ -132,6 +133,7 @@ const appMenu: MenuItemConstructorOptions[] = [
             }
           },
           {
+            id: 'dark-mode-enabled',
             label: 'Enabled',
             type: 'radio',
             checked: config.get(ConfigKey.DarkMode) === true,
@@ -141,6 +143,7 @@ const appMenu: MenuItemConstructorOptions[] = [
             }
           },
           {
+            id: 'dark-mode-disabled',
             label: 'Disabled',
             type: 'radio',
             checked: config.get(ConfigKey.DarkMode) === false,

@@ -539,4 +539,40 @@ app.on('before-quit', () => {
 
     openExternalUrl(url)
   })
+
+  if (config.get(ConfigKey.DarkMode) === undefined) {
+    const { response } = await dialog.showMessageBox({
+      type: 'info',
+      message: `${app.name} (now) has dark mode! Do you want to enable it?`,
+      detail:
+        'It\'s recommended to set the Gmail theme to "Default" in order for dark mode to work properly.',
+      buttons: ['Yes', 'No', 'Follow System Appearance', 'Ask Again Later']
+    })
+
+    if (response === 0) {
+      nativeTheme.themeSource = 'dark'
+      config.set(ConfigKey.DarkMode, true)
+
+      const menuItem = menu.getMenuItemById('dark-mode-enabled')
+      if (menuItem) {
+        menuItem.checked = true
+      }
+    } else if (response === 1) {
+      nativeTheme.themeSource = 'light'
+      config.set(ConfigKey.DarkMode, false)
+
+      const menuItem = menu.getMenuItemById('dark-mode-disabled')
+      if (menuItem) {
+        menuItem.checked = true
+      }
+    } else if (response === 2) {
+      nativeTheme.themeSource = 'system'
+      config.set(ConfigKey.DarkMode, 'system')
+
+      const menuItem = menu.getMenuItemById('dark-mode-system')
+      if (menuItem) {
+        menuItem.checked = true
+      }
+    }
+  }
 })()
