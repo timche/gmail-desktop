@@ -271,6 +271,7 @@ const appMenu: MenuItemConstructorOptions[] = [
               },
               {
                 label: 'Remove Custom User Agent',
+                enabled: Boolean(config.get(ConfigKey.CustomUserAgent)),
                 click() {
                   removeCustomUserAgent()
                 }
