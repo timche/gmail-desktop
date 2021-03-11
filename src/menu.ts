@@ -294,6 +294,13 @@ const appMenu: MenuItemConstructorOptions[] = [
             }
           },
           {
+            label: 'Reset Config File',
+            click() {
+              config.set(ConfigKey.ResetConfig, true)
+              showRestartDialog()
+            }
+          },
+          {
             type: 'separator'
           },
           {
