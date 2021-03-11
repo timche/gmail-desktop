@@ -100,3 +100,30 @@ ipc.on('set-custom-style', (_: Event, key: ConfigKey, enabled: boolean) => {
 ipc.on('set-full-screen', (_: Event, enabled: boolean) => {
   document.body.classList[enabled ? 'add' : 'remove']('full-screen')
 })
+
+function clickElement(selector: string) {
+  const element = document.querySelector<HTMLDivElement>(selector)
+  if (element) {
+    element.click()
+  }
+}
+
+ipc.on('compose', () => {
+  clickElement('div[gh="cm"]')
+})
+
+ipc.on('inbox', () => {
+  clickElement('#\\:3d')
+})
+
+ipc.on('snoozed', () => {
+  clickElement('#\\:3f')
+})
+
+ipc.on('sent', () => {
+  clickElement('#\\:3i')
+})
+
+ipc.on('all-mail', () => {
+  clickElement('#\\:3l')
+})

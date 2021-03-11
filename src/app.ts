@@ -22,7 +22,11 @@ import { init as initDebug } from './debug'
 import { init as initDownloads } from './downloads'
 import { platform, getUrlAccountId, createTrayIcon } from './helpers'
 import menu from './menu'
-import { setAppMenuBarVisibility, cleanURLFromGoogle } from './utils'
+import {
+  setAppMenuBarVisibility,
+  cleanURLFromGoogle,
+  sendChannelToMainWindow
+} from './utils'
 import ensureOnline from './ensure-online'
 import { autoFixUserAgent, removeCustomUserAgent } from './user-agent'
 
@@ -307,10 +311,6 @@ app.on('before-quit', () => {
 ;(async () => {
   await Promise.all([ensureOnline(), app.whenReady()])
 
-  if (is.macos && !config.get(ConfigKey.ShowDockIcon)) {
-    app.dock.hide()
-  }
-
   const customUserAgent = config.get(ConfigKey.CustomUserAgent)
 
   if (customUserAgent) {
@@ -394,6 +394,55 @@ app.on('before-quit', () => {
         mainWindow.show()
       }
     })
+  }
+
+  if (is.macos) {
+    if (!config.get(ConfigKey.ShowDockIcon)) {
+      app.dock.hide()
+    }
+
+    const dockMenu = Menu.buildFromTemplate([
+      {
+        label: 'Compose',
+        click() {
+          mainWindow.show()
+          sendChannelToMainWindow('compose')
+        }
+      },
+      {
+        type: 'separator'
+      },
+      {
+        label: 'Inbox',
+        click() {
+          mainWindow.show()
+          sendChannelToMainWindow('inbox')
+        }
+      },
+      {
+        label: 'Snoozed',
+        click() {
+          mainWindow.show()
+          sendChannelToMainWindow('snoozed')
+        }
+      },
+      {
+        label: 'Sent',
+        click() {
+          mainWindow.show()
+          sendChannelToMainWindow('sent')
+        }
+      },
+      {
+        label: 'All Mail',
+        click() {
+          mainWindow.show()
+          sendChannelToMainWindow('all-mail')
+        }
+      }
+    ])
+
+    app.dock.setMenu(dockMenu)
   }
 
   const { webContents } = mainWindow!
