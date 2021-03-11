@@ -1,4 +1,4 @@
-import { app, shell, Menu, MenuItemConstructorOptions } from 'electron'
+import { app, shell, Menu, MenuItemConstructorOptions, dialog } from 'electron'
 import * as fs from 'fs'
 import { is } from 'electron-util'
 
@@ -186,6 +186,49 @@ const appMenu: MenuItemConstructorOptions[] = [
           config.set(ConfigKey.HardwareAcceleration, checked)
           showRestartDialog(checked, 'hardware acceleration')
         }
+      },
+      {
+        label: 'Downloads',
+        submenu: [
+          {
+            label: 'Show Save As Dialog Before Downloading',
+            type: 'checkbox',
+            checked: config.get(ConfigKey.DownloadsShowSaveAs),
+            click({ checked }) {
+              config.set(ConfigKey.DownloadsShowSaveAs, checked)
+
+              showRestartDialog()
+            }
+          },
+          {
+            label: 'Open Folder When Done',
+            type: 'checkbox',
+            checked: config.get(ConfigKey.DownloadsOpenFolderWhenDone),
+            click({ checked }) {
+              config.set(ConfigKey.DownloadsOpenFolderWhenDone, checked)
+
+              showRestartDialog()
+            }
+          },
+          {
+            label: 'Default Location',
+            async click() {
+              const { canceled, filePaths } = await dialog.showOpenDialog({
+                properties: ['openDirectory'],
+                buttonLabel: 'Select',
+                defaultPath: config.get(ConfigKey.DownloadsLocation)
+              })
+
+              if (canceled) {
+                return
+              }
+
+              config.set(ConfigKey.DownloadsLocation, filePaths[0])
+
+              showRestartDialog()
+            }
+          }
+        ]
       },
       {
         type: 'separator'

@@ -1,3 +1,4 @@
+import { app } from 'electron'
 import { is } from 'electron-util'
 
 import Store = require('electron-store')
@@ -28,7 +29,10 @@ export enum ConfigKey {
   AutoFixUserAgent = 'autoFixUserAgent',
   TrustedHosts = 'trustedHosts',
   ConfirmExternalLinks = 'confirmExternalLinks',
-  HardwareAcceleration = 'hardwareAcceleration'
+  HardwareAcceleration = 'hardwareAcceleration',
+  DownloadsShowSaveAs = 'downloadsShowSaveAs',
+  DownloadsOpenFolderWhenDone = 'downloadsOpenFolderWhenDone',
+  DownloadsLocation = 'downloadsLocation'
 }
 
 type TypedStore = {
@@ -47,6 +51,9 @@ type TypedStore = {
   [ConfigKey.TrustedHosts]: string[]
   [ConfigKey.ConfirmExternalLinks]: boolean
   [ConfigKey.HardwareAcceleration]: boolean
+  [ConfigKey.DownloadsShowSaveAs]: boolean
+  [ConfigKey.DownloadsOpenFolderWhenDone]: boolean
+  [ConfigKey.DownloadsLocation]: string
 }
 
 const defaults = {
@@ -73,7 +80,10 @@ const defaults = {
   [ConfigKey.AutoFixUserAgent]: false,
   [ConfigKey.TrustedHosts]: [],
   [ConfigKey.ConfirmExternalLinks]: true,
-  [ConfigKey.HardwareAcceleration]: true
+  [ConfigKey.HardwareAcceleration]: true,
+  [ConfigKey.DownloadsShowSaveAs]: false,
+  [ConfigKey.DownloadsOpenFolderWhenDone]: false,
+  [ConfigKey.DownloadsLocation]: app.getPath('downloads')
 }
 
 const config = new Store<TypedStore>({
