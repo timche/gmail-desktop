@@ -1,25 +1,24 @@
-# <img src="media/logo.png" height="38"> Gmail Desktop
-
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/timche/gmail-desktop)
-![GitHub Release Date](https://img.shields.io/github/release-date/timche/gmail-desktop)
-![GitHub All Releases](https://img.shields.io/github/downloads/timche/gmail-desktop/total)
-[![XO Code Style](https://img.shields.io/badge/code_style-XO-5ed9c7.svg)](https://github.com/sindresorhus/xo)
-[![Styled with Prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
-
-> Nifty Gmail desktop app
-
-![](media/screenshot.png)
+<div align="center">
+	<img src="media/icon.svg" width="200" height="200">
+	<h1>Gmail Desktop</h1>
+	<p>
+		Nifty Gmail desktop app for macOS, Linux & Windows
+	</p>
+  <img src="media/preview.png">
+</div>
 
 ## Highlights
 
+- [Dark mode](#dark-mode)
 - [Appearance customizations](#appearance-customizations)
 - [Custom styles](#custom-styles)
-- Desktop notifications
-- macOS: Unread badge in dock
-- Windows/Linux: Unread icon tray
-- Silent auto-updates
 - [Clean email links from Google](#clean-email-links-from-google)
 - [Confirm email links before opening to prevent phishing](#confirm-email-links-before-opening-to-prevent-phishing)
+- [Menu bar mode](#menu-bar-mode-macos) _(macOS)_
+- Unread badge in dock _(macOS)_
+- Unread icon in tray _(Linux/Windows)_
+- Desktop notifications
+- Silent auto-updates
 - Cross-platform
 
 ## Installation
@@ -42,33 +41,54 @@ Or with [Homebrew Cask](https://caskroom.github.io/): `brew install timche-gmail
 
 ## Features
 
-### Appearance customizations
+### Dark Mode
 
-Gmail Desktop provides a number of appearance customizations to improve and simplify the default Gmail styles. These customizations are enabled by default and configurable under the `Settings` → `Appearance` menu.
+You can configure dark mode in the `Settings` → `Dark Mode` menu.
 
-- `Compact Header`: Customizes the Gmail header to use a more compact style to provide a more native feel. This setting requires a restart to be applied.
-- `Hide Footer`: Hides footer information text (storage used, terms links, etc.).
+<div align="center">
+  <img src="media/dark-mode.png">
+</div>
+
+### Appearance Customizations
+
+Gmail Desktop provides few appearance customizations to simplify the default Gmail layout and remove some clutter. These customizations are enabled by default and configurable in the `Settings` → `Appearance` menu.
+
+- `Compact Header`: Makes the Gmail header more compact to provide a more native feel.
 - `Hide Support`: Hides the support button in the header.
+- `Hide Footer`: Hides footer (storage used, terms links, etc.).
 
-![](media/appearancecustomization.gif)
+<div align="center">
+  <br>
+  <img src="media/appearance-customization.gif" width="742">
+  <br>
+</div>
 
-### Custom styles
+### Custom Styles
 
-In addition to the available appearance customizations, custom user styles can be applied. Click the menu item `Settings` → `Appearance` → `Custom Styles` to open the custom CSS file in the default editor for CSS files.
+If you wish to use your own styles, custom user styles can be applied. Click the menu item `Settings` → `Appearance` → `Custom Styles` to open the app custom CSS file in your default editor for CSS files.
 
-### Confirm email links before opening to prevent phishing
+### Confirm Email Links Before Opening to Prevent Phishing
 
 Confirm email links can be disabled at `Settings` → `Confirm External Links before Opening`.
 
-![](media/confirmlinkdialog.png)
+<div align="center">
+  <img src="media/confirm-link-dialog.png">
+</div>
 
-### Clean email links from Google
+### Clean Email Links from Google
 
-Email links in Gmail are usually prepended with `https://google.com/url?q=<actual_url>`, which is not visible to the user. While we don't know exactly why or what it does, it's unnecesary and we believe it does some tracking stuff. Gmail Desktop automatically cleans links from this, so the actual URL will be directly opened in the browser.
+Email links in Gmail are usually prepended with `https://google.com/url?q=<actual_url>`, which is not visible to the user. While we don't know exactly why or what it does, we believe does tracking, so it's unnecesary. Gmail Desktop automatically cleans links from this, so the actual URL will be directly opened in your default browser.
+
+### Menu Bar Mode _(macOS)_
+
+You can enable the menu bar mode with `Settings` → `Show Menu Bar Icon` and remove Gmail Desktop from the dock with `Hide Dock Icon` in the menu bar icon menu.
 
 ## Troubleshooting
 
 #### I can't sign in: `This browser or app may not be secure`
+
+<details>
+  <summary>Read more</summary>
 
 In December 2019 Google has decided to block unsupported user agents, such as Electron, from signing in to Google accounts for security reasons (related issue: [#174](https://github.com/timche/gmail-desktop/issues/174)). This only affects some users, but not all.
 
@@ -76,7 +96,9 @@ We doubt this will ever change, so we are required to override the Electron defa
 
 Gmail Desktop offers to attempt to automatically fix the user agent when the issue above occurs:
 
-![](media/signinfixdialog.png)
+<div align="center">
+  <img src="media/sign-in-fix-dialog.png">
+</div>
 
 Clicking on `Yes` will set a [custom user agent (based on Firefox)](https://github.com/timche/gmail-desktop/blob/master/src/user-agents.json) in the app config we think should work and Gmail Desktop will be restarted.
 
@@ -95,6 +117,8 @@ Example:
 ```
 
 Save the config, restart Gmail Desktop and sign in again.
+
+</details>
 
 ## Developing
 
