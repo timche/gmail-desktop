@@ -104,7 +104,8 @@ function createWindow(): void {
     show: !shouldStartMinimized,
     icon: is.linux
       ? path.join(__dirname, '..', 'static', 'icon.png')
-      : undefined
+      : undefined,
+    darkTheme: Boolean(config.get(ConfigKey.DarkMode))
   })
 
   if (lastWindowState.fullscreen && !mainWindow.isFullScreen()) {
