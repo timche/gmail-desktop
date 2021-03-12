@@ -43,10 +43,14 @@ Or with [Homebrew Cask](https://caskroom.github.io/): `brew install timche-gmail
 
 ### Dark Mode
 
-You can configure dark mode in the `Settings` → `Dark Mode` menu.
+While Gmail offers a dark theme, it's unfortunately not a dark mode, so areas such as compose and emails remain untouched and keep their light appearance. Gmail Desktop comes with dark mode (powered by [Dark Reader](https://github.com/darkreader/darkreader)) and makes composing and reading emails easy on the eye as well. You can configure dark mode in the `Settings` → `Dark Mode` menu.
+
+**Note:** It's recommended to set the [Gmail theme to "Default"](https://mail.google.com/#settings/oldthemes) in order for dark mode to work properly.
 
 <div align="center">
-  <img src="media/dark-mode.png">
+  <img src="media/dark-mode-1.png">
+  <img src="media/dark-mode-2.png">
+  <img src="media/dark-mode-3.png">
 </div>
 
 ### Appearance Customizations
@@ -59,7 +63,7 @@ Gmail Desktop provides few appearance customizations to simplify the default Gma
 
 <div align="center">
   <br>
-  <img src="media/appearance-customization.gif" width="742">
+  <img src="media/appearance-customizations.gif" width="742">
   <br>
 </div>
 
@@ -72,7 +76,7 @@ If you wish to use your own styles, custom user styles can be applied. Click the
 Confirm email links can be disabled at `Settings` → `Confirm External Links before Opening`.
 
 <div align="center">
-  <img src="media/confirm-link-dialog.png">
+  <img src="media/confirm-link-dialog.png" width="535">
 </div>
 
 ### Clean Email Links from Google
@@ -97,7 +101,7 @@ We doubt this will ever change, so we are required to override the Electron defa
 Gmail Desktop offers to attempt to automatically fix the user agent when the issue above occurs:
 
 <div align="center">
-  <img src="media/sign-in-fix-dialog.png">
+  <img src="media/sign-in-fix-dialog.png" width="535">
 </div>
 
 Clicking on `Yes` will set a [custom user agent (based on Firefox)](https://github.com/timche/gmail-desktop/blob/master/src/user-agents.json) in the app config we think should work and Gmail Desktop will be restarted.
