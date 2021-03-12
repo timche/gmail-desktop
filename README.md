@@ -69,7 +69,7 @@ Gmail Desktop provides few appearance customizations to simplify the default Gma
 
 ### Custom Styles
 
-If you wish to use your own styles, custom user styles can be applied. Click the menu item `Settings` → `Appearance` → `Custom Styles` to open the app custom CSS file in your default editor for CSS files.
+If you wish to add your own styles, click the menu item `Settings` → `Appearance` → `Custom Styles` to open the app custom CSS file in your default editor.
 
 ### Confirm Email Links Before Opening to Prevent Phishing
 
@@ -81,7 +81,7 @@ Confirm email links can be disabled at `Settings` → `Confirm External Links be
 
 ### Clean Email Links from Google
 
-Email links in Gmail are usually prepended with `https://google.com/url?q=<actual_url>`, which is not visible to the user. While we don't know exactly why or what it does, we believe does tracking, so it's unnecesary. Gmail Desktop automatically cleans links from this, so the actual URL will be directly opened in your default browser.
+Some Email links in Gmail are prepended with `https://google.com/url?q=<actual_url>`, which is somtimes not visible to the user. We believe it does some sort of analytics or tracking, so not necesary. Gmail Desktop automatically cleans links from this, so the actual URL will be directly opened in your default browser.
 
 ### Menu Bar Mode _(macOS)_
 
@@ -104,11 +104,11 @@ Gmail Desktop offers to attempt to automatically fix the user agent when the iss
   <img src="media/sign-in-fix-dialog.png" width="535">
 </div>
 
-Clicking on `Yes` will set a [custom user agent (based on Firefox)](https://github.com/timche/gmail-desktop/blob/master/src/user-agents.json) in the app config we think should work and Gmail Desktop will be restarted.
+Clicking on `Yes` will set a [custom user agent (based on Firefox)](https://github.com/timche/gmail-desktop/blob/master/src/user-agents.json) in the app config and Gmail Desktop will be restarted.
 
 In case the custom user agent isn't working anymore, you'll be offered to let Gmail Desktop to attempt to fix it again or trigger it manually at `Settings` → `Advanced` → `User Agent` → `Attempt User Agent Fix`.
 
-If the automatic user agent fix isn't working at all or you want to set your own custom user agent, you are able to set the user agent at `Settings` → `Advanced` → `User Agent` → `Set Custom User Agent`, which opens the app config in your editor.
+If the automatic user agent fix isn't working at all or you want to set your own custom user agent, you are able to do that at `Settings` → `Advanced` → `User Agent` → `Set Custom User Agent`, which opens the app config in your editor.
 
 In the app config, edit the `customUserAgent` value with an user agent from e.g. https://www.whatismybrowser.com/guides/the-latest-user-agent.
 
