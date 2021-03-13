@@ -22,7 +22,6 @@ esbuild
     bundle: true,
     sourcemap: !isProd,
     outfile: './dist-renderer/index.js',
-    external: ['fs', 'path'],
     define: {
       'process.env.NODE_ENV': isProd ? '"production"' : '"development"'
     },

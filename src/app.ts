@@ -1,9 +1,7 @@
-import * as fs from 'fs'
 import * as path from 'path'
 import {
   app,
   ipcMain as ipc,
-  shell,
   BrowserWindow,
   Menu,
   Tray,
@@ -15,24 +13,26 @@ import { is } from 'electron-util'
 
 import { init as initAutoUpdates } from './updates'
 import config, { ConfigKey } from './config'
-import {
-  init as initCustomStyles,
-  USER_CUSTOM_STYLE_PATH
-} from './custom-styles'
 import { init as initDebug } from './debug'
 import { init as initDownloads } from './downloads'
-import { platform, getUrlAccountId, createTrayIcon } from './helpers'
+import { createTrayIcon } from './helpers'
 import menu from './menu'
 import {
   setAppMenuBarVisibility,
-  cleanURLFromGoogle,
   sendChannelToMainWindow,
   sendChannelToAllWindows
 } from './utils'
 import ensureOnline from './ensure-online'
-import { autoFixUserAgent, removeCustomUserAgent } from './user-agent'
+import {
+  createView,
+  getAccountId,
+  getView,
+  selectView,
+  sendToViews
+} from './views'
 
 import electronContextMenu = require('electron-context-menu')
+import { updateUnreadCount } from './unread'
 
 initDebug()
 initDownloads()
@@ -54,7 +54,6 @@ const trayIconUnread = createTrayIcon(true)
 app.setAppUserModelId('io.cheung.gmail-desktop')
 
 let mainWindow: BrowserWindow
-let replyToWindow: BrowserWindow
 let isQuitting = false
 let tray: Tray | undefined
 let trayContextMenu: Menu
@@ -97,9 +96,10 @@ function createWindow(): void {
     x: lastWindowState.bounds.x,
     y: lastWindowState.bounds.y,
     webPreferences: {
-      nodeIntegration: true,
-      nativeWindowOpen: true,
-      preload: path.join(__dirname, 'preload')
+      nodeIntegration: false,
+      contextIsolation: true,
+      enableRemoteModule: false,
+      preload: path.join(__dirname, 'preload.js')
     },
     show: !shouldStartMinimized,
     icon: is.linux
@@ -123,73 +123,20 @@ function createWindow(): void {
   mainWindow.loadFile(path.resolve(__dirname, '..', 'static', 'index.html'))
 
   mainWindow.on('app-command', (_event, command) => {
-    if (command === 'browser-backward' && mainWindow.webContents.canGoBack()) {
-      mainWindow.webContents.goBack()
+    const selectedAccount = config.get(ConfigKey.SelectedAccount)
+    const view = getView(selectedAccount)
+
+    if (!view) {
+      return
+    }
+
+    if (command === 'browser-backward' && view.webContents.canGoBack()) {
+      view.webContents.goBack()
     } else if (
       command === 'browser-forward' &&
-      mainWindow.webContents.canGoForward()
+      view.webContents.canGoForward()
     ) {
-      mainWindow.webContents.goForward()
-    }
-  })
-
-  mainWindow.webContents.on('dom-ready', () => {
-    addCustomCSS(mainWindow)
-    initCustomStyles()
-  })
-
-  mainWindow.webContents.on('did-finish-load', async () => {
-    if (mainWindow.webContents.getURL().includes('signin/rejected')) {
-      const message = `It looks like you are unable to sign-in, because Gmail is blocking the user agent ${app.name} is using.`
-      const askAutoFixMessage = `Do you want ${app.name} to attempt to fix it automatically?`
-      const troubleshoot = () => {
-        openExternalUrl(
-          'https://github.com/timche/gmail-desktop#i-cant-sign-in-this-browser-or-app-may-not-be-secure'
-        )
-      }
-
-      if (config.get(ConfigKey.CustomUserAgent)) {
-        const { response } = await dialog.showMessageBox({
-          type: 'info',
-          message,
-          detail: `You're currently using a custom user agent. ${askAutoFixMessage} Alternatively you can try the default user agent or set another custom user agent (see "Troubleshoot").`,
-          buttons: ['Yes', 'Cancel', 'Use Default User Agent', 'Troubleshoot']
-        })
-
-        if (response === 3) {
-          troubleshoot()
-          return
-        }
-
-        if (response === 2) {
-          removeCustomUserAgent()
-          return
-        }
-
-        if (response === 1) {
-          return
-        }
-
-        return
-      }
-
-      const { response } = await dialog.showMessageBox({
-        type: 'info',
-        message,
-        detail: `${askAutoFixMessage} Alternatively you can set a custom user agent (see "Troubleshoot").`,
-        buttons: ['Yes', 'Cancel', 'Troubleshoot']
-      })
-
-      if (response === 2) {
-        troubleshoot()
-        return
-      }
-
-      if (response === 1) {
-        return
-      }
-
-      autoFixUserAgent()
+      view.webContents.goForward()
     }
   })
 
@@ -224,85 +171,19 @@ function createWindow(): void {
       tray.setContextMenu(trayContextMenu)
     }
   }
-
-  ipc.on('unread-count', (_: Event, unreadCount: number) => {
-    if (is.macos) {
-      app.dock.setBadge(unreadCount ? unreadCount.toString() : '')
-    }
-
-    if (tray) {
-      tray.setImage(unreadCount ? trayIconUnread : trayIcon)
-      if (is.macos) {
-        tray.setTitle(unreadCount ? unreadCount.toString() : '')
-      }
-    }
-  })
 }
 
-function createMailto(url: string): void {
-  replyToWindow = new BrowserWindow({
+app.on('open-url', (event, url) => {
+  event.preventDefault()
+
+  // @TODO: Select Account
+  const replyToWindow = new BrowserWindow({
     parent: mainWindow
   })
 
   replyToWindow.loadURL(
     `https://mail.google.com/mail/?extsrc=mailto&url=${url}`
   )
-}
-
-function addCustomCSS(windowElement: BrowserWindow): void {
-  windowElement.webContents.insertCSS(
-    fs.readFileSync(path.join(__dirname, '..', 'css', 'style.css'), 'utf8')
-  )
-
-  if (fs.existsSync(USER_CUSTOM_STYLE_PATH)) {
-    windowElement.webContents.insertCSS(
-      fs.readFileSync(USER_CUSTOM_STYLE_PATH, 'utf8')
-    )
-  }
-
-  const platformCSSFile = path.join(
-    __dirname,
-    '..',
-    'css',
-    `style.${platform}.css`
-  )
-  if (fs.existsSync(platformCSSFile)) {
-    windowElement.webContents.insertCSS(
-      fs.readFileSync(platformCSSFile, 'utf8')
-    )
-  }
-}
-
-async function openExternalUrl(url: string): Promise<void> {
-  const cleanURL = cleanURLFromGoogle(url)
-
-  if (config.get(ConfigKey.ConfirmExternalLinks)) {
-    const { origin } = new URL(cleanURL)
-    const trustedHosts = config.get(ConfigKey.TrustedHosts)
-
-    if (!trustedHosts.includes(origin)) {
-      const { response, checkboxChecked } = await dialog.showMessageBox({
-        type: 'info',
-        buttons: ['Open Link', 'Cancel'],
-        message: `Do you want to open this external link in your default browser?`,
-        checkboxLabel: `Trust all links on ${origin}`,
-        detail: cleanURL
-      })
-
-      if (response !== 0) return
-
-      if (checkboxChecked) {
-        config.set(ConfigKey.TrustedHosts, [...trustedHosts, origin])
-      }
-    }
-  }
-
-  shell.openExternal(cleanURL)
-}
-
-app.on('open-url', (event, url) => {
-  event.preventDefault()
-  createMailto(url)
 })
 
 app.on('activate', () => {
@@ -335,11 +216,37 @@ app.on('before-quit', () => {
     return nativeTheme.shouldUseDarkColors
   })
 
+  ipc.handle('accounts', () => {
+    return accounts
+  })
+
+  ipc.on('unread-count', ({ sender }, unreadCount: number) => {
+    const accountId = getAccountId(sender.id)
+
+    if (accountId) {
+      const updatedUnreadCount = updateUnreadCount(accountId, unreadCount)
+
+      if (is.macos) {
+        app.dock.setBadge(
+          updatedUnreadCount ? updatedUnreadCount.toString() : ''
+        )
+      }
+
+      if (tray) {
+        tray.setImage(updatedUnreadCount ? trayIconUnread : trayIcon)
+        if (is.macos) {
+          tray.setTitle(updatedUnreadCount ? updatedUnreadCount.toString() : '')
+        }
+      }
+    }
+  })
+
   nativeTheme.on('updated', () => {
     sendChannelToAllWindows(
       'dark-mode:updated',
       nativeTheme.shouldUseDarkColors
     )
+    sendToViews('dark-mode:updated', nativeTheme.shouldUseDarkColors)
   })
 
   createWindow()
@@ -478,68 +385,18 @@ app.on('before-quit', () => {
     }
   })
 
-  // eslint-disable-next-line max-params
-  webContents.on('new-window', (event: any, url, _1, _2, options) => {
-    event.preventDefault()
-
-    // `Add account` opens `accounts.google.com`
-    if (url.startsWith('https://accounts.google.com')) {
-      mainWindow.loadURL(url)
-      return
-    }
-
-    if (url.startsWith('https://mail.google.com')) {
-      // Check if the user switches accounts which is determined
-      // by the URL: `mail.google.com/mail/u/<local_account_id>/...`
-      const currentAccountId = getUrlAccountId(mainWindow.webContents.getURL())
-      const targetAccountId = getUrlAccountId(url)
-
-      if (targetAccountId !== currentAccountId) {
-        mainWindow.loadURL(url)
-        return
-      }
-
-      // Center the new window on the screen
-      event.newGuest = new BrowserWindow({
-        ...options,
-        titleBarStyle: 'default',
-        x: undefined,
-        y: undefined
-      })
-
-      event.newGuest.webContents.on('dom-ready', () => {
-        addCustomCSS(event.newGuest)
-      })
-
-      event.newGuest.webContents.on(
-        'new-window',
-        (event: Event, url: string) => {
-          event.preventDefault()
-          openExternalUrl(url)
-        }
-      )
-
-      return
-    }
-
-    if (url.startsWith('about:blank')) {
-      const win = new BrowserWindow({
-        ...options,
-        show: false
-      })
-
-      win.webContents.once('will-redirect', (_event, url) => {
-        openExternalUrl(url)
-        win.destroy()
-      })
-
-      event.newGuest = win
-
-      return
-    }
-
-    openExternalUrl(url)
+  ipc.handle('account-selected', (_event, accountId: string) => {
+    selectView(mainWindow, accountId)
   })
+
+  const accounts = config.get(ConfigKey.Accounts)
+
+  for (const { id } of accounts) {
+    createView(mainWindow!, id)
+  }
+
+  const selectedAccount = config.get(ConfigKey.SelectedAccount)
+  selectView(mainWindow!, selectedAccount)
 
   if (config.get(ConfigKey.DarkMode) === undefined) {
     const { response } = await dialog.showMessageBox({

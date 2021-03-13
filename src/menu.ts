@@ -11,7 +11,7 @@ import { is } from 'electron-util'
 
 import { checkForUpdates } from './updates'
 import config, { ConfigKey } from './config'
-import { setCustomStyle, USER_CUSTOM_STYLE_PATH } from './custom-styles'
+import { setCustomStyle, USER_CUSTOM_STYLE_PATH } from './views/custom-styles'
 import { viewLogs } from './logs'
 import { showRestartDialog, setAppMenuBarVisibility } from './utils'
 import { autoFixUserAgent, removeCustomUserAgent } from './user-agent'

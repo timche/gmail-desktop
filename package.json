@@ -7,7 +7,7 @@
   "repository": "timche/gmail-desktop",
   "author": "Tim Cheung <tim@cheung.io>",
   "license": "MIT",
-  "main": "dist-main/index.js",
+  "main": "dist-main/app.js",
   "scripts": {
     "prepare": "husky install",
     "postinstall": "electron-builder install-app-deps",

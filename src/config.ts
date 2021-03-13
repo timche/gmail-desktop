@@ -14,6 +14,11 @@ interface LastWindowState {
   maximized: boolean
 }
 
+interface Account {
+  id: string
+  label?: string
+}
+
 export enum ConfigKey {
   AutoUpdate = 'autoUpdate',
   CompactHeader = 'compactHeader',
@@ -35,12 +40,8 @@ export enum ConfigKey {
   DownloadsLocation = 'downloadsLocation',
   DarkMode = 'darkMode',
   ResetConfig = 'resetConfig',
-  Accounts = 'accounts'
-}
-
-interface Account {
-  id: string
-  label: string
+  Accounts = 'accounts',
+  SelectedAccount = 'selectedAccount'
 }
 
 type TypedStore = {
@@ -65,6 +66,7 @@ type TypedStore = {
   [ConfigKey.DarkMode]?: 'system' | boolean
   [ConfigKey.ResetConfig]: boolean
   [ConfigKey.Accounts]: Account[]
+  [ConfigKey.SelectedAccount]: string
 }
 
 const defaults: TypedStore = {
@@ -98,14 +100,10 @@ const defaults: TypedStore = {
   [ConfigKey.ResetConfig]: false,
   [ConfigKey.Accounts]: [
     {
-      id: '1',
-      label: 'tim@cheung.io'
-    },
-    {
-      id: '2',
-      label: 't.cheung@faceit.com'
+      id: 'default'
     }
-  ]
+  ],
+  [ConfigKey.SelectedAccount]: 'default'
 }
 
 const config = new Store<TypedStore>({
