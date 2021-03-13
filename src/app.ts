@@ -97,7 +97,7 @@ function createWindow(): void {
     x: lastWindowState.bounds.x,
     y: lastWindowState.bounds.y,
     webPreferences: {
-      nodeIntegration: false,
+      nodeIntegration: true,
       nativeWindowOpen: true,
       preload: path.join(__dirname, 'preload')
     },
@@ -120,7 +120,7 @@ function createWindow(): void {
     setAppMenuBarVisibility()
   }
 
-  mainWindow.loadURL('https://mail.google.com')
+  mainWindow.loadFile(path.resolve(__dirname, '..', 'static', 'index.html'))
 
   mainWindow.on('app-command', (_event, command) => {
     if (command === 'browser-backward' && mainWindow.webContents.canGoBack()) {

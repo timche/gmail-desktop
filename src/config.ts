@@ -34,7 +34,13 @@ export enum ConfigKey {
   DownloadsOpenFolderWhenDone = 'downloadsOpenFolderWhenDone',
   DownloadsLocation = 'downloadsLocation',
   DarkMode = 'darkMode',
-  ResetConfig = 'resetConfig'
+  ResetConfig = 'resetConfig',
+  Accounts = 'accounts'
+}
+
+interface Account {
+  id: string
+  label: string
 }
 
 type TypedStore = {
@@ -58,6 +64,7 @@ type TypedStore = {
   [ConfigKey.DownloadsLocation]: string
   [ConfigKey.DarkMode]?: 'system' | boolean
   [ConfigKey.ResetConfig]: boolean
+  [ConfigKey.Accounts]: Account[]
 }
 
 const defaults: TypedStore = {
@@ -88,7 +95,17 @@ const defaults: TypedStore = {
   [ConfigKey.DownloadsShowSaveAs]: false,
   [ConfigKey.DownloadsOpenFolderWhenDone]: false,
   [ConfigKey.DownloadsLocation]: app.getPath('downloads'),
-  [ConfigKey.ResetConfig]: false
+  [ConfigKey.ResetConfig]: false,
+  [ConfigKey.Accounts]: [
+    {
+      id: '1',
+      label: 'tim@cheung.io'
+    },
+    {
+      id: '2',
+      label: 't.cheung@faceit.com'
+    }
+  ]
 }
 
 const config = new Store<TypedStore>({
