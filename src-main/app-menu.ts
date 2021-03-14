@@ -234,15 +234,6 @@ const appMenuTemplate: MenuItemConstructorOptions[] = [
         }
       },
       {
-        label: 'Auto Update',
-        type: 'checkbox',
-        checked: config.get(ConfigKey.AutoUpdate),
-        click({ checked }: { checked: boolean }) {
-          config.set(ConfigKey.AutoUpdate, checked)
-          showRestartDialog(checked, 'auto updates')
-        }
-      },
-      {
         label: 'Launch Minimized',
         type: 'checkbox',
         checked: config.get(ConfigKey.LaunchMinimized),
@@ -304,6 +295,52 @@ const appMenuTemplate: MenuItemConstructorOptions[] = [
       },
       {
         type: 'separator'
+      },
+      {
+        label: 'Updates',
+        submenu: [
+          {
+            label: 'Auto Update',
+            type: 'checkbox',
+            checked: config.get(ConfigKey.AutoUpdate),
+            click({ checked }: { checked: boolean }) {
+              config.set(ConfigKey.AutoUpdate, checked)
+              showRestartDialog(checked, 'auto updates')
+            }
+          },
+          {
+            label: 'Release Channel',
+            submenu: [
+              {
+                label: 'Latest',
+                type: 'radio',
+                checked: config.get(ConfigKey.ReleaseChannel) === undefined,
+                click() {
+                  config.delete(ConfigKey.ReleaseChannel)
+                  showRestartDialog()
+                }
+              },
+              {
+                label: 'Beta',
+                type: 'radio',
+                checked: config.get(ConfigKey.ReleaseChannel) === 'beta',
+                click() {
+                  config.set(ConfigKey.ReleaseChannel, 'beta')
+                  showRestartDialog()
+                }
+              },
+              {
+                label: 'Alpha',
+                type: 'radio',
+                checked: config.get(ConfigKey.ReleaseChannel) === 'alpha',
+                click() {
+                  config.set(ConfigKey.ReleaseChannel, 'alpha')
+                  showRestartDialog()
+                }
+              }
+            ]
+          }
+        ]
       },
       {
         label: 'Advanced',

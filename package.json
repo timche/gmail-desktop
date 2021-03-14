@@ -124,6 +124,7 @@
     }
   },
   "build": {
+    "generateUpdatesFilesForAllChannels": true,
     "artifactName": "${name}-${version}-${os}.${ext}",
     "files": [
       "**/*",

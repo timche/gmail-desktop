@@ -41,7 +41,8 @@ export enum ConfigKey {
   DownloadsLocation = 'downloadsLocation',
   DarkMode = 'darkMode',
   ResetConfig = 'resetConfig',
-  Accounts = 'accounts'
+  Accounts = 'accounts',
+  ReleaseChannel = 'releaseChannel'
 }
 
 type TypedStore = {
@@ -66,6 +67,7 @@ type TypedStore = {
   [ConfigKey.DarkMode]?: 'system' | boolean
   [ConfigKey.ResetConfig]: boolean
   [ConfigKey.Accounts]: Account[]
+  [ConfigKey.ReleaseChannel]?: 'beta' | 'alpha'
 }
 
 const defaults: TypedStore = {

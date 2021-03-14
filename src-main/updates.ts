@@ -21,16 +21,24 @@ function onUpdateAvailable(): void {
 }
 
 export function init(): void {
-  if (!is.development) {
-    log.transports.file.level = 'info'
-    autoUpdater.logger = log
+  if (is.development) {
+    return
+  }
 
-    autoUpdater.on('update-downloaded', onUpdateAvailable)
+  log.transports.file.level = 'info'
+  autoUpdater.logger = log
 
-    if (config.get(ConfigKey.AutoUpdate)) {
-      setInterval(() => autoUpdater.checkForUpdates, UPDATE_CHECK_INTERVAL)
-      autoUpdater.checkForUpdates()
-    }
+  const releaseChannel = config.get(ConfigKey.ReleaseChannel)
+
+  if (releaseChannel) {
+    autoUpdater.channel = releaseChannel
+  }
+
+  autoUpdater.on('update-downloaded', onUpdateAvailable)
+
+  if (config.get(ConfigKey.AutoUpdate)) {
+    setInterval(() => autoUpdater.checkForUpdates, UPDATE_CHECK_INTERVAL)
+    autoUpdater.checkForUpdates()
   }
 }
 
