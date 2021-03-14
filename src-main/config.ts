@@ -14,6 +14,12 @@ interface LastWindowState {
   maximized: boolean
 }
 
+export interface Account {
+  id: string
+  label: string
+  selected: boolean
+}
+
 export enum ConfigKey {
   AutoUpdate = 'autoUpdate',
   CompactHeader = 'compactHeader',
@@ -35,7 +41,8 @@ export enum ConfigKey {
   DownloadsLocation = 'downloadsLocation',
   DarkMode = 'darkMode',
   ResetConfig = 'resetConfig',
-  ReleaseChannel = 'releaseChannel'
+  ReleaseChannel = 'releaseChannel',
+  Accounts = 'accounts'
 }
 
 type TypedStore = {
@@ -60,6 +67,7 @@ type TypedStore = {
   [ConfigKey.DarkMode]?: 'system' | boolean
   [ConfigKey.ResetConfig]: boolean
   [ConfigKey.ReleaseChannel]: 'stable' | 'dev'
+  [ConfigKey.Accounts]: Account[]
 }
 
 const defaults: TypedStore = {
@@ -91,7 +99,14 @@ const defaults: TypedStore = {
   [ConfigKey.DownloadsOpenFolderWhenDone]: false,
   [ConfigKey.DownloadsLocation]: app.getPath('downloads'),
   [ConfigKey.ResetConfig]: false,
-  [ConfigKey.ReleaseChannel]: 'stable'
+  [ConfigKey.ReleaseChannel]: 'stable',
+  [ConfigKey.Accounts]: [
+    {
+      id: 'default',
+      label: 'Default',
+      selected: true
+    }
+  ]
 }
 
 const config = new Store<TypedStore>({
