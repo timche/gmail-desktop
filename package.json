@@ -34,7 +34,6 @@
     "electron-updater": "^4.3.8",
     "electron-util": "^0.14.2",
     "element-ready": "^5.0.0",
-    "is-online": "^9.0.0",
     "p-wait-for": "^3.2.0"
   },
   "devDependencies": {
