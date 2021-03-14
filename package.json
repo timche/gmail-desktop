@@ -1,7 +1,11 @@
 {
   "name": "gmail-desktop",
   "productName": "Gmail Desktop",
+<<<<<<< HEAD
   "version": "2.25.2",
+=======
+  "version": "3.0.0-alpha.1",
+>>>>>>> 0bd5ec4 (3.0.0-alpha.1)
   "description": "Unofficial Gmail Desktop App",
   "private": true,
   "repository": "timche/gmail-desktop",
