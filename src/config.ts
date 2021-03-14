@@ -34,7 +34,8 @@ export enum ConfigKey {
   DownloadsOpenFolderWhenDone = 'downloadsOpenFolderWhenDone',
   DownloadsLocation = 'downloadsLocation',
   DarkMode = 'darkMode',
-  ResetConfig = 'resetConfig'
+  ResetConfig = 'resetConfig',
+  ReleaseChannel = 'releaseChannel'
 }
 
 type TypedStore = {
@@ -58,6 +59,7 @@ type TypedStore = {
   [ConfigKey.DownloadsLocation]: string
   [ConfigKey.DarkMode]?: 'system' | boolean
   [ConfigKey.ResetConfig]: boolean
+  [ConfigKey.ReleaseChannel]: 'stable' | 'dev'
 }
 
 const defaults: TypedStore = {
@@ -88,7 +90,8 @@ const defaults: TypedStore = {
   [ConfigKey.DownloadsShowSaveAs]: false,
   [ConfigKey.DownloadsOpenFolderWhenDone]: false,
   [ConfigKey.DownloadsLocation]: app.getPath('downloads'),
-  [ConfigKey.ResetConfig]: false
+  [ConfigKey.ResetConfig]: false,
+  [ConfigKey.ReleaseChannel]: 'stable'
 }
 
 const config = new Store<TypedStore>({

@@ -9,7 +9,7 @@ import {
 import * as fs from 'fs'
 import { is } from 'electron-util'
 
-import { checkForUpdates } from './updates'
+import { checkForUpdates, changeReleaseChannel } from './updates'
 import config, { ConfigKey } from './config'
 import { setCustomStyle, USER_CUSTOM_STYLE_PATH } from './custom-styles'
 import { viewLogs } from './logs'
@@ -207,15 +207,6 @@ export function initOrUpdateMenu() {
           }
         },
         {
-          label: 'Auto Update',
-          type: 'checkbox',
-          checked: config.get(ConfigKey.AutoUpdate),
-          click({ checked }: { checked: boolean }) {
-            config.set(ConfigKey.AutoUpdate, checked)
-            showRestartDialog(checked, 'auto updates')
-          }
-        },
-        {
           label: 'Launch Minimized',
           type: 'checkbox',
           checked: config.get(ConfigKey.LaunchMinimized),
@@ -277,6 +268,42 @@ export function initOrUpdateMenu() {
         },
         {
           type: 'separator'
+        },
+        {
+          label: 'Updates',
+          submenu: [
+            {
+              label: 'Auto Update',
+              type: 'checkbox',
+              checked: config.get(ConfigKey.AutoUpdate),
+              click({ checked }: { checked: boolean }) {
+                config.set(ConfigKey.AutoUpdate, checked)
+                showRestartDialog(checked, 'auto updates')
+              }
+            },
+            {
+              label: 'Release Channel',
+              submenu: [
+                {
+                  id: 'release-channel-stable',
+                  label: 'Stable',
+                  type: 'radio',
+                  checked: config.get(ConfigKey.ReleaseChannel) === 'stable',
+                  click() {
+                    changeReleaseChannel('stable')
+                  }
+                },
+                {
+                  label: 'Dev',
+                  type: 'radio',
+                  checked: config.get(ConfigKey.ReleaseChannel) === 'dev',
+                  click() {
+                    changeReleaseChannel('dev')
+                  }
+                }
+              ]
+            }
+          ]
         },
         {
           label: 'Advanced',
