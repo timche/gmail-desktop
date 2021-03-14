@@ -1,28 +1,17 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 import { ChakraProvider } from '@chakra-ui/react'
-import { useColorMode, Flex, Box, Tabs, TabList, Tab } from '@chakra-ui/react'
+import { useColorMode, Flex, Tabs, TabList, Tab, Badge } from '@chakra-ui/react'
 import theme from './theme'
-
-const height = '40px'
-
-function MacOsTrafficLightsSpace() {
-  const { colorMode } = useColorMode()
-
-  return (
-    <Box
-      width="80px"
-      height={height}
-      borderBottomWidth="1px"
-      borderBottomColor={colorMode === 'light' ? 'gray.200' : 'whiteAlpha.300'}
-    />
-  )
-}
+import { tabsHeight } from './constants'
+import TrafficLightsSpace from './components/TrafficLightsSpace'
 
 function App() {
-  const [accounts, setAccounts] = React.useState<
-    { id: string; label: string }[]
-  >([])
+  const [tabs, setTabs] = React.useState<{ id: string; label: string }[]>([])
+  const [unreadCounts, setUnreadCounts] = React.useState<
+    Record<string, number>
+  >({})
+  const [selectedTab, setSelectedTab] = React.useState()
   const { setColorMode } = useColorMode()
 
   React.useEffect(() => {
@@ -31,14 +20,26 @@ function App() {
         setColorMode(darkMode ? 'dark' : 'light')
       })
 
-      setAccounts(await window.ipc.invoke('accounts'))
+      window.ipc.on(
+        'unread-count',
+        (accountId: string, unreadCount: number) => {
+          setUnreadCounts({ ...unreadCounts, [accountId]: unreadCount })
+        }
+      )
+
+      window.ipc.on('account-selected', (accountId: string) => {
+        setSelectedTab(accountId)
+      })
+
+      setTabs(await window.ipc.invoke('accounts'))
+      setSelectedTab(await window.ipc.invoke('selected-account'))
       setColorMode((await window.ipc.invoke('dark-mode')) ? 'dark' : 'light')
     }
 
     init()
   }, [])
 
-  if (accounts.length < 2) {
+  if (tabs.length < 2) {
     return null
   }
 
@@ -48,23 +49,32 @@ function App() {
         WebkitAppRegion: 'drag'
       }}
     >
-      <MacOsTrafficLightsSpace />
+      <TrafficLightsSpace />
       {/* @ts-ignore: Type error with children */}
       <Tabs
         isFitted
         flex="1"
         colorScheme="red"
         size="sm"
-        onChange={(tabIndex) => {
-          window.ipc.invoke('account-selected', accounts[tabIndex].id)
-        }}
+        index={tabs.findIndex((tab) => tab.id === selectedTab)}
       >
-        <TabList height={height} borderBottomWidth="1px">
-          {accounts.map(({ id, label }) => (
-            <Tab key={id} _focus={{ outline: 'none' }}>
-              {label}
-            </Tab>
-          ))}
+        <TabList height={tabsHeight} borderBottomWidth="1px">
+          {tabs.map(({ id, label }) => {
+            const unreadCount = unreadCounts[id]
+            return (
+              <Tab
+                key={`${id}_${unreadCount}`}
+                _focus={{ outline: 'none' }}
+                onClick={() => {
+                  window.ipc.invoke('account-selected', id)
+                  setSelectedTab(id)
+                }}
+              >
+                {label}
+                {unreadCount > 0 && <Badge ml={1}>{unreadCount}</Badge>}
+              </Tab>
+            )
+          })}
         </TabList>
       </Tabs>
     </Flex>

@@ -4,7 +4,8 @@ import {
   ipcMain as ipc,
   BrowserWindow,
   dialog,
-  nativeTheme
+  nativeTheme,
+  globalShortcut
 } from 'electron'
 import { is } from 'electron-util'
 import { init as initAutoUpdates } from './updates'
@@ -12,17 +13,15 @@ import config, { ConfigKey } from './config'
 import { init as initDebug } from './debug'
 import { init as initDownloads } from './downloads'
 import { getAppMenuItemById, initAppMenu } from './app-menu'
-import { setAppMenuBarVisibility, sendChannelToAllWindows } from './utils'
-import ensureOnline from './ensure-online'
 import {
-  createView,
-  getViewAccountId,
-  getView,
-  selectView,
-  sendToViews
-} from './views'
+  setAppMenuBarVisibility,
+  sendChannelToAllWindows,
+  getMainWindow
+} from './utils'
+import ensureOnline from './ensure-online'
+import { createView, getView, selectView, sendToViews } from './views'
 import electronContextMenu = require('electron-context-menu')
-import { updateUnreadCount } from './unread'
+import { handleUnreadCount } from './unread-counts'
 import { initTray, toggleAppVisiblityTrayItem } from './tray'
 import { shouldStartMinimized } from './constants'
 import { initDock } from './dock'
@@ -139,6 +138,12 @@ function createWindow(): void {
   mainWindow.on('show', () => {
     toggleAppVisiblityTrayItem(true)
   })
+
+  mainWindow.webContents.on('new-window', (event, url) => {
+    event.preventDefault()
+    console.log(event)
+    console.log(url)
+  })
 }
 
 app.on('open-url', (event, url) => {
@@ -184,17 +189,7 @@ app.on('before-quit', () => {
     return nativeTheme.shouldUseDarkColors
   })
 
-  ipc.handle('accounts', () => {
-    return accounts
-  })
-
-  ipc.on('unread-count', ({ sender }, unreadCount: number) => {
-    const accountId = getViewAccountId(sender.id)
-
-    if (accountId) {
-      updateUnreadCount(accountId, unreadCount)
-    }
-  })
+  handleUnreadCount()
 
   nativeTheme.on('updated', () => {
     sendChannelToAllWindows(
@@ -225,14 +220,33 @@ app.on('before-quit', () => {
   })
 
   const accounts = config.get(ConfigKey.Accounts)
+  const selectedAccount = config.get(ConfigKey.SelectedAccount)
+
+  ipc.handle('accounts', () => {
+    return accounts
+  })
+
+  ipc.handle('selected-account', () => {
+    return selectedAccount
+  })
 
   for (const { id } of accounts) {
     createView(mainWindow!, id)
   }
 
-  const selectedAccount = config.get(ConfigKey.SelectedAccount)
-
   selectView(mainWindow!, selectedAccount)
+
+  for (let i = 1; i <= 9; i++) {
+    globalShortcut.register(`CommandOrControl+${i}`, () => {
+      const selectedAccount = config.get(ConfigKey.Accounts)[i - 1]
+      const mainWindow = getMainWindow()
+
+      if (selectedAccount && mainWindow) {
+        selectView(mainWindow, selectedAccount.id)
+        sendChannelToAllWindows('account-selected', selectedAccount.id)
+      }
+    })
+  }
 
   if (config.get(ConfigKey.DarkMode) === undefined) {
     const { response } = await dialog.showMessageBox({

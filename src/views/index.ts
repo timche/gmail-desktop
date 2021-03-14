@@ -7,14 +7,12 @@ import {
   USER_CUSTOM_STYLE_PATH
 } from './custom-styles'
 import { autoFixUserAgent, removeCustomUserAgent } from '../user-agent'
-import { getUrlAccountId, platform } from '../helpers'
-import { cleanURLFromGoogle } from '../utils'
+import { platform } from '../helpers'
+import { cleanURLFromGoogle, sendChannelToAllWindows } from '../utils'
 
 const TABS_HEIGHT = 40
 
-const views: {
-  [accountId: string]: BrowserView
-} = {}
+const views: Record<string, BrowserView> = {}
 
 export function getView(accountId: string) {
   return views[accountId]
@@ -101,8 +99,9 @@ export function selectView(mainWindow: BrowserWindow, accountId: string) {
 export function createView(mainWindow: BrowserWindow, accountId: string) {
   const view = new BrowserView({
     webPreferences: {
-      partition: accountId !== 'default' ? `persist:${accountId}` : undefined,
-      preload: path.join(__dirname, 'preload.js')
+      partition: accountId === 'default' ? undefined : `persist:${accountId}`,
+      preload: path.join(__dirname, 'preload.js'),
+      nativeWindowOpen: true
     }
   })
 
@@ -119,8 +118,6 @@ export function createView(mainWindow: BrowserWindow, accountId: string) {
     height: height - TABS_HEIGHT
   })
 
-  view.setAutoResize({ width: true })
-
   mainWindow.on('resize', () => {
     view.setBounds({
       x: 0,
@@ -131,8 +128,6 @@ export function createView(mainWindow: BrowserWindow, accountId: string) {
   })
 
   view.webContents.loadURL('https://mail.google.com')
-
-  view.webContents.openDevTools()
 
   view.webContents.on('dom-ready', () => {
     addCustomCSS(view)
@@ -200,22 +195,16 @@ export function createView(mainWindow: BrowserWindow, accountId: string) {
 
     // `Add account` opens `accounts.google.com`
     if (url.startsWith('https://accounts.google.com')) {
-      mainWindow.loadURL(url)
+      view.webContents.loadURL(url)
       return
     }
 
     if (url.startsWith('https://mail.google.com')) {
-      // Check if the user switches accounts which is determined
-      // by the URL: `mail.google.com/mail/u/<local_account_id>/...`
-      const currentAccountId = getUrlAccountId(mainWindow.webContents.getURL())
-      const targetAccountId = getUrlAccountId(url)
+      mainWindow.setTopBrowserView(view)
+      sendChannelToAllWindows('account-selected', accountId)
+      config.set(ConfigKey.SelectedAccount, accountId)
 
-      if (targetAccountId !== currentAccountId) {
-        mainWindow.loadURL(url)
-        return
-      }
-
-      // Center the new window on the screen
+      // // Center the new window on the screen
       event.newGuest = new BrowserWindow({
         ...options,
         titleBarStyle: 'default',
