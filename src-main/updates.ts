@@ -6,7 +6,7 @@ import { is } from 'electron-util'
 import config, { ConfigKey } from './config'
 import { viewLogs } from './logs'
 import { createNotification } from './notifications'
-import { initOrUpdateMenu } from './menu'
+import { initOrUpdateAppMenu } from './app-menu'
 
 const UPDATE_CHECK_INTERVAL = 60000 * 60 * 3 // 3 Hours
 
@@ -38,14 +38,14 @@ export function init(): void {
       config.get(ConfigKey.ReleaseChannel) === 'stable'
     ) {
       config.set(ConfigKey.ReleaseChannel, 'dev')
-      initOrUpdateMenu()
+      initOrUpdateAppMenu()
     } else if (
       !autoUpdater.allowPrerelease &&
       config.get(ConfigKey.ReleaseChannel) === 'dev'
     ) {
       autoUpdater.allowPrerelease = true
       checkForUpdates()
-      initOrUpdateMenu()
+      initOrUpdateAppMenu()
     }
 
     autoUpdater.on('update-downloaded', onUpdateAvailable)
