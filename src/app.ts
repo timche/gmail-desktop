@@ -3,36 +3,29 @@ import {
   app,
   ipcMain as ipc,
   BrowserWindow,
-  Menu,
-  Tray,
-  MenuItemConstructorOptions,
   dialog,
   nativeTheme
 } from 'electron'
 import { is } from 'electron-util'
-
 import { init as initAutoUpdates } from './updates'
 import config, { ConfigKey } from './config'
 import { init as initDebug } from './debug'
 import { init as initDownloads } from './downloads'
-import { createTrayIcon } from './helpers'
-import menu from './menu'
-import {
-  setAppMenuBarVisibility,
-  sendChannelToMainWindow,
-  sendChannelToAllWindows
-} from './utils'
+import { getAppMenuItemById, initAppMenu } from './app-menu'
+import { setAppMenuBarVisibility, sendChannelToAllWindows } from './utils'
 import ensureOnline from './ensure-online'
 import {
   createView,
-  getAccountId,
+  getViewAccountId,
   getView,
   selectView,
   sendToViews
 } from './views'
-
 import electronContextMenu = require('electron-context-menu')
 import { updateUnreadCount } from './unread'
+import { initTray, toggleAppVisiblityTrayItem } from './tray'
+import { shouldStartMinimized } from './constants'
+import { initDock } from './dock'
 
 initDebug()
 initDownloads()
@@ -44,19 +37,10 @@ if (!config.get(ConfigKey.HardwareAcceleration)) {
   app.disableHardwareAcceleration()
 }
 
-const shouldStartMinimized =
-  app.commandLine.hasSwitch('launch-minimized') ||
-  config.get(ConfigKey.LaunchMinimized)
-
-const trayIcon = createTrayIcon(false)
-const trayIconUnread = createTrayIcon(true)
-
 app.setAppUserModelId('io.cheung.gmail-desktop')
 
 let mainWindow: BrowserWindow
 let isQuitting = false
-let tray: Tray | undefined
-let trayContextMenu: Menu
 
 if (!app.requestSingleInstanceLock()) {
   app.quit()
@@ -155,22 +139,6 @@ function createWindow(): void {
   mainWindow.on('show', () => {
     toggleAppVisiblityTrayItem(true)
   })
-
-  function toggleAppVisiblityTrayItem(isMainWindowVisible: boolean): void {
-    if (config.get(ConfigKey.EnableTrayIcon) && tray) {
-      const showWin = trayContextMenu.getMenuItemById('show-win')
-      if (showWin) {
-        showWin.visible = !isMainWindowVisible
-      }
-
-      const hideWin = trayContextMenu.getMenuItemById('hide-win')
-      if (hideWin) {
-        hideWin.visible = isMainWindowVisible
-      }
-
-      tray.setContextMenu(trayContextMenu)
-    }
-  }
 }
 
 app.on('open-url', (event, url) => {
@@ -221,23 +189,10 @@ app.on('before-quit', () => {
   })
 
   ipc.on('unread-count', ({ sender }, unreadCount: number) => {
-    const accountId = getAccountId(sender.id)
+    const accountId = getViewAccountId(sender.id)
 
     if (accountId) {
-      const updatedUnreadCount = updateUnreadCount(accountId, unreadCount)
-
-      if (is.macos) {
-        app.dock.setBadge(
-          updatedUnreadCount ? updatedUnreadCount.toString() : ''
-        )
-      }
-
-      if (tray) {
-        tray.setImage(updatedUnreadCount ? trayIconUnread : trayIcon)
-        if (is.macos) {
-          tray.setTitle(updatedUnreadCount ? updatedUnreadCount.toString() : '')
-        }
-      }
+      updateUnreadCount(accountId, unreadCount)
     }
   })
 
@@ -251,131 +206,11 @@ app.on('before-quit', () => {
 
   createWindow()
 
-  Menu.setApplicationMenu(menu)
+  initAppMenu()
 
-  if (config.get(ConfigKey.EnableTrayIcon) && !tray) {
-    const appName = app.name
+  initTray()
 
-    const macosMenuItems: MenuItemConstructorOptions[] = is.macos
-      ? [
-          {
-            label: 'Show Dock Icon',
-            type: 'checkbox',
-            checked: config.get(ConfigKey.ShowDockIcon),
-            click({ checked }: { checked: boolean }) {
-              config.set(ConfigKey.ShowDockIcon, checked)
-
-              if (checked) {
-                app.dock.show()
-              } else {
-                app.dock.hide()
-              }
-
-              const menu = trayContextMenu.getMenuItemById('menu')
-
-              if (menu) {
-                menu.visible = !checked
-              }
-            }
-          },
-          {
-            type: 'separator'
-          },
-          {
-            id: 'menu',
-            label: 'Menu',
-            visible: !config.get(ConfigKey.ShowDockIcon),
-            submenu: Menu.getApplicationMenu()!
-          }
-        ]
-      : []
-
-    const contextMenuTemplate: MenuItemConstructorOptions[] = [
-      {
-        click: () => {
-          mainWindow.show()
-        },
-        label: 'Show',
-        visible: shouldStartMinimized,
-        id: 'show-win'
-      },
-      {
-        label: 'Hide',
-        visible: !shouldStartMinimized,
-        click: () => {
-          mainWindow.hide()
-        },
-        id: 'hide-win'
-      },
-      ...macosMenuItems,
-      {
-        type: 'separator'
-      },
-      {
-        role: 'quit'
-      }
-    ]
-
-    trayContextMenu = Menu.buildFromTemplate(contextMenuTemplate)
-
-    tray = new Tray(trayIcon)
-    tray.setToolTip(appName)
-    tray.setContextMenu(trayContextMenu)
-    tray.on('click', () => {
-      if (mainWindow) {
-        mainWindow.show()
-      }
-    })
-  }
-
-  if (is.macos) {
-    if (!config.get(ConfigKey.ShowDockIcon)) {
-      app.dock.hide()
-    }
-
-    const dockMenu = Menu.buildFromTemplate([
-      {
-        label: 'Compose',
-        click() {
-          mainWindow.show()
-          sendChannelToMainWindow('compose')
-        }
-      },
-      {
-        type: 'separator'
-      },
-      {
-        label: 'Inbox',
-        click() {
-          mainWindow.show()
-          sendChannelToMainWindow('inbox')
-        }
-      },
-      {
-        label: 'Snoozed',
-        click() {
-          mainWindow.show()
-          sendChannelToMainWindow('snoozed')
-        }
-      },
-      {
-        label: 'Sent',
-        click() {
-          mainWindow.show()
-          sendChannelToMainWindow('sent')
-        }
-      },
-      {
-        label: 'All Mail',
-        click() {
-          mainWindow.show()
-          sendChannelToMainWindow('all-mail')
-        }
-      }
-    ])
-
-    app.dock.setMenu(dockMenu)
-  }
+  initDock()
 
   const { webContents } = mainWindow!
 
@@ -396,6 +231,7 @@ app.on('before-quit', () => {
   }
 
   const selectedAccount = config.get(ConfigKey.SelectedAccount)
+
   selectView(mainWindow!, selectedAccount)
 
   if (config.get(ConfigKey.DarkMode) === undefined) {
@@ -411,7 +247,7 @@ app.on('before-quit', () => {
       nativeTheme.themeSource = 'dark'
       config.set(ConfigKey.DarkMode, true)
 
-      const menuItem = menu.getMenuItemById('dark-mode-enabled')
+      const menuItem = getAppMenuItemById('dark-mode-enabled')
       if (menuItem) {
         menuItem.checked = true
       }
@@ -419,7 +255,7 @@ app.on('before-quit', () => {
       nativeTheme.themeSource = 'light'
       config.set(ConfigKey.DarkMode, false)
 
-      const menuItem = menu.getMenuItemById('dark-mode-disabled')
+      const menuItem = getAppMenuItemById('dark-mode-disabled')
       if (menuItem) {
         menuItem.checked = true
       }
@@ -427,7 +263,7 @@ app.on('before-quit', () => {
       nativeTheme.themeSource = 'system'
       config.set(ConfigKey.DarkMode, 'system')
 
-      const menuItem = menu.getMenuItemById('dark-mode-system')
+      const menuItem = getAppMenuItemById('dark-mode-system')
       if (menuItem) {
         menuItem.checked = true
       }

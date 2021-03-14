@@ -70,10 +70,18 @@ async function openExternalUrl(url: string): Promise<void> {
   shell.openExternal(cleanURL)
 }
 
-export function getAccountId(viewId: number) {
+export function getViewAccountId(viewId: number) {
   return Object.entries(views).find(
     ([_accountId, view]) => view.webContents.id === viewId
   )?.[0]
+}
+
+export function sendToSelectedView(channel: string, ...args: unknown[]) {
+  const selectedAccount = config.get(ConfigKey.SelectedAccount)
+  const selectedView = getView(selectedAccount)
+  if (selectedView) {
+    selectedView.webContents.send(channel, ...args)
+  }
 }
 
 export function sendToViews(channel: string, ...args: unknown[]) {
@@ -123,6 +131,8 @@ export function createView(mainWindow: BrowserWindow, accountId: string) {
   })
 
   view.webContents.loadURL('https://mail.google.com')
+
+  view.webContents.openDevTools()
 
   view.webContents.on('dom-ready', () => {
     addCustomCSS(view)

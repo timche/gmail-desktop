@@ -2,12 +2,6 @@ import * as esbuild from 'esbuild'
 
 const isProd = process.env['NODE_ENV'] === 'production'
 
-function logBuildWarnings(warnings: esbuild.Message[]) {
-  for (const warning of warnings) {
-    console.log(warning)
-  }
-}
-
 function logBuildSuccessful() {
   console.log('Build succeeded')
 }
@@ -27,14 +21,10 @@ esbuild
     },
     watch: !isProd
       ? {
-          onRebuild: (error, result) => {
+          onRebuild: (error) => {
             if (error) {
               logBuildFailure(error)
               return
-            }
-
-            if (result?.warnings) {
-              logBuildWarnings(result.warnings)
             }
 
             logBuildSuccessful()
@@ -42,8 +32,7 @@ esbuild
         }
       : undefined
   })
-  .then(({ warnings, stop }) => {
-    logBuildWarnings(warnings)
+  .then(({ stop }) => {
     logBuildSuccessful()
 
     if (isProd && stop) {

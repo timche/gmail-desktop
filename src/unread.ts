@@ -1,12 +1,21 @@
+import { app } from 'electron'
+import { is } from 'electron-util'
+import { updateTrayUnreadStatus } from './tray'
+
 const unreadCount: { [accountId: string]: number } = {}
 
 export function updateUnreadCount(accountId: string, newCount: number) {
-  const currentCount = unreadCount[accountId]
+  unreadCount[accountId] = newCount
 
-  unreadCount[accountId] =
-    typeof currentCount === 'number' ? currentCount + newCount : newCount
+  const totalUnreadCount = getTotalUnreadCount()
 
-  return getTotalUnreadCount()
+  if (is.macos) {
+    app.dock.setBadge(totalUnreadCount ? totalUnreadCount.toString() : '')
+  }
+
+  updateTrayUnreadStatus(totalUnreadCount)
+
+  return totalUnreadCount
 }
 
 export function getTotalUnreadCount() {

@@ -16,6 +16,8 @@ import { viewLogs } from './logs'
 import { showRestartDialog, setAppMenuBarVisibility } from './utils'
 import { autoFixUserAgent, removeCustomUserAgent } from './user-agent'
 
+let appMenu: Menu
+
 interface AppearanceMenuItem {
   key: ConfigKey
   label: string
@@ -73,7 +75,7 @@ if (is.linux || is.windows) {
   })
 }
 
-const appMenu: MenuItemConstructorOptions[] = [
+const appMenuTemplate: MenuItemConstructorOptions[] = [
   {
     label: app.name,
     submenu: [
@@ -381,7 +383,7 @@ const appMenu: MenuItemConstructorOptions[] = [
 
 // Add the develop menu when running in the development environment
 if (is.development) {
-  appMenu.splice(-1, 0, {
+  appMenuTemplate.splice(-1, 0, {
     label: 'Develop',
     submenu: [
       {
@@ -398,6 +400,12 @@ if (is.development) {
   })
 }
 
-const menu = Menu.buildFromTemplate(appMenu)
+export function getAppMenuItemById(id: string) {
+  return appMenu.getMenuItemById(id)
+}
 
-export default menu
+export function initAppMenu() {
+  appMenu = Menu.buildFromTemplate(appMenuTemplate)
+
+  Menu.setApplicationMenu(appMenu)
+}
