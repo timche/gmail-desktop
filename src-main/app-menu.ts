@@ -11,10 +11,18 @@ import { is } from 'electron-util'
 
 import { checkForUpdates } from './updates'
 import config, { ConfigKey } from './config'
-import { setCustomStyle, USER_CUSTOM_STYLE_PATH } from './custom-styles'
+import {
+  setCustomStyle,
+  USER_CUSTOM_STYLE_PATH
+} from './account-views/custom-styles'
 import { viewLogs } from './logs'
 import { showRestartDialog, setAppMenuBarVisibility } from './utils'
 import { autoFixUserAgent, removeCustomUserAgent } from './user-agent'
+import { getSelectedAccount } from './accounts'
+import { sendToMainWindow } from './main-window'
+import { hideAccountViews } from './account-views'
+
+let appMenu: Menu
 
 interface AppearanceMenuItem {
   key: ConfigKey
@@ -73,7 +81,7 @@ if (is.linux || is.windows) {
   })
 }
 
-const appMenu: MenuItemConstructorOptions[] = [
+const appMenuTemplate: MenuItemConstructorOptions[] = [
   {
     label: app.name,
     submenu: [
@@ -112,6 +120,28 @@ const appMenu: MenuItemConstructorOptions[] = [
         accelerator: 'CommandOrControl+Q',
         click() {
           app.quit()
+        }
+      }
+    ]
+  },
+  {
+    label: 'Accounts',
+    submenu: [
+      {
+        label: 'Add Account',
+        click() {
+          sendToMainWindow('add-account-request')
+          hideAccountViews()
+        }
+      },
+      {
+        label: 'Edit Account',
+        click() {
+          const selectedAccount = getSelectedAccount()
+          if (selectedAccount) {
+            sendToMainWindow('edit-account-request', selectedAccount)
+            hideAccountViews()
+          }
         }
       }
     ]
@@ -370,7 +400,6 @@ const appMenu: MenuItemConstructorOptions[] = [
       },
       {
         label: 'View Logs',
-        visible: config.get(ConfigKey.DebugMode),
         click() {
           viewLogs()
         }
@@ -381,7 +410,7 @@ const appMenu: MenuItemConstructorOptions[] = [
 
 // Add the develop menu when running in the development environment
 if (is.development) {
-  appMenu.splice(-1, 0, {
+  appMenuTemplate.splice(-1, 0, {
     label: 'Develop',
     submenu: [
       {
@@ -398,6 +427,12 @@ if (is.development) {
   })
 }
 
-const menu = Menu.buildFromTemplate(appMenu)
+export function getAppMenuItemById(id: string) {
+  return appMenu.getMenuItemById(id)
+}
 
-export default menu
+export function initAppMenu() {
+  appMenu = Menu.buildFromTemplate(appMenuTemplate)
+
+  Menu.setApplicationMenu(appMenu)
+}

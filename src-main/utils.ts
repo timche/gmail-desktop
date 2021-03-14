@@ -1,9 +1,6 @@
 import { app, BrowserWindow, dialog } from 'electron'
 import config, { ConfigKey } from './config'
-
-export function getMainWindow(): BrowserWindow | undefined {
-  return BrowserWindow.getAllWindows()[0]
-}
+import { getMainWindow } from './main-window'
 
 export function setAppMenuBarVisibility(showTip?: boolean): void {
   const mainWindow = getMainWindow()
