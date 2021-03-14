@@ -1,7 +1,7 @@
 import { extendTheme } from '@chakra-ui/react'
 
 const theme = extendTheme({
-  // @ts-ignore
+  // @ts-expect-error
   styles: {
     global: (props) => ({
       body: {

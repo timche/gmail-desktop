@@ -2,7 +2,7 @@ import { app, ipcMain as ipc } from 'electron'
 import { is } from 'electron-util'
 import { updateTrayUnreadStatus } from './tray'
 import { sendChannelToAllWindows } from './utils'
-import { getViewAccountId } from './views'
+import { getViewAccountId } from './account-views'
 
 const unreadCounts: Record<string, number> = {}
 

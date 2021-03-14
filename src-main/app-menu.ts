@@ -11,16 +11,20 @@ import { is } from 'electron-util'
 
 import { checkForUpdates } from './updates'
 import config, { ConfigKey } from './config'
-import { setCustomStyle, USER_CUSTOM_STYLE_PATH } from './views/custom-styles'
+import {
+  setCustomStyle,
+  USER_CUSTOM_STYLE_PATH
+} from './account-views/custom-styles'
 import { viewLogs } from './logs'
 import {
   showRestartDialog,
   setAppMenuBarVisibility,
-  getMainWindow
+  sendChannelToMainWindow
 } from './utils'
 import { autoFixUserAgent, removeCustomUserAgent } from './user-agent'
-import { createView, offsetViews, selectView } from './views'
-import { nanoid } from 'nanoid'
+import { getSelectedAccount } from './accounts'
+// Import { createView, offsetViews, selectView } from './views'
+// import { nanoid } from 'nanoid'
 
 let appMenu: Menu
 
@@ -130,68 +134,17 @@ const appMenuTemplate: MenuItemConstructorOptions[] = [
       {
         label: 'Add Account',
         click() {
-          let accounts = config.get(ConfigKey.Accounts)
-          const account = {
-            id: nanoid()
-          }
-          config.set(ConfigKey.Accounts, [...accounts, account])
-          accounts = config.get(ConfigKey.Accounts)
-          config.set(ConfigKey.SelectedAccount, account.id)
-          const mainWindow = getMainWindow()
-          if (mainWindow) {
-            mainWindow.webContents.send('accounts', accounts)
-            mainWindow.webContents.send('account-selected', account.id)
-            createView(mainWindow, account.id, accounts.length > 1)
-            selectView(mainWindow, account.id)
-            offsetViews(accounts.length > 1)
-          }
+          sendChannelToMainWindow('add-account-request')
         }
       },
       {
-        label: 'Rename Selected Account',
+        label: 'Edit Account',
         click() {
-          const mainWindow = getMainWindow()
-
-          if (mainWindow) {
-            mainWindow.focus()
-            mainWindow.webContents.send('rename-account')
+          const selectedAccount = getSelectedAccount()
+          if (selectedAccount) {
+            sendChannelToMainWindow('edit-account-request', selectedAccount)
           }
         }
-      },
-      {
-        label: 'Remove Selected Account',
-        click() {
-          const selectedAccount = config.get(ConfigKey.SelectedAccount)
-          const mainWindow = getMainWindow()
-
-          if (selectedAccount === 'default') {
-            dialog.showMessageBox(mainWindow!, {
-              message: "The default account can't be removed."
-            })
-            return
-          }
-
-          let accounts = config.get(ConfigKey.Accounts)
-
-          config.set(
-            ConfigKey.Accounts,
-            accounts.filter((account) => account.id !== selectedAccount)
-          )
-
-          accounts = config.get(ConfigKey.Accounts)
-
-          config.set(ConfigKey.SelectedAccount, accounts[0]?.id)
-
-          if (mainWindow) {
-            mainWindow.webContents.send('accounts', accounts)
-            mainWindow.webContents.send('account-selected', accounts[0]?.id)
-            selectView(mainWindow, accounts[0]!.id)
-            offsetViews(accounts.length > 1)
-          }
-        }
-      },
-      {
-        type: 'separator'
       }
     ]
   },

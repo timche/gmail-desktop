@@ -1,6 +1,6 @@
 import * as esbuild from 'esbuild'
 
-const isProd = process.env['NODE_ENV'] === 'production'
+const isProd = process.env.NODE_ENV === 'production'
 
 function logBuildSuccessful() {
   console.log('Build succeeded')
@@ -12,15 +12,16 @@ function logBuildFailure(error: esbuild.BuildFailure) {
 
 esbuild
   .build({
-    entryPoints: ['./renderer/index.tsx'],
+    entryPoints: ['./src-renderer/index.tsx'],
     bundle: true,
     sourcemap: !isProd,
     outfile: './dist-renderer/index.js',
     define: {
       'process.env.NODE_ENV': isProd ? '"production"' : '"development"'
     },
-    watch: !isProd
-      ? {
+    watch: isProd
+      ? undefined
+      : {
           onRebuild: (error) => {
             if (error) {
               logBuildFailure(error)
@@ -30,7 +31,6 @@ esbuild
             logBuildSuccessful()
           }
         }
-      : undefined
   })
   .then(({ stop }) => {
     logBuildSuccessful()
@@ -41,5 +41,5 @@ esbuild
   })
   .catch((error: esbuild.BuildFailure) => {
     logBuildFailure(error)
-    process.exit(1)
+    throw error
   })

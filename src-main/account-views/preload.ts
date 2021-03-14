@@ -7,7 +7,7 @@ import initDarkMode from './dark-mode'
 import elementReady = require('element-ready')
 
 const INTERVAL = 1000
-let count: number = 0
+let count = 0
 
 initDarkMode()
 

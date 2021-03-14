@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { useColorMode, Box } from '@chakra-ui/react'
-import { tabsHeight } from '../constants'
+import { accountTabsHeight } from '../constants'
 
 function TrafficLightsSpace() {
   const { colorMode } = useColorMode()
@@ -8,7 +8,7 @@ function TrafficLightsSpace() {
   return (
     <Box
       width="80px"
-      height={tabsHeight}
+      height={accountTabsHeight}
       borderBottomWidth="1px"
       borderBottomColor={colorMode === 'light' ? 'gray.200' : 'whiteAlpha.300'}
     />

@@ -1,6 +1,6 @@
 {
   "extends": "@sindresorhus/tsconfig",
-  "include": ["src/**/*"],
+  "include": ["src-main/**/*"],
   "compilerOptions": {
     "outDir": "dist-main",
     "target": "es2018",

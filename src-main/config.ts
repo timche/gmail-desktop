@@ -14,9 +14,10 @@ interface LastWindowState {
   maximized: boolean
 }
 
-interface Account {
+export interface Account {
   id: string
-  label?: string
+  label: string
+  selected: boolean
 }
 
 export enum ConfigKey {
@@ -40,8 +41,7 @@ export enum ConfigKey {
   DownloadsLocation = 'downloadsLocation',
   DarkMode = 'darkMode',
   ResetConfig = 'resetConfig',
-  Accounts = 'accounts',
-  SelectedAccount = 'selectedAccount'
+  Accounts = 'accounts'
 }
 
 type TypedStore = {
@@ -66,7 +66,6 @@ type TypedStore = {
   [ConfigKey.DarkMode]?: 'system' | boolean
   [ConfigKey.ResetConfig]: boolean
   [ConfigKey.Accounts]: Account[]
-  [ConfigKey.SelectedAccount]: string
 }
 
 const defaults: TypedStore = {
@@ -100,10 +99,11 @@ const defaults: TypedStore = {
   [ConfigKey.ResetConfig]: false,
   [ConfigKey.Accounts]: [
     {
-      id: 'default'
+      id: 'default',
+      label: 'Default',
+      selected: true
     }
-  ],
-  [ConfigKey.SelectedAccount]: 'default'
+  ]
 }
 
 const config = new Store<TypedStore>({

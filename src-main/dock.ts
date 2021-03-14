@@ -2,7 +2,7 @@ import { app, Menu } from 'electron'
 import { is } from 'electron-util'
 import config, { ConfigKey } from './config'
 import { getMainWindow } from './utils'
-import { sendToSelectedView } from './views'
+import { sendToSelectedView } from './account-views'
 
 export function initDock() {
   const mainWindow = getMainWindow()

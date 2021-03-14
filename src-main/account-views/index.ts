@@ -9,7 +9,8 @@ import {
 import { autoFixUserAgent, removeCustomUserAgent } from '../user-agent'
 import { platform } from '../helpers'
 import { cleanURLFromGoogle, sendChannelToAllWindows } from '../utils'
-import { getMainWindow } from '../app'
+import { getMainWindow } from '../main-window'
+import { getSelectedAccount, selectAccount } from '../accounts'
 
 const TABS_HEIGHT = 40
 
@@ -81,10 +82,12 @@ export function getViewAccountId(viewId: number) {
 }
 
 export function sendToSelectedView(channel: string, ...args: unknown[]) {
-  const selectedAccount = config.get(ConfigKey.SelectedAccount)
-  const selectedView = getView(selectedAccount)
-  if (selectedView) {
-    selectedView.webContents.send(channel, ...args)
+  const selectedAccount = getSelectedAccount()
+  if (selectedAccount) {
+    const selectedView = getView(selectedAccount.id)
+    if (selectedView) {
+      selectedView.webContents.send(channel, ...args)
+    }
   }
 }
 
@@ -99,7 +102,7 @@ export function selectView(mainWindow: BrowserWindow, accountId: string) {
 
   if (view) {
     mainWindow.setTopBrowserView(view)
-    config.set(ConfigKey.SelectedAccount, accountId)
+    selectAccount(accountId)
   }
 }
 
@@ -228,7 +231,7 @@ export function createView(
     if (url.startsWith('https://mail.google.com')) {
       mainWindow.setTopBrowserView(view)
       sendChannelToAllWindows('account-selected', accountId)
-      config.set(ConfigKey.SelectedAccount, accountId)
+      // Config.set(ConfigKey.SelectedAccount, accountId)
 
       // // Center the new window on the screen
       event.newGuest = new BrowserWindow({
