@@ -116,17 +116,18 @@ ipc.on('compose', () => {
 })
 
 ipc.on('inbox', () => {
-  clickElement('#\\:3d')
+  clickElement('#\\:30')
 })
 
 ipc.on('snoozed', () => {
-  clickElement('#\\:3f')
+  clickElement('#\\:32')
 })
 
 ipc.on('sent', () => {
-  clickElement('#\\:3i')
+  clickElement('#\\:35')
 })
 
 ipc.on('all-mail', () => {
-  clickElement('#\\:3l')
+  console.log('hello')
+  clickElement('#\\:38')
 })
