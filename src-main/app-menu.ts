@@ -11,10 +11,16 @@ import { is } from 'electron-util'
 
 import { checkForUpdates, changeReleaseChannel } from './updates'
 import config, { ConfigKey } from './config'
-import { setCustomStyle, USER_CUSTOM_STYLE_PATH } from './custom-styles'
+import {
+  setCustomStyle,
+  USER_CUSTOM_STYLE_PATH
+} from './account-views/custom-styles'
 import { viewLogs } from './logs'
 import { showRestartDialog, setAppMenuBarVisibility } from './utils'
 import { autoFixUserAgent, removeCustomUserAgent } from './user-agent'
+import { getSelectedAccount } from './accounts'
+import { sendToMainWindow } from './main-window'
+import { hideAccountViews } from './account-views'
 
 interface AppearanceMenuItem {
   key: ConfigKey
@@ -23,7 +29,7 @@ interface AppearanceMenuItem {
   setMenuBarVisibility?: boolean
 }
 
-export function initOrUpdateMenu() {
+export function initOrUpdateAppMenu() {
   const appearanceMenuItems: AppearanceMenuItem[] = [
     {
       key: ConfigKey.CompactHeader,
@@ -113,6 +119,28 @@ export function initOrUpdateMenu() {
           accelerator: 'CommandOrControl+Q',
           click() {
             app.quit()
+          }
+        }
+      ]
+    },
+    {
+      label: 'Accounts',
+      submenu: [
+        {
+          label: 'Add Account',
+          click() {
+            sendToMainWindow('add-account-request')
+            hideAccountViews()
+          }
+        },
+        {
+          label: 'Edit Account',
+          click() {
+            const selectedAccount = getSelectedAccount()
+            if (selectedAccount) {
+              sendToMainWindow('edit-account-request', selectedAccount)
+              hideAccountViews()
+            }
           }
         }
       ]

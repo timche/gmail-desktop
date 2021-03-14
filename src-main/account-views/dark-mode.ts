@@ -1,4 +1,4 @@
-import { ipcRenderer as ipc } from 'electron'
+import { ipcRenderer } from 'electron'
 import * as DarkReader from 'darkreader'
 
 DarkReader.setFetchMethod(window.fetch)
@@ -60,7 +60,7 @@ function enableDarkMode(): void {
 }
 
 async function initDarkMode(): Promise<void> {
-  const darkMode = await ipc.invoke('dark-mode')
+  const darkMode = await ipcRenderer.invoke('get-dark-mode')
 
   if (darkMode) {
     window.addEventListener('DOMContentLoaded', () => {
@@ -68,7 +68,7 @@ async function initDarkMode(): Promise<void> {
     })
   }
 
-  ipc.on('dark-mode:updated', (_event, enabled: boolean) => {
+  ipcRenderer.on('dark-mode-updated', (_event, enabled: boolean) => {
     if (enabled) {
       enableDarkMode()
     } else {
