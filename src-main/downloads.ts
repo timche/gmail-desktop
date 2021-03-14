@@ -24,7 +24,7 @@ function onDownloadComplete(filename: string, state: State): void {
   )
 }
 
-export function init(): void {
+export function initDownloads(): void {
   const openFolderWhenDone = config.get(ConfigKey.DownloadsOpenFolderWhenDone)
   const handleStarted = (item: Electron.DownloadItem) => {
     item.once('done', (_, state) => {
