@@ -1,8 +1,9 @@
-import { app } from 'electron'
+import { app, BrowserView } from 'electron'
 import * as path from 'path'
 
-import config, { ConfigKey } from './config'
-import { sendChannelToMainWindow, getMainWindow } from './utils'
+import config, { ConfigKey } from '../config'
+import { getMainWindow } from '../main-window'
+import { sendToAccountViews } from '.'
 
 export const USER_CUSTOM_STYLE_PATH = path.join(
   app.getPath('userData'),
@@ -10,24 +11,24 @@ export const USER_CUSTOM_STYLE_PATH = path.join(
 )
 
 export function setCustomStyle(key: ConfigKey, enabled: boolean): void {
-  sendChannelToMainWindow('set-custom-style', key, enabled)
+  sendToAccountViews('set-custom-style', key, enabled)
 }
 
-function initFullScreenStyles(): void {
+function initFullScreenStyles(view: BrowserView): void {
   const mainWindow = getMainWindow()
 
   if (mainWindow) {
     mainWindow.on('enter-full-screen', () => {
-      sendChannelToMainWindow('set-full-screen', true)
+      view.webContents.send('set-full-screen', true)
     })
 
     mainWindow.on('leave-full-screen', () => {
-      sendChannelToMainWindow('set-full-screen', false)
+      view.webContents.send('set-full-screen', false)
     })
   }
 }
 
-export function init(): void {
+export function init(view: BrowserView): void {
   for (const key of [
     ConfigKey.CompactHeader,
     ConfigKey.HideFooter,
@@ -35,5 +36,5 @@ export function init(): void {
   ])
     setCustomStyle(key, config.get(key) as boolean)
 
-  initFullScreenStyles()
+  initFullScreenStyles(view)
 }

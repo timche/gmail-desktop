@@ -12,7 +12,7 @@
 }
 
 /* Header: Burger Menu */
-.compactHeader .gb_Xc {
+.compactHeader.burgerMenu .gb_Xc {
   min-width: auto !important;
   margin-left: 70px !important;
   padding-right: 120px !important;

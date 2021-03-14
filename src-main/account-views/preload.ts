@@ -1,13 +1,13 @@
 import { ipcRenderer as ipc } from 'electron'
 import log from 'electron-log'
 
-import { ConfigKey } from './config'
+import { ConfigKey } from '../config'
 import initDarkMode from './dark-mode'
 
 import elementReady = require('element-ready')
 
 const INTERVAL = 1000
-let count: number
+let count = 0
 
 initDarkMode()
 
@@ -129,4 +129,8 @@ ipc.on('sent', () => {
 
 ipc.on('all-mail', () => {
   clickElement('#\\:3l')
+})
+
+ipc.on('burger-menu-offset', (_event, offset: boolean) => {
+  document.body.classList[offset ? 'add' : 'remove']('burgerMenu')
 })

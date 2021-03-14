@@ -13,6 +13,5 @@ yarn-error.log
 !.vscode/launch.json
 
 # Build and distribution files
-dist/
-dist-js/
+dist*/
 *.tgz
