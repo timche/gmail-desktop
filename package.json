@@ -42,6 +42,7 @@
     "element-ready": "^5.0.0",
     "framer-motion": "^3.10.3",
     "is-online": "^9.0.0",
+    "nanoid": "^3.1.21",
     "p-wait-for": "^3.2.0"
   },
   "devDependencies": {

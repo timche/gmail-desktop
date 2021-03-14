@@ -4,7 +4,7 @@ import config, { ConfigKey } from './config'
 import electronDebug = require('electron-debug')
 
 const OPTIONS = {
-  showDevTools: false,
+  showDevTools: true,
   isEnabled: is.development || config.get(ConfigKey.DebugMode)
 }
 

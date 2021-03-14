@@ -9,6 +9,7 @@ import {
 import { autoFixUserAgent, removeCustomUserAgent } from '../user-agent'
 import { platform } from '../helpers'
 import { cleanURLFromGoogle, sendChannelToAllWindows } from '../utils'
+import { getMainWindow } from '../app'
 
 const TABS_HEIGHT = 40
 
@@ -16,6 +17,10 @@ const views: Record<string, BrowserView> = {}
 
 export function getView(accountId: string) {
   return views[accountId]
+}
+
+export function getViews() {
+  return Object.values(views)
 }
 
 function addCustomCSS(view: BrowserView): void {
@@ -32,6 +37,7 @@ function addCustomCSS(view: BrowserView): void {
 
   const platformCSSFile = path.join(
     __dirname,
+    '..',
     '..',
     'css',
     `style.${platform}.css`
@@ -93,10 +99,30 @@ export function selectView(mainWindow: BrowserWindow, accountId: string) {
 
   if (view) {
     mainWindow.setTopBrowserView(view)
+    config.set(ConfigKey.SelectedAccount, accountId)
   }
 }
 
-export function createView(mainWindow: BrowserWindow, accountId: string) {
+export function offsetViews(withOffset: boolean) {
+  const views = getViews()
+  const mainWindow = getMainWindow()
+  const { width, height } = mainWindow.getBounds()
+
+  for (const view of views) {
+    view.setBounds({
+      x: 0,
+      y: withOffset ? TABS_HEIGHT : 0,
+      width,
+      height: withOffset ? height - TABS_HEIGHT : height
+    })
+  }
+}
+
+export function createView(
+  mainWindow: BrowserWindow,
+  accountId: string,
+  withOffset: boolean
+) {
   const view = new BrowserView({
     webPreferences: {
       partition: accountId === 'default' ? undefined : `persist:${accountId}`,
@@ -113,9 +139,9 @@ export function createView(mainWindow: BrowserWindow, accountId: string) {
 
   view.setBounds({
     x: 0,
-    y: TABS_HEIGHT,
+    y: withOffset ? TABS_HEIGHT : 0,
     width,
-    height: height - TABS_HEIGHT
+    height: withOffset ? height - TABS_HEIGHT : height
   })
 
   mainWindow.on('resize', () => {

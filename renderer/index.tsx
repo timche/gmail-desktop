@@ -1,7 +1,15 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 import { ChakraProvider } from '@chakra-ui/react'
-import { useColorMode, Flex, Tabs, TabList, Tab, Badge } from '@chakra-ui/react'
+import {
+  useColorMode,
+  Flex,
+  Tabs,
+  TabList,
+  Tab,
+  Input,
+  Badge
+} from '@chakra-ui/react'
 import theme from './theme'
 import { tabsHeight } from './constants'
 import TrafficLightsSpace from './components/TrafficLightsSpace'
@@ -12,6 +20,8 @@ function App() {
     Record<string, number>
   >({})
   const [selectedTab, setSelectedTab] = React.useState()
+  const [isRenamingAccount, setIsRenamingAccount] = React.useState(false)
+  const [newAccountLabel, setNewAccountLabel] = React.useState('')
   const { setColorMode } = useColorMode()
 
   React.useEffect(() => {
@@ -31,7 +41,16 @@ function App() {
         setSelectedTab(accountId)
       })
 
-      setTabs(await window.ipc.invoke('accounts'))
+      window.ipc.on('accounts', (accounts: string) => {
+        setTabs(accounts)
+      })
+
+      window.ipc.on('rename-account', () => {
+        setIsRenamingAccount(true)
+      })
+
+      window.ipc.send('accounts')
+
       setSelectedTab(await window.ipc.invoke('selected-account'))
       setColorMode((await window.ipc.invoke('dark-mode')) ? 'dark' : 'light')
     }
@@ -59,18 +78,35 @@ function App() {
         index={tabs.findIndex((tab) => tab.id === selectedTab)}
       >
         <TabList height={tabsHeight} borderBottomWidth="1px">
-          {tabs.map(({ id, label }) => {
+          {tabs.map(({ id, label = '' }) => {
             const unreadCount = unreadCounts[id]
             return (
               <Tab
-                key={`${id}_${unreadCount}`}
+                key={`${id}_${unreadCount}_${isRenamingAccount.toString()}`}
                 _focus={{ outline: 'none' }}
                 onClick={() => {
                   window.ipc.invoke('account-selected', id)
                   setSelectedTab(id)
                 }}
               >
-                {label}
+                {isRenamingAccount && selectedTab === id ? (
+                  <Input
+                    autoFocus
+                    value={newAccountLabel || label}
+                    onChange={(event) => {
+                      setNewAccountLabel(event.target.value)
+                    }}
+                    onBlur={(event) => {
+                      window.ipc.send(
+                        'rename-selected-account',
+                        event.target.value
+                      )
+                      setIsRenamingAccount(false)
+                    }}
+                  />
+                ) : (
+                  label
+                )}
                 {unreadCount > 0 && <Badge ml={1}>{unreadCount}</Badge>}
               </Tab>
             )

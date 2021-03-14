@@ -16,7 +16,7 @@ import { getAppMenuItemById, initAppMenu } from './app-menu'
 import {
   setAppMenuBarVisibility,
   sendChannelToAllWindows,
-  getMainWindow
+  sendChannelToMainWindow
 } from './utils'
 import ensureOnline from './ensure-online'
 import { createView, getView, selectView, sendToViews } from './views'
@@ -64,6 +64,10 @@ switch (config.get(ConfigKey.DarkMode)) {
     break
   default:
     nativeTheme.themeSource = 'light'
+}
+
+export function getMainWindow() {
+  return mainWindow
 }
 
 function createWindow(): void {
@@ -222,8 +226,21 @@ app.on('before-quit', () => {
   const accounts = config.get(ConfigKey.Accounts)
   const selectedAccount = config.get(ConfigKey.SelectedAccount)
 
-  ipc.handle('accounts', () => {
-    return accounts
+  ipc.on('accounts', () => {
+    webContents.send('accounts', accounts)
+  })
+
+  ipc.on('rename-selected-account', (_event, newLabel: string) => {
+    const selectedAccount = config.get(ConfigKey.SelectedAccount)
+    const accounts = config
+      .get(ConfigKey.Accounts)
+      .map((account) =>
+        account.id === selectedAccount
+          ? { ...account, label: newLabel }
+          : account
+      )
+    config.set(ConfigKey.Accounts, accounts)
+    sendChannelToMainWindow('accounts', accounts)
   })
 
   ipc.handle('selected-account', () => {
@@ -231,7 +248,7 @@ app.on('before-quit', () => {
   })
 
   for (const { id } of accounts) {
-    createView(mainWindow!, id)
+    createView(mainWindow!, id, accounts.length > 1)
   }
 
   selectView(mainWindow!, selectedAccount)
