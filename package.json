@@ -100,7 +100,7 @@
     "appId": "io.cheung.gmail-desktop",
     "mac": {
       "category": "public.app-category.productivity",
-      "darkModeSupport": false
+      "darkModeSupport": true
     },
     "linux": {
       "target": [
