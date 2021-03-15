@@ -104,7 +104,7 @@ Gmail Desktop offers to attempt to automatically fix the user agent when the iss
   <img src="media/sign-in-fix-dialog.png" width="535">
 </div>
 
-Clicking on `Yes` will set a [custom user agent (based on Firefox)](https://github.com/timche/gmail-desktop/blob/master/src/user-agents.json) in the app config and Gmail Desktop will be restarted.
+Clicking on `Yes` will set a [custom user agent (based on Firefox)](https://github.com/timche/gmail-desktop/blob/main/src/user-agents.json) in the app config and Gmail Desktop will be restarted.
 
 In case the custom user agent isn't working anymore, you'll be offered to let Gmail Desktop to attempt to fix it again or trigger it manually at `Settings` → `Advanced` → `User Agent` → `Attempt User Agent Fix`.
 
