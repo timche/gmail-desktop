@@ -41,6 +41,7 @@
     "@sindresorhus/tsconfig": "^0.9.0",
     "electron": "^12.0.0",
     "electron-builder": "^22.10.5",
+    "electron-notarize": "^1.0.0",
     "husky": "^5.1.3",
     "lint-staged": "^10.5.4",
     "npm-run-all": "^4.1.5",
@@ -97,9 +98,11 @@
       "!scripts${/*}"
     ],
     "appId": "io.cheung.gmail-desktop",
+    "afterSign": "scripts/build-hook-after-sign.js",
     "mac": {
       "category": "public.app-category.productivity",
-      "darkModeSupport": true
+      "darkModeSupport": true,
+      "hardenedRuntime": true
     },
     "linux": {
       "target": [
