@@ -1,15 +1,16 @@
 name: Release
-
 on:
   release:
     types:
       - prereleased
       - released
-
 jobs:
   release:
     runs-on: macos-latest
     steps:
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 14
       - uses: actions/checkout@v2
       - run: HOMEBREW_NO_AUTO_UPDATE=1 brew install rpm
       - run: yarn --frozen-lockfile
