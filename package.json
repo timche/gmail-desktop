@@ -16,7 +16,7 @@
     "lint": "run-p lint:*",
     "lint:ts": "xo",
     "lint:css": "stylelint 'css/*.css'",
-    "update-user-agents": "scripts/update-user-agents.js",
+    "update-user-agents": "node scripts/update-user-agents.js",
     "start": "tsc && electron .",
     "build:macos": "electron-builder --macos --universal --publish never",
     "build:linux": "electron-builder --linux --publish never",
