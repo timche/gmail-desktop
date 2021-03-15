@@ -20,13 +20,13 @@ jobs:
       - run: yarn build
       - uses: actions/upload-artifact@v2
         with:
-          name: gmail-desktop-macos
+          name: ${{ github.event.repository.name }}-macos
           path: dist/*-mac.*
       - uses: actions/upload-artifact@v2
         with:
-          name: gmail-desktop-linux
+          name: ${{ github.event.repository.name }}-linux
           path: dist/*-linux.*
       - uses: actions/upload-artifact@v2
         with:
-          name: gmail-desktop-windows
+          name: ${{ github.event.repository.name }}-windows
           path: dist/*-win.*
