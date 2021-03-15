@@ -1,8 +1,8 @@
-import * as path from 'path'
-import got from 'got'
-import writeJsonFile = require('write-json-file')
+const path = require('path')
+const got = require('got')
+const writeJsonFile = require('write-json-file')
 
-async function main() {
+async function updateUserAgents() {
   let latestFirefoxUserAgents
 
   try {
@@ -25,7 +25,7 @@ async function main() {
   }
 
   await writeJsonFile(
-    path.resolve(__dirname, '..', 'src', 'user-agents.json'),
+    path.resolve(__dirname, '..', 'src-main', 'user-agents.json'),
     {
       windows: match[0],
       macos: match[1],
@@ -36,4 +36,4 @@ async function main() {
   console.log('Updated User Agents')
 }
 
-main()
+updateUserAgents()

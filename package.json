@@ -16,7 +16,7 @@
     "lint": "run-p lint:*",
     "lint:ts": "xo",
     "lint:css": "stylelint 'css/*.css'",
-    "update-user-agents": "ts-node scripts/update-user-agents.ts",
+    "update-user-agents": "node scripts/update-user-agents.js",
     "dev:main": "tsc && electron .",
     "dev:renderer": "node scripts/compile-renderer.js",
     "compile:main": "tsc",
