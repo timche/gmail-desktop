@@ -16,7 +16,7 @@
     "lint": "run-p lint:*",
     "lint:ts": "xo",
     "lint:css": "stylelint 'css/*.css'",
-    "update-user-agents": "ts-node scripts/update-user-agents.ts",
+    "update-user-agents": "scripts/update-user-agents.js",
     "start": "tsc && electron .",
     "build:macos": "electron-builder --macos --universal --publish never",
     "build:linux": "electron-builder --linux --publish never",
@@ -48,7 +48,6 @@
     "stylelint": "^13.11.0",
     "stylelint-config-prettier": "^8.0.2",
     "stylelint-config-xo": "^0.20.0",
-    "ts-node": "^9.1.1",
     "typescript": "^4.2.3",
     "write-json-file": "^4.3.0",
     "xo": "^0.38.2"

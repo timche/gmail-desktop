@@ -1,6 +1,6 @@
-import * as path from 'path'
-import got from 'got'
-import writeJsonFile = require('write-json-file')
+const path = require('path')
+const got = require('got')
+const writeJsonFile = require('write-json-file')
 
 async function main() {
   let latestFirefoxUserAgents
