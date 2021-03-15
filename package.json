@@ -12,7 +12,7 @@
     "prepare": "husky install",
     "postinstall": "electron-builder install-app-deps",
     "prettier": "prettier --write",
-    "prettify": "yarn prettier -- 'src/**/*.ts'",
+    "prettify": "yarn prettier -- 'src/**/*.{ts,js}'",
     "lint": "run-p lint:*",
     "lint:ts": "xo",
     "lint:css": "stylelint 'css/*.css'",
@@ -53,7 +53,7 @@
     "xo": "^0.38.2"
   },
   "lint-staged": {
-    "*.ts": [
+    "*.{ts,js}": [
       "prettier --write",
       "xo --fix"
     ],
