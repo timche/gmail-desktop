@@ -3,7 +3,7 @@ import { init as initAutoUpdates } from './updates'
 import config, { ConfigKey } from './config'
 import { init as initDebug } from './debug'
 import { init as initDownloads } from './downloads'
-import { initAppMenu } from './app-menu'
+import { initOrUpdateAppMenu } from './app-menu'
 import ensureOnline from './ensure-online'
 import electronContextMenu = require('electron-context-menu')
 import { handleUnreadCount } from './unread-counts'
@@ -90,7 +90,7 @@ app.on('before-quit', () => {
 
   initDarkMode()
   handleUnreadCount()
-  initAppMenu()
+  initOrUpdateAppMenu()
   initTray()
   initDock()
   createMainWindow()

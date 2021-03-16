@@ -6,8 +6,15 @@ import { is } from 'electron-util'
 import config, { ConfigKey } from './config'
 import { viewLogs } from './logs'
 import { createNotification } from './notifications'
+import { initOrUpdateAppMenu } from './app-menu'
 
 const UPDATE_CHECK_INTERVAL = 60000 * 60 * 3 // 3 Hours
+
+export function changeReleaseChannel(channel: 'stable' | 'dev') {
+  autoUpdater.allowPrerelease = channel === 'dev'
+  autoUpdater.checkForUpdates()
+  config.set(ConfigKey.ReleaseChannel, channel)
+}
 
 function onUpdateAvailable(): void {
   createNotification(
@@ -21,24 +28,30 @@ function onUpdateAvailable(): void {
 }
 
 export function init(): void {
-  if (is.development) {
-    return
-  }
+  if (!is.development) {
+    log.transports.file.level = 'info'
+    autoUpdater.logger = log
 
-  log.transports.file.level = 'info'
-  autoUpdater.logger = log
+    if (
+      autoUpdater.allowPrerelease &&
+      config.get(ConfigKey.ReleaseChannel) === 'stable'
+    ) {
+      config.set(ConfigKey.ReleaseChannel, 'dev')
+      initOrUpdateAppMenu()
+    } else if (
+      !autoUpdater.allowPrerelease &&
+      config.get(ConfigKey.ReleaseChannel) === 'dev'
+    ) {
+      autoUpdater.allowPrerelease = true
+      initOrUpdateAppMenu()
+    }
 
-  const releaseChannel = config.get(ConfigKey.ReleaseChannel)
+    autoUpdater.on('update-downloaded', onUpdateAvailable)
 
-  if (releaseChannel) {
-    autoUpdater.channel = releaseChannel
-  }
-
-  autoUpdater.on('update-downloaded', onUpdateAvailable)
-
-  if (config.get(ConfigKey.AutoUpdate)) {
-    setInterval(() => autoUpdater.checkForUpdates, UPDATE_CHECK_INTERVAL)
-    autoUpdater.checkForUpdates()
+    if (config.get(ConfigKey.AutoUpdate)) {
+      setInterval(() => autoUpdater.checkForUpdates, UPDATE_CHECK_INTERVAL)
+      autoUpdater.checkForUpdates()
+    }
   }
 }
 

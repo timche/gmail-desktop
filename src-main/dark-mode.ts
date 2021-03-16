@@ -1,5 +1,5 @@
 import { nativeTheme, dialog, app, ipcMain } from 'electron'
-import { getAppMenuItemById } from './app-menu'
+import { initOrUpdateAppMenu } from './app-menu'
 import config, { ConfigKey } from './config'
 import { sendChannelToAllWindows } from './utils'
 import { sendToAccountViews } from './account-views'
@@ -40,27 +40,15 @@ export async function initDarkMode() {
     if (response === 0) {
       nativeTheme.themeSource = 'dark'
       config.set(ConfigKey.DarkMode, true)
-
-      const menuItem = getAppMenuItemById('dark-mode-enabled')
-      if (menuItem) {
-        menuItem.checked = true
-      }
+      initOrUpdateAppMenu()
     } else if (response === 1) {
       nativeTheme.themeSource = 'light'
       config.set(ConfigKey.DarkMode, false)
-
-      const menuItem = getAppMenuItemById('dark-mode-disabled')
-      if (menuItem) {
-        menuItem.checked = true
-      }
+      initOrUpdateAppMenu()
     } else if (response === 2) {
       nativeTheme.themeSource = 'system'
       config.set(ConfigKey.DarkMode, 'system')
-
-      const menuItem = getAppMenuItemById('dark-mode-system')
-      if (menuItem) {
-        menuItem.checked = true
-      }
+      initOrUpdateAppMenu()
     }
   }
 }

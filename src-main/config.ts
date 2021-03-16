@@ -41,8 +41,8 @@ export enum ConfigKey {
   DownloadsLocation = 'downloadsLocation',
   DarkMode = 'darkMode',
   ResetConfig = 'resetConfig',
-  Accounts = 'accounts',
-  ReleaseChannel = 'releaseChannel'
+  ReleaseChannel = 'releaseChannel',
+  Accounts = 'accounts'
 }
 
 type TypedStore = {
@@ -66,8 +66,8 @@ type TypedStore = {
   [ConfigKey.DownloadsLocation]: string
   [ConfigKey.DarkMode]?: 'system' | boolean
   [ConfigKey.ResetConfig]: boolean
+  [ConfigKey.ReleaseChannel]: 'stable' | 'dev'
   [ConfigKey.Accounts]: Account[]
-  [ConfigKey.ReleaseChannel]?: 'beta' | 'alpha'
 }
 
 const defaults: TypedStore = {
@@ -99,6 +99,7 @@ const defaults: TypedStore = {
   [ConfigKey.DownloadsOpenFolderWhenDone]: false,
   [ConfigKey.DownloadsLocation]: app.getPath('downloads'),
   [ConfigKey.ResetConfig]: false,
+  [ConfigKey.ReleaseChannel]: 'stable',
   [ConfigKey.Accounts]: [
     {
       id: 'default',
