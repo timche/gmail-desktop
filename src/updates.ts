@@ -12,7 +12,8 @@ const UPDATE_CHECK_INTERVAL = 60000 * 60 * 3 // 3 Hours
 
 export function changeReleaseChannel(channel: 'stable' | 'dev') {
   autoUpdater.allowPrerelease = channel === 'dev'
-  autoUpdater.checkForUpdates()
+  autoUpdater.allowDowngrade = true
+  checkForUpdates()
   config.set(ConfigKey.ReleaseChannel, channel)
 }
 
@@ -43,6 +44,7 @@ export function init(): void {
       config.get(ConfigKey.ReleaseChannel) === 'dev'
     ) {
       autoUpdater.allowPrerelease = true
+      checkForUpdates()
       initOrUpdateMenu()
     }
 
