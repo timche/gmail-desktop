@@ -22,7 +22,7 @@ import {
 import { init as initDebug } from './debug'
 import { init as initDownloads } from './downloads'
 import { platform, getUrlAccountId, createTrayIcon } from './helpers'
-import menu from './menu'
+import { initOrUpdateMenu } from './menu'
 import {
   setAppMenuBarVisibility,
   cleanURLFromGoogle,
@@ -344,7 +344,7 @@ app.on('before-quit', () => {
 
   createWindow()
 
-  Menu.setApplicationMenu(menu)
+  initOrUpdateMenu()
 
   if (config.get(ConfigKey.EnableTrayIcon) && !tray) {
     const appName = app.name
@@ -553,27 +553,15 @@ app.on('before-quit', () => {
     if (response === 0) {
       nativeTheme.themeSource = 'dark'
       config.set(ConfigKey.DarkMode, true)
-
-      const menuItem = menu.getMenuItemById('dark-mode-enabled')
-      if (menuItem) {
-        menuItem.checked = true
-      }
+      initOrUpdateMenu()
     } else if (response === 1) {
       nativeTheme.themeSource = 'light'
       config.set(ConfigKey.DarkMode, false)
-
-      const menuItem = menu.getMenuItemById('dark-mode-disabled')
-      if (menuItem) {
-        menuItem.checked = true
-      }
+      initOrUpdateMenu()
     } else if (response === 2) {
       nativeTheme.themeSource = 'system'
       config.set(ConfigKey.DarkMode, 'system')
-
-      const menuItem = menu.getMenuItemById('dark-mode-system')
-      if (menuItem) {
-        menuItem.checked = true
-      }
+      initOrUpdateMenu()
     }
   }
 })()
