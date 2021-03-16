@@ -1,15 +1,26 @@
 ---
-name: Bug report
+name: Bug Report
 about: Create a report to help us improve
 labels: bug
 ---
 
-<!-- Please search existing issues to avoid creating duplicates. -->
+**Describe the bug**
+A clear and concise description of what the bug is.
 
-- Gmail Desktop Version:
-- OS Version:
+**To Reproduce**
+Steps to reproduce the behavior:
+1. Go to '...'
+2. Click on '....'
+4. See error
 
-Steps to Reproduce:
+**Expected behavior**
+A clear and concise description of what you expected to happen.
 
-1.
-2.
+**Screenshots**
+If applicable, add screenshots to help explain your problem.
+
+**Desktop (please complete the following information):**
+ - OS: macOS, Linux, Windows
+
+**Additional context**
+Add any other context about the problem here.
