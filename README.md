@@ -23,6 +23,8 @@
 
 ## Installation
 
+> **We are currently testing v3.0.0-alpha which includes the long-awaited support for multi-accounts! Read more [here](https://github.com/timche/gmail-desktop/discussions/242).**
+
 _macOS 10.13+, Linux and Windows 8+ are supported (64-bit only)._
 
 #### macOS
