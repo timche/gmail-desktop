@@ -32,6 +32,12 @@ function EditAccount({
 
   const isLabelRequired = label.length === 0
 
+  const editAccount = () => {
+    if (label) {
+      onSave({ id, label })
+    }
+  }
+
   return (
     <Container>
       <Heading mb="2">Edit Account</Heading>
@@ -42,6 +48,11 @@ function EditAccount({
           id="label"
           placeholder="Work, work@example.com, ..."
           value={label}
+          onKeyPress={(event) => {
+            if (event.key === 'Enter') {
+              editAccount()
+            }
+          }}
           onChange={(event) => {
             setAccount({ id, label: event.target.value })
           }}
@@ -71,9 +82,7 @@ function EditAccount({
         <Button
           colorScheme="blue"
           onClick={() => {
-            if (label) {
-              onSave({ id, label })
-            }
+            editAccount()
           }}
           disabled={isLabelRequired}
         >
