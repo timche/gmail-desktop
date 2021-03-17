@@ -1,4 +1,4 @@
-import { app } from 'electron'
+import { app, ipcMain } from 'electron'
 import { is } from 'electron-util'
 
 import Store = require('electron-store')
@@ -144,5 +144,9 @@ if (config.get(ConfigKey.ResetConfig)) {
   config.clear()
   config.set(ConfigKey.ResetConfig, false)
 }
+
+ipcMain.handle('is-compact-header-enabled', () =>
+  config.get(ConfigKey.CompactHeader)
+)
 
 export default config
