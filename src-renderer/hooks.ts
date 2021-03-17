@@ -16,6 +16,17 @@ export function useDarkMode() {
   }, [])
 }
 
+export function useIsCompactHeaderEnabled() {
+  // Compact header is enabled by default in the app config
+  const [isCompactHeaderEnabled, setIsCompactHeaderEnabled] = useState(true)
+
+  useEffect(() => {
+    ipc.invoke('is-compact-header-enabled').then(setIsCompactHeaderEnabled)
+  }, [])
+
+  return { isCompactHeaderEnabled }
+}
+
 export function useAccounts() {
   const [accounts, setAccounts] = useState<Account[]>([])
   const [unreadCounts, setUnreadCounts] = useState<UnreadCounts>({})
