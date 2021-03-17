@@ -8,7 +8,9 @@ import {
   Heading,
   Tag,
   Button,
-  Spacer
+  Spacer,
+  FormControl,
+  FormLabel
 } from '@chakra-ui/react'
 import { Account } from '../types'
 
@@ -34,22 +36,19 @@ function EditAccount({
     <Container>
       <Heading mb="2">Edit Account</Heading>
       <Tag mb="8">ID: {id}</Tag>
-      <Box mb="8">
-        <label>
-          <Text mb="1" fontSize="sm">
-            Label
-          </Text>
-          <Input
-            value={label}
-            onChange={(event) => {
-              setAccount({ id, label: event.target.value })
-            }}
-            placeholder="Work, work@example.com, ..."
-            isInvalid={isLabelRequired}
-            autoFocus
-          />
-        </label>
-      </Box>
+      <FormControl mb="8" isRequired>
+        <FormLabel htmlFor="label">Label</FormLabel>
+        <Input
+          id="label"
+          placeholder="Work, work@example.com, ..."
+          value={label}
+          onChange={(event) => {
+            setAccount({ id, label: event.target.value })
+          }}
+          isInvalid={isLabelRequired}
+          autoFocus
+        />
+      </FormControl>
       <Flex justifyContent="flex-end">
         <Button
           colorScheme="red"

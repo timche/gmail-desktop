@@ -1,13 +1,12 @@
 import * as React from 'react'
 import {
   Container,
-  Text,
   Input,
-  Box,
   Flex,
   Heading,
-  Tag,
-  Button
+  Button,
+  FormControl,
+  FormLabel
 } from '@chakra-ui/react'
 import { Account } from '../types'
 import { nanoid } from 'nanoid'
@@ -25,23 +24,20 @@ function AddAccount({ onAdd, onCancel }: AddAccountProps) {
 
   return (
     <Container>
-      <Heading mb="2">Add Account</Heading>
-      <Box mb="8">
-        <label>
-          <Text mb="1" fontSize="sm">
-            Label
-          </Text>
-          <Input
-            value={label}
-            onChange={(event) => {
-              setAccount({ id, label: event.target.value })
-            }}
-            placeholder="Work, work@example.com, ..."
-            isInvalid={isLabelRequired}
-            autoFocus
-          />
-        </label>
-      </Box>
+      <Heading mb="8">Add Account</Heading>
+      <FormControl mb="8" isRequired>
+        <FormLabel htmlFor="label">Label</FormLabel>
+        <Input
+          id="label"
+          placeholder="Work, me@work.com, ..."
+          value={label}
+          onChange={(event) => {
+            setAccount({ id, label: event.target.value })
+          }}
+          isInvalid={isLabelRequired}
+          autoFocus
+        />
+      </FormControl>
       <Flex justifyContent="flex-end">
         <Button
           mr="2"
