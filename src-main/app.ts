@@ -12,6 +12,7 @@ import { initOrUpdateDockMenu } from './dock-menu'
 import { initAccounts } from './accounts'
 import { getMainWindow, createMainWindow } from './main-window'
 import { initDarkMode } from './dark-mode'
+import { initUserAgent } from './user-agent'
 
 initDebug()
 initDownloads()
@@ -82,12 +83,7 @@ app.on('before-quit', () => {
 ;(async () => {
   await Promise.all([ensureOnline(), app.whenReady()])
 
-  const customUserAgent = config.get(ConfigKey.CustomUserAgent)
-
-  if (customUserAgent) {
-    app.userAgentFallback = customUserAgent
-  }
-
+  initUserAgent()
   initDarkMode()
   handleUnreadCount()
   createMainWindow()
