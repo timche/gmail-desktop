@@ -22,6 +22,12 @@ function AddAccount({ onAdd, onCancel }: AddAccountProps) {
 
   const isLabelRequired = label.length === 0
 
+  const addAccount = () => {
+    if (label) {
+      onAdd({ id, label })
+    }
+  }
+
   return (
     <Container>
       <Heading mb="8">Add Account</Heading>
@@ -31,6 +37,11 @@ function AddAccount({ onAdd, onCancel }: AddAccountProps) {
           id="label"
           placeholder="Work, me@work.com, ..."
           value={label}
+          onKeyPress={(event) => {
+            if (event.key === 'Enter') {
+              addAccount()
+            }
+          }}
           onChange={(event) => {
             setAccount({ id, label: event.target.value })
           }}
@@ -50,9 +61,7 @@ function AddAccount({ onAdd, onCancel }: AddAccountProps) {
         <Button
           colorScheme="blue"
           onClick={() => {
-            if (label) {
-              onAdd({ id, label })
-            }
+            addAccount()
           }}
           disabled={isLabelRequired}
         >
