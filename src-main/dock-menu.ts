@@ -3,6 +3,7 @@ import { is } from 'electron-util'
 import config, { ConfigKey } from './config'
 import { getMainWindow } from './main-window'
 import { sendToSelectedView } from './account-views'
+import { getAccountsMenuItems } from './accounts'
 
 export function initOrUpdateDockMenu() {
   const mainWindow = getMainWindow()
@@ -13,6 +14,10 @@ export function initOrUpdateDockMenu() {
     }
 
     const dockMenu = Menu.buildFromTemplate([
+      ...getAccountsMenuItems(),
+      {
+        type: 'separator'
+      },
       {
         label: 'Compose',
         click() {
