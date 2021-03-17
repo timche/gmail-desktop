@@ -8,7 +8,7 @@ import ensureOnline from './ensure-online'
 import electronContextMenu = require('electron-context-menu')
 import { handleUnreadCount } from './unread-counts'
 import { initTray } from './tray'
-import { initDock } from './dock'
+import { initOrUpdateDockMenu } from './dock-menu'
 import { initAccounts } from './accounts'
 import { getMainWindow, createMainWindow } from './main-window'
 import { initDarkMode } from './dark-mode'
@@ -90,9 +90,9 @@ app.on('before-quit', () => {
 
   initDarkMode()
   handleUnreadCount()
-  initOrUpdateAppMenu()
-  initTray()
-  initDock()
   createMainWindow()
   initAccounts()
+  initOrUpdateAppMenu()
+  initTray()
+  initOrUpdateDockMenu()
 })()
