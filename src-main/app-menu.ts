@@ -17,7 +17,7 @@ import {
 } from './account-views/custom-styles'
 import { viewLogs } from './logs'
 import { showRestartDialog, setAppMenuBarVisibility } from './utils'
-import { autoFixUserAgent, removeCustomUserAgent } from './user-agent'
+import { enableAutoFixUserAgent, removeCustomUserAgent } from './user-agent'
 import { getAccountsMenuItems, getSelectedAccount } from './accounts'
 import { sendToMainWindow } from './main-window'
 import { getSelectedAccountView, hideAccountViews } from './account-views'
@@ -370,9 +370,14 @@ export function initOrUpdateAppMenu() {
               label: 'User Agent',
               submenu: [
                 {
-                  label: 'Attempt User Agent Fix',
-                  click() {
-                    autoFixUserAgent()
+                  label: 'Use User Agent Fix',
+                  type: 'checkbox',
+                  checked: config.get(ConfigKey.AutoFixUserAgent),
+                  click({ checked }) {
+                    enableAutoFixUserAgent({
+                      enable: checked,
+                      showRestartDialog: true
+                    })
                   }
                 },
                 {
