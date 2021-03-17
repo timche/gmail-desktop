@@ -6,8 +6,11 @@ import {
   showAccountViews,
   updateAllAccountViewBounds
 } from './account-views'
+import { initOrUpdateAppMenu } from './app-menu'
 import config, { ConfigKey, Account } from './config'
-import { sendToMainWindow } from './main-window'
+import { sendToMainWindow, getMainWindow } from './main-window'
+import { initOrUpdateDockMenu } from './dock-menu'
+import { updateTrayMenu } from './tray'
 
 const DEFAULT_ACCOUNT_ID = 'default'
 
@@ -44,6 +47,9 @@ export function editAccount(editedAccount: Account) {
   )
   sendToMainWindow('accounts-updated', accounts)
   config.set(ConfigKey.Accounts, accounts)
+  initOrUpdateAppMenu()
+  initOrUpdateDockMenu()
+  updateTrayMenu()
 }
 
 export function addAccount(addedAccount: Account) {
@@ -54,6 +60,9 @@ export function addAccount(addedAccount: Account) {
   createAccountView(addedAccount.id, true)
   updateAllAccountViewBounds()
   config.set(ConfigKey.Accounts, accounts)
+  initOrUpdateAppMenu()
+  initOrUpdateDockMenu()
+  updateTrayMenu()
 }
 
 export function removeAccount(accountId: string) {
@@ -81,6 +90,17 @@ function registerAccountShortcuts() {
       }
     })
   }
+}
+
+export function getAccountsMenuItems(withAccelerator?: boolean) {
+  return config.get(ConfigKey.Accounts).map(({ id, label }, index) => ({
+    label,
+    click() {
+      selectAccount(id)
+      getMainWindow().show()
+    },
+    accelerator: withAccelerator ? `CommandOrControl+${index + 1}` : undefined
+  }))
 }
 
 export function initAccounts() {
