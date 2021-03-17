@@ -1,11 +1,12 @@
 import { app, Menu, MenuItemConstructorOptions, Tray } from 'electron'
 import { is } from 'electron-util'
+import { getAccountsMenuItems } from './accounts'
 import config, { ConfigKey } from './config'
 import { shouldStartMinimized } from './constants'
 import { createTrayIcon } from './helpers'
 import { getMainWindow } from './main-window'
 
-let tray: Tray | undefined
+let tray: Tray
 let trayMenu: Menu
 
 const trayIcon = createTrayIcon(false)
@@ -73,6 +74,10 @@ export function getTrayMenuTemplate() {
     : []
 
   const trayMenuTemplate: MenuItemConstructorOptions[] = [
+    ...getAccountsMenuItems(),
+    {
+      type: 'separator'
+    },
     {
       click: () => {
         getMainWindow().show()
@@ -119,4 +124,13 @@ export function initTray() {
       mainWindow.show()
     }
   })
+}
+
+export function updateTrayMenu() {
+  if (!config.get(ConfigKey.EnableTrayIcon)) {
+    return
+  }
+
+  trayMenu = Menu.buildFromTemplate(getTrayMenuTemplate())
+  tray.setContextMenu(trayMenu)
 }
