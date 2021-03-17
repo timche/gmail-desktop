@@ -174,6 +174,15 @@ async function openExternalUrl(url: string): Promise<void> {
   shell.openExternal(cleanURL)
 }
 
+export function getSelectedAccountView() {
+  const selectedAccount = getSelectedAccount()
+  if (!selectedAccount) {
+    return
+  }
+
+  return accountViews.get(selectedAccount.id)
+}
+
 export function createAccountView(accountId: string, setAsTopView?: boolean) {
   const accountView = new BrowserView({
     webPreferences: {
