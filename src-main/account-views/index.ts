@@ -18,7 +18,7 @@ import { platform } from '../helpers'
 import { cleanURLFromGoogle } from '../utils'
 import { getMainWindow } from '../main-window'
 import { getSelectedAccount, selectAccount } from '../accounts'
-import { ACCOUNTS_TAB_HEIGHT } from '../constants'
+import { ACCOUNTS_TAB_HEIGHT, GMAIL_URL } from '../constants'
 import { is } from 'electron-util'
 
 const accountViews = new Map<string, BrowserView>()
@@ -206,7 +206,7 @@ export function createAccountView(accountId: string, setAsTopView?: boolean) {
     updateAccountViewBounds(accountView)
   })
 
-  accountView.webContents.loadURL('https://mail.google.com')
+  accountView.webContents.loadURL(GMAIL_URL)
 
   accountView.webContents.on('dom-ready', () => {
     addCustomCSS(accountView)
