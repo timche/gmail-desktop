@@ -18,7 +18,7 @@ import {
 import { viewLogs } from './logs'
 import { showRestartDialog, setAppMenuBarVisibility } from './utils'
 import { autoFixUserAgent, removeCustomUserAgent } from './user-agent'
-import { getSelectedAccount } from './accounts'
+import { getAccountsMenuItems, getSelectedAccount } from './accounts'
 import { sendToMainWindow } from './main-window'
 import { hideAccountViews } from './account-views'
 
@@ -126,6 +126,10 @@ export function initOrUpdateAppMenu() {
     {
       label: 'Accounts',
       submenu: [
+        ...getAccountsMenuItems(true),
+        {
+          type: 'separator'
+        },
         {
           label: 'Add Account',
           click() {
