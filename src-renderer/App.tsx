@@ -8,11 +8,13 @@ import {
   useAccounts,
   useAddAccount,
   useDarkMode,
-  useEditAccount
+  useEditAccount,
+  useIsCompactHeaderEnabled
 } from './hooks'
 import { isMacOS } from './constants'
 
 export default function App() {
+  const { isCompactHeaderEnabled } = useIsCompactHeaderEnabled()
   const { accounts, selectAccount } = useAccounts()
   const { isAddingAccount, addAccount, cancelAddAccount } = useAddAccount()
   const {
@@ -34,7 +36,7 @@ export default function App() {
           WebkitAppRegion: 'drag'
         }}
       >
-        {isMacOS && <TrafficLightsSpace />}
+        {isMacOS && isCompactHeaderEnabled && <TrafficLightsSpace />}
         <AccountsTab
           accounts={accounts}
           onSelectAccount={selectAccount}
