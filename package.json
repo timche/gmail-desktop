@@ -22,6 +22,7 @@
     "dev": "run-p dev:*",
     "compile:main": "tsc",
     "compile:renderer": "cross-env NODE_ENV=production node scripts/compile-renderer.js",
+    "compile": "run-s compile:*",
     "build:macos": "electron-builder --macos --universal --publish never",
     "build:linux": "electron-builder --linux --publish never",
     "build:windows": "electron-builder --windows --publish never",
