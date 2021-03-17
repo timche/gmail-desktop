@@ -4,7 +4,7 @@ import config, { ConfigKey } from './config'
 import { getMainWindow } from './main-window'
 import { sendToSelectedView } from './account-views'
 
-export function initDock() {
+export function initOrUpdateDockMenu() {
   const mainWindow = getMainWindow()
 
   if (is.macos && mainWindow) {
