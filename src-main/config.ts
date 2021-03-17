@@ -1,7 +1,7 @@
 import { app, ipcMain } from 'electron'
 import { is } from 'electron-util'
-
 import Store = require('electron-store')
+import { getPlatformUserAgentFix } from './user-agent'
 
 interface LastWindowState {
   bounds: {
@@ -91,7 +91,7 @@ const defaults: TypedStore = {
   [ConfigKey.EnableTrayIcon]: !is.macos,
   [ConfigKey.ShowDockIcon]: true,
   [ConfigKey.CustomUserAgent]: '',
-  [ConfigKey.AutoFixUserAgent]: false,
+  [ConfigKey.AutoFixUserAgent]: true,
   [ConfigKey.TrustedHosts]: [],
   [ConfigKey.ConfirmExternalLinks]: true,
   [ConfigKey.HardwareAcceleration]: true,
@@ -135,6 +135,13 @@ const config = new Store<TypedStore>({
 
         // @ts-expect-error
         store.delete('overrideUserAgent')
+      }
+    },
+    '>3.0.0-alpha.2': (store) => {
+      const customUserAgent: string = store.get('customUserAgent')
+
+      if (customUserAgent === getPlatformUserAgentFix()) {
+        store.set('customUserAgent', '')
       }
     }
   }
