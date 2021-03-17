@@ -56,7 +56,7 @@ function AddAccount({ onAdd, onCancel }: AddAccountProps) {
           }}
           disabled={isLabelRequired}
         >
-          Save
+          Add
         </Button>
       </Flex>
     </Container>
