@@ -64,7 +64,7 @@ type TypedStore = {
   [ConfigKey.DownloadsShowSaveAs]: boolean
   [ConfigKey.DownloadsOpenFolderWhenDone]: boolean
   [ConfigKey.DownloadsLocation]: string
-  [ConfigKey.DarkMode]?: 'system' | boolean
+  [ConfigKey.DarkMode]: 'system' | boolean
   [ConfigKey.ResetConfig]: boolean
   [ConfigKey.ReleaseChannel]: 'stable' | 'dev'
   [ConfigKey.Accounts]: Account[]
@@ -98,6 +98,7 @@ const defaults: TypedStore = {
   [ConfigKey.DownloadsShowSaveAs]: false,
   [ConfigKey.DownloadsOpenFolderWhenDone]: false,
   [ConfigKey.DownloadsLocation]: app.getPath('downloads'),
+  [ConfigKey.DarkMode]: 'system',
   [ConfigKey.ResetConfig]: false,
   [ConfigKey.ReleaseChannel]: 'stable',
   [ConfigKey.Accounts]: [
