@@ -20,7 +20,7 @@ import { showRestartDialog, setAppMenuBarVisibility } from './utils'
 import { autoFixUserAgent, removeCustomUserAgent } from './user-agent'
 import { getAccountsMenuItems, getSelectedAccount } from './accounts'
 import { sendToMainWindow } from './main-window'
-import { hideAccountViews } from './account-views'
+import { getSelectedAccountView, hideAccountViews } from './account-views'
 
 interface AppearanceMenuItem {
   key: ConfigKey
@@ -395,6 +395,21 @@ export function initOrUpdateAppMenu() {
     },
     {
       role: 'editMenu'
+    },
+    {
+      label: 'View',
+      submenu: [
+        {
+          label: 'Developer Tools',
+          accelerator: is.macos ? 'Command+Alt+I' : 'Control+Shift+I',
+          click() {
+            const selectedAccountView = getSelectedAccountView()
+            if (selectedAccountView) {
+              selectedAccountView.webContents.openDevTools()
+            }
+          }
+        }
+      ]
     },
     {
       label: 'Window',
