@@ -13,7 +13,7 @@ import {
   init as initCustomStyles,
   USER_CUSTOM_STYLE_PATH
 } from './custom-styles'
-import { autoFixUserAgent, removeCustomUserAgent } from '../user-agent'
+import { enableAutoFixUserAgent } from '../user-agent'
 import { platform } from '../helpers'
 import { cleanURLFromGoogle } from '../utils'
 import { getMainWindow } from '../main-window'
@@ -215,48 +215,17 @@ export function createAccountView(accountId: string, setAsTopView?: boolean) {
 
   accountView.webContents.on('did-finish-load', async () => {
     if (accountView.webContents.getURL().includes('signin/rejected')) {
-      const message = `It looks like you are unable to sign-in, because Gmail is blocking the user agent ${app.name} is using.`
-      const askAutoFixMessage = `Do you want ${app.name} to attempt to fix it automatically?`
-      const troubleshoot = () => {
-        openExternalUrl(
-          'https://github.com/timche/gmail-desktop#i-cant-sign-in-this-browser-or-app-may-not-be-secure'
-        )
-      }
-
-      if (config.get(ConfigKey.CustomUserAgent)) {
-        const { response } = await dialog.showMessageBox({
-          type: 'info',
-          message,
-          detail: `You're currently using a custom user agent. ${askAutoFixMessage} Alternatively you can try the default user agent or set another custom user agent (see "Troubleshoot").`,
-          buttons: ['Yes', 'Cancel', 'Use Default User Agent', 'Troubleshoot']
-        })
-
-        if (response === 3) {
-          troubleshoot()
-          return
-        }
-
-        if (response === 2) {
-          removeCustomUserAgent()
-          return
-        }
-
-        if (response === 1) {
-          return
-        }
-
-        return
-      }
-
       const { response } = await dialog.showMessageBox({
         type: 'info',
-        message,
-        detail: `${askAutoFixMessage} Alternatively you can set a custom user agent (see "Troubleshoot").`,
+        message: `It looks like you are unable to sign-in, because Gmail is blocking the user agent ${app.name} is using.`,
+        detail: `Do you want ${app.name} to attempt to fix it automatically? If that doesn't work, you can try to set another user agent yourself or ask for help (see "Troubleshoot").`,
         buttons: ['Yes', 'Cancel', 'Troubleshoot']
       })
 
       if (response === 2) {
-        troubleshoot()
+        openExternalUrl(
+          'https://github.com/timche/gmail-desktop#i-cant-sign-in-this-browser-or-app-may-not-be-secure'
+        )
         return
       }
 
@@ -264,7 +233,7 @@ export function createAccountView(accountId: string, setAsTopView?: boolean) {
         return
       }
 
-      autoFixUserAgent()
+      enableAutoFixUserAgent()
     }
   })
 
