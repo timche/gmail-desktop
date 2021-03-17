@@ -21,6 +21,7 @@ import { autoFixUserAgent, removeCustomUserAgent } from './user-agent'
 import { getAccountsMenuItems, getSelectedAccount } from './accounts'
 import { sendToMainWindow } from './main-window'
 import { getSelectedAccountView, hideAccountViews } from './account-views'
+import { GMAIL_URL } from './constants'
 
 interface AppearanceMenuItem {
   key: ConfigKey
@@ -399,6 +400,16 @@ export function initOrUpdateAppMenu() {
     {
       label: 'View',
       submenu: [
+        {
+          label: 'Reload',
+          accelerator: 'CommandOrControl+Shift+R',
+          click() {
+            const selectedAccountView = getSelectedAccountView()
+            if (selectedAccountView) {
+              selectedAccountView.webContents.loadURL(GMAIL_URL)
+            }
+          }
+        },
         {
           label: 'Developer Tools',
           accelerator: is.macos ? 'Command+Alt+I' : 'Control+Shift+I',
