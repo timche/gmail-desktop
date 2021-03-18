@@ -7,7 +7,18 @@ export function addContextMenu(accountView: BrowserView) {
       window: accountView,
       showCopyImageAddress: true,
       showSaveImageAs: true,
-      showInspectElement: false
+      showInspectElement: false,
+      append: (_defaultActions, parameters) => [
+        {
+          label: 'Inspect Element',
+          click() {
+            accountView.webContents.inspectElement(parameters.x, parameters.y)
+            if (accountView.webContents.isDevToolsOpened()) {
+              accountView.webContents.devToolsWebContents?.focus()
+            }
+          }
+        }
+      ]
     })
   })
 }
