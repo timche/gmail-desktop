@@ -20,6 +20,7 @@ import { getMainWindow } from '../main-window'
 import { getSelectedAccount, selectAccount } from '../accounts'
 import { ACCOUNTS_TAB_HEIGHT, GMAIL_URL } from '../constants'
 import { is } from 'electron-util'
+import { addContextMenu } from './context-menu'
 
 const accountViews = new Map<string, BrowserView>()
 
@@ -213,6 +214,8 @@ export function createAccountView(accountId: string, setAsTopView?: boolean) {
   mainWindow.on('resize', () => {
     updateAccountViewBounds(accountView)
   })
+
+  addContextMenu(accountView)
 
   accountView.webContents.loadURL(GMAIL_URL)
 
