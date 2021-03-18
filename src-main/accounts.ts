@@ -77,6 +77,9 @@ export function removeAccount(accountId: string) {
 
   sendToMainWindow('accounts-updated', accounts)
   removeAccountView(accountId)
+  initOrUpdateAppMenu()
+  initOrUpdateDockMenu()
+  updateTrayMenu()
 
   config.set(ConfigKey.Accounts, accounts)
 }
