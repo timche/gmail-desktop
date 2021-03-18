@@ -60,6 +60,14 @@ export function selectAccountView(accountId: string) {
   }
 }
 
+export function forEachAccountView(
+  callback: (accountView: BrowserView) => void
+) {
+  for (const [_accountId, accountView] of accountViews) {
+    callback(accountView)
+  }
+}
+
 export function updateAllAccountViewBounds() {
   for (const [_accountId, accountView] of accountViews) {
     updateAccountViewBounds(accountView)
