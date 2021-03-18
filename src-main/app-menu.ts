@@ -19,7 +19,7 @@ import { viewLogs } from './logs'
 import { showRestartDialog, setAppMenuBarVisibility } from './utils'
 import { enableAutoFixUserAgent, removeCustomUserAgent } from './user-agent'
 import { getAccountsMenuItems, getSelectedAccount } from './accounts'
-import { sendToMainWindow } from './main-window'
+import { getMainWindow, sendToMainWindow } from './main-window'
 import {
   forEachAccountView,
   getSelectedAccountView,
@@ -411,12 +411,23 @@ export function initOrUpdateAppMenu() {
       submenu: [
         {
           label: 'Reload',
-          accelerator: 'CommandOrControl+Shift+R',
+          accelerator: 'CommandOrControl+R',
           click() {
             const selectedAccountView = getSelectedAccountView()
             if (selectedAccountView) {
               selectedAccountView.webContents.loadURL(GMAIL_URL)
             }
+          }
+        },
+        {
+          label: 'Full Reload',
+          accelerator: 'CommandOrControl+Shift+R',
+          click() {
+            const mainWindow = getMainWindow()
+            mainWindow.reload()
+            forEachAccountView((accountView) => {
+              accountView.webContents.loadURL(GMAIL_URL)
+            })
           }
         },
         {
