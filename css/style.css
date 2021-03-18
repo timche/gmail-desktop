@@ -21,7 +21,11 @@
 }
 
 /* Header: Burger Menu */
-.compactHeader header > div:nth-child(2) > div:first-of-type > div:first-of-type {
+.compactHeader
+  header
+  > div:nth-child(2)
+  > div:first-of-type
+  > div:first-of-type {
   padding: 4px !important;
 }
 
@@ -64,7 +68,13 @@
 }
 
 /* Header: Settings */
-.compactHeader header > div:nth-child(2) > div:nth-child(2) > div:last-of-type > div:last-of-type > a {
+.compactHeader
+  header
+  > div:nth-child(2)
+  > div:nth-child(2)
+  > div:last-of-type
+  > div:last-of-type
+  > a {
   padding: 4px !important;
   margin: 0 !important;
 }
