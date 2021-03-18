@@ -1,3 +1,4 @@
+import * as path from 'path'
 import { app, BrowserWindow } from 'electron'
 import { init as initAutoUpdates } from './updates'
 import config, { ConfigKey } from './config'
@@ -7,10 +8,11 @@ import ensureOnline from './ensure-online'
 import { handleUnreadCount } from './unread-counts'
 import { initTray } from './tray'
 import { initOrUpdateDockMenu } from './dock-menu'
-import { initAccounts } from './accounts'
+import { getSelectedAccount, initAccounts } from './accounts'
 import { getMainWindow, createMainWindow } from './main-window'
 import { initDarkMode } from './dark-mode'
 import { initUserAgent } from './user-agent'
+import { getSessionPartitionKey } from './account-views/helpers'
 
 initDownloads()
 initAutoUpdates()
@@ -45,15 +47,20 @@ app.on('second-instance', () => {
 app.on('open-url', (event, url) => {
   event.preventDefault()
 
-  // @TODO: Open in view
-  const mainWindow = getMainWindow()
-  const replyToWindow = new BrowserWindow({
-    parent: mainWindow
-  })
+  const selectedAccount = getSelectedAccount()
 
-  replyToWindow.loadURL(
-    `https://mail.google.com/mail/?extsrc=mailto&url=${url}`
-  )
+  if (selectedAccount) {
+    const composeWindow = new BrowserWindow({
+      webPreferences: {
+        partition: getSessionPartitionKey(selectedAccount.id),
+        preload: path.join(__dirname, 'account-views', 'preload.js')
+      }
+    })
+
+    composeWindow.loadURL(
+      `https://mail.google.com/mail/?extsrc=mailto&url=${url}`
+    )
+  }
 })
 
 app.on('activate', () => {
