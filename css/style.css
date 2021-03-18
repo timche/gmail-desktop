@@ -1,91 +1,35 @@
-/**
-  * Remove unnecessary elements
-  * ===========================
-  */
-
 /* Header: Gmail logo */
-.compactHeader .gb_oc,
+.compactHeader header > div:first-of-type > div:first-of-type > div:first-of-type > div:first-of-type,
+.compactHeader header > div:nth-child(2) > div:first-of-type > div:nth-child(4),
 /* Header: Support */
-.hideSupport .zo,
+.compactHeader header > div:nth-child(2) > div:nth-child(2) > div:last-of-type > a:first-of-type,
+.compactHeader header > div:nth-child(2) > div:nth-child(2) > div:last-of-type > div:first-of-type > a,
 /* Header: Google apps */
-.compactHeader .gb_Pc,
+.compactHeader header > div:nth-child(2) > div:nth-child(3) > div:first-of-type > div:first-of-type > div:first-of-type,
 /* Header: Google logo (Google Workspace) */
-.compactHeader .gb_la,
+.compactHeader header div[href*='accounts.google.com'] > div:first-of-type,
 /* Footer */
-.hideFooter .aeG {
+.hideFooter div[role='contentinfo'] {
   display: none !important;
 }
 
-/**
-  * Adjustments
-  * ===========
-  */
-
-/* Header: Account */
-.compactHeader .gb_i {
-  width: auto !important;
-  border: none !important;
-}
-
-.compactHeader .gb_qa.gb_Se .gb_Oa.gb_cd {
-  padding: 0 !important;
-}
-
-.compactHeader .gb_ja {
-  max-height: none !important;
-  border-radius: 50% !important;
-  background-color: transparent !important;
-}
-
-.compactHeader .gb_ja:hover {
-  background-color: rgb(60 64 67 / 8%) !important;
-}
-
-.compactHeader .gb_ja:focus {
-  background-color: rgb(95 99 104 / 24%) !important;
-  box-shadow: none !important;
-}
-
-.compactHeader .gb_Da:hover,
-.compactHeader .gb_Da:focus {
-  box-shadow: none !important;
-}
-
-.compactHeader .gb_Da {
-  width: 26px !important;
-  height: 26px !important;
-}
-
-.compactHeader a.gb_D {
-  display: flex;
-  align-items: center;
-}
-
-.compactHeader .gb_Oa .gb_D {
-  padding: 7px !important;
-}
-
-/* Header */
-.compactHeader .gb_Jd {
-  height: 22px !important;
-}
-
-.compactHeader .gb_Xd {
+/* Header: Inner Containers */
+.compactHeader header > div:nth-child(2) > div:first-of-type,
+.compactHeader header > div:nth-child(2) > div:nth-child(2),
+.compactHeader header > div:nth-child(2) > div:nth-child(3) {
   height: 22px !important;
 }
 
 /* Header: Burger Menu */
-.compactHeader .gb_vc {
+.compactHeader header > div:nth-child(2) > div:first-of-type > div:first-of-type {
   padding: 4px !important;
 }
 
 /* Header: Search */
-/* .compactHeader .gb_Ie { */
 .compactHeader header > div:nth-child(2) > div:nth-child(2) > div:nth-child(2) {
   height: 28px !important;
 }
 
-/* .compactHeader .gb_wf { */
 .compactHeader header form > div:nth-child(3) {
   height: 26px !important;
 }
@@ -110,5 +54,49 @@
 
 .compactHeader header form input {
   position: initial !important;
+  height: 26px !important;
+}
+
+/* Header: Settings */
+.compactHeader header > div:nth-child(2) > div:nth-child(2) > div:last-of-type > div:last-of-type > a {
+  padding: 4px !important;
+  margin: 0 !important;
+}
+
+/* Header: Account */
+.compactHeader header div[href*='accounts.google.com'] {
+  width: auto !important;
+  border: none !important;
+  max-height: none !important;
+  border-radius: 50% !important;
+  background-color: transparent !important;
+}
+
+.compactHeader header div[href*='accounts.google.com']:hover {
+  background-color: rgb(60 64 67 / 8%) !important;
+}
+
+.compactHeader header div[href*='accounts.google.com']:focus {
+  background-color: rgb(95 99 104 / 24%) !important;
+  box-shadow: none !important;
+}
+
+.compactHeader header div[href*='accounts.google.com'] > div:nth-child(2) {
+  padding: 4px !important;
+}
+
+.compactHeader header div[href*='accounts.google.com'] a {
+  padding: 0 !important;
+  height: 26px !important;
+  width: 26px !important;
+}
+
+.compactHeader header div[href*='accounts.google.com'] a img:hover,
+.compactHeader header div[href*='accounts.google.com'] a img:focus {
+  box-shadow: none !important;
+}
+
+.compactHeader header div[href*='accounts.google.com'] a img {
+  width: 26px !important;
   height: 26px !important;
 }
