@@ -18,7 +18,11 @@ import {
 import { viewLogs } from './logs'
 import { showRestartDialog, setAppMenuBarVisibility } from './utils'
 import { enableAutoFixUserAgent, removeCustomUserAgent } from './user-agent'
-import { getAccountsMenuItems, getSelectedAccount } from './accounts'
+import {
+  getAccountsMenuItems,
+  getSelectedAccount,
+  removeAccount
+} from './accounts'
 import { getMainWindow, sendToMainWindow } from './main-window'
 import {
   forEachAccountView,
@@ -149,6 +153,33 @@ export function initOrUpdateAppMenu() {
             if (selectedAccount) {
               sendToMainWindow('edit-account-request', selectedAccount)
               hideAccountViews()
+            }
+          }
+        },
+        {
+          label: 'Remove Account',
+          async click() {
+            const selectedAccount = getSelectedAccount()
+
+            if (selectedAccount) {
+              if (selectedAccount.id === 'default') {
+                dialog.showMessageBox({
+                  type: 'info',
+                  message: "The default account can't be removed."
+                })
+                return
+              }
+
+              const { response } = await dialog.showMessageBox({
+                type: 'warning',
+                message:
+                  'Do you really want to remove the currently selected account?',
+                buttons: ['Confirm', 'Cancel']
+              })
+
+              if (response === 0) {
+                removeAccount(selectedAccount.id)
+              }
             }
           }
         }
