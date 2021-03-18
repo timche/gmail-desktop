@@ -346,15 +346,6 @@ export function initOrUpdateAppMenu() {
           label: 'Advanced',
           submenu: [
             {
-              label: 'Debug Mode',
-              type: 'checkbox',
-              checked: config.get(ConfigKey.DebugMode),
-              click({ checked }) {
-                config.set(ConfigKey.DebugMode, checked)
-                showRestartDialog(checked, 'debug mode')
-              }
-            },
-            {
               label: 'Edit Config File',
               click() {
                 config.openInEditor()
@@ -516,7 +507,6 @@ export function initOrUpdateAppMenu() {
         },
         {
           label: 'View Logs',
-          visible: config.get(ConfigKey.DebugMode),
           click() {
             viewLogs()
           }
@@ -524,25 +514,6 @@ export function initOrUpdateAppMenu() {
       ]
     }
   ]
-
-  // Add the develop menu when running in the development environment
-  if (is.development) {
-    appMenu.splice(-1, 0, {
-      label: 'Develop',
-      submenu: [
-        {
-          label: 'Clear Cache and Restart',
-          click() {
-            // Clear app config
-            config.clear()
-            // Restart without firing quitting events
-            app.relaunch()
-            app.exit(0)
-          }
-        }
-      ]
-    })
-  }
 
   const menu = Menu.buildFromTemplate(appMenu)
 
