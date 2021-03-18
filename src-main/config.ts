@@ -23,7 +23,6 @@ export interface Account {
 export enum ConfigKey {
   AutoUpdate = 'autoUpdate',
   CompactHeader = 'compactHeader',
-  DebugMode = 'debugMode',
   HideFooter = 'hideFooter',
   HideSupport = 'hideSupport',
   LastWindowState = 'lastWindowState',
@@ -52,7 +51,6 @@ type TypedStore = {
   [ConfigKey.CompactHeader]: boolean
   [ConfigKey.HideFooter]: boolean
   [ConfigKey.HideSupport]: boolean
-  [ConfigKey.DebugMode]: boolean
   [ConfigKey.LaunchMinimized]: boolean
   [ConfigKey.AutoHideMenuBar]: boolean
   [ConfigKey.EnableTrayIcon]: boolean
@@ -87,7 +85,6 @@ const defaults: TypedStore = {
   [ConfigKey.CompactHeader]: true,
   [ConfigKey.HideFooter]: true,
   [ConfigKey.HideSupport]: true,
-  [ConfigKey.DebugMode]: is.development,
   [ConfigKey.LaunchMinimized]: false,
   [ConfigKey.AutoHideMenuBar]: false,
   [ConfigKey.EnableTrayIcon]: !is.macos,

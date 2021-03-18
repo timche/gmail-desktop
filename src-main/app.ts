@@ -1,7 +1,6 @@
 import { app, BrowserWindow } from 'electron'
 import { init as initAutoUpdates } from './updates'
 import config, { ConfigKey } from './config'
-import { init as initDebug } from './debug'
 import { init as initDownloads } from './downloads'
 import { initOrUpdateAppMenu } from './app-menu'
 import ensureOnline from './ensure-online'
@@ -14,7 +13,6 @@ import { getMainWindow, createMainWindow } from './main-window'
 import { initDarkMode } from './dark-mode'
 import { initUserAgent } from './user-agent'
 
-initDebug()
 initDownloads()
 initAutoUpdates()
 
