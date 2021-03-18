@@ -18,7 +18,7 @@
 }
 
 /* Header: Burger Menu */
-.compactHeader header > div:nth-child(2) > div:first-of-type {
+.compactHeader.burgerMenu header > div:nth-child(2) > div:first-of-type {
   min-width: auto !important;
   margin-left: 70px !important;
   padding-right: 128px !important;
