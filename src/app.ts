@@ -92,7 +92,9 @@ function createWindow(): void {
     titleBarStyle: config.get(ConfigKey.CompactHeader)
       ? 'hiddenInset'
       : 'default',
+    minWidth: 780,
     width: lastWindowState.bounds.width,
+    minHeight: 200,
     height: lastWindowState.bounds.height,
     x: lastWindowState.bounds.x,
     y: lastWindowState.bounds.y,
