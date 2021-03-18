@@ -20,7 +20,11 @@ import { showRestartDialog, setAppMenuBarVisibility } from './utils'
 import { enableAutoFixUserAgent, removeCustomUserAgent } from './user-agent'
 import { getAccountsMenuItems, getSelectedAccount } from './accounts'
 import { sendToMainWindow } from './main-window'
-import { getSelectedAccountView, hideAccountViews } from './account-views'
+import {
+  forEachAccountView,
+  getSelectedAccountView,
+  hideAccountViews
+} from './account-views'
 import { GMAIL_URL } from './constants'
 
 interface AppearanceMenuItem {
@@ -422,6 +426,44 @@ export function initOrUpdateAppMenu() {
             const selectedAccountView = getSelectedAccountView()
             if (selectedAccountView) {
               selectedAccountView.webContents.openDevTools()
+            }
+          }
+        },
+        {
+          type: 'separator'
+        },
+        {
+          label: 'Reset Zoom',
+          accelerator: 'CommandOrControl+0',
+          click() {
+            const resetZoomFactor = 1
+            forEachAccountView((accountView) => {
+              accountView.webContents.setZoomFactor(resetZoomFactor)
+            })
+            config.set(ConfigKey.ZoomFactor, resetZoomFactor)
+          }
+        },
+        {
+          label: 'Zoom In',
+          accelerator: 'CommandOrControl+Plus',
+          click() {
+            const newZoomFactor = config.get(ConfigKey.ZoomFactor) + 0.1
+            forEachAccountView((accountView) => {
+              accountView.webContents.setZoomFactor(newZoomFactor)
+            })
+            config.set(ConfigKey.ZoomFactor, newZoomFactor)
+          }
+        },
+        {
+          label: 'Zoom Out',
+          accelerator: 'CommandOrControl+-',
+          click() {
+            const newZoomFactor = config.get(ConfigKey.ZoomFactor) - 0.1
+            if (newZoomFactor > 0) {
+              forEachAccountView((accountView) => {
+                accountView.webContents.setZoomFactor(newZoomFactor)
+              })
+              config.set(ConfigKey.ZoomFactor, newZoomFactor)
             }
           }
         }
