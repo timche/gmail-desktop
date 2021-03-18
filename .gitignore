@@ -8,9 +8,7 @@ yarn-error.log
 
 # Editors
 .idea/
-.vscode/*
-!.vscode/tasks.json
-!.vscode/launch.json
+.vscode/
 
 # Build and distribution files
 dist*/
