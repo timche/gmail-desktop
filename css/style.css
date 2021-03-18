@@ -34,8 +34,14 @@
   height: 26px !important;
 }
 
-.compactHeader header form table {
+.compactHeader header form div table {
   height: 26px !important;
+  font-size: 0.875rem !important;
+}
+
+.compactHeader header input {
+  height: 26px !important;
+  font-size: 0.875rem !important;
 }
 
 .compactHeader header form button {
@@ -47,7 +53,7 @@
   margin: 0 !important;
 }
 
-.compactHeader header form table table td {
+.compactHeader header form div table table td {
   padding: 0 !important;
   height: 26px !important;
 }
