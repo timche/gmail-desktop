@@ -4,7 +4,6 @@ import config, { ConfigKey } from './config'
 import { init as initDownloads } from './downloads'
 import { initOrUpdateAppMenu } from './app-menu'
 import ensureOnline from './ensure-online'
-import electronContextMenu = require('electron-context-menu')
 import { handleUnreadCount } from './unread-counts'
 import { initTray } from './tray'
 import { initOrUpdateDockMenu } from './dock-menu'
@@ -15,8 +14,6 @@ import { initUserAgent } from './user-agent'
 
 initDownloads()
 initAutoUpdates()
-
-electronContextMenu({ showCopyImageAddress: true, showSaveImageAs: true })
 
 if (!config.get(ConfigKey.HardwareAcceleration)) {
   app.disableHardwareAcceleration()
