@@ -1,10 +1,11 @@
 import { app, dialog } from 'electron'
 import pWaitFor from 'p-wait-for'
 import got from 'got'
+import { GMAIL_URL } from './constants'
 
 async function isOnline() {
   try {
-    await got('https://mail.google.com', {
+    await got(GMAIL_URL, {
       timeout: 5000
     })
     return true

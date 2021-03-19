@@ -1,5 +1,4 @@
 import * as path from 'path'
-import * as fs from 'fs'
 import {
   BrowserView,
   BrowserWindow,
@@ -9,18 +8,15 @@ import {
   session
 } from 'electron'
 import config, { ConfigKey } from '../config'
-import {
-  init as initCustomStyles,
-  USER_CUSTOM_STYLE_PATH
-} from './custom-styles'
+import { addCustomCSS, initCustomStyles } from './custom-styles'
 import { enableAutoFixUserAgent } from '../user-agent'
-import { platform } from '../helpers'
 import { cleanURLFromGoogle } from '../utils'
 import { getMainWindow, sendToMainWindow } from '../main-window'
 import { getSelectedAccount, selectAccount } from '../accounts'
 import { ACCOUNTS_TAB_HEIGHT, GMAIL_URL } from '../constants'
 import { is } from 'electron-util'
 import { addContextMenu } from './context-menu'
+import { getSessionPartitionKey } from './helpers'
 
 const accountViews = new Map<string, BrowserView>()
 
@@ -38,7 +34,7 @@ export function getAccountIdByViewId(accountViewId: number) {
   return undefined
 }
 
-export function sendToSelectedView(channel: string, ...args: unknown[]) {
+export function sendToSelectedAccountView(channel: string, ...args: unknown[]) {
   const selectedAccount = getSelectedAccount()
   if (selectedAccount) {
     const selectedView = getAccountView(selectedAccount.id)
@@ -132,30 +128,6 @@ export function getShouldAccountViewOffset() {
   return accountViews.size > 1
 }
 
-function addCustomCSS(view: BrowserView): void {
-  view.webContents.insertCSS(
-    fs.readFileSync(
-      path.join(__dirname, '..', '..', 'css', 'style.css'),
-      'utf8'
-    )
-  )
-
-  if (fs.existsSync(USER_CUSTOM_STYLE_PATH)) {
-    view.webContents.insertCSS(fs.readFileSync(USER_CUSTOM_STYLE_PATH, 'utf8'))
-  }
-
-  const platformCSSFile = path.join(
-    __dirname,
-    '..',
-    '..',
-    'css',
-    `style.${platform}.css`
-  )
-  if (fs.existsSync(platformCSSFile)) {
-    view.webContents.insertCSS(fs.readFileSync(platformCSSFile, 'utf8'))
-  }
-}
-
 async function openExternalUrl(url: string): Promise<void> {
   const cleanURL = cleanURLFromGoogle(url)
 
@@ -195,7 +167,7 @@ export function getSelectedAccountView() {
 export function createAccountView(accountId: string, setAsTopView?: boolean) {
   const accountView = new BrowserView({
     webPreferences: {
-      partition: accountId === 'default' ? undefined : `persist:${accountId}`,
+      partition: getSessionPartitionKey(accountId),
       preload: path.join(__dirname, 'preload.js'),
       nativeWindowOpen: true
     }
@@ -261,7 +233,7 @@ export function createAccountView(accountId: string, setAsTopView?: boolean) {
         return
       }
 
-      if (url.startsWith('https://mail.google.com')) {
+      if (url.startsWith(GMAIL_URL)) {
         selectAccount(accountId)
 
         // // Center the new window on the screen
