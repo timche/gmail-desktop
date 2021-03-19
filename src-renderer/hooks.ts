@@ -11,7 +11,7 @@ export function useDarkMode() {
   }
 
   useEffect(() => {
-    ipc.invoke('get-dark-mode').then(handleDarkMode)
+    ipc.invoke('init-dark-mode').then(handleDarkMode)
     ipc.on('dark-mode-updated', handleDarkMode)
   }, [])
 }
