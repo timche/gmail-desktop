@@ -8,7 +8,6 @@ import {
 } from 'electron'
 import * as fs from 'fs'
 import { is } from 'electron-util'
-
 import { checkForUpdates, changeReleaseChannel } from './updates'
 import config, { ConfigKey } from './config'
 import {
@@ -34,7 +33,7 @@ import { GMAIL_URL } from './constants'
 interface AppearanceMenuItem {
   key: ConfigKey
   label: string
-  restartDialogText?: string
+  restartRequired?: boolean
   setMenuBarVisibility?: boolean
 }
 
@@ -43,7 +42,7 @@ export function initOrUpdateAppMenu() {
     {
       key: ConfigKey.CompactHeader,
       label: 'Compact Header',
-      restartDialogText: 'compact header'
+      restartRequired: true
     },
     {
       key: ConfigKey.HideFooter,
@@ -58,7 +57,7 @@ export function initOrUpdateAppMenu() {
   const createAppearanceMenuItem = ({
     key,
     label,
-    restartDialogText,
+    restartRequired,
     setMenuBarVisibility
   }: AppearanceMenuItem): MenuItemConstructorOptions => ({
     label,
@@ -69,8 +68,8 @@ export function initOrUpdateAppMenu() {
 
       // If the style changes requires a restart, don't add or remove the class
       // name from the DOM
-      if (restartDialogText) {
-        showRestartDialog(checked, restartDialogText)
+      if (restartRequired) {
+        showRestartDialog()
       } else {
         setCustomStyle(key, checked)
       }
@@ -256,10 +255,7 @@ export function initOrUpdateAppMenu() {
           checked: config.get(ConfigKey.EnableTrayIcon),
           click({ checked }: { checked: boolean }) {
             config.set(ConfigKey.EnableTrayIcon, checked)
-            showRestartDialog(
-              checked,
-              is.macos ? 'the menu bar icon' : 'the system tray icon'
-            )
+            showRestartDialog()
           }
         },
         {
@@ -288,7 +284,7 @@ export function initOrUpdateAppMenu() {
           checked: config.get(ConfigKey.HardwareAcceleration),
           click({ checked }: { checked: boolean }) {
             config.set(ConfigKey.HardwareAcceleration, checked)
-            showRestartDialog(checked, 'hardware acceleration')
+            showRestartDialog()
           }
         },
         {
@@ -346,7 +342,7 @@ export function initOrUpdateAppMenu() {
               checked: config.get(ConfigKey.AutoUpdate),
               click({ checked }: { checked: boolean }) {
                 config.set(ConfigKey.AutoUpdate, checked)
-                showRestartDialog(checked, 'auto updates')
+                showRestartDialog()
               }
             },
             {

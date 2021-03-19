@@ -1,13 +1,34 @@
-import { app, Menu, MenuItemConstructorOptions, Tray } from 'electron'
+import * as path from 'path'
+import {
+  app,
+  Menu,
+  MenuItemConstructorOptions,
+  nativeImage,
+  NativeImage,
+  Tray
+} from 'electron'
 import { is } from 'electron-util'
 import { getAccountsMenuItems } from './accounts'
 import config, { ConfigKey } from './config'
-import { shouldStartMinimized } from './constants'
-import { createTrayIcon } from './helpers'
+import { SHOULD_START_MINIMIZED } from './constants'
 import { getMainWindow } from './main-window'
 
 let tray: Tray
 let trayMenu: Menu
+
+export function createTrayIcon(unread: boolean): NativeImage {
+  let iconFileName
+
+  if (is.macos) {
+    iconFileName = 'tray-icon.macos.Template.png'
+  } else {
+    iconFileName = unread ? 'tray-icon-unread.png' : 'tray-icon.png'
+  }
+
+  return nativeImage.createFromPath(
+    path.join(__dirname, '..', 'static', iconFileName)
+  )
+}
 
 const trayIcon = createTrayIcon(false)
 const trayIconUnread = createTrayIcon(true)
@@ -83,12 +104,12 @@ export function getTrayMenuTemplate() {
         getMainWindow().show()
       },
       label: 'Show',
-      visible: shouldStartMinimized,
+      visible: SHOULD_START_MINIMIZED,
       id: 'show-win'
     },
     {
       label: 'Hide',
-      visible: !shouldStartMinimized,
+      visible: !SHOULD_START_MINIMIZED,
       click: () => {
         getMainWindow().hide()
       },

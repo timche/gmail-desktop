@@ -28,7 +28,7 @@ function onUpdateAvailable(): void {
   )
 }
 
-export function init(): void {
+export function initUpdates(): void {
   if (!is.development) {
     log.transports.file.level = 'info'
     autoUpdater.logger = log
