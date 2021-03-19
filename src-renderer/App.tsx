@@ -11,7 +11,7 @@ import {
   useEditAccount,
   useIsCompactHeaderEnabled
 } from './hooks'
-import { isMacOS } from './constants'
+import { IS_MAC_OS } from './constants'
 
 export default function App() {
   const { isCompactHeaderEnabled } = useIsCompactHeaderEnabled()
@@ -36,7 +36,7 @@ export default function App() {
           WebkitAppRegion: 'drag'
         }}
       >
-        {isMacOS && isCompactHeaderEnabled && <TrafficLightsSpace />}
+        {IS_MAC_OS && isCompactHeaderEnabled && <TrafficLightsSpace />}
         <AccountsTab
           accounts={accounts}
           onSelectAccount={selectAccount}
