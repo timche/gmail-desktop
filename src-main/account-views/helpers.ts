@@ -1,3 +1,5 @@
+import { isDefaultAccount } from '../accounts'
+
 export function getSessionPartitionKey(accountId: string) {
-  return accountId === 'default' ? undefined : `persist:${accountId}`
+  return isDefaultAccount(accountId) ? undefined : `persist:${accountId}`
 }
