@@ -1,8 +1,8 @@
 import * as path from 'path'
 import { app, BrowserWindow } from 'electron'
-import { init as initAutoUpdates } from './updates'
+import { initUpdates } from './updates'
 import config, { ConfigKey } from './config'
-import { init as initDownloads } from './downloads'
+import { initDownloads } from './downloads'
 import { initOrUpdateAppMenu } from './app-menu'
 import ensureOnline from './ensure-online'
 import { handleUnreadCount } from './unread-counts'
@@ -13,9 +13,10 @@ import { getMainWindow, createMainWindow } from './main-window'
 import { initDarkMode } from './dark-mode'
 import { initUserAgent } from './user-agent'
 import { getSessionPartitionKey } from './account-views/helpers'
+import { GMAIL_URL } from './constants'
 
 initDownloads()
-initAutoUpdates()
+initUpdates()
 
 if (!config.get(ConfigKey.HardwareAcceleration)) {
   app.disableHardwareAcceleration()
@@ -57,9 +58,7 @@ app.on('open-url', (event, url) => {
       }
     })
 
-    composeWindow.loadURL(
-      `https://mail.google.com/mail/?extsrc=mailto&url=${url}`
-    )
+    composeWindow.loadURL(`${GMAIL_URL}/mail/?extsrc=mailto&url=${url}`)
   }
 })
 

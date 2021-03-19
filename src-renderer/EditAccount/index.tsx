@@ -1,9 +1,7 @@
 import * as React from 'react'
 import {
   Container,
-  Text,
   Input,
-  Box,
   Flex,
   Heading,
   Tag,
