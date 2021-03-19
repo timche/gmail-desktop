@@ -3,11 +3,11 @@ import { app, BrowserWindow, nativeTheme } from 'electron'
 import { is } from 'electron-util'
 import { getSelectedAccount } from '../accounts'
 import config, { ConfigKey } from '../config'
-import { SHOULD_START_MINIMIZED } from '../constants'
 import { toggleAppVisiblityTrayItem } from '../tray'
 import { setAppMenuBarVisibility } from '../utils'
 import { getAccountView } from '../account-views'
 import { getIsQuitting } from '../app'
+import { shouldStartMinimized } from '../helpers'
 
 let mainWindow: BrowserWindow
 
@@ -39,7 +39,7 @@ export function createMainWindow(): void {
       enableRemoteModule: false,
       preload: path.join(__dirname, 'preload.js')
     },
-    show: !SHOULD_START_MINIMIZED,
+    show: !shouldStartMinimized(),
     icon: is.linux
       ? path.join(__dirname, '..', '..', 'static', 'icon.png')
       : undefined,
@@ -102,7 +102,7 @@ export function createMainWindow(): void {
   })
 
   mainWindow.webContents.on('dom-ready', () => {
-    if (!SHOULD_START_MINIMIZED) {
+    if (!shouldStartMinimized()) {
       mainWindow.show()
     }
   })

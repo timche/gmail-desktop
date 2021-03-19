@@ -11,15 +11,18 @@ import config, { ConfigKey, Account } from './config'
 import { sendToMainWindow, getMainWindow } from './main-window'
 import { initOrUpdateDockMenu } from './dock-menu'
 import { updateTrayMenu } from './tray'
-
-const DEFAULT_ACCOUNT_ID = 'default'
+import { DEFAULT_ACCOUNT_ID } from './constants'
 
 export function getAccounts() {
   return config.get(ConfigKey.Accounts)
 }
 
+export function isDefaultAccount(accountId: string) {
+  return accountId === DEFAULT_ACCOUNT_ID
+}
+
 export function getDefaultAccount() {
-  return getAccounts().find(({ id }) => id === 'default')
+  return getAccounts().find(({ id }) => isDefaultAccount(id))
 }
 
 export function getSelectedAccount() {
