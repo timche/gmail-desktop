@@ -20,6 +20,7 @@ import { enableAutoFixUserAgent, removeCustomUserAgent } from './user-agent'
 import {
   getAccountsMenuItems,
   getSelectedAccount,
+  isDefaultAccount,
   removeAccount
 } from './accounts'
 import { getMainWindow, sendToMainWindow } from './main-window'
@@ -161,7 +162,7 @@ export function initOrUpdateAppMenu() {
             const selectedAccount = getSelectedAccount()
 
             if (selectedAccount) {
-              if (selectedAccount.id === 'default') {
+              if (isDefaultAccount(selectedAccount.id)) {
                 dialog.showMessageBox({
                   type: 'info',
                   message: "The default account can't be removed."
