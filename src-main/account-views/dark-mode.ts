@@ -60,12 +60,18 @@ function enableDarkMode(): void {
 }
 
 async function initDarkMode(): Promise<void> {
-  const darkMode = await ipcRenderer.invoke('get-dark-mode')
+  const darkMode = await ipcRenderer.invoke('init-dark-mode')
 
-  if (darkMode) {
-    window.addEventListener('DOMContentLoaded', () => {
-      enableDarkMode()
-    })
+  if (darkMode.enabled) {
+    if (darkMode.initLazy) {
+      ipcRenderer.once('account-selected', () => {
+        enableDarkMode()
+      })
+    } else {
+      window.addEventListener('DOMContentLoaded', () => {
+        enableDarkMode()
+      })
+    }
   }
 
   ipcRenderer.on('dark-mode-updated', (_event, enabled: boolean) => {

@@ -10,13 +10,14 @@ import { initTray } from './tray'
 import { initOrUpdateDockMenu } from './dock-menu'
 import { getSelectedAccount, initAccounts } from './accounts'
 import { getMainWindow, createMainWindow } from './main-window'
-import { initDarkMode } from './dark-mode'
+import { initDarkMode, initNativeThemeSource } from './dark-mode'
 import { initUserAgent } from './user-agent'
 import { getSessionPartitionKey } from './account-views/helpers'
 import { GMAIL_URL } from './constants'
 
 initDownloads()
 initUpdates()
+initNativeThemeSource()
 
 if (!config.get(ConfigKey.HardwareAcceleration)) {
   app.disableHardwareAcceleration()
