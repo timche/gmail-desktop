@@ -1,10 +1,8 @@
 import { shell } from 'electron'
 import * as path from 'path'
-
-import { createNotification } from './notifications'
-
 import electronDl = require('electron-dl')
 import config, { ConfigKey } from './config'
+import { createNotification } from './notifications'
 
 type State = 'cancelled' | 'completed' | 'interrupted'
 
@@ -27,15 +25,18 @@ function onDownloadComplete(filename: string, state: State): void {
 }
 
 export function init(): void {
+  const openFolderWhenDone = config.get(ConfigKey.DownloadsOpenFolderWhenDone)
+  const handleStarted = (item: Electron.DownloadItem) => {
+    item.once('done', (_, state) => {
+      onDownloadComplete(item.getFilename(), state)
+    })
+  }
+
   electronDl({
     saveAs: config.get(ConfigKey.DownloadsShowSaveAs),
-    openFolderWhenDone: config.get(ConfigKey.DownloadsOpenFolderWhenDone),
+    openFolderWhenDone,
     directory: config.get(ConfigKey.DownloadsLocation),
     showBadge: false,
-    onStarted: (item) => {
-      item.once('done', (_, state) => {
-        onDownloadComplete(item.getFilename(), state)
-      })
-    }
+    onStarted: openFolderWhenDone ? undefined : handleStarted
   })
 }
