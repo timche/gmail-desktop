@@ -1,4 +1,4 @@
-import { globalShortcut, ipcMain } from 'electron'
+import { ipcMain } from 'electron'
 import {
   createAccountView,
   removeAccountView,
@@ -84,17 +84,6 @@ export function removeAccount(accountId: string) {
   config.set(ConfigKey.Accounts, accounts)
 }
 
-function registerAccountShortcuts() {
-  for (let i = 1; i <= 9; i++) {
-    globalShortcut.register(`CommandOrControl+${i}`, () => {
-      const account = getAccounts()[i - 1]
-      if (account) {
-        selectAccount(account.id)
-      }
-    })
-  }
-}
-
 export function getAccountsMenuItems(withAccelerator?: boolean) {
   return config.get(ConfigKey.Accounts).map(({ id, label }, index) => ({
     label,
@@ -137,8 +126,6 @@ export function initAccounts() {
     showAccountViews()
     removeAccount(accountId)
   })
-
-  registerAccountShortcuts()
 
   const accounts = getAccounts()
 
