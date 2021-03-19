@@ -16,7 +16,7 @@ import {
 import { enableAutoFixUserAgent } from '../user-agent'
 import { platform } from '../helpers'
 import { cleanURLFromGoogle } from '../utils'
-import { getMainWindow } from '../main-window'
+import { getMainWindow, sendToMainWindow } from '../main-window'
 import { getSelectedAccount, selectAccount } from '../accounts'
 import { ACCOUNTS_TAB_HEIGHT, GMAIL_URL } from '../constants'
 import { is } from 'electron-util'
@@ -256,7 +256,8 @@ export function createAccountView(accountId: string, setAsTopView?: boolean) {
 
       // `Add account` opens `accounts.google.com`
       if (url.startsWith('https://accounts.google.com')) {
-        accountView.webContents.loadURL(url)
+        sendToMainWindow('add-account-request')
+        hideAccountViews()
         return
       }
 
