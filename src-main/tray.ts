@@ -10,8 +10,8 @@ import {
 import { is } from 'electron-util'
 import { getAccountsMenuItems } from './accounts'
 import config, { ConfigKey } from './config'
-import { SHOULD_START_MINIMIZED } from './constants'
 import { getMainWindow } from './main-window'
+import { shouldStartMinimized } from './helpers'
 
 let tray: Tray
 let trayMenu: Menu
@@ -104,12 +104,12 @@ export function getTrayMenuTemplate() {
         getMainWindow().show()
       },
       label: 'Show',
-      visible: SHOULD_START_MINIMIZED,
+      visible: shouldStartMinimized(),
       id: 'show-win'
     },
     {
       label: 'Hide',
-      visible: !SHOULD_START_MINIMIZED,
+      visible: !shouldStartMinimized(),
       click: () => {
         getMainWindow().hide()
       },

@@ -2,6 +2,7 @@ import { app, ipcMain } from 'electron'
 import { is } from 'electron-util'
 import Store = require('electron-store')
 import { getPlatformUserAgentFix } from './user-agent'
+import { DEFAULT_ACCOUNT_ID } from './constants'
 
 interface LastWindowState {
   bounds: {
@@ -102,7 +103,7 @@ const defaults: TypedStore = {
   [ConfigKey.ReleaseChannel]: 'stable',
   [ConfigKey.Accounts]: [
     {
-      id: 'default',
+      id: DEFAULT_ACCOUNT_ID,
       label: 'Default',
       selected: true
     }
