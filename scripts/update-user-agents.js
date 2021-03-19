@@ -25,11 +25,14 @@ async function main() {
   }
 
   await writeJsonFile(
-    path.resolve(__dirname, '..', 'src', 'user-agents.json'),
+    path.resolve(__dirname, '..', 'src-main', 'user-agents.json'),
     {
       windows: match[0],
       macos: match[1],
       linux: match[5]
+    },
+    {
+      detectIndent: true
     }
   )
 
