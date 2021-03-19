@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Tabs, TabList, Tab, Badge } from '@chakra-ui/react'
-import { accountTabsHeight } from '../constants'
+import { TOP_BAR_HEIGHT } from '../constants'
 import { Account } from '../types'
 
 interface AccountsTabProps {
@@ -24,7 +24,7 @@ function AccountsTab({
       size="sm"
       index={selectedAccountIndex}
     >
-      <TabList height={accountTabsHeight} borderBottomWidth="1px">
+      <TabList height={TOP_BAR_HEIGHT} borderBottomWidth="1px">
         {accounts.map(({ id, label, unreadCount }) => {
           return (
             <Tab

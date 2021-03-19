@@ -26,7 +26,7 @@ function onDownloadComplete(filename: string, state: State): void {
   )
 }
 
-export function init(): void {
+export function initDownloads(): void {
   electronDl({
     saveAs: config.get(ConfigKey.DownloadsShowSaveAs),
     openFolderWhenDone: config.get(ConfigKey.DownloadsOpenFolderWhenDone),

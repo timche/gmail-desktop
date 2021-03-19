@@ -1,9 +1,7 @@
 import { ipcRenderer as ipc } from 'electron'
 import log from 'electron-log'
-
 import { ConfigKey } from '../config'
 import initDarkMode from './dark-mode'
-
 import elementReady = require('element-ready')
 
 const INTERVAL = 1000
