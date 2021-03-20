@@ -453,6 +453,7 @@ export function initOrUpdateAppMenu() {
           label: 'Developer Tools',
           accelerator: is.macos ? 'Command+Alt+I' : 'Control+Shift+I',
           click() {
+            getMainWindow().webContents.openDevTools({ mode: 'detach' })
             const selectedAccountView = getSelectedAccountView()
             if (selectedAccountView) {
               selectedAccountView.webContents.openDevTools()
