@@ -5,7 +5,7 @@ import { getSelectedAccount } from '../accounts'
 import config, { ConfigKey } from '../config'
 import { toggleAppVisiblityTrayItem } from '../tray'
 import { setAppMenuBarVisibility } from '../utils'
-import { getAccountView } from '../account-views'
+import { getAccountView, getSelectedAccountView } from '../account-views'
 import { getIsQuitting } from '../app'
 import { openExternalUrl, shouldStartMinimized } from '../helpers'
 
@@ -99,6 +99,13 @@ export function createMainWindow(): void {
 
   mainWindow.on('show', () => {
     toggleAppVisiblityTrayItem(true)
+  })
+
+  mainWindow.on('focus', () => {
+    const selectedAccountView = getSelectedAccountView()
+    if (selectedAccountView) {
+      selectedAccountView.webContents.focus()
+    }
   })
 
   mainWindow.webContents.on('dom-ready', () => {
