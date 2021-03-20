@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import {
   Text,
   Heading,
@@ -12,7 +12,8 @@ import {
 import htmlReactParser, {
   domToReact,
   attributesToProps,
-  DOMNode
+  DOMNode,
+  HTMLReactParserOptions
 } from 'html-react-parser'
 import { Element as ElementNode } from 'domhandler/lib/node'
 
@@ -20,7 +21,7 @@ function parseDom(nodes: DOMNode[]) {
   return domToReact(nodes, htmlReactParserOptions)
 }
 
-const htmlReactParserOptions = {
+const htmlReactParserOptions: HTMLReactParserOptions = {
   replace: (domNode) => {
     if (domNode instanceof ElementNode) {
       const { name, attribs, children } = domNode
@@ -53,6 +54,8 @@ const htmlReactParserOptions = {
         default:
       }
     }
+
+    return null
   }
 }
 

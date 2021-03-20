@@ -14,6 +14,7 @@ jobs:
       - uses: actions/checkout@v2
       - run: HOMEBREW_NO_AUTO_UPDATE=1 brew install rpm
       - run: yarn --frozen-lockfile
+      - run: yarn type-check
       - run: yarn lint
       - run: yarn build
         env:

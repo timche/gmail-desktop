@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import { Box } from '@chakra-ui/react'
 import { IS_MAC_OS } from '../constants'
 

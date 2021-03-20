@@ -1,22 +1,3 @@
-import { IpcRenderer } from 'electron'
-
-declare global {
-  interface Window {
-    ipc: {
-      send: IpcRenderer['send']
-      invoke: IpcRenderer['invoke']
-      on: (channel: string, listener: (...args: any[]) => void) => void
-    }
-    accounts: Account[]
-  }
-}
-
-declare module 'react' {
-  interface CSSProperties {
-    WebkitAppRegion: 'drag' | 'no-drag'
-  }
-}
-
 export interface Account {
   id: string
   label: string
