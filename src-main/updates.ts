@@ -59,19 +59,15 @@ export function showUpdateAvailable({ version, releaseNotes }: UpdateInfo) {
 export async function manuallyCheckForUpdates(): Promise<void> {
   try {
     const { updateInfo } = await autoUpdater.checkForUpdates()
+    const currentVersion = app.getVersion()
 
-    if (!updateInfo) {
+    if (updateInfo.version === currentVersion) {
       dialog.showMessageBox({
         type: 'info',
         message: `You're up to date!`,
-        detail: `${
-          app.name
-        } ${app.getVersion()} is currently the newest version available.`
+        detail: `${app.name} v${currentVersion} is currently the newest version available.`
       })
-      return
     }
-
-    showUpdateAvailable(updateInfo)
   } catch (error: unknown) {
     dialog.showMessageBox({
       type: 'info',
