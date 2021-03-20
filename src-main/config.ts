@@ -157,7 +157,7 @@ if (config.get(ConfigKey.ResetConfig)) {
   config.set(ConfigKey.ResetConfig, false)
 }
 
-ipcMain.handle('is-compact-header-enabled', () =>
+ipcMain.handle('config:compact-header', () =>
   config.get(ConfigKey.CompactHeader)
 )
 

@@ -5,18 +5,17 @@ import AccountsTab from './AccountsTab'
 import AddAccount from './AddAccount'
 import EditAccount from './EditAccount'
 import AppUpdate from './AppUpdate'
+import ReleaseNotes from './ReleaseNotes'
 import {
   useAccounts,
   useAddAccount,
   useDarkMode,
   useEditAccount,
-  useIsCompactHeaderEnabled,
   useAppUpdate
 } from './hooks'
 import { IS_MAC_OS } from './constants'
 
 export default function App() {
-  const { isCompactHeaderEnabled } = useIsCompactHeaderEnabled()
   const { accounts, selectAccount } = useAccounts()
   const { isAddingAccount, addAccount, cancelAddAccount } = useAddAccount()
   const {
@@ -40,6 +39,38 @@ export default function App() {
 
   useDarkMode()
 
+  const appRegionStyle: React.CSSProperties | undefined = IS_MAC_OS
+    ? {
+        WebkitAppRegion: 'drag'
+      }
+    : undefined
+
+  const renderBanner = () => {
+    let banner: JSX.Element
+
+    if (updateStatus) {
+      banner = (
+        <AppUpdate
+          status={updateStatus}
+          updateInfo={updateInfo}
+          showReleaseNotes={showReleaseNotes}
+          downloadPercent={updateDownloadPercent}
+          onClickDownload={downloadUpdate}
+          onClickRestart={installUpdate}
+          onDismiss={dismissUpdate}
+          onCancelDownload={cancelUpdateDownload}
+          onToggleReleaseNotes={toggleReleaseNotes}
+        />
+      )
+    }
+
+    if (banner) {
+      return <Box style={appRegionStyle}>{banner}</Box>
+    }
+
+    return null
+  }
+
   const renderContent = () => {
     if (isAddingAccount) {
       return <AddAccount onAdd={addAccount} onCancel={cancelAddAccount} />
@@ -56,39 +87,25 @@ export default function App() {
       )
     }
 
-    if (updateStatus) {
-      return (
-        <AppUpdate
-          status={updateStatus}
-          updateInfo={updateInfo}
-          showReleaseNotes={showReleaseNotes}
-          downloadPercent={updateDownloadPercent}
-          onClickDownload={downloadUpdate}
-          onClickRestart={installUpdate}
-          onDismiss={dismissUpdate}
-          onCancelDownload={cancelUpdateDownload}
-          onToggleReleaseNotes={toggleReleaseNotes}
-        />
-      )
+    if (showReleaseNotes) {
+      return <ReleaseNotes notes={updateInfo.releaseNotes} />
     }
+
+    return null
   }
 
   return (
     <Flex height="100vh" flexDirection="column">
-      <Flex
-        style={{
-          // @ts-expect-error: Complains that it doesn't exist, but it does.
-          WebkitAppRegion: 'drag'
-        }}
+      {renderBanner()}
+      <AccountsTab
+        accounts={accounts}
+        onSelectAccount={selectAccount}
+        isDisabled={isAddingAccount || isEditingAccount || showReleaseNotes}
+        style={appRegionStyle}
       >
-        {IS_MAC_OS && isCompactHeaderEnabled && <TrafficLightsSpace />}
-        <AccountsTab
-          accounts={accounts}
-          onSelectAccount={selectAccount}
-          isDisabled={isAddingAccount || isEditingAccount || showReleaseNotes}
-        />
-      </Flex>
-      <Box flex={1} overflowY="auto" pt={!updateStatus && 10}>
+        {!updateStatus && <TrafficLightsSpace />}
+      </AccountsTab>
+      <Box flex={1} py={8} overflowY="auto">
         {renderContent()}
       </Box>
     </Flex>

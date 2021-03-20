@@ -1,30 +1,39 @@
 import * as React from 'react'
 import { Tabs, TabList, Tab, Badge } from '@chakra-ui/react'
-import { TOP_BAR_HEIGHT } from '../constants'
+import { TOP_ELEMENT_HEIGHT } from '../constants'
 import { Account } from '../types'
 
 interface AccountsTabProps {
   accounts: Account[]
   onSelectAccount: (accountId: string) => void
   isDisabled: boolean
+  children?: JSX.Element
+  style?: React.ComponentProps<typeof Tabs>['style']
 }
 
 function AccountsTab({
   accounts,
   onSelectAccount,
-  isDisabled
+  isDisabled,
+  children,
+  style
 }: AccountsTabProps) {
+  if (accounts.length < 2) {
+    return null
+  }
+
   const selectedAccountIndex = accounts.findIndex(({ selected }) => selected)
 
   return (
     <Tabs
       isFitted
-      flex="1"
       colorScheme="red"
       size="sm"
       index={selectedAccountIndex}
+      style={style}
     >
-      <TabList height={TOP_BAR_HEIGHT} borderBottomWidth="1px">
+      <TabList height={TOP_ELEMENT_HEIGHT} borderBottomWidth="1px">
+        {children}
         {accounts.map(({ id, label, unreadCount }) => {
           return (
             <Tab
