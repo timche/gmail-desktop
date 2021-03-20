@@ -1946,6 +1946,23 @@
     "@storybook/components" "6.1.21"
     core-js "^3.0.1"
 
+"@storybook/addon-viewport@^6.1.21":
+  version "6.1.21"
+  resolved "https://registry.yarnpkg.com/@storybook/addon-viewport/-/addon-viewport-6.1.21.tgz#893090cca12f55abb4d8acade5f04e58e6317b1f"
+  integrity sha512-FrQk0BXCI4HdbBn9+8b+Cp2HvsweZkgW/joKfcF2vVLoasUBB4bl+9uU3HV/3a08glgjPl24caDMPgoRKS90WQ==
+  dependencies:
+    "@storybook/addons" "6.1.21"
+    "@storybook/api" "6.1.21"
+    "@storybook/client-logger" "6.1.21"
+    "@storybook/components" "6.1.21"
+    "@storybook/core-events" "6.1.21"
+    "@storybook/theming" "6.1.21"
+    core-js "^3.0.1"
+    global "^4.3.2"
+    memoizerific "^1.11.3"
+    prop-types "^15.7.2"
+    regenerator-runtime "^0.13.7"
+
 "@storybook/addons@6.1.21":
   version "6.1.21"
   resolved "https://registry.yarnpkg.com/@storybook/addons/-/addons-6.1.21.tgz#94bb66fc51d1dfee80d0fe84f5b83c10045651b5"
