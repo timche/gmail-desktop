@@ -41,7 +41,8 @@ export default function App() {
 
   const appRegionStyle: React.CSSProperties | undefined = IS_MAC_OS
     ? {
-        WebkitAppRegion: 'drag'
+        WebkitAppRegion: 'drag',
+        WebkitUserSelect: 'none'
       }
     : undefined
 
