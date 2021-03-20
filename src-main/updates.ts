@@ -1,7 +1,7 @@
 import { app, dialog, ipcMain } from 'electron'
 import log from 'electron-log'
 import { autoUpdater } from 'electron-updater'
-import { CancellationToken, UpdateInfo } from 'builder-util-runtime'
+import { CancellationToken, UpdateInfo, HttpError } from 'builder-util-runtime'
 import { is } from 'electron-util'
 import config, { ConfigKey } from './config'
 import { initOrUpdateAppMenu } from './app-menu'
@@ -56,19 +56,30 @@ export function showUpdateAvailable({ version, releaseNotes }: UpdateInfo) {
   updateAllAccountViewBounds()
 }
 
+function showUpToDate() {
+  const currentVersion = app.getVersion()
+
+  dialog.showMessageBox({
+    type: 'info',
+    message: `You're up to date!`,
+    detail: `${app.name} v${currentVersion} is currently the newest version available.`
+  })
+}
+
 export async function manuallyCheckForUpdates(): Promise<void> {
   try {
     const { updateInfo } = await autoUpdater.checkForUpdates()
     const currentVersion = app.getVersion()
 
     if (updateInfo.version === currentVersion) {
-      dialog.showMessageBox({
-        type: 'info',
-        message: `You're up to date!`,
-        detail: `${app.name} v${currentVersion} is currently the newest version available.`
-      })
+      showUpToDate()
     }
   } catch (error: unknown) {
+    if (error instanceof HttpError && error.statusCode === 404) {
+      showUpToDate()
+      return
+    }
+
     dialog.showMessageBox({
       type: 'info',
       message: 'Check for updates has failed',
