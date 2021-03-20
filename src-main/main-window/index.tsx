@@ -7,7 +7,7 @@ import { toggleAppVisiblityTrayItem } from '../tray'
 import { setAppMenuBarVisibility } from '../utils'
 import { getAccountView } from '../account-views'
 import { getIsQuitting } from '../app'
-import { shouldStartMinimized } from '../helpers'
+import { openExternalUrl, shouldStartMinimized } from '../helpers'
 
 let mainWindow: BrowserWindow
 
@@ -105,5 +105,10 @@ export function createMainWindow(): void {
     if (!shouldStartMinimized()) {
       mainWindow.show()
     }
+  })
+
+  mainWindow.webContents.on('will-navigate', (event, url) => {
+    event.preventDefault()
+    openExternalUrl(url)
   })
 }

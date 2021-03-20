@@ -1,15 +1,17 @@
 import * as React from 'react'
+import { Box, Flex } from '@chakra-ui/react'
 import TrafficLightsSpace from './TrafficLightsSpace'
 import AccountsTab from './AccountsTab'
 import AddAccount from './AddAccount'
 import EditAccount from './EditAccount'
-import { Flex } from '@chakra-ui/react'
+import AppUpdate from './AppUpdate'
 import {
   useAccounts,
   useAddAccount,
   useDarkMode,
   useEditAccount,
-  useIsCompactHeaderEnabled
+  useIsCompactHeaderEnabled,
+  useAppUpdate
 } from './hooks'
 import { IS_MAC_OS } from './constants'
 
@@ -24,13 +26,56 @@ export default function App() {
     cancelEditAccount,
     removeAccount
   } = useEditAccount()
+  const {
+    updateStatus,
+    updateInfo,
+    updateDownloadPercent,
+    downloadUpdate,
+    installUpdate,
+    dismissUpdate,
+    cancelUpdateDownload,
+    toggleReleaseNotes,
+    showReleaseNotes
+  } = useAppUpdate()
 
   useDarkMode()
 
+  const renderContent = () => {
+    if (isAddingAccount) {
+      return <AddAccount onAdd={addAccount} onCancel={cancelAddAccount} />
+    }
+
+    if (isEditingAccount) {
+      return (
+        <EditAccount
+          account={editingAccount}
+          onSave={saveEditAccount}
+          onCancel={cancelEditAccount}
+          onRemove={removeAccount}
+        />
+      )
+    }
+
+    if (updateStatus) {
+      return (
+        <AppUpdate
+          status={updateStatus}
+          updateInfo={updateInfo}
+          showReleaseNotes={showReleaseNotes}
+          downloadPercent={updateDownloadPercent}
+          onClickDownload={downloadUpdate}
+          onClickRestart={installUpdate}
+          onDismiss={dismissUpdate}
+          onCancelDownload={cancelUpdateDownload}
+          onToggleReleaseNotes={toggleReleaseNotes}
+        />
+      )
+    }
+  }
+
   return (
-    <>
+    <Flex height="100vh" flexDirection="column">
       <Flex
-        mb="10"
         style={{
           // @ts-expect-error: Complains that it doesn't exist, but it does.
           WebkitAppRegion: 'drag'
@@ -40,20 +85,12 @@ export default function App() {
         <AccountsTab
           accounts={accounts}
           onSelectAccount={selectAccount}
-          isDisabled={isAddingAccount || isEditingAccount}
+          isDisabled={isAddingAccount || isEditingAccount || showReleaseNotes}
         />
       </Flex>
-      {isAddingAccount && (
-        <AddAccount onAdd={addAccount} onCancel={cancelAddAccount} />
-      )}
-      {isEditingAccount && (
-        <EditAccount
-          account={editingAccount}
-          onSave={saveEditAccount}
-          onCancel={cancelEditAccount}
-          onRemove={removeAccount}
-        />
-      )}
-    </>
+      <Box flex={1} overflowY="auto" pt={!updateStatus && 10}>
+        {renderContent()}
+      </Box>
+    </Flex>
   )
 }

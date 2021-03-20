@@ -31,6 +31,10 @@ export function getIsQuitting() {
   return isQuitting
 }
 
+export function setIsQuitting(quit: boolean) {
+  isQuitting = quit
+}
+
 if (!app.requestSingleInstanceLock()) {
   app.quit()
 }

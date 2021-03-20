@@ -1,80 +1,164 @@
-import { app, dialog } from 'electron'
+import { app, dialog, ipcMain } from 'electron'
 import log from 'electron-log'
 import { autoUpdater } from 'electron-updater'
+import { CancellationToken, UpdateInfo } from 'builder-util-runtime'
 import { is } from 'electron-util'
-
 import config, { ConfigKey } from './config'
-import { viewLogs } from './logs'
-import { createNotification } from './notifications'
 import { initOrUpdateAppMenu } from './app-menu'
+import { sendToMainWindow } from './main-window'
+import {
+  hideAccountViews,
+  showAccountViews,
+  updateAllAccountViewBounds
+} from './account-views'
+import { setIsQuitting } from './app'
+import { createNotification } from './notifications'
 
-const UPDATE_CHECK_INTERVAL = 60000 * 60 * 3 // 3 Hours
+const AUTO_UPDATE_CHECK_INTERVAL = 60000 * 60 * 3 // 4 Hours
+
+let autoUpdateInterval: ReturnType<typeof setInterval>
+let isUpdateAvailable = false
+let downloadCancellationToken: CancellationToken
+
+export function getIsUpdateAvailable() {
+  return isUpdateAvailable
+}
+
+export function setAutoUpdateCheck(enable: boolean) {
+  if (enable) {
+    if (autoUpdateInterval) {
+      return
+    }
+
+    autoUpdateInterval = setInterval(() => {
+      autoUpdater.checkForUpdates()
+    }, AUTO_UPDATE_CHECK_INTERVAL)
+  } else if (autoUpdateInterval) {
+    clearInterval(autoUpdateInterval)
+  }
+}
 
 export function changeReleaseChannel(channel: 'stable' | 'dev') {
   autoUpdater.allowPrerelease = channel === 'dev'
   autoUpdater.allowDowngrade = true
-  checkForUpdates()
+  manuallyCheckForUpdates()
   config.set(ConfigKey.ReleaseChannel, channel)
 }
 
-function onUpdateAvailable(): void {
-  createNotification(
-    'Update available',
-    `Please restart ${app.name} to update to the latest version`,
-    () => {
-      app.relaunch()
-      app.quit()
-    }
-  )
+export function showUpdateAvailable({ version, releaseNotes }: UpdateInfo) {
+  isUpdateAvailable = true
+
+  sendToMainWindow('update:available', {
+    version,
+    releaseNotes
+  })
+
+  updateAllAccountViewBounds()
 }
 
-export function initUpdates(): void {
-  if (!is.development) {
-    log.transports.file.level = 'info'
-    autoUpdater.logger = log
+export async function manuallyCheckForUpdates(): Promise<void> {
+  try {
+    const { updateInfo } = await autoUpdater.checkForUpdates()
 
-    if (
-      autoUpdater.allowPrerelease &&
-      config.get(ConfigKey.ReleaseChannel) === 'stable'
-    ) {
-      config.set(ConfigKey.ReleaseChannel, 'dev')
-      initOrUpdateAppMenu()
-    } else if (
-      !autoUpdater.allowPrerelease &&
-      config.get(ConfigKey.ReleaseChannel) === 'dev'
-    ) {
-      autoUpdater.allowPrerelease = true
-      checkForUpdates()
-      initOrUpdateAppMenu()
+    if (!updateInfo) {
+      dialog.showMessageBox({
+        type: 'info',
+        message: `You're up to date!`,
+        detail: `${
+          app.name
+        } ${app.getVersion()} is currently the newest version available.`
+      })
+      return
     }
 
-    autoUpdater.on('update-downloaded', onUpdateAvailable)
-
-    if (config.get(ConfigKey.AutoUpdate)) {
-      setInterval(() => autoUpdater.checkForUpdates, UPDATE_CHECK_INTERVAL)
-      autoUpdater.checkForUpdates()
-    }
+    showUpdateAvailable(updateInfo)
+  } catch (error: unknown) {
+    dialog.showMessageBox({
+      type: 'info',
+      message: 'Check for updates has failed',
+      detail:
+        error instanceof Error
+          ? error.stack
+          : typeof error === 'string'
+          ? error
+          : undefined
+    })
   }
 }
 
-export async function checkForUpdates(): Promise<void> {
-  try {
-    const { downloadPromise } = await autoUpdater.checkForUpdates()
+export function initUpdates(): void {
+  if (is.development) {
+    return
+  }
 
-    // If there isn't an update, notify the user
-    if (!downloadPromise) {
-      dialog.showMessageBox({
-        type: 'info',
-        message: 'There are currently no updates available.'
-      })
-    }
-  } catch (error: unknown) {
-    log.error('Check for updates failed', error)
+  autoUpdater.on('update-available', (updateInfo) => {
+    showUpdateAvailable(updateInfo)
+  })
 
+  autoUpdater.on('download-progress', ({ percent }) => {
+    sendToMainWindow('update:download-progress', percent)
+  })
+
+  autoUpdater.on('update-downloaded', () => {
+    sendToMainWindow('update:install')
     createNotification(
-      'Check for updates failed',
-      'View the logs for more information',
-      viewLogs
+      'Update downloaded',
+      'A restart is required to install the update.'
     )
+  })
+
+  ipcMain.on('update:download', () => {
+    downloadCancellationToken = new CancellationToken()
+    autoUpdater.downloadUpdate(downloadCancellationToken)
+  })
+
+  ipcMain.on('update:install', () => {
+    setIsQuitting(true)
+    autoUpdater.quitAndInstall()
+  })
+
+  ipcMain.on('update:dismiss', () => {
+    isUpdateAvailable = false
+    showAccountViews()
+    updateAllAccountViewBounds()
+  })
+
+  ipcMain.on('update:cancel-download', () => {
+    downloadCancellationToken.cancel()
+    isUpdateAvailable = false
+    updateAllAccountViewBounds()
+  })
+
+  ipcMain.on('update:toggle-release-notes', (_event, visible: boolean) => {
+    if (visible) {
+      hideAccountViews()
+    } else {
+      showAccountViews()
+    }
+  })
+
+  log.transports.file.level = 'info'
+
+  autoUpdater.logger = log
+  autoUpdater.fullChangelog = true
+  autoUpdater.autoDownload = false
+
+  if (
+    autoUpdater.allowPrerelease &&
+    config.get(ConfigKey.ReleaseChannel) === 'stable'
+  ) {
+    config.set(ConfigKey.ReleaseChannel, 'dev')
+    initOrUpdateAppMenu()
+  } else if (
+    !autoUpdater.allowPrerelease &&
+    config.get(ConfigKey.ReleaseChannel) === 'dev'
+  ) {
+    config.set(ConfigKey.ReleaseChannel, 'stable')
+    initOrUpdateAppMenu()
+  }
+
+  if (config.get(ConfigKey.AutoUpdateCheck)) {
+    setAutoUpdateCheck(true)
+    autoUpdater.checkForUpdates()
   }
 }
