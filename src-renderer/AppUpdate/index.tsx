@@ -1,13 +1,5 @@
-import * as React from 'react'
-import {
-  Button,
-  Text,
-  Spacer,
-  Progress,
-  Alert,
-  Flex,
-  HStack
-} from '@chakra-ui/react'
+import React from 'react'
+import { Button, Text, Spacer, Progress, Alert, HStack } from '@chakra-ui/react'
 import { AppUpdateStatus, AppUpdateInfo } from '../types'
 import { TOP_ELEMENT_HEIGHT } from '../constants'
 
@@ -46,7 +38,7 @@ export default function AppUpdate({
     </Button>
   )
 
-  const { version, releaseNotes } = updateInfo
+  const { version } = updateInfo
   const normalizedVersion = `(v${version})`
 
   const renderContent = () => {
@@ -129,6 +121,8 @@ export default function AppUpdate({
         </>
       )
     }
+
+    return null
   }
 
   return (
