@@ -19,3 +19,10 @@ export interface Account {
 }
 
 export type UnreadCounts = Record<string, number>
+
+export type AppUpdateStatus = 'available' | 'downloading' | 'install'
+
+export type AppUpdateInfo = {
+  version: string
+  releaseNotes: Array<{ version: string; note: string | null }>
+}

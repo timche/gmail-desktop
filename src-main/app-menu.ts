@@ -8,7 +8,11 @@ import {
 } from 'electron'
 import * as fs from 'fs'
 import { is } from 'electron-util'
-import { checkForUpdates, changeReleaseChannel } from './updates'
+import {
+  manuallyCheckForUpdates,
+  changeReleaseChannel,
+  setAutoUpdateCheck
+} from './updates'
 import config, { ConfigKey } from './config'
 import {
   setCustomStyle,
@@ -100,7 +104,7 @@ export function initOrUpdateAppMenu() {
         {
           label: 'Check for Updates...',
           click() {
-            checkForUpdates()
+            manuallyCheckForUpdates()
           }
         },
         {
@@ -338,12 +342,20 @@ export function initOrUpdateAppMenu() {
           label: 'Updates',
           submenu: [
             {
-              label: 'Auto Update',
+              label: 'Check For Updates Automatically',
               type: 'checkbox',
-              checked: config.get(ConfigKey.AutoUpdate),
+              checked: config.get(ConfigKey.AutoUpdateCheck),
               click({ checked }: { checked: boolean }) {
-                config.set(ConfigKey.AutoUpdate, checked)
-                showRestartDialog()
+                setAutoUpdateCheck(checked)
+                config.set(ConfigKey.AutoUpdateCheck, checked)
+              }
+            },
+            {
+              label: 'Notify When Update Downloaded',
+              type: 'checkbox',
+              checked: config.get(ConfigKey.NotifyUpdateDownloaded),
+              click({ checked }: { checked: boolean }) {
+                config.set(ConfigKey.NotifyUpdateDownloaded, checked)
               }
             },
             {
