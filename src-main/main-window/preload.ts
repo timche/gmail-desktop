@@ -8,4 +8,4 @@ contextBridge.exposeInMainWorld('ipc', {
       listener(...args)
     })
   }
-})
+} as typeof window.ipc)

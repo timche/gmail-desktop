@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import { Box, Flex } from '@chakra-ui/react'
 import TrafficLightsSpace from './TrafficLightsSpace'
 import AccountsTab from './AccountsTab'
@@ -47,9 +47,9 @@ export default function App() {
     : undefined
 
   const renderBanner = () => {
-    let banner: JSX.Element
+    let banner: JSX.Element | undefined
 
-    if (updateStatus) {
+    if (updateStatus && updateInfo) {
       banner = (
         <AppUpdate
           status={updateStatus}
@@ -77,7 +77,7 @@ export default function App() {
       return <AddAccount onAdd={addAccount} onCancel={cancelAddAccount} />
     }
 
-    if (isEditingAccount) {
+    if (isEditingAccount && editingAccount) {
       return (
         <EditAccount
           account={editingAccount}
@@ -88,7 +88,7 @@ export default function App() {
       )
     }
 
-    if (showReleaseNotes) {
+    if (showReleaseNotes && updateInfo) {
       return <ReleaseNotes notes={updateInfo.releaseNotes} />
     }
 

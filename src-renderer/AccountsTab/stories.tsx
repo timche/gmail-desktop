@@ -1,11 +1,11 @@
+import React from 'react'
 import AccountsTab from '.'
-import { Meta } from '@storybook/react'
 import { action } from '@storybook/addon-actions'
 import { nanoid } from 'nanoid'
 
 export default {
   title: 'AccountsTab'
-} as Meta
+}
 
 export const Default = () => (
   <AccountsTab

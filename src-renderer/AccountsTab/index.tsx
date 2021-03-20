@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import { Tabs, TabList, Tab, Badge } from '@chakra-ui/react'
 import { TOP_ELEMENT_HEIGHT } from '../constants'
 import { Account } from '../types'
@@ -6,8 +6,8 @@ import { Account } from '../types'
 interface AccountsTabProps {
   accounts: Account[]
   onSelectAccount: (accountId: string) => void
-  isDisabled: boolean
-  children?: JSX.Element
+  isDisabled?: boolean
+  children?: React.ReactNode
   style?: React.ComponentProps<typeof Tabs>['style']
 }
 
@@ -40,7 +40,7 @@ function AccountsTab({
               key={id}
               _focus={{ outline: 'none' }}
               onClick={() => {
-                if (accounts[selectedAccountIndex].id !== id) {
+                if (accounts[selectedAccountIndex]?.id !== id) {
                   onSelectAccount(id)
                 }
               }}
@@ -50,7 +50,7 @@ function AccountsTab({
               isDisabled={isDisabled}
             >
               {label}
-              {unreadCount > 0 && (
+              {typeof unreadCount === 'number' && unreadCount > 0 && (
                 <Badge ml="2" colorScheme="red">
                   {unreadCount}
                 </Badge>
