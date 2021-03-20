@@ -3,7 +3,20 @@ import { useEffect } from 'react'
 import theme from '../src-renderer/theme'
 
 export const parameters = {
-  actions: { argTypesRegex: '^on[A-Z].*' }
+  layout: 'fullscreen',
+  actions: { argTypesRegex: '^on[A-Z].*' },
+  viewport: {
+    viewports: {
+      minWidth: {
+        name: 'Minimum Width',
+        styles: {
+          width: '780px',
+          height: '450px'
+        }
+      }
+    },
+    defaultViewport: 'minWidth'
+  }
 }
 
 export const globalTypes = {

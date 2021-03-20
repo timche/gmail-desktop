@@ -4,7 +4,11 @@ const toPath = (_path) => path.join(process.cwd(), _path)
 
 module.exports = {
   stories: ['../src-renderer/**/stories.tsx'],
-  addons: ['@storybook/addon-toolbars', '@storybook/addon-actions'],
+  addons: [
+    '@storybook/addon-toolbars',
+    '@storybook/addon-actions',
+    '@storybook/addon-viewport'
+  ],
   typescript: {
     reactDocgen: false
   },
