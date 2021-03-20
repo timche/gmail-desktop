@@ -4,7 +4,7 @@ import { addCustomCSS, initCustomStyles } from './custom-styles'
 import { enableAutoFixUserAgent } from '../user-agent'
 import { getMainWindow, sendToMainWindow } from '../main-window'
 import { getSelectedAccount, selectAccount } from '../accounts'
-import { ACCOUNTS_TAB_HEIGHT, GMAIL_URL, BANNER_HEIGHT } from '../constants'
+import { TOP_ELEMENT_HEIGHT, GMAIL_URL } from '../constants'
 import { is } from 'electron-util'
 import { addContextMenu } from './context-menu'
 import { getSessionPartitionKey } from './helpers'
@@ -59,14 +59,6 @@ export function forEachAccountView(
   }
 }
 
-export function updateAllAccountViewBounds() {
-  for (const [_accountId, accountView] of accountViews) {
-    updateAccountViewBounds(accountView)
-  }
-
-  sendToAccountViews('burger-menu-offset', is.macos && accountViews.size === 1)
-}
-
 export function updateAccountViewBounds(accountView: BrowserView) {
   const hasMultipleAccounts = accountViews.size > 1
   const isUpdateAvailable = getIsUpdateAvailable()
@@ -75,19 +67,30 @@ export function updateAccountViewBounds(accountView: BrowserView) {
   let offset = 0
 
   if (hasMultipleAccounts) {
-    offset += ACCOUNTS_TAB_HEIGHT
+    offset += TOP_ELEMENT_HEIGHT
   }
 
   if (isUpdateAvailable) {
-    offset += BANNER_HEIGHT
+    offset += TOP_ELEMENT_HEIGHT
   }
 
   accountView.setBounds({
     x: 0,
-    y: hasMultipleAccounts ? offset : 0,
+    y: offset || 0,
     width,
-    height: hasMultipleAccounts ? height - offset : height
+    height: offset ? height - offset : height
   })
+
+  accountView.webContents.send(
+    'burger-menu-offset',
+    is.macos && !isUpdateAvailable && hasMultipleAccounts
+  )
+}
+
+export function updateAllAccountViewBounds() {
+  for (const [_accountId, accountView] of accountViews) {
+    updateAccountViewBounds(accountView)
+  }
 }
 
 export function removeAccountView(accountId: string) {

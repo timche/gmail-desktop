@@ -16,7 +16,6 @@ import { getSessionPartitionKey } from './account-views/helpers'
 import { GMAIL_URL } from './constants'
 
 initDownloads()
-initUpdates()
 initNativeThemeSource()
 
 if (!config.get(ConfigKey.HardwareAcceleration)) {
@@ -97,4 +96,5 @@ app.on('before-quit', () => {
   initOrUpdateAppMenu()
   initTray()
   initOrUpdateDockMenu()
+  initUpdates()
 })()

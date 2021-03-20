@@ -1,18 +1,13 @@
 import * as React from 'react'
-import { useColorMode, Box } from '@chakra-ui/react'
-import { TOP_BAR_HEIGHT } from '../constants'
+import { Box } from '@chakra-ui/react'
+import { IS_MAC_OS } from '../constants'
 
 function TrafficLightsSpace() {
-  const { colorMode } = useColorMode()
+  if (IS_MAC_OS) {
+    return <Box width="80px" />
+  }
 
-  return (
-    <Box
-      width="80px"
-      height={TOP_BAR_HEIGHT}
-      borderBottomWidth="1px"
-      borderBottomColor={colorMode === 'light' ? 'gray.200' : 'whiteAlpha.300'}
-    />
-  )
+  return null
 }
 
 export default TrafficLightsSpace

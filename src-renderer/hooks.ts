@@ -1,5 +1,6 @@
 import { useColorMode } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
+import { IS_MAC_OS } from './constants'
 import ipc from './ipc'
 import { Account, UnreadCounts, AppUpdateInfo, AppUpdateStatus } from './types'
 
@@ -16,15 +17,15 @@ export function useDarkMode() {
   }, [])
 }
 
-export function useIsCompactHeaderEnabled() {
+export function useTitlebar() {
   // Compact header is enabled by default in the app config
   const [isCompactHeaderEnabled, setIsCompactHeaderEnabled] = useState(true)
 
   useEffect(() => {
-    ipc.invoke('is-compact-header-enabled').then(setIsCompactHeaderEnabled)
+    ipc.invoke('config:compact-header').then(setIsCompactHeaderEnabled)
   }, [])
 
-  return { isCompactHeaderEnabled }
+  return { isTitlebarHidden: IS_MAC_OS && isCompactHeaderEnabled }
 }
 
 export function useAccounts() {
