@@ -46,8 +46,9 @@ export function sendToAccountViews(channel: string, ...args: unknown[]) {
 export function selectAccountView(accountId: string) {
   const accountView = getAccountView(accountId)
   if (accountView) {
-    accountView.webContents.send('account-selected')
     getMainWindow().setTopBrowserView(accountView)
+    accountView.webContents.focus()
+    accountView.webContents.send('account-selected')
   }
 }
 
