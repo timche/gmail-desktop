@@ -35,11 +35,11 @@ export function createMainWindow(): void {
       nodeIntegration: false,
       contextIsolation: true,
       enableRemoteModule: false,
-      preload: path.join(__dirname, 'preload.js')
+      preload: path.join(__dirname, 'main-window', 'preload.js')
     },
     show: !shouldStartMinimized(),
     icon: is.linux
-      ? path.join(__dirname, '..', '..', 'static', 'icon.png')
+      ? path.join(__dirname, '..', 'static', 'icon.png')
       : undefined,
     darkTheme: nativeTheme.shouldUseDarkColors
   })
@@ -56,9 +56,7 @@ export function createMainWindow(): void {
     setAppMenuBarVisibility()
   }
 
-  mainWindow.loadFile(
-    path.resolve(__dirname, '..', '..', 'static', 'index.html')
-  )
+  mainWindow.loadFile(path.resolve(__dirname, '..', 'static', 'index.html'))
 
   mainWindow.on('app-command', (_event, command) => {
     const selectedAccount = getSelectedAccount()
