@@ -1,5 +1,4 @@
 import { ipcRenderer as ipc } from 'electron'
-import log from 'electron-log'
 import { ConfigKey } from '../config'
 import initDarkMode from './dark-mode'
 import elementReady = require('element-ready')
@@ -64,8 +63,6 @@ function attachButtonListeners(): void {
         button.addEventListener('click', () => {
           window.close()
         })
-      } else {
-        log.error(`Detect button "${selector}" timed out`)
       }
     })
   }
