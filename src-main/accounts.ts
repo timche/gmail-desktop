@@ -80,11 +80,10 @@ export function removeAccount(accountId: string) {
 
   sendToMainWindow('accounts-updated', accounts)
   removeAccountView(accountId)
+  config.set(ConfigKey.Accounts, accounts)
   initOrUpdateAppMenu()
   initOrUpdateDockMenu()
   updateTrayMenu()
-
-  config.set(ConfigKey.Accounts, accounts)
 }
 
 export function getAccountsMenuItems(withAccelerator?: boolean) {
