@@ -24,9 +24,7 @@ export function createMainWindow(): void {
 
   mainWindow = new BrowserWindow({
     title: app.name,
-    titleBarStyle: config.get(ConfigKey.CompactHeader)
-      ? 'hiddenInset'
-      : 'default',
+    titleBarStyle: is.macos ? 'hiddenInset' : 'default',
     minWidth: 780,
     width: lastWindowState.bounds.width,
     minHeight: 200,
