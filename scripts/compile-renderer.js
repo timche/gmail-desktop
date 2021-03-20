@@ -14,6 +14,7 @@ esbuild
   .build({
     entryPoints: ['./src-renderer/index.tsx'],
     bundle: true,
+    target: 'chrome89',
     sourcemap: !isProd,
     outfile: './dist-renderer/index.js',
     define: {
