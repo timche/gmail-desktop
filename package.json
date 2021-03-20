@@ -170,5 +170,8 @@
         "zip"
       ]
     }
+  },
+  "dependencies": {
+    "@storybook/addon-viewport": "^6.1.21"
   }
 }
