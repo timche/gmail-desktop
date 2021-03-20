@@ -1,5 +1,5 @@
-import { useColorMode } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
+import { useColorMode } from '@chakra-ui/react'
 import { IS_MAC_OS } from './constants'
 import ipc from './ipc'
 import { Account, UnreadCounts, AppUpdateInfo, AppUpdateStatus } from './types'

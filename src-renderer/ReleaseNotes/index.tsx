@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import { Box, Container, Heading, Stack } from '@chakra-ui/react'
 import HtmlParser from './HtmlParser'
 import { AppUpdateInfo } from '../types'
@@ -17,7 +17,7 @@ export default function ReleaseNotes({ notes }: ReleaseNotesProps) {
             <Heading size="md" mb="2">
               v{version}
             </Heading>
-            <HtmlParser html={note} />
+            {note && <HtmlParser html={note} />}
           </Box>
         ))}
       </Stack>
