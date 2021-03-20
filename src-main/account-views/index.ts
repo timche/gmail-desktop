@@ -1,22 +1,15 @@
 import * as path from 'path'
-import {
-  BrowserView,
-  BrowserWindow,
-  app,
-  dialog,
-  shell,
-  session
-} from 'electron'
-import config, { ConfigKey } from '../config'
+import { BrowserView, BrowserWindow, app, dialog, session } from 'electron'
 import { addCustomCSS, initCustomStyles } from './custom-styles'
 import { enableAutoFixUserAgent } from '../user-agent'
-import { cleanURLFromGoogle } from '../utils'
 import { getMainWindow, sendToMainWindow } from '../main-window'
 import { getSelectedAccount, selectAccount } from '../accounts'
-import { ACCOUNTS_TAB_HEIGHT, GMAIL_URL } from '../constants'
+import { ACCOUNTS_TAB_HEIGHT, GMAIL_URL, BANNER_HEIGHT } from '../constants'
 import { is } from 'electron-util'
 import { addContextMenu } from './context-menu'
 import { getSessionPartitionKey } from './helpers'
+import { getIsUpdateAvailable } from '../updates'
+import { openExternalUrl } from '../helpers'
 
 const accountViews = new Map<string, BrowserView>()
 
@@ -75,14 +68,25 @@ export function updateAllAccountViewBounds() {
 }
 
 export function updateAccountViewBounds(accountView: BrowserView) {
-  const shouldAccountViewOffset = getShouldAccountViewOffset()
+  const hasMultipleAccounts = accountViews.size > 1
+  const isUpdateAvailable = getIsUpdateAvailable()
   const { width, height } = getMainWindow().getBounds()
+
+  let offset = 0
+
+  if (hasMultipleAccounts) {
+    offset += ACCOUNTS_TAB_HEIGHT
+  }
+
+  if (isUpdateAvailable) {
+    offset += BANNER_HEIGHT
+  }
 
   accountView.setBounds({
     x: 0,
-    y: shouldAccountViewOffset ? ACCOUNTS_TAB_HEIGHT : 0,
+    y: hasMultipleAccounts ? offset : 0,
     width,
-    height: shouldAccountViewOffset ? height - ACCOUNTS_TAB_HEIGHT : height
+    height: hasMultipleAccounts ? height - offset : height
   })
 }
 
@@ -123,37 +127,6 @@ export function showAccountViews() {
   if (selectedAccount) {
     selectAccountView(selectedAccount.id)
   }
-}
-
-export function getShouldAccountViewOffset() {
-  return accountViews.size > 1
-}
-
-async function openExternalUrl(url: string): Promise<void> {
-  const cleanURL = cleanURLFromGoogle(url)
-
-  if (config.get(ConfigKey.ConfirmExternalLinks)) {
-    const { origin } = new URL(cleanURL)
-    const trustedHosts = config.get(ConfigKey.TrustedHosts)
-
-    if (!trustedHosts.includes(origin)) {
-      const { response, checkboxChecked } = await dialog.showMessageBox({
-        type: 'info',
-        buttons: ['Open Link', 'Cancel'],
-        message: `Do you want to open this external link in your default browser?`,
-        checkboxLabel: `Trust all links on ${origin}`,
-        detail: cleanURL
-      })
-
-      if (response !== 0) return
-
-      if (checkboxChecked) {
-        config.set(ConfigKey.TrustedHosts, [...trustedHosts, origin])
-      }
-    }
-  }
-
-  shell.openExternal(cleanURL)
 }
 
 export function getSelectedAccountView() {

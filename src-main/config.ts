@@ -22,7 +22,8 @@ export interface Account {
 }
 
 export enum ConfigKey {
-  AutoUpdate = 'autoUpdate',
+  AutoUpdateCheck = 'autoUpdateCheck',
+  NotifyUpdateDownloaded = 'notifyUpdateDownloaded',
   CompactHeader = 'compactHeader',
   HideFooter = 'hideFooter',
   HideSupport = 'hideSupport',
@@ -47,7 +48,8 @@ export enum ConfigKey {
 }
 
 type TypedStore = {
-  [ConfigKey.AutoUpdate]: boolean
+  [ConfigKey.AutoUpdateCheck]: boolean
+  [ConfigKey.NotifyUpdateDownloaded]: boolean
   [ConfigKey.LastWindowState]: LastWindowState
   [ConfigKey.CompactHeader]: boolean
   [ConfigKey.HideFooter]: boolean
@@ -72,7 +74,8 @@ type TypedStore = {
 }
 
 const defaults: TypedStore = {
-  [ConfigKey.AutoUpdate]: true,
+  [ConfigKey.AutoUpdateCheck]: true,
+  [ConfigKey.NotifyUpdateDownloaded]: true,
   [ConfigKey.LastWindowState]: {
     bounds: {
       width: 860,

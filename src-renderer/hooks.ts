@@ -1,7 +1,7 @@
 import { useColorMode } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import ipc from './ipc'
-import { Account, UnreadCounts } from './types'
+import { Account, UnreadCounts, AppUpdateInfo, AppUpdateStatus } from './types'
 
 export function useDarkMode() {
   const { setColorMode } = useColorMode()
@@ -108,5 +108,72 @@ export function useEditAccount() {
     saveEditAccount,
     cancelEditAccount,
     removeAccount
+  }
+}
+
+export function useAppUpdate() {
+  const [updateStatus, setUpdateStatus] = useState<
+    AppUpdateStatus | undefined
+  >()
+  const [updateInfo, setUpdateInfo] = useState<AppUpdateInfo | undefined>()
+  const [updateDownloadPercent, setUpdateDownloadPercent] = useState(0)
+  const [showReleaseNotes, setShowReleaseNotes] = useState(false)
+
+  useEffect(() => {
+    ipc.on('update:available', (updateInfo) => {
+      setUpdateInfo(updateInfo)
+      setUpdateStatus('available')
+    })
+
+    ipc.on('update:download-progress', (downloadPercent) => {
+      setUpdateDownloadPercent(downloadPercent)
+    })
+
+    ipc.on('update:install', () => {
+      setUpdateStatus('install')
+    })
+  }, [])
+
+  const resetStates = () => {
+    setUpdateStatus(undefined)
+    setUpdateInfo(undefined)
+    setUpdateDownloadPercent(0)
+    setShowReleaseNotes(false)
+  }
+
+  const downloadUpdate = () => {
+    ipc.send('update:download')
+    setUpdateStatus('downloading')
+  }
+
+  const installUpdate = () => {
+    ipc.send('update:install')
+  }
+
+  const dismissUpdate = () => {
+    ipc.send('update:dismiss')
+    resetStates()
+  }
+
+  const cancelUpdateDownload = () => {
+    ipc.send('update:cancel-download')
+    resetStates()
+  }
+
+  const toggleReleaseNotes = (visible: boolean) => {
+    ipc.send('update:toggle-release-notes', visible)
+    setShowReleaseNotes(visible)
+  }
+
+  return {
+    updateStatus,
+    updateInfo,
+    updateDownloadPercent,
+    downloadUpdate,
+    installUpdate,
+    dismissUpdate,
+    cancelUpdateDownload,
+    toggleReleaseNotes,
+    showReleaseNotes
   }
 }
