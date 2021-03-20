@@ -84,7 +84,7 @@ export function updateAccountViewBounds(accountView: BrowserView) {
 
   accountView.webContents.send(
     'burger-menu-offset',
-    is.macos && !isUpdateAvailable && hasMultipleAccounts
+    is.macos && !isUpdateAvailable && !hasMultipleAccounts
   )
 }
 
