@@ -4,17 +4,12 @@ import {
   Text,
   Spacer,
   Progress,
-  Heading,
-  Container,
-  useColorMode,
   Alert,
-  Stack,
-  Box,
   Flex,
   HStack
 } from '@chakra-ui/react'
-import HtmlParser from './HtmlParser'
 import { AppUpdateStatus, AppUpdateInfo } from '../types'
+import { TOP_ELEMENT_HEIGHT } from '../constants'
 
 export interface AppUpdateProps {
   status: AppUpdateStatus
@@ -39,8 +34,6 @@ export default function AppUpdate({
   onCancelDownload,
   onClickRestart
 }: AppUpdateProps) {
-  const { colorMode } = useColorMode()
-
   const releaseNotesButton = (
     <Button
       size="xs"
@@ -139,25 +132,8 @@ export default function AppUpdate({
   }
 
   return (
-    <Flex height="100%" flexDirection="column">
-      <Alert px={3} py={1} justifyContent="center">
-        <HStack>{renderContent()}</HStack>
-      </Alert>
-      <Box py={10} flex={1} overflowY="auto">
-        <Container>
-          <Heading mb={8}>Release Notes</Heading>
-          <Stack key={version} spacing={4}>
-            {releaseNotes.map(({ version, note }) => (
-              <Box>
-                <Heading size="md" mb="2">
-                  v{version}
-                </Heading>
-                <HtmlParser html={note} />
-              </Box>
-            ))}
-          </Stack>
-        </Container>
-      </Box>
-    </Flex>
+    <Alert height={TOP_ELEMENT_HEIGHT} justifyContent="center">
+      <HStack>{renderContent()}</HStack>
+    </Alert>
   )
 }

@@ -1,6 +1,4 @@
-export const ACCOUNTS_TAB_HEIGHT = 40
-
-export const BANNER_HEIGHT = 32
+export const TOP_ELEMENT_HEIGHT = 40
 
 export const GMAIL_URL = 'https://mail.google.com'
 
