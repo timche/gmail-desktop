@@ -5,7 +5,7 @@ import { CancellationToken, UpdateInfo } from 'builder-util-runtime'
 import { is } from 'electron-util'
 import config, { ConfigKey } from './config'
 import { initOrUpdateAppMenu } from './app-menu'
-import { sendToMainWindow } from './main-window'
+import { getMainWindow, sendToMainWindow } from './main-window'
 import {
   hideAccountViews,
   showAccountViews,
@@ -89,6 +89,7 @@ export function initUpdates(): void {
 
   autoUpdater.on('update-available', (updateInfo) => {
     showUpdateAvailable(updateInfo)
+    getMainWindow().show()
   })
 
   autoUpdater.on('download-progress', ({ percent }) => {
