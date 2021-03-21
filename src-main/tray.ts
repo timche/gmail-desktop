@@ -30,8 +30,8 @@ export function createTrayIcon(unread: boolean): NativeImage {
   )
 }
 
-const trayIcon = createTrayIcon(false)
-const trayIconUnread = createTrayIcon(true)
+let trayIcon: NativeImage
+let trayIconUnread: NativeImage
 
 export function toggleAppVisiblityTrayItem(isMainWindowVisible: boolean): void {
   if (config.get(ConfigKey.EnableTrayIcon) && tray) {
@@ -131,6 +131,9 @@ export function initTray() {
   if (!config.get(ConfigKey.EnableTrayIcon)) {
     return
   }
+
+  trayIcon = createTrayIcon(false)
+  trayIconUnread = createTrayIcon(true)
 
   tray = new Tray(trayIcon)
 
