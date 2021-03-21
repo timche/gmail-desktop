@@ -178,3 +178,35 @@ export function useAppUpdate() {
     showReleaseNotes
   }
 }
+
+export function useTitleBar() {
+  const [isWindowMaximized, setIsWindowMaximized] = useState(false)
+
+  useEffect(() => {
+    if (!IS_MAC_OS) {
+      ipc.invoke('window:is-maximized').then(setIsWindowMaximized)
+    }
+  }, [])
+
+  return {
+    isTitleBarVisible: !IS_MAC_OS,
+    isWindowMaximized,
+    openAppMenu: () => {
+      ipc.send('title-bar:open-app-menu')
+    },
+    minimzeWindow: () => {
+      ipc.send('window:minimize')
+    },
+    maximizeWindow: () => {
+      ipc.send('window:maximize')
+      setIsWindowMaximized(true)
+    },
+    unmaximizeWindow: () => {
+      ipc.send('window:unmaximize')
+      setIsWindowMaximized(false)
+    },
+    closeWindow: () => {
+      ipc.send('window:close')
+    }
+  }
+}
