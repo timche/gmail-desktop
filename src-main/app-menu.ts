@@ -336,6 +336,30 @@ export function getAppMenu() {
           ]
         },
         {
+          label: 'Title Bar Style',
+          visible: is.linux,
+          submenu: [
+            {
+              label: 'App',
+              type: 'radio',
+              checked: config.get(ConfigKey.TitleBarStyle) === 'app',
+              click() {
+                config.set(ConfigKey.TitleBarStyle, 'app')
+                showRestartDialog()
+              }
+            },
+            {
+              label: 'System',
+              type: 'radio',
+              checked: config.get(ConfigKey.TitleBarStyle) === 'system',
+              click() {
+                config.set(ConfigKey.TitleBarStyle, 'system')
+                showRestartDialog()
+              }
+            }
+          ]
+        },
+        {
           type: 'separator'
         },
         {

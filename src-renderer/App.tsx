@@ -39,7 +39,7 @@ export default function App() {
     showReleaseNotes
   } = useAppUpdate()
   const {
-    isTitleBarVisible,
+    isTitleBarEnabled,
     isWindowMaximized,
     openAppMenu,
     minimzeWindow,
@@ -71,7 +71,7 @@ export default function App() {
 
     if (banner) {
       return (
-        <Box style={isTitleBarVisible ? undefined : appRegionDragStyle}>
+        <Box style={isTitleBarEnabled ? undefined : appRegionDragStyle}>
           {banner}
         </Box>
       )
@@ -105,7 +105,7 @@ export default function App() {
 
   return (
     <Flex height="100vh" flexDirection="column">
-      {isTitleBarVisible && (
+      {isTitleBarEnabled && (
         <TitleBar
           isMaximized={isWindowMaximized}
           onClickMenu={openAppMenu}
@@ -120,7 +120,7 @@ export default function App() {
         accounts={accounts}
         onSelectAccount={selectAccount}
         isDisabled={isAddingAccount || isEditingAccount || showReleaseNotes}
-        style={isTitleBarVisible ? undefined : appRegionDragStyle}
+        style={isTitleBarEnabled ? undefined : appRegionDragStyle}
       >
         {!updateStatus && <TrafficLightsSpace />}
       </AccountsTab>

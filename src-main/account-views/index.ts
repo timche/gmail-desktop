@@ -10,6 +10,7 @@ import { addContextMenu } from './context-menu'
 import { getSessionPartitionKey } from './helpers'
 import { getIsUpdateAvailable } from '../updates'
 import { openExternalUrl } from '../helpers'
+import config, { ConfigKey } from '../config'
 
 const accountViews = new Map<string, BrowserView>()
 
@@ -68,7 +69,8 @@ export function updateAccountViewBounds(accountView: BrowserView) {
   const isUpdateAvailable = getIsUpdateAvailable()
   const { width, height } = getMainWindow().getBounds()
 
-  let offset = is.macos ? 0 : 30 // Linux/Window Title Bar
+  let offset =
+    is.macos || config.get(ConfigKey.TitleBarStyle) === 'system' ? 0 : 30 // Linux/Window Title Bar
 
   if (hasMultipleAccounts) {
     offset += TOP_ELEMENT_HEIGHT
