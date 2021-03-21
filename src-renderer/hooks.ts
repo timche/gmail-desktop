@@ -185,6 +185,14 @@ export function useTitleBar() {
   useEffect(() => {
     if (!IS_MAC_OS) {
       ipc.invoke('window:is-maximized').then(setIsWindowMaximized)
+
+      ipc.on('window:maximized', () => {
+        setIsWindowMaximized(true)
+      })
+
+      ipc.on('window:unmaximized', () => {
+        setIsWindowMaximized(false)
+      })
     }
   }, [])
 
@@ -199,11 +207,9 @@ export function useTitleBar() {
     },
     maximizeWindow: () => {
       ipc.send('window:maximize')
-      setIsWindowMaximized(true)
     },
     unmaximizeWindow: () => {
       ipc.send('window:unmaximize')
-      setIsWindowMaximized(false)
     },
     closeWindow: () => {
       ipc.send('window:close')
