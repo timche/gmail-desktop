@@ -44,7 +44,8 @@ export enum ConfigKey {
   ResetConfig = 'resetConfig',
   ReleaseChannel = 'releaseChannel',
   Accounts = 'accounts',
-  ZoomFactor = 'zoomFactor'
+  ZoomFactor = 'zoomFactor',
+  TitleBarStyle = 'titleBarStyle'
 }
 
 type TypedStore = {
@@ -71,6 +72,7 @@ type TypedStore = {
   [ConfigKey.ReleaseChannel]: 'stable' | 'dev'
   [ConfigKey.Accounts]: Account[]
   [ConfigKey.ZoomFactor]: number
+  [ConfigKey.TitleBarStyle]: 'system' | 'app'
 }
 
 const defaults: TypedStore = {
@@ -111,7 +113,8 @@ const defaults: TypedStore = {
       selected: true
     }
   ],
-  [ConfigKey.ZoomFactor]: 1
+  [ConfigKey.ZoomFactor]: 1,
+  [ConfigKey.TitleBarStyle]: 'app'
 }
 
 const config = new Store<TypedStore>({
