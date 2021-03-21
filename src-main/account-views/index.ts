@@ -14,7 +14,12 @@ import { openExternalUrl } from '../helpers'
 const accountViews = new Map<string, BrowserView>()
 
 export function getAccountView(accountId: string) {
-  return accountViews.get(accountId)
+  const accountView = accountViews.get(accountId)
+  if (!accountView) {
+    throw new Error('Account view is unitialized or has been destroyed')
+  }
+
+  return accountView
 }
 
 export function getAccountIdByViewId(accountViewId: number) {
@@ -31,9 +36,7 @@ export function sendToSelectedAccountView(channel: string, ...args: unknown[]) {
   const selectedAccount = getSelectedAccount()
   if (selectedAccount) {
     const selectedView = getAccountView(selectedAccount.id)
-    if (selectedView) {
-      selectedView.webContents.send(channel, ...args)
-    }
+    selectedView.webContents.send(channel, ...args)
   }
 }
 
@@ -45,11 +48,11 @@ export function sendToAccountViews(channel: string, ...args: unknown[]) {
 
 export function selectAccountView(accountId: string) {
   const accountView = getAccountView(accountId)
-  if (accountView) {
-    getMainWindow().setTopBrowserView(accountView)
-    accountView.webContents.focus()
-    accountView.webContents.send('account-selected')
-  }
+  const mainWindow = getMainWindow()
+
+  mainWindow.setTopBrowserView(accountView)
+  accountView.webContents.focus()
+  accountView.webContents.send('account-selected')
 }
 
 export function forEachAccountView(
@@ -98,17 +101,15 @@ export function removeAccountView(accountId: string) {
   const accountView = getAccountView(accountId)
   const mainWindow = getMainWindow()
 
-  if (accountView) {
-    mainWindow.removeBrowserView(accountView)
-    // `browserView.webContents.destroy()` is undocumented:
-    // https://github.com/electron/electron/issues/10096#issuecomment-774505246
-    // @ts-expect-error
-    accountView.webContents.destroy()
-    session.fromPartition(`persist:${accountId}`).clearStorageData()
-    accountViews.delete(accountId)
+  mainWindow.removeBrowserView(accountView)
+  // `browserView.webContents.destroy()` is undocumented:
+  // https://github.com/electron/electron/issues/10096#issuecomment-774505246
+  // @ts-expect-error
+  accountView.webContents.destroy()
+  session.fromPartition(`persist:${accountId}`).clearStorageData()
+  accountViews.delete(accountId)
 
-    updateAllAccountViewBounds()
-  }
+  updateAllAccountViewBounds()
 }
 
 export function hideAccountViews() {
