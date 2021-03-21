@@ -149,13 +149,28 @@ export function createMainWindow(): void {
   })
 
   if (!is.macos) {
-    mainWindow.on('maximize', () => {
-      sendToMainWindow('window:maximized')
-    })
+    // The events `maximize` and `unmaximize` are not sent on Linux for some reason.
+    // Probably for a similar reason as above when handling the `resize` event
+    // where a maximize/unmaximize animation is happening.
+    if (is.linux) {
+      const debouncedIsMaximized = debounce(() => {
+        if (mainWindow) {
+          sendToMainWindow(
+            mainWindow.isMaximized() ? 'window:maximized' : 'window:unmaximized'
+          )
+        }
+      }, 200)
 
-    mainWindow.on('unmaximize', () => {
-      sendToMainWindow('window:unmaximized')
-    })
+      mainWindow.on('resize', debouncedIsMaximized)
+    } else {
+      mainWindow.on('maximize', () => {
+        sendToMainWindow('window:maximized')
+      })
+
+      mainWindow.on('unmaximize', () => {
+        sendToMainWindow('window:unmaximized')
+      })
+    }
 
     ipcMain.handle('window:is-maximized', () => {
       if (mainWindow) {
