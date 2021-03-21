@@ -11,9 +11,11 @@ import {
   useAddAccount,
   useDarkMode,
   useEditAccount,
-  useAppUpdate
+  useAppUpdate,
+  useTitleBar
 } from './hooks'
-import { IS_MAC_OS } from './constants'
+import TitleBar from './TitleBar'
+import { appRegionDragStyle } from './helpers'
 
 export default function App() {
   const { accounts, selectAccount } = useAccounts()
@@ -36,15 +38,17 @@ export default function App() {
     toggleReleaseNotes,
     showReleaseNotes
   } = useAppUpdate()
+  const {
+    isTitleBarVisible,
+    isWindowMaximized,
+    openAppMenu,
+    minimzeWindow,
+    maximizeWindow,
+    unmaximizeWindow,
+    closeWindow
+  } = useTitleBar()
 
   useDarkMode()
-
-  const appRegionStyle: React.CSSProperties | undefined = IS_MAC_OS
-    ? {
-        WebkitAppRegion: 'drag',
-        WebkitUserSelect: 'none'
-      }
-    : undefined
 
   const renderBanner = () => {
     let banner: JSX.Element | undefined
@@ -66,7 +70,11 @@ export default function App() {
     }
 
     if (banner) {
-      return <Box style={appRegionStyle}>{banner}</Box>
+      return (
+        <Box style={isTitleBarVisible ? undefined : appRegionDragStyle}>
+          {banner}
+        </Box>
+      )
     }
 
     return null
@@ -97,12 +105,22 @@ export default function App() {
 
   return (
     <Flex height="100vh" flexDirection="column">
+      {isTitleBarVisible && (
+        <TitleBar
+          isMaximized={isWindowMaximized}
+          onClickMenu={openAppMenu}
+          onMinimze={minimzeWindow}
+          onMaximize={maximizeWindow}
+          onUnmaximize={unmaximizeWindow}
+          onClose={closeWindow}
+        />
+      )}
       {renderBanner()}
       <AccountsTab
         accounts={accounts}
         onSelectAccount={selectAccount}
         isDisabled={isAddingAccount || isEditingAccount || showReleaseNotes}
-        style={appRegionStyle}
+        style={isTitleBarVisible ? undefined : appRegionDragStyle}
       >
         {!updateStatus && <TrafficLightsSpace />}
       </AccountsTab>
