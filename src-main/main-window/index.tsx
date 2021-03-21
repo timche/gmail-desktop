@@ -37,8 +37,9 @@ export function createMainWindow(): void {
 
   mainWindow = new BrowserWindow({
     title: app.name,
-    titleBarStyle: 'hiddenInset',
-    frame: is.macos,
+    titleBarStyle:
+      config.get(ConfigKey.TitleBarStyle) === 'app' ? 'hiddenInset' : 'default',
+    frame: config.get(ConfigKey.TitleBarStyle) === 'system',
     minWidth: 780,
     width: lastWindowState.bounds.width,
     minHeight: 200,
