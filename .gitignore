@@ -11,5 +11,6 @@ yarn-error.log
 .vscode/
 
 # Build and distribution files
-dist*/
+build-*/
+dist/
 *.tgz

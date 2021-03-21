@@ -5,26 +5,41 @@ on:
       - prereleased
       - released
 jobs:
-  release:
-    runs-on: macos-latest
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - os: macos-latest
+            dist-target: 'macos'
+          - os: ubuntu-latest
+            dist-target: 'linux'
+          - os: windows-latest
+            dist-target: 'windows'
+      fail-fast: false
     steps:
+      - uses: fountainhead/action-wait-for-check@v1.0.0
+        with:
+          ref: ${{ github.sha }}
+          checkName: test
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - if: matrix.os == 'ubuntu-latest'
+        run: sudo apt-get install --no-install-recommends -y libarchive-tools
       - uses: actions/setup-node@v1
         with:
           node-version: 14
       - uses: actions/checkout@v2
-      - run: HOMEBREW_NO_AUTO_UPDATE=1 brew install rpm
       - run: yarn --frozen-lockfile
-      - run: yarn type-check
-      - run: yarn lint
       - run: yarn build
+      - if: matrix.os == 'macos-latest'
+        run: yarn dist:macos --publish always
         env:
           CSC_LINK: ${{ secrets.CSC_LINK }}
           CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
           APPLE_ID: ${{ secrets.APPLE_ID }}
           APPLE_ID_APP_PASSWORD: ${{ secrets.APPLE_ID_APP_PASSWORD }}
-      - uses: svenstaro/upload-release-action@v1-release
-        with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: dist/*
-          tag: ${{ github.ref }}
-          file_glob: true
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - if: matrix.os != 'macos-latest'
+        run: yarn dist:${{ matrix.dist-target }} --publish always
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
