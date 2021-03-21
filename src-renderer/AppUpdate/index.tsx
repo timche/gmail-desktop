@@ -1,71 +1,97 @@
-import React from 'react'
-import { Button, Text, Spacer, Progress, Alert, HStack } from '@chakra-ui/react'
-import { AppUpdateStatus, AppUpdateInfo } from '../types'
+import React, { ComponentProps } from 'react'
+import {
+  Button as ChakraButton,
+  Text,
+  Spacer,
+  Progress,
+  Alert,
+  HStack
+} from '@chakra-ui/react'
+import { AppUpdateStatus } from '../types'
 import { TOP_ELEMENT_HEIGHT } from '../constants'
+import { appRegionNoDragStyle } from '../helpers'
+
+function Button({
+  onClick,
+  ...props
+}: ComponentProps<typeof ChakraButton> & { onClick: () => void }) {
+  return (
+    <ChakraButton
+      size="xs"
+      variant="ghost"
+      onClick={() => {
+        if (onClick) {
+          onClick()
+        }
+      }}
+      _focus={{
+        outline: 'none'
+      }}
+      style={appRegionNoDragStyle}
+      {...props}
+    />
+  )
+}
 
 export interface AppUpdateProps {
   status: AppUpdateStatus
-  updateInfo: AppUpdateInfo
+  version: string
   downloadPercent: number
-  showReleaseNotes: boolean
-  onClickDownload: () => void
+  isReleaseNotesVisible?: boolean
+  onDownload: () => void
   onToggleReleaseNotes: (visible: boolean) => void
   onDismiss: () => void
+  onSkipVersion: (version: string) => void
   onCancelDownload: () => void
-  onClickRestart: () => void
+  onRestart: () => void
 }
 
 export default function AppUpdate({
   status,
-  updateInfo,
-  showReleaseNotes,
+  version,
+  isReleaseNotesVisible,
   downloadPercent,
-  onClickDownload,
+  onDownload,
   onToggleReleaseNotes,
   onDismiss,
+  onSkipVersion,
   onCancelDownload,
-  onClickRestart
+  onRestart
 }: AppUpdateProps) {
   const releaseNotesButton = (
     <Button
-      size="xs"
-      variant="ghost"
       onClick={() => {
-        onToggleReleaseNotes(!showReleaseNotes)
+        onToggleReleaseNotes(!isReleaseNotesVisible)
       }}
     >
-      {showReleaseNotes ? 'Hide' : 'Show'} Release Notes
+      {isReleaseNotesVisible ? 'Hide' : 'Show'} Release Notes
     </Button>
   )
 
-  const { version } = updateInfo
   const normalizedVersion = `(v${version})`
 
   const renderContent = () => {
     if (status === 'available') {
       return (
         <>
-          <Text fontSize="xs">
-            A new update is available {normalizedVersion}
-          </Text>
+          <Text fontSize="xs">An update is available {normalizedVersion}</Text>
           <Button
-            size="xs"
+            variant="solid"
             onClick={() => {
-              onClickDownload()
+              onDownload()
             }}
           >
             Download Now
           </Button>
           {releaseNotesButton}
           <Button
-            size="xs"
-            variant="ghost"
             onClick={() => {
-              onDismiss()
+              onSkipVersion(version)
             }}
           >
-            Dismiss
+            Skip This Version
           </Button>
+          <Button onClick={onDismiss}>Remind Me Later</Button>
         </>
       )
     }
@@ -80,14 +106,7 @@ export default function AppUpdate({
             width="150px"
             borderRadius="150px"
           />
-          <Button
-            size="xs"
-            onClick={() => {
-              onCancelDownload()
-            }}
-          >
-            Cancel
-          </Button>
+          <Button onClick={onCancelDownload}>Cancel</Button>
           {releaseNotesButton}
         </>
       )
@@ -100,23 +119,10 @@ export default function AppUpdate({
             A restart is required to install the update {normalizedVersion}
           </Text>
           <Spacer />
-          <Button
-            size="xs"
-            onClick={() => {
-              onClickRestart()
-            }}
-          >
+          <Button variant="solid" onClick={onRestart}>
             Restart Now
           </Button>
-          <Button
-            size="xs"
-            variant="ghost"
-            onClick={() => {
-              onDismiss()
-            }}
-          >
-            Restart Later
-          </Button>
+          <Button onClick={onDismiss}>Restart Later</Button>
           {releaseNotesButton}
         </>
       )
