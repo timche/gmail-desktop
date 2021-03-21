@@ -118,7 +118,7 @@ export function useAppUpdate() {
   >()
   const [updateInfo, setUpdateInfo] = useState<AppUpdateInfo | undefined>()
   const [updateDownloadPercent, setUpdateDownloadPercent] = useState(0)
-  const [showReleaseNotes, setShowReleaseNotes] = useState(false)
+  const [isReleaseNotesVisible, setIsReleaseNotesVisible] = useState(false)
 
   useEffect(() => {
     ipc.on('update:available', (updateInfo) => {
@@ -139,43 +139,37 @@ export function useAppUpdate() {
     setUpdateStatus(undefined)
     setUpdateInfo(undefined)
     setUpdateDownloadPercent(0)
-    setShowReleaseNotes(false)
-  }
-
-  const downloadUpdate = () => {
-    ipc.send('update:download')
-    setUpdateStatus('downloading')
-  }
-
-  const installUpdate = () => {
-    ipc.send('update:install')
-  }
-
-  const dismissUpdate = () => {
-    ipc.send('update:dismiss')
-    resetStates()
-  }
-
-  const cancelUpdateDownload = () => {
-    ipc.send('update:cancel-download')
-    resetStates()
-  }
-
-  const toggleReleaseNotes = (visible: boolean) => {
-    ipc.send('update:toggle-release-notes', visible)
-    setShowReleaseNotes(visible)
+    setIsReleaseNotesVisible(false)
   }
 
   return {
     updateStatus,
     updateInfo,
     updateDownloadPercent,
-    downloadUpdate,
-    installUpdate,
-    dismissUpdate,
-    cancelUpdateDownload,
-    toggleReleaseNotes,
-    showReleaseNotes
+    downloadUpdate: () => {
+      ipc.send('update:download')
+      setUpdateStatus('downloading')
+    },
+    installUpdate: () => {
+      ipc.send('update:install')
+    },
+    dismissUpdate: () => {
+      ipc.send('update:dismiss')
+      resetStates()
+    },
+    cancelUpdateDownload: () => {
+      ipc.send('update:cancel-download')
+      resetStates()
+    },
+    toggleReleaseNotes: (visible: boolean) => {
+      ipc.send('update:toggle-release-notes', visible)
+      setIsReleaseNotesVisible(visible)
+    },
+    isReleaseNotesVisible,
+    skipUpdateVersion: (version: string) => {
+      ipc.send('update:skip-version', version)
+      resetStates()
+    }
   }
 }
 
