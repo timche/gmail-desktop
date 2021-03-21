@@ -32,9 +32,9 @@ const htmlReactParserOptions: HTMLReactParserOptions = {
 
       switch (name) {
         case 'p':
-          return <Text mb={1}>{parseDom(children)}</Text>
+          return <Text mb={3}>{parseDom(children)}</Text>
         case 'ul':
-          return <UnorderedList>{parseDom(children)}</UnorderedList>
+          return <UnorderedList spacing={2}>{parseDom(children)}</UnorderedList>
         case 'li':
           return <ListItem>{parseDom(children)}</ListItem>
         case 'a':
@@ -44,7 +44,11 @@ const htmlReactParserOptions: HTMLReactParserOptions = {
             </Link>
           )
         case 'tt':
-          return <Code fontSize="xs">{parseDom(children)}</Code>
+          return (
+            <Code fontSize="xs" color="gray.400">
+              {parseDom(children)}
+            </Code>
+          )
         case 'img':
           return <Image {...attributesToProps(attribs)} />
         case 'kbd':
