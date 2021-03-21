@@ -119,6 +119,14 @@ export function createMainWindow(): void {
   })
 
   if (!is.macos) {
+    mainWindow.on('maximize', () => {
+      sendToMainWindow('window:maximized')
+    })
+
+    mainWindow.on('unmaximize', () => {
+      sendToMainWindow('window:unmaximized')
+    })
+
     ipcMain.handle('window:is-maximized', () => mainWindow.isMaximized())
 
     ipcMain.on('title-bar:open-app-menu', () => {
