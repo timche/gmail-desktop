@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, Container, Heading, Stack } from '@chakra-ui/react'
+import { Box, Text, Container, Heading, Stack } from '@chakra-ui/react'
 import HtmlParser from './HtmlParser'
 import { AppUpdateInfo } from '../types'
 
@@ -10,7 +10,8 @@ interface ReleaseNotesProps {
 export default function ReleaseNotes({ notes }: ReleaseNotesProps) {
   return (
     <Container>
-      <Heading mb={8}>Release Notes</Heading>
+      <Heading>Release Notes</Heading>
+      <Text mb={8}>Since current version</Text>
       <Stack spacing={4}>
         {notes.map(({ version, note }) => (
           <Box key={version}>
