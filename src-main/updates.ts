@@ -98,12 +98,15 @@ export function initUpdates(): void {
     return
   }
 
-  autoUpdater.on('update-available', (updateInfo) => {
-    showUpdateAvailable(updateInfo)
-    getMainWindow().show()
+  autoUpdater.on('update-available', (updateInfo: UpdateInfo) => {
+    const skipUpdateVersion = config.get(ConfigKey.SkipUpdateVersion)
+    if (updateInfo.version !== skipUpdateVersion) {
+      showUpdateAvailable(updateInfo)
+      getMainWindow().show()
+    }
   })
 
-  autoUpdater.on('download-progress', ({ percent }) => {
+  autoUpdater.on('download-progress', ({ percent }: { percent: number }) => {
     sendToMainWindow('update:download-progress', percent)
   })
 
@@ -118,6 +121,13 @@ export function initUpdates(): void {
   ipcMain.on('update:download', () => {
     downloadCancellationToken = new CancellationToken()
     autoUpdater.downloadUpdate(downloadCancellationToken)
+  })
+
+  ipcMain.on('update:skip-version', (_event, version: string) => {
+    isUpdateAvailable = false
+    config.set(ConfigKey.SkipUpdateVersion, version)
+    showAccountViews()
+    updateAllAccountViewBounds()
   })
 
   ipcMain.on('update:install', () => {

@@ -36,7 +36,8 @@ export default function App() {
     dismissUpdate,
     cancelUpdateDownload,
     toggleReleaseNotes,
-    showReleaseNotes
+    isReleaseNotesVisible,
+    skipUpdateVersion
   } = useAppUpdate()
   const {
     isTitleBarEnabled,
@@ -57,14 +58,15 @@ export default function App() {
       banner = (
         <AppUpdate
           status={updateStatus}
-          updateInfo={updateInfo}
-          showReleaseNotes={showReleaseNotes}
+          version={updateInfo.version}
+          isReleaseNotesVisible={isReleaseNotesVisible}
           downloadPercent={updateDownloadPercent}
-          onClickDownload={downloadUpdate}
-          onClickRestart={installUpdate}
+          onDownload={downloadUpdate}
+          onRestart={installUpdate}
           onDismiss={dismissUpdate}
           onCancelDownload={cancelUpdateDownload}
           onToggleReleaseNotes={toggleReleaseNotes}
+          onSkipVersion={skipUpdateVersion}
         />
       )
     }
@@ -96,7 +98,7 @@ export default function App() {
       )
     }
 
-    if (showReleaseNotes && updateInfo) {
+    if (isReleaseNotesVisible && updateInfo) {
       return <ReleaseNotes notes={updateInfo.releaseNotes} />
     }
 
@@ -119,7 +121,9 @@ export default function App() {
       <AccountsTab
         accounts={accounts}
         onSelectAccount={selectAccount}
-        isDisabled={isAddingAccount || isEditingAccount || showReleaseNotes}
+        isDisabled={
+          isAddingAccount || isEditingAccount || isReleaseNotesVisible
+        }
         style={isTitleBarEnabled ? undefined : appRegionDragStyle}
       >
         {!updateStatus && <TrafficLightsSpace />}
