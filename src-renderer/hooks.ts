@@ -180,10 +180,13 @@ export function useAppUpdate() {
 }
 
 export function useTitleBar() {
+  const [isTitleBarEnabled, setIsTitleBarEnabled] = useState(!IS_MAC_OS)
   const [isWindowMaximized, setIsWindowMaximized] = useState(false)
 
   useEffect(() => {
     if (!IS_MAC_OS) {
+      ipc.invoke('title-bar:is-enabled').then(setIsTitleBarEnabled)
+
       ipc.invoke('window:is-maximized').then(setIsWindowMaximized)
 
       ipc.on('window:maximized', () => {
@@ -197,7 +200,7 @@ export function useTitleBar() {
   }, [])
 
   return {
-    isTitleBarVisible: !IS_MAC_OS,
+    isTitleBarEnabled,
     isWindowMaximized,
     openAppMenu: () => {
       ipc.send('title-bar:open-app-menu')
