@@ -1,8 +1,8 @@
-const compile = require('./utils/compile')
+const build = require('./utils/build')
 
-async function compileMain() {
+async function buildMain() {
   await Promise.all([
-    compile('main', {
+    build('main', {
       entryPoints: ['src-main/app.ts'],
       platform: 'node',
       target: 'node14.16.0',
@@ -11,18 +11,18 @@ async function compileMain() {
         '.json': 'json',
         '.css': 'text'
       },
-      outfile: 'dist-main/app.js'
+      outfile: 'build-main/app.js'
     }),
-    compile('main-preload', {
+    build('main-preload', {
       entryPoints: [
         'src-main/main-window/preload.ts',
         'src-main/account-views/preload.ts'
       ],
       target: 'chrome89',
       external: ['electron'],
-      outdir: 'dist-main'
+      outdir: 'build-main'
     })
   ])
 }
 
-compileMain()
+buildMain()

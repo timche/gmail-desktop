@@ -3,13 +3,13 @@ const esbuild = require('esbuild')
 const isProd = process.env.NODE_ENV === 'production'
 const watch = process.env.WATCH === 'true'
 
-function compile(name, buildOptions) {
+function build(name, buildOptions) {
   const logBuildSuccessful = () => {
-    console.log(`[compile:${name}]`, 'Build succeeded')
+    console.log(`[build:${name}]`, 'Build succeeded')
   }
 
   const logBuildFailure = (error) => {
-    console.log(`[compile:${name}]`, 'Build failed:', error)
+    console.log(`[build:${name}]`, 'Build failed:', error)
   }
 
   return esbuild
@@ -44,4 +44,4 @@ function compile(name, buildOptions) {
     })
 }
 
-module.exports = compile
+module.exports = build

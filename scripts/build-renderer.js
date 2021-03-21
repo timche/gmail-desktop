@@ -1,9 +1,9 @@
-const compile = require('./utils/compile')
+const build = require('./utils/build')
 
-compile('renderer', (isProd) => ({
+build('renderer', (isProd) => ({
   entryPoints: ['./src-renderer/index.tsx'],
   target: 'chrome89',
-  outfile: './dist-renderer/index.js',
+  outfile: './build-renderer/index.js',
   define: {
     'process.env.NODE_ENV': isProd ? '"production"' : '"development"'
   }
