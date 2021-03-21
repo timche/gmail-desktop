@@ -5,11 +5,16 @@ import { getSelectedAccount } from '../accounts'
 import config, { ConfigKey } from '../config'
 import { toggleAppVisiblityTrayItem } from '../tray'
 import { setAppMenuBarVisibility } from '../utils'
-import { getAccountView, getSelectedAccountView } from '../account-views'
+import {
+  getAccountView,
+  getSelectedAccountView,
+  updateAllAccountViewBounds
+} from '../account-views'
 import { getIsQuitting } from '../app'
 import { openExternalUrl, shouldStartMinimized } from '../helpers'
 import { ipcMain } from 'electron/main'
 import { getAppMenu } from '../app-menu'
+import debounce from 'lodash.debounce'
 
 let mainWindow: BrowserWindow | undefined
 
@@ -106,6 +111,29 @@ export function createMainWindow(): void {
     const selectedAccountView = getSelectedAccountView()
     if (selectedAccountView) {
       selectedAccountView.webContents.focus()
+    }
+  })
+
+  let debouncedUpdateAllAccountViewBounds: () => void
+
+  if (is.linux) {
+    debouncedUpdateAllAccountViewBounds = debounce(
+      updateAllAccountViewBounds,
+      200
+    )
+  }
+
+  mainWindow.on('resize', () => {
+    // When the window is getting maximized on Linux, the bounds of the
+    // main window are not updated until the maximizing animation is completed.
+    // A workaround is to wait 200 ms before updating the account views bounds.
+    // Not all Linux distros may have this animation, but it's a universal workaround
+    // and there's no way to know if there's an animation or not. Unfortunately the
+    // `resized` event is only available on macOS and Windows.
+    if (is.linux) {
+      debouncedUpdateAllAccountViewBounds()
+    } else {
+      updateAllAccountViewBounds()
     }
   })
 

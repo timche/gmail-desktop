@@ -162,10 +162,6 @@ export function createAccountView(accountId: string, setAsTopView?: boolean) {
     mainWindow.setTopBrowserView(accountView)
   }
 
-  mainWindow.on('resize', () => {
-    updateAccountViewBounds(accountView)
-  })
-
   addContextMenu(accountView)
 
   accountView.webContents.loadURL(GMAIL_URL)
