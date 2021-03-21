@@ -8,6 +8,8 @@ import { setAppMenuBarVisibility } from '../utils'
 import { getAccountView, getSelectedAccountView } from '../account-views'
 import { getIsQuitting } from '../app'
 import { openExternalUrl, shouldStartMinimized } from '../helpers'
+import { ipcMain } from 'electron/main'
+import { getAppMenu } from '../app-menu'
 
 let mainWindow: BrowserWindow
 
@@ -24,7 +26,8 @@ export function createMainWindow(): void {
 
   mainWindow = new BrowserWindow({
     title: app.name,
-    titleBarStyle: is.macos ? 'hiddenInset' : 'default',
+    titleBarStyle: 'hiddenInset',
+    frame: is.macos,
     minWidth: 780,
     width: lastWindowState.bounds.width,
     minHeight: 200,
@@ -114,4 +117,34 @@ export function createMainWindow(): void {
     event.preventDefault()
     openExternalUrl(url)
   })
+
+  if (!is.macos) {
+    ipcMain.handle('window:is-maximized', () => mainWindow.isMaximized())
+
+    ipcMain.on('title-bar:open-app-menu', () => {
+      const appMenu = getAppMenu()
+      appMenu.popup({
+        window: mainWindow,
+        callback: () => {
+          appMenu.closePopup(mainWindow)
+        }
+      })
+    })
+
+    ipcMain.on('window:minimize', () => {
+      mainWindow.minimize()
+    })
+
+    ipcMain.on('window:maximize', () => {
+      mainWindow.maximize()
+    })
+
+    ipcMain.on('window:unmaximize', () => {
+      mainWindow.unmaximize()
+    })
+
+    ipcMain.on('window:close', () => {
+      mainWindow.close()
+    })
+  }
 }

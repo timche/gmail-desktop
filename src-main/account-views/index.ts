@@ -65,7 +65,7 @@ export function updateAccountViewBounds(accountView: BrowserView) {
   const isUpdateAvailable = getIsUpdateAvailable()
   const { width, height } = getMainWindow().getBounds()
 
-  let offset = 0
+  let offset = is.macos ? 0 : 30 // Linux/Window Title Bar
 
   if (hasMultipleAccounts) {
     offset += TOP_ELEMENT_HEIGHT

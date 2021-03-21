@@ -42,7 +42,7 @@ interface AppearanceMenuItem {
   setMenuBarVisibility?: boolean
 }
 
-export function initOrUpdateAppMenu() {
+export function getAppMenu() {
   const appearanceMenuItems: AppearanceMenuItem[] = [
     {
       key: ConfigKey.CompactHeader,
@@ -93,7 +93,7 @@ export function initOrUpdateAppMenu() {
     })
   }
 
-  const appMenu: MenuItemConstructorOptions[] = [
+  const appMenuTemplate: MenuItemConstructorOptions[] = [
     {
       label: app.name,
       submenu: [
@@ -556,7 +556,12 @@ export function initOrUpdateAppMenu() {
     }
   ]
 
-  const menu = Menu.buildFromTemplate(appMenu)
+  return Menu.buildFromTemplate(appMenuTemplate)
+}
 
-  Menu.setApplicationMenu(menu)
+export function initOrUpdateAppMenu() {
+  if (is.macos) {
+    const appMenu = getAppMenu()
+    Menu.setApplicationMenu(appMenu)
+  }
 }
