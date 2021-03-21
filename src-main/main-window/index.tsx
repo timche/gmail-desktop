@@ -195,12 +195,7 @@ export function createMainWindow(): void {
     ipcMain.on('title-bar:open-app-menu', () => {
       const appMenu = getAppMenu()
       appMenu.popup({
-        window: mainWindow,
-        callback: () => {
-          if (mainWindow) {
-            appMenu.closePopup(mainWindow)
-          }
-        }
+        window: mainWindow
       })
     })
 
