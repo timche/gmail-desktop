@@ -72,9 +72,11 @@
     "prettier": "^2.2.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
+    "react-icons": "^4.2.0",
     "stylelint": "^13.11.0",
     "stylelint-config-prettier": "^8.0.2",
     "stylelint-config-xo": "^0.20.0",
+    "type-fest": "^0.21.3",
     "typescript": "^4.2.3",
     "write-json-file": "^4.3.0",
     "xo": "^0.38.2"
