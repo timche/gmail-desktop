@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, Text, Container, Heading, Stack } from '@chakra-ui/react'
+import { Box, Text, Container, Heading, Stack, Link } from '@chakra-ui/react'
 import HtmlParser from './HtmlParser'
 import { AppUpdateInfo } from '../types'
 
@@ -16,7 +16,11 @@ export default function ReleaseNotes({ notes }: ReleaseNotesProps) {
         {notes.map(({ version, note }) => (
           <Box key={version}>
             <Heading size="md" mb="2">
-              v{version}
+              <Link
+                href={`https://github.com/timche/gmail-desktop/releases/tag/v${version}`}
+              >
+                v{version}
+              </Link>
             </Heading>
             {note && <HtmlParser html={note} />}
           </Box>
