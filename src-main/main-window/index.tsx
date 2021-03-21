@@ -173,9 +173,22 @@ export function createMainWindow(): void {
     }
 
     ipcMain.handle('window:is-maximized', () => {
-      if (mainWindow) {
-        mainWindow.isMaximized()
+      // Similar reason as above.
+      if (is.linux) {
+        setTimeout(() => {
+          if (mainWindow) {
+            sendToMainWindow(
+              mainWindow.isMaximized()
+                ? 'window:maximized'
+                : 'window:unmaximized'
+            )
+          }
+        }, 200)
+      } else if (mainWindow) {
+        return mainWindow.isMaximized()
       }
+
+      return false
     })
 
     ipcMain.on('title-bar:open-app-menu', () => {
