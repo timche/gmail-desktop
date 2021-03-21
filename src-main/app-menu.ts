@@ -560,8 +560,6 @@ export function getAppMenu() {
 }
 
 export function initOrUpdateAppMenu() {
-  if (is.macos) {
-    const appMenu = getAppMenu()
-    Menu.setApplicationMenu(appMenu)
-  }
+  const appMenu = getAppMenu()
+  Menu.setApplicationMenu(appMenu)
 }
