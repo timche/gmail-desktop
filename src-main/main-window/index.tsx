@@ -11,14 +11,20 @@ import { openExternalUrl, shouldStartMinimized } from '../helpers'
 import { ipcMain } from 'electron/main'
 import { getAppMenu } from '../app-menu'
 
-let mainWindow: BrowserWindow
+let mainWindow: BrowserWindow | undefined
 
 export function getMainWindow() {
+  if (!mainWindow) {
+    throw new Error('Main window is uninitialized or has been destroyed')
+  }
+
   return mainWindow
 }
 
 export function sendToMainWindow(channel: string, ...args: any[]) {
-  mainWindow.webContents.send(channel, ...args)
+  if (mainWindow) {
+    mainWindow.webContents.send(channel, ...args)
+  }
 }
 
 export function createMainWindow(): void {
@@ -68,24 +74,20 @@ export function createMainWindow(): void {
       return
     }
 
-    const view = getAccountView(selectedAccount.id)
+    const accountView = getAccountView(selectedAccount.id)
 
-    if (!view) {
-      return
-    }
-
-    if (command === 'browser-backward' && view.webContents.canGoBack()) {
-      view.webContents.goBack()
+    if (command === 'browser-backward' && accountView.webContents.canGoBack()) {
+      accountView.webContents.goBack()
     } else if (
       command === 'browser-forward' &&
-      view.webContents.canGoForward()
+      accountView.webContents.canGoForward()
     ) {
-      view.webContents.goForward()
+      accountView.webContents.goForward()
     }
   })
 
   mainWindow.on('close', (error) => {
-    if (!getIsQuitting()) {
+    if (!getIsQuitting() && mainWindow) {
       error.preventDefault()
       mainWindow.blur()
       mainWindow.hide()
@@ -108,7 +110,7 @@ export function createMainWindow(): void {
   })
 
   mainWindow.webContents.on('dom-ready', () => {
-    if (!shouldStartMinimized()) {
+    if (!shouldStartMinimized() && mainWindow) {
       mainWindow.show()
     }
   })
@@ -127,32 +129,46 @@ export function createMainWindow(): void {
       sendToMainWindow('window:unmaximized')
     })
 
-    ipcMain.handle('window:is-maximized', () => mainWindow.isMaximized())
+    ipcMain.handle('window:is-maximized', () => {
+      if (mainWindow) {
+        mainWindow.isMaximized()
+      }
+    })
 
     ipcMain.on('title-bar:open-app-menu', () => {
       const appMenu = getAppMenu()
       appMenu.popup({
         window: mainWindow,
         callback: () => {
-          appMenu.closePopup(mainWindow)
+          if (mainWindow) {
+            appMenu.closePopup(mainWindow)
+          }
         }
       })
     })
 
     ipcMain.on('window:minimize', () => {
-      mainWindow.minimize()
+      if (mainWindow) {
+        mainWindow.minimize()
+      }
     })
 
     ipcMain.on('window:maximize', () => {
-      mainWindow.maximize()
+      if (mainWindow) {
+        mainWindow.maximize()
+      }
     })
 
     ipcMain.on('window:unmaximize', () => {
-      mainWindow.unmaximize()
+      if (mainWindow) {
+        mainWindow.unmaximize()
+      }
     })
 
     ipcMain.on('window:close', () => {
-      mainWindow.close()
+      if (mainWindow) {
+        mainWindow.close()
+      }
     })
   }
 }
