@@ -4,7 +4,6 @@ import { initUpdates } from './updates'
 import config, { ConfigKey } from './config'
 import { initDownloads } from './downloads'
 import { initOrUpdateAppMenu } from './app-menu'
-import ensureOnline from './ensure-online'
 import { handleUnreadCount } from './unread-counts'
 import { initTray } from './tray'
 import { initOrUpdateDockMenu } from './dock-menu'
@@ -85,8 +84,9 @@ app.on('before-quit', () => {
     })
   }
 })
-;(async () => {
-  await Promise.all([ensureOnline(), app.whenReady()])
+
+async function initApp() {
+  await app.whenReady()
 
   initUserAgent()
   initDarkMode()
@@ -97,4 +97,6 @@ app.on('before-quit', () => {
   initTray()
   initOrUpdateDockMenu()
   initUpdates()
-})()
+}
+
+initApp()
