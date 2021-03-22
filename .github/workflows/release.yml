@@ -39,6 +39,7 @@ jobs:
           APPLE_ID: ${{ secrets.APPLE_ID }}
           APPLE_ID_APP_PASSWORD: ${{ secrets.APPLE_ID_APP_PASSWORD }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          EP_PRE_RELEASE: ${{ github.event.release.prerelease }}
       - if: matrix.os != 'macos-latest'
         run: yarn dist:${{ matrix.dist-target }} --publish always
         env:
