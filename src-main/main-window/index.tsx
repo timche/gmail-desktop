@@ -1,5 +1,5 @@
 import * as path from 'path'
-import { app, BrowserWindow, nativeTheme } from 'electron'
+import { app, BrowserWindow, nativeTheme, ipcMain } from 'electron'
 import { is } from 'electron-util'
 import { getSelectedAccount } from '../accounts'
 import config, { ConfigKey } from '../config'
@@ -12,7 +12,6 @@ import {
 } from '../account-views'
 import { getIsQuitting } from '../app'
 import { openExternalUrl, shouldStartMinimized } from '../helpers'
-import { ipcMain } from 'electron/main'
 import { getAppMenu } from '../app-menu'
 import debounce from 'lodash.debounce'
 
@@ -192,13 +191,6 @@ export function createMainWindow(): void {
       return false
     })
 
-    ipcMain.on('title-bar:open-app-menu', () => {
-      const appMenu = getAppMenu()
-      appMenu.popup({
-        window: mainWindow
-      })
-    })
-
     ipcMain.on('window:minimize', () => {
       if (mainWindow) {
         mainWindow.minimize()
@@ -221,6 +213,18 @@ export function createMainWindow(): void {
       if (mainWindow) {
         mainWindow.close()
       }
+    })
+
+    ipcMain.handle(
+      'title-bar:is-enabled',
+      () => config.get(ConfigKey.TitleBarStyle) === 'app'
+    )
+
+    ipcMain.on('title-bar:open-app-menu', () => {
+      const appMenu = getAppMenu()
+      appMenu.popup({
+        window: mainWindow
+      })
     })
   }
 }
