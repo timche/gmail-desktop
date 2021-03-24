@@ -3,6 +3,12 @@ import { fetchGmail } from './gmail-actions'
 
 const parser = new DOMParser()
 
+declare global {
+  interface Window {
+    GM_INBOX_TYPE: 'CLASSIC' | 'SECTIONED'
+  }
+}
+
 export interface Mail {
   messageId: string
   subject: string
@@ -13,6 +19,7 @@ export interface Mail {
 }
 
 let isInitialFeed = true
+let isInboxSectioned = false
 let previousModifiedDate = 0
 let currentModifiedDate = 0
 const previousNewMails = new Set<string>()
@@ -70,7 +77,9 @@ export function getNewMails(feedDocument: Document) {
 }
 
 export async function fetchGmailFeed() {
-  const feedDocument = await fetchGmail(`feed/atom?v=${Date.now()}`)
+  const feedDocument = await fetchGmail(
+    `feed/atom${isInboxSectioned ? '/^sq_ig_i_personal' : ''}?v=${Date.now()}`
+  )
     .then(async (response) => response.text())
     .then((xml) => parseAtomToDocument(xml))
 
@@ -95,10 +104,19 @@ export async function fetchGmailFeed() {
   }
 }
 
+export function fetchIsInboxSectioned() {
+  if (window.GM_INBOX_TYPE) {
+    isInboxSectioned = window.GM_INBOX_TYPE === 'SECTIONED'
+  }
+}
+
 export async function initGmailFeed() {
-  fetchGmailFeed()
-  setInterval(fetchGmailFeed, 10000)
-  setInterval(() => {
-    previousNewMails.clear()
-  }, 1000 * 60 * 30)
+  window.addEventListener('DOMContentLoaded', () => {
+    fetchIsInboxSectioned()
+    fetchGmailFeed()
+    setInterval(fetchGmailFeed, 10000)
+    setInterval(() => {
+      previousNewMails.clear()
+    }, 1000 * 60 * 30)
+  })
 }
