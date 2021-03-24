@@ -7,13 +7,13 @@ import { Account, UnreadCounts, AppUpdateInfo, AppUpdateStatus } from './types'
 export function useDarkMode() {
   const { setColorMode } = useColorMode()
 
-  const handleDarkMode = (enabled: boolean) => {
-    setColorMode(enabled ? 'dark' : 'light')
-  }
-
   useEffect(() => {
-    ipc.invoke('init-dark-mode').then(handleDarkMode)
-    ipc.on('dark-mode-updated', handleDarkMode)
+    ipc.invoke('init-dark-mode').then(({ enabled }: { enabled: boolean }) => {
+      setColorMode(enabled ? 'dark' : 'light')
+    })
+    ipc.on('dark-mode-updated', (enabled: boolean) => {
+      setColorMode(enabled ? 'dark' : 'light')
+    })
   }, [])
 }
 
