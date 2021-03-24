@@ -18,6 +18,17 @@ async function initInboxParentElement() {
       ?.parentElement?.parentElement?.parentElement ?? undefined
 }
 
+export function refreshInbox() {
+  if (window.location.hash.startsWith('#inbox')) {
+    const inboxAnchorElement = document.querySelector<HTMLAnchorElement>(
+      'a[href*="#inbox"]'
+    )
+    if (inboxAnchorElement) {
+      inboxAnchorElement.click()
+    }
+  }
+}
+
 async function getUnreadCount() {
   if (inboxParentElement) {
     const unreadCountElement: HTMLLabelElement | null = inboxParentElement.querySelector(
