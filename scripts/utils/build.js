@@ -18,7 +18,6 @@ function build(name, buildOptions) {
         ? buildOptions(isProd)
         : buildOptions),
       bundle: true,
-      sourcemap: true,
       watch: watch
         ? {
             onRebuild: (error) => {

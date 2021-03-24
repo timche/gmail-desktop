@@ -10,7 +10,7 @@ import { getSelectedAccount, initAccounts } from './accounts'
 import { getMainWindow, createMainWindow } from './main-window'
 import { initDarkMode, initNativeThemeSource } from './dark-mode'
 import { initUserAgent } from './user-agent'
-import { getSessionPartitionKey } from './account-views/helpers'
+import { getSessionPartitionKey } from './account-views'
 import { GMAIL_URL } from './constants'
 import { handleGmail } from './gmail'
 
@@ -57,7 +57,7 @@ app.on('open-url', (event, url) => {
     const composeWindow = new BrowserWindow({
       webPreferences: {
         partition: getSessionPartitionKey(selectedAccount.id),
-        preload: path.join(__dirname, 'account-views', 'preload.js')
+        preload: path.join(__dirname, 'preload', 'account-view.js')
       }
     })
 

@@ -11,7 +11,7 @@ import {
   showAccountViews,
   updateAllAccountViewBounds
 } from './account-views'
-import { setIsQuitting } from './app'
+import { setIsQuitting } from '.'
 import { createNotification } from './notifications'
 
 const AUTO_UPDATE_CHECK_INTERVAL = 60000 * 60 * 3 // 4 Hours

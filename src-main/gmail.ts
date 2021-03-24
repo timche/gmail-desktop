@@ -1,11 +1,11 @@
 import { app, ipcMain, Notification } from 'electron'
-import { Mail } from './account-views/gmail-feed'
 import { getAccountIdByViewId } from './account-views'
 import { getAccount, selectAccount } from './accounts'
 import { getMainWindow, sendToMainWindow } from './main-window'
 import config, { ConfigKey } from './config'
 import { is } from 'electron-util'
 import { updateTrayUnreadStatus } from './tray'
+import { Mail } from './types'
 
 const unreadCounts: Record<string, number> = {}
 

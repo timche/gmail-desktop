@@ -1,19 +1,11 @@
 import { ipcRenderer } from 'electron'
-import { fetchGmail } from './gmail-actions'
+import { Mail } from '../../../types'
+import { fetchGmail } from './actions'
 
 declare global {
   interface Window {
     GM_INBOX_TYPE: 'CLASSIC' | 'SECTIONED'
   }
-}
-
-export interface Mail {
-  messageId: string
-  subject: string
-  summary: string
-  link: string
-  senderName: string
-  senderEmail: string
 }
 
 let isInitialFeed = true
