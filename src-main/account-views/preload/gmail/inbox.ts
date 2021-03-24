@@ -5,35 +5,38 @@ import elementReady from 'element-ready'
 let inboxParentElement: Element | undefined
 let previousUnreadCount: number | undefined
 
+const inboxAnchorElementSelector = 'div[role=navigation] a[href*="#inbox"]'
+
 async function initInboxParentElement() {
-  const inboxAnchorElement = await elementReady(
-    'div[role=navigation] [href*="#inbox"]',
-    {
-      stopOnDomReady: false,
-      timeout: 60000
-    }
-  )
+  const inboxAnchorElement = await elementReady(inboxAnchorElementSelector, {
+    stopOnDomReady: false,
+    timeout: 60000
+  })
   inboxParentElement =
     inboxAnchorElement?.parentElement?.parentElement?.parentElement
       ?.parentElement?.parentElement?.parentElement ?? undefined
 }
 
+function getInboxAnchorElement() {
+  return document.querySelector<HTMLAnchorElement>(inboxAnchorElementSelector)
+}
+
 export function refreshInbox(forceRefresh?: true) {
   if (window.location.hash.startsWith('#inbox') || forceRefresh) {
-    const inboxAnchorElement = document.querySelector<HTMLAnchorElement>(
-      'a[href*="#inbox"]'
-    )
+    const inboxAnchorElement = getInboxAnchorElement()
     if (inboxAnchorElement) {
       inboxAnchorElement.click()
     }
   }
 }
 
-async function getUnreadCount() {
-  if (inboxParentElement) {
-    const unreadCountElement: HTMLLabelElement | null = inboxParentElement.querySelector(
-      '.bsU'
-    )
+function getUnreadCount() {
+  const inboxAnchorElement = getInboxAnchorElement()
+
+  if (inboxAnchorElement) {
+    const unreadCountElement =
+      inboxAnchorElement.parentElement?.parentElement?.querySelector('.bsU') ??
+      undefined
 
     if (unreadCountElement?.textContent) {
       return Number(/\d*/.exec(unreadCountElement.textContent))
@@ -44,7 +47,7 @@ async function getUnreadCount() {
 }
 
 async function updateUnreadCount() {
-  const currentUnreadCount = await getUnreadCount()
+  const currentUnreadCount = getUnreadCount()
 
   if (previousUnreadCount !== currentUnreadCount) {
     ipcRenderer.send('gmail:unread-count', currentUnreadCount)
