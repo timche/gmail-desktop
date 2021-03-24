@@ -3,24 +3,29 @@ const build = require('./utils/build')
 async function buildMain() {
   await Promise.all([
     build('main', {
-      entryPoints: ['src-main/app.ts'],
+      entryPoints: ['src-main/index.ts'],
       platform: 'node',
       target: 'node14.16.0',
       external: ['electron'],
       loader: {
         '.json': 'json',
-        '.css': 'text'
+        '.css': 'text',
+        '.html': 'file'
       },
-      outfile: 'build-main/app.js'
+      assetNames: '[name]',
+      outfile: 'build-main/index.js'
     }),
-    build('main-preload', {
-      entryPoints: [
-        'src-main/main-window/preload.ts',
-        'src-main/account-views/preload.ts'
-      ],
+    build('main-preload-main-window', {
+      entryPoints: ['src-main/main-window/preload.ts'],
       target: 'chrome89',
       external: ['electron'],
-      outdir: 'build-main'
+      outfile: 'build-main/preload/main-window.js'
+    }),
+    build('main-preload-account-views', {
+      entryPoints: ['src-main/account-views/preload/index.ts'],
+      target: 'chrome89',
+      external: ['electron'],
+      outfile: 'build-main/preload/account-view.js'
     })
   ])
 }

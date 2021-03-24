@@ -10,10 +10,11 @@ import {
   getSelectedAccountView,
   updateAllAccountViewBounds
 } from '../account-views'
-import { getIsQuitting } from '../app'
+import { getIsQuitting } from '..'
 import { openExternalUrl, shouldStartMinimized } from '../helpers'
 import { getAppMenu } from '../app-menu'
 import debounce from 'lodash.debounce'
+import indexHTML from './index.html'
 
 let mainWindow: BrowserWindow | undefined
 
@@ -49,7 +50,7 @@ export function createMainWindow(): void {
       nodeIntegration: false,
       contextIsolation: true,
       enableRemoteModule: false,
-      preload: path.join(__dirname, 'main-window', 'preload.js')
+      preload: path.join(__dirname, 'preload', 'main-window.js')
     },
     show: !shouldStartMinimized(),
     icon: is.linux
@@ -70,7 +71,7 @@ export function createMainWindow(): void {
     setAppMenuBarVisibility()
   }
 
-  mainWindow.loadFile(path.resolve(__dirname, '..', 'static', 'index.html'))
+  mainWindow.loadFile(path.resolve(__dirname, indexHTML))
 
   mainWindow.on('app-command', (_event, command) => {
     const selectedAccount = getSelectedAccount()

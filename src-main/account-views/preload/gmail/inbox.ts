@@ -1,5 +1,5 @@
 import { ipcRenderer } from 'electron'
-import { fetchGmailFeed } from './gmail-feed'
+import { fetchGmailFeed } from './feed'
 import elementReady from 'element-ready'
 
 let inboxParentElement: Element | undefined
@@ -53,7 +53,7 @@ async function updateUnreadCount() {
   }
 }
 
-export function initGmailInbox() {
+export function handleGmailInbox() {
   ipcRenderer.on('gmail:open-mail', async (_event, messageId: string) => {
     const threadElementSelector = `[data-legacy-thread-id="${messageId}"]`
 

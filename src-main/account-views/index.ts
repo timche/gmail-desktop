@@ -3,11 +3,14 @@ import { BrowserView, BrowserWindow, app, dialog, session } from 'electron'
 import { addCustomCSS, initCustomStyles } from './custom-styles'
 import { enableAutoFixUserAgent } from '../user-agent'
 import { getMainWindow, sendToMainWindow } from '../main-window'
-import { getSelectedAccount, selectAccount } from '../accounts'
+import {
+  getSelectedAccount,
+  isDefaultAccount,
+  selectAccount
+} from '../accounts'
 import { TOP_ELEMENT_HEIGHT, GMAIL_URL } from '../constants'
 import { is } from 'electron-util'
 import { addContextMenu } from './context-menu'
-import { getSessionPartitionKey } from './helpers'
 import { getIsUpdateAvailable } from '../updates'
 import { openExternalUrl } from '../helpers'
 import config, { ConfigKey } from '../config'
@@ -145,6 +148,10 @@ export function getSelectedAccountView() {
   return accountViews.get(selectedAccount.id)
 }
 
+export function getSessionPartitionKey(accountId: string) {
+  return isDefaultAccount(accountId) ? undefined : `persist:${accountId}`
+}
+
 export function createAccountView(accountId: string, setAsTopView?: boolean) {
   const sessionPartitionKey = getSessionPartitionKey(accountId)
   const accountSession = sessionPartitionKey
@@ -162,7 +169,7 @@ export function createAccountView(accountId: string, setAsTopView?: boolean) {
   const accountView = new BrowserView({
     webPreferences: {
       partition: sessionPartitionKey,
-      preload: path.join(__dirname, 'account-views', 'preload.js'),
+      preload: path.join(__dirname, 'preload', 'account-view.js'),
       nativeWindowOpen: true
     }
   })

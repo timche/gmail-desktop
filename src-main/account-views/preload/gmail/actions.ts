@@ -1,5 +1,5 @@
 import { ipcRenderer } from 'electron'
-import { refreshInbox } from './gmail-inbox'
+import { refreshInbox } from './inbox'
 
 let gmailActionToken: string | undefined
 
