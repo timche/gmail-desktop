@@ -48,13 +48,35 @@ export function newMailNotification(
       {
         text: 'Archive',
         type: 'button'
+      },
+      {
+        text: 'Mark As Read',
+        type: 'button'
+      },
+      {
+        text: 'Delete',
+        type: 'button'
+      },
+      {
+        text: 'Mark As Spam',
+        type: 'button'
       }
     ]
   })
 
   notification.on('action', (_event, index) => {
-    if (index === 0) {
-      sender.send('mail:archive', messageId)
+    switch (index) {
+      case 1:
+        sender.send('gmail:mark-mail-as-read', messageId)
+        break
+      case 2:
+        sender.send('gmail:delete-mail', messageId)
+        break
+      case 3:
+        sender.send('gmail:mark-mail-as-spam', messageId)
+        break
+      default:
+        sender.send('gmail:archive-mail', messageId)
     }
   })
 
