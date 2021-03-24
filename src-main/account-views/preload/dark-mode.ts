@@ -1,22 +1,23 @@
 import { ipcRenderer } from 'electron'
 import * as DarkReader from 'darkreader'
+import {
+  darkModeBackgroundColor,
+  darkModeSelectionColor
+} from '../../constants'
 
 DarkReader.setFetchMethod(window.fetch)
-
-const darkSchemeBackgroundColor = '#121212'
-const selectionColor = '#c2dbff'
 
 function enableDarkMode(): void {
   DarkReader.enable(
     {
-      darkSchemeBackgroundColor,
-      selectionColor
+      darkSchemeBackgroundColor: darkModeBackgroundColor,
+      selectionColor: darkModeSelectionColor
     },
     {
       css: `
           /* Read email */
           .yO {
-            background-color: ${darkSchemeBackgroundColor} !important;
+            background-color: ${darkModeBackgroundColor} !important;
           }
 
           /* Unread email */
