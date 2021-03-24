@@ -1,8 +1,6 @@
 import { ipcRenderer } from 'electron'
 import { fetchGmail } from './gmail-actions'
 
-const parser = new DOMParser()
-
 declare global {
   interface Window {
     GM_INBOX_TYPE: 'CLASSIC' | 'SECTIONED'
@@ -22,10 +20,6 @@ let isInitialFeed = true
 let previousModifiedDate = 0
 let currentModifiedDate = 0
 const previousNewMails = new Set<string>()
-
-function parseAtomToDocument(xml: string) {
-  return parser.parseFromString(xml, 'text/xml')
-}
 
 function getTextContent(node: Document | Element, selector: string) {
   return node.querySelector(selector)?.textContent ?? ''
@@ -90,7 +84,10 @@ export async function fetchGmailFeed(suspendMode?: boolean) {
     }?v=${Date.now()}`
   )
     .then(async (response) => response.text())
-    .then((xml) => parseAtomToDocument(xml))
+    .then((xml) => {
+      const parser = new DOMParser()
+      return parser.parseFromString(xml, 'text/xml')
+    })
 
   updateModifiedDates(feedDocument)
 
