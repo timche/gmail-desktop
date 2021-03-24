@@ -46,7 +46,12 @@ export enum ConfigKey {
   ReleaseChannel = 'releaseChannel',
   Accounts = 'accounts',
   ZoomFactor = 'zoomFactor',
-  TitleBarStyle = 'titleBarStyle'
+  TitleBarStyle = 'titleBarStyle',
+  NotificationsShowSender = 'notificationsShowSender',
+  NotificationsShowSubject = 'notificationsShowSubject',
+  NotificationsShowSummary = 'notificationsShowSummary',
+  NotificationsDisabled = 'notificationsDisabled',
+  NotificationsSilent = 'notificationsSilent'
 }
 
 type TypedStore = {
@@ -75,6 +80,11 @@ type TypedStore = {
   [ConfigKey.Accounts]: Account[]
   [ConfigKey.ZoomFactor]: number
   [ConfigKey.TitleBarStyle]: 'system' | 'app'
+  [ConfigKey.NotificationsShowSender]: boolean
+  [ConfigKey.NotificationsShowSubject]: boolean
+  [ConfigKey.NotificationsShowSummary]: boolean
+  [ConfigKey.NotificationsDisabled]: boolean
+  [ConfigKey.NotificationsSilent]: boolean
 }
 
 const defaults: TypedStore = {
@@ -117,7 +127,12 @@ const defaults: TypedStore = {
     }
   ],
   [ConfigKey.ZoomFactor]: 1,
-  [ConfigKey.TitleBarStyle]: 'app'
+  [ConfigKey.TitleBarStyle]: 'app',
+  [ConfigKey.NotificationsShowSender]: true,
+  [ConfigKey.NotificationsShowSubject]: true,
+  [ConfigKey.NotificationsShowSummary]: true,
+  [ConfigKey.NotificationsDisabled]: false,
+  [ConfigKey.NotificationsSilent]: false
 }
 
 const config = new Store<TypedStore>({

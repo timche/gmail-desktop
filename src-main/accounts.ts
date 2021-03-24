@@ -13,6 +13,10 @@ import { initOrUpdateDockMenu } from './dock-menu'
 import { updateTrayMenu } from './tray'
 import { DEFAULT_ACCOUNT_ID } from './constants'
 
+export function getAccount(accountId: string) {
+  return getAccounts().find(({ id }) => id === accountId)
+}
+
 export function getAccounts() {
   return config.get(ConfigKey.Accounts)
 }

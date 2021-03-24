@@ -154,7 +154,9 @@
     "mac": {
       "category": "public.app-category.productivity",
       "darkModeSupport": true,
-      "hardenedRuntime": true
+      "extendInfo": {
+        "NSUserNotificationAlertStyle": "alert"
+      }
     },
     "linux": {
       "target": [

@@ -146,11 +146,25 @@ export function getSelectedAccountView() {
 }
 
 export function createAccountView(accountId: string, setAsTopView?: boolean) {
+  const sessionPartitionKey = getSessionPartitionKey(accountId)
+  const accountSession = sessionPartitionKey
+    ? session.fromPartition(sessionPartitionKey)
+    : session.defaultSession
+
+  accountSession.setPermissionRequestHandler(
+    (_webContents, permission, callback) => {
+      if (permission === 'notifications') {
+        callback(false)
+      }
+    }
+  )
+
   const accountView = new BrowserView({
     webPreferences: {
-      partition: getSessionPartitionKey(accountId),
+      partition: sessionPartitionKey,
       preload: path.join(__dirname, 'account-views', 'preload.js'),
-      nativeWindowOpen: true
+      nativeWindowOpen: true,
+      contextIsolation: false
     }
   })
 
