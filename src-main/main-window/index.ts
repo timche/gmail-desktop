@@ -15,6 +15,7 @@ import { openExternalUrl, shouldStartMinimized } from '../helpers'
 import { getAppMenu } from '../app-menu'
 import debounce from 'lodash.debounce'
 import indexHTML from './index.html'
+import { darkModeBackgroundColor } from '../constants'
 
 let mainWindow: BrowserWindow | undefined
 
@@ -56,7 +57,10 @@ export function createMainWindow(): void {
     icon: is.linux
       ? path.join(__dirname, '..', 'static', 'icon.png')
       : undefined,
-    darkTheme: nativeTheme.shouldUseDarkColors
+    darkTheme: nativeTheme.shouldUseDarkColors,
+    backgroundColor: nativeTheme.shouldUseDarkColors
+      ? darkModeBackgroundColor
+      : undefined
   })
 
   if (lastWindowState.fullscreen && !mainWindow.isFullScreen()) {
