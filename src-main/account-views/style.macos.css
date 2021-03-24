@@ -1,5 +1,6 @@
 /* Header: Drag Region */
 .compactHeader header {
+  -webkit-user-select: none;
   -webkit-app-region: drag;
 }
 
