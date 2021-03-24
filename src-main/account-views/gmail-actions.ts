@@ -1,11 +1,7 @@
 import { ipcRenderer } from 'electron'
 import { refreshInbox } from './gmail-inbox'
 
-declare global {
-  interface Window {
-    GM_ACTION_TOKEN: string
-  }
-}
+let gmailActionToken: string | undefined
 
 const mailActions = {
   archive: 'rc_^i',
@@ -14,12 +10,21 @@ const mailActions = {
   markAsSpam: 'sp'
 }
 
-function getActionToken() {
-  return window.GM_ACTION_TOKEN
+async function fetchActionToken() {
+  if (!gmailActionToken) {
+    const gmailResponse = await fetchGmail().then(async (response) =>
+      response.text()
+    )
+    gmailActionToken = /var GM_ACTION_TOKEN="([\w-]+)";/.exec(
+      gmailResponse
+    )?.[1]
+  }
+
+  return gmailActionToken
 }
 
 export async function fetchGmail(
-  path: string,
+  path = '',
   fetchOptions?: Parameters<typeof fetch>[1]
 ) {
   return fetch(`https://mail.google.com/mail/u/0/${path}`, fetchOptions)
@@ -29,9 +34,15 @@ async function sendMailAction(
   mailId: string,
   action: keyof typeof mailActions
 ) {
+  await fetchActionToken()
+
+  if (!gmailActionToken) {
+    return
+  }
+
   const parameters = new URLSearchParams({
     t: mailId,
-    at: getActionToken(),
+    at: gmailActionToken,
     act: mailActions[action]
   }).toString()
 
