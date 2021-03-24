@@ -4,7 +4,6 @@ import { initUpdates } from './updates'
 import config, { ConfigKey } from './config'
 import { initDownloads } from './downloads'
 import { initOrUpdateAppMenu } from './app-menu'
-import { handleUnreadCount } from './unread-counts'
 import { initTray } from './tray'
 import { initOrUpdateDockMenu } from './dock-menu'
 import { getSelectedAccount, initAccounts } from './accounts'
@@ -13,6 +12,7 @@ import { initDarkMode, initNativeThemeSource } from './dark-mode'
 import { initUserAgent } from './user-agent'
 import { getSessionPartitionKey } from './account-views/helpers'
 import { GMAIL_URL } from './constants'
+import { handleGmail } from './gmail'
 
 initDownloads()
 initNativeThemeSource()
@@ -90,8 +90,8 @@ async function initApp() {
 
   initUserAgent()
   initDarkMode()
-  handleUnreadCount()
   createMainWindow()
+  handleGmail()
   initAccounts()
   initOrUpdateAppMenu()
   initTray()

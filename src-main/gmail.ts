@@ -1,0 +1,97 @@
+import { app, ipcMain, Notification } from 'electron'
+import { Mail } from './account-views/gmail-feed'
+import { getAccountIdByViewId } from './account-views'
+import { getAccount, selectAccount } from './accounts'
+import { getMainWindow, sendToMainWindow } from './main-window'
+import config, { ConfigKey } from './config'
+import { is } from 'electron-util'
+import { updateTrayUnreadStatus } from './tray'
+import { GMAIL_URL } from './constants'
+
+const unreadCounts: Record<string, number> = {}
+
+export function getTotalUnreadCount() {
+  let totalUnreadCount = 0
+
+  for (const unreadCount of Object.values(unreadCounts)) {
+    totalUnreadCount += unreadCount
+  }
+
+  return totalUnreadCount
+}
+
+export function newMailNotification(
+  { messageId, senderName, subject, summary }: Mail,
+  sender: Electron.WebContents
+) {
+  const accountId = getAccountIdByViewId(sender.id)
+
+  if (!accountId) {
+    return
+  }
+
+  const account = getAccount(accountId)
+
+  if (!account) {
+    return
+  }
+
+  const notification = new Notification({
+    title: config.get(ConfigKey.NotificationsShowSender)
+      ? senderName
+      : account.label,
+    subtitle: config.get(ConfigKey.NotificationsShowSubject)
+      ? subject
+      : undefined,
+    body: config.get(ConfigKey.NotificationsShowSummary) ? summary : undefined,
+    actions: [
+      {
+        text: 'Archive',
+        type: 'button'
+      }
+    ]
+  })
+
+  notification.on('action', (_event, index) => {
+    if (index === 0) {
+      sender.send('mail:archive', messageId)
+    }
+  })
+
+  notification.on('click', () => {
+    if (accountId) {
+      selectAccount(accountId)
+
+      if (!sender.getURL().includes('#inbox')) {
+        sender.loadURL(`${GMAIL_URL}#inbox`)
+      }
+
+      getMainWindow().show()
+    }
+  })
+
+  notification.show()
+}
+
+export function handleGmail() {
+  ipcMain.on('gmail:unread-count', ({ sender }, unreadCount: number) => {
+    const accountId = getAccountIdByViewId(sender.id)
+    if (accountId) {
+      unreadCounts[accountId] = unreadCount
+
+      const totalUnreadCount = getTotalUnreadCount()
+
+      if (is.macos) {
+        app.dock.setBadge(totalUnreadCount ? totalUnreadCount.toString() : '')
+      }
+
+      updateTrayUnreadStatus(totalUnreadCount)
+
+      sendToMainWindow('unread-counts-updated', unreadCounts)
+    }
+  })
+
+  ipcMain.on('gmail:new-mail', (event, mail: Mail) => {
+    newMailNotification(mail, event.sender)
+  })
+}

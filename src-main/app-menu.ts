@@ -360,6 +360,54 @@ export function getAppMenu() {
           ]
         },
         {
+          label: 'Notifications',
+          submenu: [
+            {
+              label: 'Show Sender',
+              type: 'checkbox',
+              checked: config.get(ConfigKey.NotificationsShowSender),
+              click({ checked }) {
+                config.set(ConfigKey.NotificationsShowSender, checked)
+              }
+            },
+            {
+              label: 'Show Subject',
+              type: 'checkbox',
+              checked: config.get(ConfigKey.NotificationsShowSubject),
+              click({ checked }) {
+                config.set(ConfigKey.NotificationsShowSubject, checked)
+              }
+            },
+            {
+              label: 'Show Summary',
+              type: 'checkbox',
+              checked: config.get(ConfigKey.NotificationsShowSummary),
+              click({ checked }) {
+                config.set(ConfigKey.NotificationsShowSummary, checked)
+              }
+            },
+            {
+              type: 'separator'
+            },
+            {
+              label: 'Deliver Silently',
+              type: 'checkbox',
+              checked: config.get(ConfigKey.NotificationsSilent),
+              click({ checked }) {
+                config.set(ConfigKey.NotificationsSilent, checked)
+              }
+            },
+            {
+              label: 'Turned Off',
+              type: 'checkbox',
+              checked: config.get(ConfigKey.NotificationsDisabled),
+              click({ checked }) {
+                config.set(ConfigKey.NotificationsDisabled, checked)
+              }
+            }
+          ]
+        },
+        {
           type: 'separator'
         },
         {
