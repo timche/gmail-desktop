@@ -6,7 +6,6 @@ import { getMainWindow, sendToMainWindow } from './main-window'
 import config, { ConfigKey } from './config'
 import { is } from 'electron-util'
 import { updateTrayUnreadStatus } from './tray'
-import { GMAIL_URL } from './constants'
 
 const unreadCounts: Record<string, number> = {}
 
@@ -81,15 +80,9 @@ export function newMailNotification(
   })
 
   notification.on('click', () => {
-    if (accountId) {
-      selectAccount(accountId)
-
-      if (!sender.getURL().includes('#inbox')) {
-        sender.loadURL(`${GMAIL_URL}#inbox`)
-      }
-
-      getMainWindow().show()
-    }
+    sender.send('gmail:open-mail', messageId)
+    selectAccount(account.id)
+    getMainWindow().show()
   })
 
   notification.show()
