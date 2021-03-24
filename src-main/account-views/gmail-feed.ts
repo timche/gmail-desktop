@@ -19,7 +19,6 @@ export interface Mail {
 }
 
 let isInitialFeed = true
-let isInboxSectioned = false
 let previousModifiedDate = 0
 let currentModifiedDate = 0
 const previousNewMails = new Set<string>()
@@ -76,9 +75,19 @@ export function getNewMails(feedDocument: Document) {
   return newMails
 }
 
-export async function fetchGmailFeed() {
+export function getIsInboxSectioned() {
+  if (window.GM_INBOX_TYPE) {
+    return window.GM_INBOX_TYPE === 'SECTIONED'
+  }
+
+  return false
+}
+
+export async function fetchGmailFeed(suspendMode?: boolean) {
   const feedDocument = await fetchGmail(
-    `feed/atom${isInboxSectioned ? '/^sq_ig_i_personal' : ''}?v=${Date.now()}`
+    `feed/atom${
+      getIsInboxSectioned() ? '/^sq_ig_i_personal' : ''
+    }?v=${Date.now()}`
   )
     .then(async (response) => response.text())
     .then((xml) => parseAtomToDocument(xml))
@@ -91,32 +100,24 @@ export async function fetchGmailFeed() {
     return
   }
 
-  const unreadCount = getUnreadCount(feedDocument)
-  ipcRenderer.send('gmail:unread-count', unreadCount)
+  if (suspendMode) {
+    const unreadCount = getUnreadCount(feedDocument)
+    ipcRenderer.send('gmail:unread-count', unreadCount)
+  }
+
+  const newMails = getNewMails(feedDocument)
 
   if (isInitialFeed) {
     isInitialFeed = false
   } else {
-    const newMails = getNewMails(feedDocument)
     for (const newMail of newMails) {
       ipcRenderer.send('gmail:new-mail', newMail)
     }
   }
 }
 
-export function fetchIsInboxSectioned() {
-  if (window.GM_INBOX_TYPE) {
-    isInboxSectioned = window.GM_INBOX_TYPE === 'SECTIONED'
-  }
-}
-
 export async function initGmailFeed() {
-  window.addEventListener('DOMContentLoaded', () => {
-    fetchIsInboxSectioned()
-    fetchGmailFeed()
-    setInterval(fetchGmailFeed, 10000)
-    setInterval(() => {
-      previousNewMails.clear()
-    }, 1000 * 60 * 30)
-  })
+  setInterval(() => {
+    previousNewMails.clear()
+  }, 1000 * 60 * 30)
 }
