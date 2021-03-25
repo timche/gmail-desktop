@@ -390,11 +390,11 @@ export function getAppMenu() {
               type: 'separator'
             },
             {
-              label: 'Deliver Silently',
+              label: 'Play Sound',
               type: 'checkbox',
-              checked: config.get(ConfigKey.NotificationsSilent),
+              checked: config.get(ConfigKey.NotificationsPlaySound),
               click({ checked }) {
-                config.set(ConfigKey.NotificationsSilent, checked)
+                config.set(ConfigKey.NotificationsPlaySound, checked)
               }
             },
             {
