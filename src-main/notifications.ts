@@ -5,6 +5,10 @@ export function createNotification(
   body: string,
   action?: () => void
 ): void {
+  if (!Notification.isSupported()) {
+    return
+  }
+
   const notification = new Notification({
     body,
     title
