@@ -398,6 +398,14 @@ export function getAppMenu() {
               }
             },
             {
+              label: 'Close Automatically',
+              type: 'checkbox',
+              checked: config.get(ConfigKey.NotificationsAutoClose),
+              click({ checked }) {
+                config.set(ConfigKey.NotificationsAutoClose, checked)
+              }
+            },
+            {
               label: 'Turned Off',
               type: 'checkbox',
               checked: config.get(ConfigKey.NotificationsDisabled),
