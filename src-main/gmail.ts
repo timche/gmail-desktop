@@ -43,7 +43,7 @@ export function newMailNotification(
       ? subject
       : undefined,
     body: config.get(ConfigKey.NotificationsShowSummary) ? summary : undefined,
-    silent: config.get(ConfigKey.NotificationsSilent),
+    silent: !config.get(ConfigKey.NotificationsPlaySound),
     actions: [
       {
         text: 'Archive',
