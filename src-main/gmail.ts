@@ -118,7 +118,9 @@ export function handleGmail() {
     }
   })
 
-  ipcMain.on('gmail:new-mail', (event, mail: Mail) => {
-    newMailNotification(mail, event.sender)
-  })
+  if (Notification.isSupported()) {
+    ipcMain.on('gmail:new-mail', (event, mail: Mail) => {
+      newMailNotification(mail, event.sender)
+    })
+  }
 }
