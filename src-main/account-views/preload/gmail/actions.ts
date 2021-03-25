@@ -69,4 +69,8 @@ export function handleGmailActions() {
     await sendMailAction(mailId, 'markAsSpam')
     refreshInbox()
   })
+
+  ipcRenderer.on('gmail:open-mail', async (_event, messageId: string) => {
+    window.location.hash = `#inbox/${messageId}`
+  })
 }

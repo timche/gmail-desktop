@@ -21,8 +21,8 @@ function getInboxAnchorElement() {
   return document.querySelector<HTMLAnchorElement>(inboxAnchorElementSelector)
 }
 
-export function refreshInbox(forceRefresh?: true) {
-  if (window.location.hash.startsWith('#inbox') || forceRefresh) {
+export function refreshInbox() {
+  if (window.location.hash.startsWith('#inbox')) {
     const inboxAnchorElement = getInboxAnchorElement()
     if (inboxAnchorElement) {
       inboxAnchorElement.click()
@@ -57,25 +57,6 @@ async function updateUnreadCount() {
 }
 
 export function handleGmailInbox() {
-  ipcRenderer.on('gmail:open-mail', async (_event, messageId: string) => {
-    const threadElementSelector = `[data-legacy-thread-id="${messageId}"]`
-
-    const threadElement = document.querySelector<HTMLSpanElement>(
-      threadElementSelector
-    )
-
-    if (!threadElement) {
-      refreshInbox(true)
-      await elementReady<HTMLSpanElement>(threadElementSelector, {
-        timeout: 30000
-      })
-    }
-
-    if (threadElement) {
-      threadElement.click()
-    }
-  })
-
   window.addEventListener('DOMContentLoaded', async () => {
     await initInboxParentElement()
 
