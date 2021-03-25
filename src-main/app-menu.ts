@@ -406,7 +406,7 @@ export function getAppMenu() {
               }
             },
             {
-              label: 'Turned Off',
+              label: 'Disabled',
               type: 'checkbox',
               checked: config.get(ConfigKey.NotificationsDisabled),
               click({ checked }) {
