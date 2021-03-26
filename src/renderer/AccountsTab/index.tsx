@@ -1,7 +1,8 @@
 import React from 'react'
-import { Tabs, TabList, Tab, Badge } from '@chakra-ui/react'
+import { Tabs, TabList, Tab, Badge, useColorModeValue } from '@chakra-ui/react'
 import { TOP_ELEMENT_HEIGHT } from '../constants'
 import { Account } from '../../types'
+import { darkTheme, lightTheme } from '../../theme'
 
 interface AccountsTabProps {
   accounts: Array<Account & { unreadCount?: number }>
@@ -18,6 +19,16 @@ function AccountsTab({
   children,
   style
 }: AccountsTabProps) {
+  const activeBg = useColorModeValue(lightTheme.bg[1], darkTheme.bg[1])
+  const activeBorderBottomColor = useColorModeValue(
+    'gray.200',
+    'whiteAlpha.300'
+  )
+  const disabledTextColor = useColorModeValue(
+    lightTheme.text.disabled,
+    darkTheme.text.disabled
+  )
+
   if (accounts.length < 2) {
     return null
   }
@@ -34,16 +45,23 @@ function AccountsTab({
     >
       <TabList height={TOP_ELEMENT_HEIGHT} borderBottomWidth="1px">
         {children}
-        {accounts.map(({ id, label, unreadCount }) => {
+        {accounts.map(({ id, label, unreadCount, selected }) => {
           return (
             <Tab
+              colorScheme="gray"
               key={id}
+              _active={{
+                bg: activeBg,
+                borderBottomWidth: '1px',
+                borderBottomColor: activeBorderBottomColor
+              }}
               _focus={{ outline: 'none' }}
               onClick={() => {
                 if (accounts[selectedAccountIndex]?.id !== id) {
                   onSelectAccount(id)
                 }
               }}
+              color={selected ? undefined : disabledTextColor}
               borderBottomWidth="1px"
               mb="-1px"
               cursor="default"

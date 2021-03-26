@@ -1,43 +1,40 @@
 import { ipcRenderer } from 'electron'
 import * as DarkReader from 'darkreader'
-import {
-  darkModeBackgroundColor,
-  darkModeSelectionColor
-} from '../../constants'
+import { darkTheme } from '../../../theme'
 
 DarkReader.setFetchMethod(window.fetch)
 
 function enableDarkMode(): void {
   DarkReader.enable(
     {
-      darkSchemeBackgroundColor: darkModeBackgroundColor,
-      selectionColor: darkModeSelectionColor
+      darkSchemeBackgroundColor: darkTheme.bg[0],
+      selectionColor: darkTheme.selection
     },
     {
       css: `
           /* Read email */
           .yO {
-            background-color: ${darkModeBackgroundColor} !important;
+            background-color: ${darkTheme.bg[0]} !important;
           }
 
           /* Unread email */
           .zE {
-            background-color: #1a1a1a !important;
+            background-color: ${darkTheme.bg[1]} !important;
           }
 
           /* Selected email */
           .x7 {
-            background-color: #161d1d !important;
+            background-color: ${darkTheme.bg[2]} !important;
           }
 
           /* Snackbar (bottom-left) */
           .bAp.b8.UC .vh {
-            background-color: #1a1a1a !important;
+            background-color: ${darkTheme.bg[1]} !important;
           }
 
           /* Compose */
           .z0 > .L3 {
-            background-color: #1a1a1a !important;
+            background-color: ${darkTheme.bg[1]} !important;
           }
         `,
       ignoreImageAnalysis: [],
