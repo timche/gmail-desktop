@@ -1,6 +1,6 @@
 import { ChakraProvider, useColorMode } from '@chakra-ui/react'
 import { useEffect } from 'react'
-import theme from '../src-renderer/theme'
+import theme from '../src/renderer/theme'
 
 export const parameters = {
   layout: 'fullscreen',
