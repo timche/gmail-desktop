@@ -25,7 +25,7 @@ async function main() {
   }
 
   await writeJsonFile(
-    path.resolve(__dirname, '..', 'src-main', 'user-agent', 'user-agents.json'),
+    path.resolve(__dirname, '..', 'src/main', 'user-agent', 'user-agents.json'),
     {
       windows: match[0],
       macos: match[1],
