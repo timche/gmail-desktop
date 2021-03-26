@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react'
 import { useColorMode } from '@chakra-ui/react'
 import { IS_MAC_OS } from './constants'
 import ipc from './ipc'
-import { Account, UnreadCounts, AppUpdateInfo, AppUpdateStatus } from './types'
+import { Account, UnreadCounts, AppUpdateInfo, AppUpdateStatus } from '../types'
+import { Except } from 'type-fest'
 
 export function useDarkMode() {
   const { setColorMode } = useColorMode()
@@ -66,7 +67,7 @@ export function useAddAccount() {
     })
   }, [])
 
-  const addAccount = (account: Account) => {
+  const addAccount = (account: Except<Account, 'selected'>) => {
     ipc.send('add-account', account)
     setIsAddingAccount(false)
   }
@@ -88,7 +89,7 @@ export function useEditAccount() {
     })
   }, [])
 
-  const saveEditAccount = (account: Account) => {
+  const saveEditAccount = (account: Except<Account, 'selected'>) => {
     ipc.send('edit-account-save', account)
     setEditingAccount(undefined)
   }

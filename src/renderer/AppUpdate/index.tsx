@@ -7,7 +7,7 @@ import {
   Alert,
   HStack
 } from '@chakra-ui/react'
-import { AppUpdateStatus } from '../types'
+import { AppUpdateStatus } from '../../types'
 import { TOP_ELEMENT_HEIGHT } from '../constants'
 import { appRegionNoDragStyle } from '../helpers'
 

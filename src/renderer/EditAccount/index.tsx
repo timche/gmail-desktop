@@ -10,11 +10,12 @@ import {
   FormControl,
   FormLabel
 } from '@chakra-ui/react'
-import { Account } from '../types'
+import { Account } from '../../types'
+import { Except } from 'type-fest'
 
 interface EditAccountProps {
-  account: Account
-  onSave: (account: Account) => void
+  account: Except<Account, 'selected'>
+  onSave: (account: Except<Account, 'selected'>) => void
   onCancel: () => void
   onRemove: (accountId: string) => void
 }

@@ -5,9 +5,9 @@ import { getMainWindow, sendToMainWindow } from './main-window'
 import config, { ConfigKey } from './config'
 import { is } from 'electron-util'
 import { updateTrayUnreadStatus } from './tray'
-import { Mail } from './types'
+import { Mail, UnreadCounts } from '../types'
 
-const unreadCounts: Record<string, number> = {}
+const unreadCounts: UnreadCounts = {}
 
 export function getTotalUnreadCount() {
   let totalUnreadCount = 0
