@@ -3,6 +3,7 @@ import { is } from 'electron-util'
 import Store = require('electron-store')
 import { getPlatformUserAgentFix } from './user-agent'
 import { DEFAULT_ACCOUNT_ID } from './constants'
+import { Account } from '../types'
 
 interface LastWindowState {
   bounds: {
@@ -13,12 +14,6 @@ interface LastWindowState {
   }
   fullscreen: boolean
   maximized: boolean
-}
-
-export interface Account {
-  id: string
-  label: string
-  selected: boolean
 }
 
 export enum ConfigKey {

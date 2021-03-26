@@ -1,5 +1,5 @@
 import { ipcRenderer } from 'electron'
-import { Mail } from '../../../types'
+import { Mail } from '../../../../types'
 import { fetchGmail } from './actions'
 
 declare global {

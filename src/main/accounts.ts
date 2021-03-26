@@ -7,11 +7,12 @@ import {
   updateAllAccountViewBounds
 } from './account-views'
 import { initOrUpdateAppMenu } from './app-menu'
-import config, { ConfigKey, Account } from './config'
+import config, { ConfigKey } from './config'
 import { sendToMainWindow, getMainWindow } from './main-window'
 import { initOrUpdateDockMenu } from './dock-menu'
 import { updateTrayMenu } from './tray'
 import { DEFAULT_ACCOUNT_ID } from './constants'
+import { Account } from '../types'
 
 export function getAccount(accountId: string) {
   return getAccounts().find(({ id }) => id === accountId)

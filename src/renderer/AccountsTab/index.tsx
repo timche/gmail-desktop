@@ -1,10 +1,10 @@
 import React from 'react'
 import { Tabs, TabList, Tab, Badge } from '@chakra-ui/react'
 import { TOP_ELEMENT_HEIGHT } from '../constants'
-import { Account } from '../types'
+import { Account } from '../../types'
 
 interface AccountsTabProps {
-  accounts: Account[]
+  accounts: Array<Account & { unreadCount?: number }>
   onSelectAccount: (accountId: string) => void
   isDisabled?: boolean
   children?: React.ReactNode

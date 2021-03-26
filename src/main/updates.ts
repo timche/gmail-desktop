@@ -1,7 +1,7 @@
 import { app, dialog, ipcMain } from 'electron'
 import log from 'electron-log'
 import { autoUpdater } from 'electron-updater'
-import { CancellationToken, UpdateInfo, HttpError } from 'builder-util-runtime'
+import { CancellationToken, HttpError } from 'builder-util-runtime'
 import { is } from 'electron-util'
 import config, { ConfigKey } from './config'
 import { initOrUpdateAppMenu } from './app-menu'
@@ -13,6 +13,7 @@ import {
 } from './account-views'
 import { setIsQuitting } from '.'
 import { createNotification } from './notifications'
+import { AppUpdateInfo } from '../types'
 
 const AUTO_UPDATE_CHECK_INTERVAL = 60000 * 60 * 3 // 4 Hours
 
@@ -45,7 +46,7 @@ export function changeReleaseChannel(channel: 'stable' | 'dev') {
   config.set(ConfigKey.ReleaseChannel, channel)
 }
 
-export function showUpdateAvailable({ version, releaseNotes }: UpdateInfo) {
+export function showUpdateAvailable({ version, releaseNotes }: AppUpdateInfo) {
   isUpdateAvailable = true
 
   sendToMainWindow('update:available', {
@@ -98,7 +99,7 @@ export function initUpdates(): void {
     return
   }
 
-  autoUpdater.on('update-available', (updateInfo: UpdateInfo) => {
+  autoUpdater.on('update-available', (updateInfo: AppUpdateInfo) => {
     const skipUpdateVersion = config.get(ConfigKey.SkipUpdateVersion)
     if (updateInfo.version !== skipUpdateVersion) {
       showUpdateAvailable(updateInfo)
