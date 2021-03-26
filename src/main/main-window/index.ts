@@ -15,7 +15,7 @@ import { openExternalUrl, shouldStartMinimized } from '../helpers'
 import { getAppMenu } from '../app-menu'
 import debounce from 'lodash.debounce'
 import indexHTML from './index.html'
-import { darkModeBackgroundColor } from '../constants'
+import { darkTheme } from '../../theme'
 
 let mainWindow: BrowserWindow | undefined
 
@@ -59,7 +59,7 @@ export function createMainWindow(): void {
       : undefined,
     darkTheme: nativeTheme.shouldUseDarkColors,
     backgroundColor: nativeTheme.shouldUseDarkColors
-      ? darkModeBackgroundColor
+      ? darkTheme.bg[0]
       : undefined
   })
 
