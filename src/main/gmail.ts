@@ -20,10 +20,10 @@ export function getTotalUnreadCount() {
 }
 
 export function newMailNotification(
-  { messageId, senderName, subject, summary }: Mail,
-  sender: Electron.WebContents
+  { messageId, sender, subject, summary }: Mail,
+  accountViewWebContents: Electron.WebContents
 ) {
-  const accountId = getAccountIdByViewId(sender.id)
+  const accountId = getAccountIdByViewId(accountViewWebContents.id)
 
   if (!accountId) {
     return
@@ -37,7 +37,7 @@ export function newMailNotification(
 
   const notification = new Notification({
     title: config.get(ConfigKey.NotificationsShowSender)
-      ? senderName
+      ? sender.name
       : account.label,
     subtitle: config.get(ConfigKey.NotificationsShowSubject)
       ? subject
@@ -67,23 +67,23 @@ export function newMailNotification(
   notification.on('action', (_event, index) => {
     switch (index) {
       case 1:
-        sender.send('gmail:mark-mail-as-read', messageId)
+        accountViewWebContents.send('gmail:mark-mail-as-read', messageId)
         break
       case 2:
-        sender.send('gmail:delete-mail', messageId)
+        accountViewWebContents.send('gmail:delete-mail', messageId)
         break
       case 3:
-        sender.send('gmail:mark-mail-as-spam', messageId)
+        accountViewWebContents.send('gmail:mark-mail-as-spam', messageId)
         break
       default:
-        sender.send('gmail:archive-mail', messageId)
+        accountViewWebContents.send('gmail:archive-mail', messageId)
     }
 
     clearTimeout(closeTimeout)
   })
 
   notification.on('click', () => {
-    sender.send('gmail:open-mail', messageId)
+    accountViewWebContents.send('gmail:open-mail', messageId)
     selectAccount(account.id)
     getMainWindow().show()
     clearTimeout(closeTimeout)
