@@ -2,15 +2,10 @@ import { ipcRenderer as ipc } from 'electron'
 import { ConfigKey } from '../../config'
 import initDarkMode from './dark-mode'
 import elementReady = require('element-ready')
-import { handleGmailActions } from './gmail/actions'
-import { handleGmailInbox } from './gmail/inbox'
-import { initGmailFeed } from './gmail/feed'
+import { initGmail } from './gmail'
 
+initGmail()
 initDarkMode()
-
-initGmailFeed()
-handleGmailInbox()
-handleGmailActions()
 
 function attachButtonListeners(): void {
   // For windows that won't include the selectors we are expecting,

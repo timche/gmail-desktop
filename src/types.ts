@@ -9,8 +9,10 @@ export interface Mail {
   subject: string
   summary: string
   link: string
-  senderName: string
-  senderEmail: string
+  sender: {
+    name: string
+    email: string
+  }
 }
 
 export type UnreadCounts = Record<string, number>
