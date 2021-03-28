@@ -12,34 +12,34 @@ import {
   manuallyCheckForUpdates,
   changeReleaseChannel,
   setAutoUpdateCheck
-} from './updates'
-import config, { ConfigKey } from './config'
+} from '../updates'
+import config, { ConfigKey } from '../config'
 import {
   setCustomStyle,
   USER_CUSTOM_STYLE_PATH
-} from './account-views/custom-styles'
-import { viewLogs } from './logs'
-import { showRestartDialog, setAppMenuBarVisibility } from './utils'
-import { enableAutoFixUserAgent, removeCustomUserAgent } from './user-agent'
+} from '../account-views/custom-styles'
+import { viewLogs } from '../utils/logs'
+import { showRestartDialog } from '../utils/dialog'
+import { enableAutoFixUserAgent, removeCustomUserAgent } from '../user-agent'
 import {
   getAccountsMenuItems,
   getSelectedAccount,
   isDefaultAccount,
   removeAccount
-} from './accounts'
-import { getMainWindow, sendToMainWindow } from './main-window'
+} from '../accounts'
+import { getMainWindow, sendToMainWindow } from '../main-window'
 import {
   forEachAccountView,
   getSelectedAccountView,
   hideAccountViews
-} from './account-views'
-import { GMAIL_URL } from './constants'
+} from '../account-views'
+import { GMAIL_URL } from '../constants'
 
 interface AppearanceMenuItem {
   key: ConfigKey
   label: string
   restartRequired?: boolean
-  setMenuBarVisibility?: boolean
+  click?: (checked?: boolean) => void
 }
 
 export function getAppMenu() {
@@ -62,8 +62,7 @@ export function getAppMenu() {
   const createAppearanceMenuItem = ({
     key,
     label,
-    restartRequired,
-    setMenuBarVisibility
+    restartRequired
   }: AppearanceMenuItem): MenuItemConstructorOptions => ({
     label,
     type: 'checkbox',
@@ -71,27 +70,13 @@ export function getAppMenu() {
     click({ checked }: { checked: boolean }) {
       config.set(key, checked)
 
-      // If the style changes requires a restart, don't add or remove the class
-      // name from the DOM
       if (restartRequired) {
         showRestartDialog()
       } else {
         setCustomStyle(key, checked)
       }
-
-      if (setMenuBarVisibility) {
-        setAppMenuBarVisibility(true)
-      }
     }
   })
-
-  if (is.linux || is.windows) {
-    appearanceMenuItems.unshift({
-      key: ConfigKey.AutoHideMenuBar,
-      label: 'Hide Menu bar',
-      setMenuBarVisibility: true
-    })
-  }
 
   const appMenuTemplate: MenuItemConstructorOptions[] = [
     {
@@ -252,6 +237,25 @@ export function getAppMenu() {
           checked: config.get(ConfigKey.ConfirmExternalLinks),
           click({ checked }: { checked: boolean }) {
             config.set(ConfigKey.ConfirmExternalLinks, checked)
+          }
+        },
+        {
+          label: 'Hide Menu bar',
+          visible: !is.macos,
+          click({ checked }) {
+            config.set(ConfigKey.AutoHideMenuBar, checked)
+            const mainWindow = getMainWindow()
+            mainWindow.setMenuBarVisibility(!checked)
+            mainWindow.autoHideMenuBar = checked
+
+            if (checked) {
+              dialog.showMessageBox({
+                type: 'info',
+                buttons: ['OK'],
+                message:
+                  'Tip: You can press the Alt key to see the menu bar again.'
+              })
+            }
           }
         },
         {

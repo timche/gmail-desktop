@@ -1,17 +1,13 @@
-import { app, dialog, shell } from 'electron'
-import { platform as selectPlatform } from 'electron-util'
-import config, { ConfigKey } from './config'
-import { cleanURLFromGoogle } from './utils'
+import { dialog, shell } from 'electron'
+import config, { ConfigKey } from '../config'
 
-export const platform: 'macos' | 'linux' | 'windows' = selectPlatform({
-  macos: 'macos',
-  linux: 'linux',
-  windows: 'windows'
-})
+export function cleanURLFromGoogle(url: string): string {
+  if (!url.includes('google.com/url')) {
+    return url
+  }
 
-export const shouldStartMinimized = () =>
-  app.commandLine.hasSwitch('launch-minimized') ||
-  config.get(ConfigKey.LaunchMinimized)
+  return new URL(url).searchParams.get('q') ?? url
+}
 
 export async function openExternalUrl(url: string): Promise<void> {
   const cleanURL = cleanURLFromGoogle(url)

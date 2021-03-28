@@ -2,7 +2,7 @@ import { shell } from 'electron'
 import * as path from 'path'
 import electronDl = require('electron-dl')
 import config, { ConfigKey } from './config'
-import { createNotification } from './notifications'
+import { createNotification } from './utils/notifications'
 
 type State = 'cancelled' | 'completed' | 'interrupted'
 

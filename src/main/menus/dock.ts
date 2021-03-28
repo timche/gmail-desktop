@@ -1,9 +1,9 @@
 import { app, Menu } from 'electron'
 import { is } from 'electron-util'
-import config, { ConfigKey } from './config'
-import { getMainWindow } from './main-window'
-import { sendToSelectedAccountView } from './account-views'
-import { getAccountsMenuItems } from './accounts'
+import config, { ConfigKey } from '../config'
+import { getMainWindow } from '../main-window'
+import { sendToSelectedAccountView } from '../account-views'
+import { getAccountsMenuItems } from '../accounts'
 
 export function initOrUpdateDockMenu() {
   const mainWindow = getMainWindow()

@@ -6,11 +6,11 @@ import {
   showAccountViews,
   updateAllAccountViewBounds
 } from './account-views'
-import { initOrUpdateAppMenu } from './app-menu'
+import { initOrUpdateAppMenu } from './menus/app'
 import config, { ConfigKey } from './config'
 import { sendToMainWindow, getMainWindow } from './main-window'
-import { initOrUpdateDockMenu } from './dock-menu'
-import { updateTrayMenu } from './tray'
+import { initOrUpdateDockMenu } from './menus/dock'
+import { initOrUpdateTrayMenu } from './menus/tray'
 import { DEFAULT_ACCOUNT_ID } from './constants'
 import { Account } from '../types'
 
@@ -57,7 +57,7 @@ export function editAccount(editedAccount: Account) {
   config.set(ConfigKey.Accounts, accounts)
   initOrUpdateAppMenu()
   initOrUpdateDockMenu()
-  updateTrayMenu()
+  initOrUpdateTrayMenu()
 }
 
 export function addAccount(addedAccount: Account) {
@@ -70,7 +70,7 @@ export function addAccount(addedAccount: Account) {
   config.set(ConfigKey.Accounts, accounts)
   initOrUpdateAppMenu()
   initOrUpdateDockMenu()
-  updateTrayMenu()
+  initOrUpdateTrayMenu()
 }
 
 export function removeAccount(accountId: string) {
@@ -88,7 +88,7 @@ export function removeAccount(accountId: string) {
   config.set(ConfigKey.Accounts, accounts)
   initOrUpdateAppMenu()
   initOrUpdateDockMenu()
-  updateTrayMenu()
+  initOrUpdateTrayMenu()
 }
 
 export function getAccountsMenuItems(withAccelerator?: boolean) {

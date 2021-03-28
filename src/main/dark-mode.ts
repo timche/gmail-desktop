@@ -1,7 +1,7 @@
 import { nativeTheme, ipcMain } from 'electron'
 import config, { ConfigKey } from './config'
-import { sendChannelToAllWindows } from './utils'
 import { getSelectedAccountView, sendToAccountViews } from './account-views'
+import { sendToMainWindow } from './main-window'
 
 export function initNativeThemeSource() {
   switch (config.get(ConfigKey.DarkMode)) {
@@ -26,10 +26,7 @@ export async function initDarkMode() {
   })
 
   nativeTheme.on('updated', () => {
-    sendChannelToAllWindows(
-      'dark-mode-updated',
-      nativeTheme.shouldUseDarkColors
-    )
+    sendToMainWindow('dark-mode-updated', nativeTheme.shouldUseDarkColors)
     sendToAccountViews('dark-mode-updated', nativeTheme.shouldUseDarkColors)
   })
 }

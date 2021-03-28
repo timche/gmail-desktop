@@ -4,15 +4,14 @@ import { is } from 'electron-util'
 import { getSelectedAccount } from '../accounts'
 import config, { ConfigKey } from '../config'
 import { toggleAppVisiblityTrayItem } from '../tray'
-import { setAppMenuBarVisibility } from '../utils'
 import {
   getAccountView,
   getSelectedAccountView,
   updateAllAccountViewBounds
 } from '../account-views'
-import { getIsQuitting } from '..'
-import { openExternalUrl, shouldStartMinimized } from '../helpers'
-import { getAppMenu } from '../app-menu'
+import { getIsQuitting, shouldStartMinimized } from '..'
+import { openExternalUrl } from '../utils/url'
+import { getAppMenu } from '../menus/app'
 import debounce from 'lodash.debounce'
 import indexHTML from './index.html'
 import { darkTheme } from '../../theme'
@@ -71,8 +70,10 @@ export function createMainWindow(): void {
     mainWindow.maximize()
   }
 
-  if (is.linux || is.windows) {
-    setAppMenuBarVisibility()
+  if (!is.macos) {
+    const hideMenuBar = config.get(ConfigKey.AutoHideMenuBar)
+    mainWindow.setMenuBarVisibility(!hideMenuBar)
+    mainWindow.autoHideMenuBar = hideMenuBar
   }
 
   mainWindow.loadFile(path.resolve(__dirname, indexHTML))
@@ -96,9 +97,9 @@ export function createMainWindow(): void {
     }
   })
 
-  mainWindow.on('close', (error) => {
+  mainWindow.on('close', (event) => {
     if (!getIsQuitting() && mainWindow) {
-      error.preventDefault()
+      event.preventDefault()
       mainWindow.blur()
       mainWindow.hide()
     }

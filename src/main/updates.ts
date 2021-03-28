@@ -4,15 +4,14 @@ import { autoUpdater } from 'electron-updater'
 import { CancellationToken, HttpError } from 'builder-util-runtime'
 import { is } from 'electron-util'
 import config, { ConfigKey } from './config'
-import { initOrUpdateAppMenu } from './app-menu'
+import { initOrUpdateAppMenu } from './menus/app'
 import { getMainWindow, sendToMainWindow } from './main-window'
 import {
   hideAccountViews,
   showAccountViews,
   updateAllAccountViewBounds
 } from './account-views'
-import { setIsQuitting } from '.'
-import { createNotification } from './notifications'
+import { createNotification } from './utils/notifications'
 import { AppUpdateInfo } from '../types'
 
 const AUTO_UPDATE_CHECK_INTERVAL = 60000 * 60 * 3 // 4 Hours
@@ -132,8 +131,8 @@ export function initUpdates(): void {
   })
 
   ipcMain.on('update:install', () => {
-    setIsQuitting(true)
-    autoUpdater.quitAndInstall()
+    app.relaunch()
+    app.quit()
   })
 
   ipcMain.on('update:dismiss', () => {

@@ -1,8 +1,8 @@
 import { app } from 'electron'
-import { platform } from '../helpers'
 import config, { ConfigKey } from '../config'
 import userAgents from './user-agents.json'
-import { showRestartDialog } from '../utils'
+import { showRestartDialog } from '../utils/dialog'
+import { platform } from 'electron-util'
 
 export function removeCustomUserAgent(): void {
   config.set(ConfigKey.CustomUserAgent, '')
@@ -22,7 +22,11 @@ export async function enableAutoFixUserAgent({
 }
 
 export function getPlatformUserAgentFix() {
-  return userAgents[platform]
+  return platform({
+    default: userAgents.macos,
+    linux: userAgents.linux,
+    windows: userAgents.windows
+  })
 }
 
 export function initUserAgent() {
