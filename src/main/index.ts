@@ -3,9 +3,9 @@ import { app, BrowserWindow } from 'electron'
 import { initUpdates } from './updates'
 import config, { ConfigKey } from './config'
 import { initDownloads } from './downloads'
-import { initOrUpdateAppMenu } from './app-menu'
+import { initOrUpdateAppMenu } from './menus/app'
 import { initTray } from './tray'
-import { initOrUpdateDockMenu } from './dock-menu'
+import { initOrUpdateDockMenu } from './menus/dock'
 import { getSelectedAccount, initAccounts } from './accounts'
 import { getMainWindow, createMainWindow } from './main-window'
 import { initDarkMode, initNativeThemeSource } from './dark-mode'
@@ -84,6 +84,13 @@ app.on('before-quit', () => {
     })
   }
 })
+
+export function shouldStartMinimized() {
+  return (
+    app.commandLine.hasSwitch('launch-minimized') ||
+    config.get(ConfigKey.LaunchMinimized)
+  )
+}
 
 async function initApp() {
   await app.whenReady()

@@ -12,7 +12,7 @@ import { TOP_ELEMENT_HEIGHT, GMAIL_URL } from '../constants'
 import { is } from 'electron-util'
 import { addContextMenu } from './context-menu'
 import { getIsUpdateAvailable } from '../updates'
-import { openExternalUrl } from '../helpers'
+import { openExternalUrl } from '../utils/url'
 import config, { ConfigKey } from '../config'
 
 const accountViews = new Map<string, BrowserView>()
