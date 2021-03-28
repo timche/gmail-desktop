@@ -217,6 +217,16 @@ export function createAccountView(accountId: string, setAsTopView?: boolean) {
     }
   })
 
+  accountView.webContents.on('will-redirect', (event, url) => {
+    // Sometimes Gmail is redirecting to the landing page instead of login.
+    if (url.startsWith('https://www.google.com')) {
+      event.preventDefault()
+      accountView.webContents.loadURL(
+        'https://accounts.google.com/ServiceLogin?service=mail'
+      )
+    }
+  })
+
   accountView.webContents.on(
     'new-window',
     // eslint-disable-next-line max-params
