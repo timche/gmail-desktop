@@ -1,11 +1,11 @@
 import * as path from 'path'
-import { app, Menu, nativeImage, NativeImage, Tray } from 'electron'
+import { app, nativeImage, NativeImage, Tray } from 'electron'
 import { is } from 'electron-util'
 import config, { ConfigKey } from './config'
 import { getMainWindow } from './main-window'
+import { getTrayMenu } from './menus/tray'
 
-let tray: Tray
-let trayMenu: Menu
+let tray: Tray | undefined
 
 export function createTrayIcon(unread: boolean): NativeImage {
   let iconFileName
@@ -17,7 +17,7 @@ export function createTrayIcon(unread: boolean): NativeImage {
   }
 
   return nativeImage.createFromPath(
-    path.join(__dirname, '..', 'static', iconFileName)
+    path.join(__dirname, '..', '..', 'static', iconFileName)
   )
 }
 
@@ -26,17 +26,22 @@ let trayIconUnread: NativeImage
 
 export function toggleAppVisiblityTrayItem(isMainWindowVisible: boolean): void {
   if (config.get(ConfigKey.EnableTrayIcon) && tray) {
-    const showWin = trayMenu.getMenuItemById('show-win')
-    if (showWin) {
-      showWin.visible = !isMainWindowVisible
-    }
+    const trayMenu = getTrayMenu()
 
-    const hideWin = trayMenu.getMenuItemById('hide-win')
-    if (hideWin) {
-      hideWin.visible = isMainWindowVisible
-    }
+    if (trayMenu) {
+      const showWin = trayMenu.getMenuItemById('show-win')
 
-    tray.setContextMenu(trayMenu)
+      if (showWin) {
+        showWin.visible = !isMainWindowVisible
+      }
+
+      const hideWin = trayMenu.getMenuItemById('hide-win')
+      if (hideWin) {
+        hideWin.visible = isMainWindowVisible
+      }
+
+      tray.setContextMenu(trayMenu)
+    }
   }
 }
 
@@ -65,8 +70,6 @@ export function initTray() {
   tray = new Tray(trayIcon)
 
   tray.setToolTip(app.name)
-
-  tray.setContextMenu(trayMenu)
 
   tray.on('click', () => {
     const mainWindow = getMainWindow()

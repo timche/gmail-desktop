@@ -6,7 +6,7 @@ import { is } from 'electron-util'
 import { getMainWindow } from '../main-window'
 import { getTray } from '../tray'
 
-let trayMenu: Menu
+let trayMenu: Menu | undefined
 
 export function getTrayMenuTemplate() {
   const macosMenuItems: MenuItemConstructorOptions[] = is.macos
@@ -16,18 +16,16 @@ export function getTrayMenuTemplate() {
           type: 'checkbox',
           checked: config.get(ConfigKey.ShowDockIcon),
           click({ checked }: { checked: boolean }) {
-            config.set(ConfigKey.ShowDockIcon, checked)
+            if (trayMenu) {
+              config.set(ConfigKey.ShowDockIcon, checked)
 
-            if (checked) {
-              app.dock.show()
-            } else {
-              app.dock.hide()
-            }
+              if (checked) {
+                app.dock.show()
+              } else {
+                app.dock.hide()
+              }
 
-            const menu = trayMenu.getMenuItemById('menu')
-
-            if (menu) {
-              menu.visible = !checked
+              initOrUpdateTrayMenu()
             }
           }
         },
@@ -35,7 +33,6 @@ export function getTrayMenuTemplate() {
           type: 'separator'
         },
         {
-          id: 'menu',
           label: 'Menu',
           visible: !config.get(ConfigKey.ShowDockIcon),
           submenu: Menu.getApplicationMenu()!
@@ -76,11 +73,18 @@ export function getTrayMenuTemplate() {
   return trayMenuTemplate
 }
 
+export function getTrayMenu() {
+  return trayMenu
+}
+
 export function initOrUpdateTrayMenu() {
   if (!config.get(ConfigKey.EnableTrayIcon)) {
     return
   }
 
-  trayMenu = Menu.buildFromTemplate(getTrayMenuTemplate())
-  getTray().setContextMenu(trayMenu)
+  const tray = getTray()
+  if (tray) {
+    trayMenu = Menu.buildFromTemplate(getTrayMenuTemplate())
+    tray.setContextMenu(trayMenu)
+  }
 }
