@@ -13,6 +13,7 @@ import { initUserAgent } from './user-agent'
 import { getSessionPartitionKey } from './account-views'
 import { gmailUrl } from '../constants'
 import { handleGmail } from './gmail'
+import { initOrUpdateTrayMenu } from './menus/tray'
 
 initDownloads()
 initNativeThemeSource()
@@ -102,6 +103,7 @@ async function initApp() {
   initAccounts()
   initOrUpdateAppMenu()
   initTray()
+  initOrUpdateTrayMenu()
   initOrUpdateDockMenu()
   initUpdates()
 }
