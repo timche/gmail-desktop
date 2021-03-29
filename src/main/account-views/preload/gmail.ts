@@ -41,13 +41,13 @@ async function gmailRequest(
   return fetch(`${gmailUrl}${path}`, fetchOptions)
 }
 
-async function observeUnreadCount() {
+async function observeUnreadInbox() {
   await findInboxParentElement()
 
   if (inboxParentElement) {
-    getUnreadCount()
+    getUnreadInbox()
     const observer = new MutationObserver(() => {
-      getUnreadCount()
+      getUnreadInbox()
     })
     observer.observe(inboxParentElement, { childList: true })
   }
@@ -76,7 +76,7 @@ async function fetchNewMails(sendUnreadCount?: boolean) {
     ipcRenderer.send('gmail:unread-count', unreadCount)
   }
 
-  const newMails = getFeedNewMails(feedDocument)
+  const newMails = parseNewMails(feedDocument)
 
   // Don't notify about new mails on first start
   if (isInitialNewMailsFetch) {
@@ -141,7 +141,7 @@ function getInboxElement() {
   )
 }
 
-function getUnreadCount() {
+function getUnreadInbox() {
   const inboxElement = getInboxElement()
 
   if (!inboxElement) {
@@ -163,7 +163,7 @@ function getUnreadCount() {
   }
 }
 
-function getFeedNewMails(feedDocument: Document) {
+function parseNewMails(feedDocument: Document) {
   const newMails: Mail[] = []
   const mails = feedDocument.querySelectorAll('entry')
   const currentDate = Date.now()
@@ -201,7 +201,7 @@ function getFeedNewMails(feedDocument: Document) {
 
 export function initGmail() {
   window.addEventListener('DOMContentLoaded', () => {
-    observeUnreadCount()
+    observeUnreadInbox()
 
     ipcRenderer.on('gmail:archive-mail', async (_event, mailId: string) => {
       await sendMailAction(mailId, 'archive')

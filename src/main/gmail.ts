@@ -119,8 +119,10 @@ export function handleGmail() {
   })
 
   if (Notification.isSupported()) {
-    ipcMain.on('gmail:new-mail', (event, mail: Mail) => {
-      newMailNotification(mail, event.sender)
+    ipcMain.on('gmail:new-mails', (event, mails: Mail[]) => {
+      for (const mail of mails) {
+        newMailNotification(mail, event.sender)
+      }
     })
   }
 }
