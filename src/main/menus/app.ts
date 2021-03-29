@@ -33,7 +33,7 @@ import {
   getSelectedAccountView,
   hideAccountViews
 } from '../account-views'
-import { GMAIL_URL } from '../constants'
+import { gmailUrl } from '../../constants'
 
 interface AppearanceMenuItem {
   key: ConfigKey
@@ -530,7 +530,7 @@ export function getAppMenu() {
           click() {
             const selectedAccountView = getSelectedAccountView()
             if (selectedAccountView) {
-              selectedAccountView.webContents.loadURL(GMAIL_URL)
+              selectedAccountView.webContents.loadURL(gmailUrl)
             }
           }
         },
@@ -541,7 +541,7 @@ export function getAppMenu() {
             const mainWindow = getMainWindow()
             mainWindow.reload()
             forEachAccountView((accountView) => {
-              accountView.webContents.loadURL(GMAIL_URL)
+              accountView.webContents.loadURL(gmailUrl)
             })
           }
         },

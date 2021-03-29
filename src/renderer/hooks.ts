@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useColorMode } from '@chakra-ui/react'
-import { IS_MAC_OS } from './constants'
+import { isMacOS } from './helpers'
 import ipc from './ipc'
 import { Account, UnreadCounts, AppUpdateInfo, AppUpdateStatus } from '../types'
 import { Except } from 'type-fest'
@@ -16,17 +16,6 @@ export function useDarkMode() {
       setColorMode(enabled ? 'dark' : 'light')
     })
   }, [])
-}
-
-export function useTitlebar() {
-  // Compact header is enabled by default in the app config
-  const [isCompactHeaderEnabled, setIsCompactHeaderEnabled] = useState(true)
-
-  useEffect(() => {
-    ipc.invoke('config:compact-header').then(setIsCompactHeaderEnabled)
-  }, [])
-
-  return { isTitlebarHidden: IS_MAC_OS && isCompactHeaderEnabled }
 }
 
 export function useAccounts() {
@@ -175,11 +164,11 @@ export function useAppUpdate() {
 }
 
 export function useTitleBar() {
-  const [isTitleBarEnabled, setIsTitleBarEnabled] = useState(!IS_MAC_OS)
+  const [isTitleBarEnabled, setIsTitleBarEnabled] = useState(!isMacOS)
   const [isWindowMaximized, setIsWindowMaximized] = useState(false)
 
   useEffect(() => {
-    if (!IS_MAC_OS) {
+    if (!isMacOS) {
       ipc.invoke('title-bar:is-enabled').then(setIsTitleBarEnabled)
 
       ipc.invoke('window:is-maximized').then(setIsWindowMaximized)
