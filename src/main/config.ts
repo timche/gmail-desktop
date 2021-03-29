@@ -2,7 +2,7 @@ import { app, ipcMain } from 'electron'
 import { is } from 'electron-util'
 import Store = require('electron-store')
 import { getPlatformUserAgentFix } from './user-agent'
-import { DEFAULT_ACCOUNT_ID } from './constants'
+import { DEFAULT_ACCOUNT_ID } from './accounts'
 import { Account } from '../types'
 
 interface LastWindowState {

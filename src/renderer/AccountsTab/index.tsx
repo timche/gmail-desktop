@@ -1,6 +1,6 @@
 import React from 'react'
 import { Tabs, TabList, Tab, Badge, useColorModeValue } from '@chakra-ui/react'
-import { TOP_ELEMENT_HEIGHT } from '../constants'
+import { topElementHeight } from '../../constants'
 import { Account } from '../../types'
 import { darkTheme, lightTheme } from '../../theme'
 
@@ -43,7 +43,7 @@ function AccountsTab({
       index={selectedAccountIndex}
       style={style}
     >
-      <TabList height={TOP_ELEMENT_HEIGHT} borderBottomWidth="1px">
+      <TabList height={`${topElementHeight}px`} borderBottomWidth="1px">
         {children}
         {accounts.map(({ id, label, unreadCount, selected }) => {
           return (

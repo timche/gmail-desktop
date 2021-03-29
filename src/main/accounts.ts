@@ -11,8 +11,9 @@ import config, { ConfigKey } from './config'
 import { sendToMainWindow, getMainWindow } from './main-window'
 import { initOrUpdateDockMenu } from './menus/dock'
 import { initOrUpdateTrayMenu } from './menus/tray'
-import { DEFAULT_ACCOUNT_ID } from './constants'
 import { Account } from '../types'
+
+export const DEFAULT_ACCOUNT_ID = 'default'
 
 export function getAccount(accountId: string) {
   return getAccounts().find(({ id }) => id === accountId)

@@ -1,9 +1,9 @@
 import React from 'react'
 import { Box } from '@chakra-ui/react'
-import { IS_MAC_OS } from '../constants'
+import { isMacOS } from '../helpers'
 
 function TrafficLightsSpace() {
-  if (IS_MAC_OS) {
+  if (isMacOS) {
     return <Box width="80px" />
   }
 

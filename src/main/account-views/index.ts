@@ -8,7 +8,7 @@ import {
   isDefaultAccount,
   selectAccount
 } from '../accounts'
-import { TOP_ELEMENT_HEIGHT, GMAIL_URL } from '../constants'
+import { topElementHeight, gmailUrl } from '../../constants'
 import { is } from 'electron-util'
 import { addContextMenu } from './context-menu'
 import { getIsUpdateAvailable } from '../updates'
@@ -76,11 +76,11 @@ export function updateAccountViewBounds(accountView: BrowserView) {
     is.macos || config.get(ConfigKey.TitleBarStyle) === 'system' ? 0 : 30 // Linux/Window Title Bar
 
   if (hasMultipleAccounts) {
-    offset += TOP_ELEMENT_HEIGHT
+    offset += topElementHeight
   }
 
   if (isUpdateAvailable) {
-    offset += TOP_ELEMENT_HEIGHT
+    offset += topElementHeight
   }
 
   accountView.setBounds({
@@ -186,7 +186,7 @@ export function createAccountView(accountId: string, setAsTopView?: boolean) {
 
   addContextMenu(accountView)
 
-  accountView.webContents.loadURL(GMAIL_URL)
+  accountView.webContents.loadURL(gmailUrl)
 
   accountView.webContents.on('dom-ready', () => {
     addCustomCSS(accountView)
@@ -240,7 +240,7 @@ export function createAccountView(accountId: string, setAsTopView?: boolean) {
         return
       }
 
-      if (url.startsWith(GMAIL_URL)) {
+      if (url.startsWith(gmailUrl)) {
         selectAccount(accountId)
 
         // // Center the new window on the screen

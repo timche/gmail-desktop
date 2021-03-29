@@ -8,7 +8,7 @@ import {
   HStack
 } from '@chakra-ui/react'
 import { AppUpdateStatus } from '../../types'
-import { TOP_ELEMENT_HEIGHT } from '../constants'
+import { topElementHeight } from '../../constants'
 import { appRegionNoDragStyle } from '../helpers'
 
 function Button({
@@ -132,7 +132,7 @@ export default function AppUpdate({
   }
 
   return (
-    <Alert height={TOP_ELEMENT_HEIGHT} justifyContent="center">
+    <Alert height={`${topElementHeight}px`} justifyContent="center">
       <HStack>{renderContent()}</HStack>
     </Alert>
   )

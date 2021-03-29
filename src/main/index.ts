@@ -11,7 +11,7 @@ import { getMainWindow, createMainWindow } from './main-window'
 import { initDarkMode, initNativeThemeSource } from './dark-mode'
 import { initUserAgent } from './user-agent'
 import { getSessionPartitionKey } from './account-views'
-import { GMAIL_URL } from './constants'
+import { gmailUrl } from '../constants'
 import { handleGmail } from './gmail'
 
 initDownloads()
@@ -61,7 +61,7 @@ app.on('open-url', (event, url) => {
       }
     })
 
-    composeWindow.loadURL(`${GMAIL_URL}/mail/?extsrc=mailto&url=${url}`)
+    composeWindow.loadURL(`${gmailUrl}/mail/?extsrc=mailto&url=${url}`)
   }
 })
 
