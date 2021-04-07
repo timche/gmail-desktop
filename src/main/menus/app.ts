@@ -31,7 +31,8 @@ import { getMainWindow, sendToMainWindow } from '../main-window'
 import {
   forEachAccountView,
   getSelectedAccountView,
-  hideAccountViews
+  hideAccountViews,
+  sendToSelectedAccountView
 } from '../account-views'
 import { gmailUrl } from '../../constants'
 
@@ -443,7 +444,11 @@ export function getAppMenu() {
           ]
         },
         {
-          type: 'separator'
+          label: 'Gmail Preferences',
+          accelerator: 'Command+,',
+          click() {
+            sendToSelectedAccountView('gmail:open-settings')
+          }
         },
         {
           type: 'separator'
