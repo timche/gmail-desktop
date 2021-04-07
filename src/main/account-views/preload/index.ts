@@ -3,9 +3,11 @@ import { ConfigKey } from '../../config'
 import initDarkMode from './dark-mode'
 import elementReady = require('element-ready')
 import { initGmail } from './gmail'
+import { initUrlPreview } from './url-preview'
 
 initGmail()
 initDarkMode()
+initUrlPreview()
 
 function attachButtonListeners(): void {
   // For windows that won't include the selectors we are expecting,
