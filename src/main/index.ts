@@ -63,6 +63,9 @@ app.on('open-url', (event, url) => {
     })
 
     composeWindow.loadURL(`${gmailUrl}/mail/?extsrc=mailto&url=${url}`)
+
+    // Workaround for dark mode initialization
+    composeWindow.webContents.send('account-selected')
   }
 })
 

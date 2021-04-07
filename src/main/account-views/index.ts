@@ -243,7 +243,7 @@ export function createAccountView(accountId: string, setAsTopView?: boolean) {
       if (url.startsWith(gmailUrl)) {
         selectAccount(accountId)
 
-        // // Center the new window on the screen
+        // Center the new window on the screen
         event.newGuest = new BrowserWindow({
           ...options,
           titleBarStyle: 'default',
@@ -262,6 +262,9 @@ export function createAccountView(accountId: string, setAsTopView?: boolean) {
             openExternalUrl(url)
           }
         )
+
+        // Workaround for dark mode initialization
+        event.newGuest.webContents.send('account-selected')
 
         return
       }
