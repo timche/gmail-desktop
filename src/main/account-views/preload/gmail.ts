@@ -230,6 +230,10 @@ export function initGmail() {
       }
     )
 
+    ipcRenderer.on('gmail:open-settings', () => {
+      window.location.hash = `#settings/general`
+    })
+
     setInterval(() => {
       previousNewMails.clear()
     }, 1000 * 60 * 30)
