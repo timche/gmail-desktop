@@ -74,7 +74,8 @@ app.on('before-quit', () => {
 export function shouldStartMinimized() {
   return (
     app.commandLine.hasSwitch('launch-minimized') ||
-    config.get(ConfigKey.LaunchMinimized)
+    config.get(ConfigKey.LaunchMinimized) ||
+    app.getLoginItemSettings().wasOpenedAsHidden
   )
 }
 
