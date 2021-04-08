@@ -138,25 +138,6 @@ export function getAppMenu() {
               ]
             },
             {
-              label: 'Gmail Appearance',
-              submenu: [
-                ...appearanceMenuItems.map((item) =>
-                  createAppearanceMenuItem(item)
-                ),
-                {
-                  label: 'Custom Styles',
-                  click() {
-                    // Create the custom style file if it doesn't exist
-                    if (!fs.existsSync(USER_CUSTOM_STYLE_PATH)) {
-                      fs.closeSync(fs.openSync(USER_CUSTOM_STYLE_PATH, 'w'))
-                    }
-
-                    shell.openPath(USER_CUSTOM_STYLE_PATH)
-                  }
-                }
-              ]
-            },
-            {
               label: 'Hide Menu bar',
               visible: !is.macos,
               click({ checked }) {
@@ -529,6 +510,28 @@ export function getAppMenu() {
     {
       label: 'View',
       submenu: [
+        {
+          label: 'Gmail Appearance',
+          submenu: [
+            ...appearanceMenuItems.map((item) =>
+              createAppearanceMenuItem(item)
+            ),
+            {
+              label: 'Edit Custom Styles',
+              click() {
+                // Create the custom style file if it doesn't exist
+                if (!fs.existsSync(USER_CUSTOM_STYLE_PATH)) {
+                  fs.closeSync(fs.openSync(USER_CUSTOM_STYLE_PATH, 'w'))
+                }
+
+                shell.openPath(USER_CUSTOM_STYLE_PATH)
+              }
+            }
+          ]
+        },
+        {
+          type: 'separator'
+        },
         {
           label: 'Reload',
           accelerator: 'CommandOrControl+R',
