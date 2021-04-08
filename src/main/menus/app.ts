@@ -495,7 +495,44 @@ export function getAppMenu() {
       ]
     },
     {
-      role: 'editMenu'
+      role: 'editMenu',
+      submenu: [
+        {
+          role: 'undo'
+        },
+        {
+          role: 'redo'
+        },
+        {
+          type: 'separator'
+        },
+        {
+          role: 'cut'
+        },
+        {
+          role: 'copy'
+        },
+        {
+          role: 'paste'
+        },
+        {
+          role: 'pasteAndMatchStyle',
+          accelerator: 'CommandOrControl+Shift+V'
+        },
+        {
+          role: 'delete'
+        },
+        {
+          role: 'selectAll'
+        },
+        {
+          type: 'separator'
+        },
+        {
+          label: 'Speech',
+          submenu: [{ role: 'startSpeaking' }, { role: 'stopSpeaking' }]
+        }
+      ]
     },
     {
       label: 'View',
