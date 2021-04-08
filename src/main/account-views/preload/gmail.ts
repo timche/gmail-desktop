@@ -230,16 +230,29 @@ export function initGmail() {
       refreshInbox()
     })
 
+    ipcRenderer.on('gmail:go-to', (_event, destination: string) => {
+      switch (destination) {
+        case 'inbox':
+        case 'starred':
+        case 'snoozed':
+        case 'sent':
+        case 'drafts':
+        case 'imp':
+        case 'scheduled':
+        case 'all':
+        case 'settings':
+          window.location.hash = `#${destination}`
+          break
+        default:
+      }
+    })
+
     ipcRenderer.on(
       'gmail:open-mail',
       (_event: IpcRendererEvent, messageId: string) => {
         window.location.hash = `#inbox/${messageId}`
       }
     )
-
-    ipcRenderer.on('gmail:open-settings', () => {
-      window.location.hash = `#settings/general`
-    })
 
     ipcRenderer.on('gmail:compose-mail', async (_event, to?: string) => {
       clickElement('div[gh="cm"]')
@@ -271,7 +284,8 @@ export function initGmail() {
         return
       }
 
-      // For some reason the subject input can't be focused immediately.
+      // The subject input can't be focused immediately after
+      // settings the "to" input value for an unknown reason.
       setTimeout(() => {
         subjectElement.focus()
       }, 200)

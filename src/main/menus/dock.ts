@@ -21,8 +21,8 @@ export function initOrUpdateDockMenu() {
       {
         label: 'Compose',
         click() {
-          mainWindow.show()
           sendToSelectedAccountView('gmail:compose-mail')
+          mainWindow.show()
         }
       },
       {
@@ -31,29 +31,63 @@ export function initOrUpdateDockMenu() {
       {
         label: 'Inbox',
         click() {
+          sendToSelectedAccountView('gmail:go-to', 'inbox')
           mainWindow.show()
-          sendToSelectedAccountView('inbox')
+        }
+      },
+      {
+        label: 'Important',
+        click() {
+          sendToSelectedAccountView('gmail:go-to', 'imp')
+          mainWindow.show()
         }
       },
       {
         label: 'Snoozed',
         click() {
+          sendToSelectedAccountView('gmail:go-to', 'snoozed')
           mainWindow.show()
-          sendToSelectedAccountView('snoozed')
+        }
+      },
+      {
+        label: 'Starred',
+        click() {
+          sendToSelectedAccountView('gmail:go-to', 'starred')
+          mainWindow.show()
+        }
+      },
+      {
+        type: 'separator'
+      },
+      {
+        label: 'Drafts',
+        click() {
+          sendToSelectedAccountView('gmail:go-to', 'drafts')
+          mainWindow.show()
+        }
+      },
+      {
+        label: 'Scheduled',
+        click() {
+          sendToSelectedAccountView('gmail:go-to', 'scheduled')
+          mainWindow.show()
         }
       },
       {
         label: 'Sent',
         click() {
+          sendToSelectedAccountView('gmail:go-to', 'sent')
           mainWindow.show()
-          sendToSelectedAccountView('sent')
         }
+      },
+      {
+        type: 'separator'
       },
       {
         label: 'All Mail',
         click() {
+          sendToSelectedAccountView('gmail:go-to', 'all')
           mainWindow.show()
-          sendToSelectedAccountView('all-mail')
         }
       }
     ])
