@@ -103,44 +103,6 @@ export function getAppMenu() {
           label: 'Preferences',
           submenu: [
             {
-              label: 'Dark Mode',
-              submenu: [
-                {
-                  id: 'dark-mode-system',
-                  label: 'Follow System Appearance',
-                  type: 'radio',
-                  checked: config.get(ConfigKey.DarkMode) === 'system',
-                  click() {
-                    nativeTheme.themeSource = 'system'
-                    config.set(ConfigKey.DarkMode, 'system')
-                  }
-                },
-                {
-                  id: 'dark-mode-enabled',
-                  label: 'Enabled',
-                  type: 'radio',
-                  checked: config.get(ConfigKey.DarkMode) === true,
-                  click() {
-                    nativeTheme.themeSource = 'dark'
-                    config.set(ConfigKey.DarkMode, true)
-                  }
-                },
-                {
-                  id: 'dark-mode-disabled',
-                  label: 'Disabled',
-                  type: 'radio',
-                  checked: config.get(ConfigKey.DarkMode) === false,
-                  click() {
-                    nativeTheme.themeSource = 'light'
-                    config.set(ConfigKey.DarkMode, false)
-                  }
-                }
-              ]
-            },
-            {
-              type: 'separator'
-            },
-            {
               label: 'Hide Menu bar',
               visible: !is.macos,
               click({ checked }) {
@@ -508,6 +470,44 @@ export function getAppMenu() {
     {
       label: 'View',
       submenu: [
+        {
+          label: 'Dark Mode',
+          submenu: [
+            {
+              id: 'dark-mode-system',
+              label: 'Follow System Appearance',
+              type: 'radio',
+              checked: config.get(ConfigKey.DarkMode) === 'system',
+              click() {
+                nativeTheme.themeSource = 'system'
+                config.set(ConfigKey.DarkMode, 'system')
+              }
+            },
+            {
+              id: 'dark-mode-enabled',
+              label: 'Enabled',
+              type: 'radio',
+              checked: config.get(ConfigKey.DarkMode) === true,
+              click() {
+                nativeTheme.themeSource = 'dark'
+                config.set(ConfigKey.DarkMode, true)
+              }
+            },
+            {
+              id: 'dark-mode-disabled',
+              label: 'Disabled',
+              type: 'radio',
+              checked: config.get(ConfigKey.DarkMode) === false,
+              click() {
+                nativeTheme.themeSource = 'light'
+                config.set(ConfigKey.DarkMode, false)
+              }
+            }
+          ]
+        },
+        {
+          type: 'separator'
+        },
         {
           label: 'Gmail Appearance',
           submenu: [
