@@ -163,10 +163,7 @@
     "afterSign": "scripts/build-hook-after-sign.js",
     "mac": {
       "category": "public.app-category.productivity",
-      "darkModeSupport": true,
-      "extendInfo": {
-        "NSUserNotificationAlertStyle": "alert"
-      }
+      "darkModeSupport": true
     },
     "linux": {
       "target": [
