@@ -26,15 +26,21 @@ const htmlReactParserOptions: HTMLReactParserOptions = {
     if (domNode instanceof ElementNode) {
       const { name, attribs, children } = domNode
 
-      if (name.startsWith('h')) {
-        return <Heading size="sm">{parseDom(children)}</Heading>
-      }
-
       switch (name) {
+        case 'h2':
+          return (
+            <Heading size="md" mt={4} mb={2}>
+              {parseDom(children)}
+            </Heading>
+          )
         case 'p':
           return <Text mb={3}>{parseDom(children)}</Text>
         case 'ul':
-          return <UnorderedList spacing={2}>{parseDom(children)}</UnorderedList>
+          return (
+            <UnorderedList spacing={2} my={2}>
+              {parseDom(children)}
+            </UnorderedList>
+          )
         case 'li':
           return <ListItem>{parseDom(children)}</ListItem>
         case 'a':
@@ -56,6 +62,9 @@ const htmlReactParserOptions: HTMLReactParserOptions = {
         case 'code':
           return <Code>{parseDom(children)}</Code>
         default:
+          if (name.startsWith('h')) {
+            return <Heading size="sm">{parseDom(children)}</Heading>
+          }
       }
     }
 
