@@ -259,14 +259,6 @@ export function getAppMenu() {
                   click({ checked }) {
                     config.set(ConfigKey.NotificationsPlaySound, checked)
                   }
-                },
-                {
-                  label: 'Close Automatically',
-                  type: 'checkbox',
-                  checked: config.get(ConfigKey.NotificationsAutoClose),
-                  click({ checked }) {
-                    config.set(ConfigKey.NotificationsAutoClose, checked)
-                  }
                 }
               ]
             },

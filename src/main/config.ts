@@ -46,8 +46,7 @@ export enum ConfigKey {
   NotificationsShowSubject = 'notificationsShowSubject',
   NotificationsShowSummary = 'notificationsShowSummary',
   NotificationsEnabled = 'notificationsEnabled',
-  NotificationsPlaySound = 'notificationsPlaySound',
-  NotificationsAutoClose = 'notificationsAutoClose'
+  NotificationsPlaySound = 'notificationsPlaySound'
 }
 
 type TypedStore = {
@@ -81,7 +80,6 @@ type TypedStore = {
   [ConfigKey.NotificationsShowSummary]: boolean
   [ConfigKey.NotificationsEnabled]: boolean
   [ConfigKey.NotificationsPlaySound]: boolean
-  [ConfigKey.NotificationsAutoClose]: boolean
 }
 
 const defaults: TypedStore = {
@@ -129,8 +127,7 @@ const defaults: TypedStore = {
   [ConfigKey.NotificationsShowSubject]: true,
   [ConfigKey.NotificationsShowSummary]: true,
   [ConfigKey.NotificationsEnabled]: true,
-  [ConfigKey.NotificationsPlaySound]: false,
-  [ConfigKey.NotificationsAutoClose]: true
+  [ConfigKey.NotificationsPlaySound]: false
 }
 
 const config = new Store<TypedStore>({

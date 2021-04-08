@@ -91,26 +91,15 @@ export function newMailNotification(
       default:
         accountViewWebContents.send('gmail:archive-mail', messageId)
     }
-
-    clearTimeout(closeTimeout)
   })
 
   notification.on('click', () => {
     accountViewWebContents.send('gmail:open-mail', messageId)
     selectAccount(account.id)
     getMainWindow().show()
-    clearTimeout(closeTimeout)
   })
 
   notification.show()
-
-  let closeTimeout: ReturnType<typeof setTimeout>
-
-  if (config.get(ConfigKey.NotificationsAutoClose)) {
-    closeTimeout = setTimeout(() => {
-      notification.close()
-    }, 5000) // MacOS default is 5 seconds
-  }
 }
 
 export function handleGmail() {
