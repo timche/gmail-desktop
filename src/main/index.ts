@@ -1,17 +1,15 @@
-import * as path from 'path'
-import { app, BrowserWindow } from 'electron'
+import { app } from 'electron'
 import { initUpdates } from './updates'
 import config, { ConfigKey } from './config'
 import { initDownloads } from './downloads'
 import { initOrUpdateAppMenu } from './menus/app'
 import { initTray } from './tray'
 import { initOrUpdateDockMenu } from './menus/dock'
-import { getSelectedAccount, initAccounts } from './accounts'
+import { initAccounts } from './accounts'
 import { getMainWindow, createMainWindow } from './main-window'
 import { initDarkMode, initNativeThemeSource } from './dark-mode'
 import { initUserAgent } from './user-agent'
-import { getSessionPartitionKey } from './account-views'
-import { gmailUrl } from '../constants'
+import { sendToSelectedAccountView } from './account-views'
 import { handleGmail } from './gmail'
 import { initOrUpdateTrayMenu } from './menus/tray'
 
@@ -49,24 +47,8 @@ app.on('second-instance', () => {
   }
 })
 
-app.on('open-url', (event, url) => {
-  event.preventDefault()
-
-  const selectedAccount = getSelectedAccount()
-
-  if (selectedAccount) {
-    const composeWindow = new BrowserWindow({
-      webPreferences: {
-        partition: getSessionPartitionKey(selectedAccount.id),
-        preload: path.join(__dirname, 'preload', 'account-view.js')
-      }
-    })
-
-    composeWindow.loadURL(`${gmailUrl}/mail/?extsrc=mailto&url=${url}`)
-
-    // Workaround for dark mode initialization
-    composeWindow.webContents.send('account-selected')
-  }
+app.on('open-url', (_event, mailto) => {
+  sendToSelectedAccountView('gmail:compose-mail', mailto.split(':')[1])
 })
 
 app.on('activate', () => {
