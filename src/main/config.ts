@@ -45,7 +45,7 @@ export enum ConfigKey {
   NotificationsShowSender = 'notificationsShowSender',
   NotificationsShowSubject = 'notificationsShowSubject',
   NotificationsShowSummary = 'notificationsShowSummary',
-  NotificationsDisabled = 'notificationsDisabled',
+  NotificationsEnabled = 'notificationsEnabled',
   NotificationsPlaySound = 'notificationsPlaySound',
   NotificationsAutoClose = 'notificationsAutoClose'
 }
@@ -79,7 +79,7 @@ type TypedStore = {
   [ConfigKey.NotificationsShowSender]: boolean
   [ConfigKey.NotificationsShowSubject]: boolean
   [ConfigKey.NotificationsShowSummary]: boolean
-  [ConfigKey.NotificationsDisabled]: boolean
+  [ConfigKey.NotificationsEnabled]: boolean
   [ConfigKey.NotificationsPlaySound]: boolean
   [ConfigKey.NotificationsAutoClose]: boolean
 }
@@ -128,7 +128,7 @@ const defaults: TypedStore = {
   [ConfigKey.NotificationsShowSender]: true,
   [ConfigKey.NotificationsShowSubject]: true,
   [ConfigKey.NotificationsShowSummary]: true,
-  [ConfigKey.NotificationsDisabled]: false,
+  [ConfigKey.NotificationsEnabled]: true,
   [ConfigKey.NotificationsPlaySound]: false,
   [ConfigKey.NotificationsAutoClose]: true
 }
@@ -175,6 +175,15 @@ const config = new Store<TypedStore>({
         store.set(ConfigKey.NotificationsPlaySound, !notificationsSilent)
         // @ts-expect-error
         store.delete('notificationsSilent')
+      }
+    },
+    '>3.0.0-alpha.20': (store) => {
+      const notificationsDisabled = store.get('notificationsDisabled')
+
+      if (typeof notificationsDisabled === 'boolean') {
+        store.set(ConfigKey.NotificationsEnabled, !notificationsDisabled)
+        // @ts-expect-error
+        store.delete('notificationsDisabled')
       }
     }
   }
