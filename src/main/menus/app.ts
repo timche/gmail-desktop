@@ -291,6 +291,17 @@ export function getAppMenu() {
               label: 'Notifications',
               submenu: [
                 {
+                  label: 'Enabled',
+                  type: 'checkbox',
+                  checked: config.get(ConfigKey.NotificationsEnabled),
+                  click({ checked }) {
+                    config.set(ConfigKey.NotificationsEnabled, checked)
+                  }
+                },
+                {
+                  type: 'separator'
+                },
+                {
                   label: 'Show Sender',
                   type: 'checkbox',
                   checked: config.get(ConfigKey.NotificationsShowSender),
@@ -331,14 +342,6 @@ export function getAppMenu() {
                   checked: config.get(ConfigKey.NotificationsAutoClose),
                   click({ checked }) {
                     config.set(ConfigKey.NotificationsAutoClose, checked)
-                  }
-                },
-                {
-                  label: 'Disabled',
-                  type: 'checkbox',
-                  checked: config.get(ConfigKey.NotificationsDisabled),
-                  click({ checked }) {
-                    config.set(ConfigKey.NotificationsDisabled, checked)
                   }
                 }
               ]

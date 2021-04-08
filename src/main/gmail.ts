@@ -120,7 +120,7 @@ export function handleGmail() {
 
   if (Notification.isSupported()) {
     ipcMain.on('gmail:new-mails', (event, mails: Mail[]) => {
-      if (config.get(ConfigKey.NotificationsDisabled)) {
+      if (!config.get(ConfigKey.NotificationsEnabled)) {
         return
       }
 
