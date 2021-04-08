@@ -447,7 +447,7 @@ export function getAppMenu() {
           label: 'Gmail Preferences',
           accelerator: 'Command+,',
           click() {
-            sendToSelectedAccountView('gmail:open-settings')
+            sendToSelectedAccountView('gmail:go-to', 'settings')
           }
         },
         {

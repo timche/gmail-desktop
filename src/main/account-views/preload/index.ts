@@ -55,29 +55,6 @@ ipc.on('set-full-screen', (_: Event, enabled: boolean) => {
   document.body.classList[enabled ? 'add' : 'remove']('full-screen')
 })
 
-function clickElement(selector: string) {
-  const element = document.querySelector<HTMLDivElement>(selector)
-  if (element) {
-    element.click()
-  }
-}
-
-ipc.on('inbox', () => {
-  clickElement('#\\:3d')
-})
-
-ipc.on('snoozed', () => {
-  clickElement('#\\:3f')
-})
-
-ipc.on('sent', () => {
-  clickElement('#\\:3i')
-})
-
-ipc.on('all-mail', () => {
-  clickElement('#\\:3l')
-})
-
 ipc.on('burger-menu-offset', (_event, offset: boolean) => {
   document.body.classList[offset ? 'add' : 'remove']('burgerMenu')
 })
