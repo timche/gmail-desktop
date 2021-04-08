@@ -424,6 +424,24 @@ export function getAppMenu() {
       ]
     },
     {
+      role: 'fileMenu',
+      submenu: [
+        {
+          label: 'Compose',
+          accelerator: 'C',
+          click() {
+            sendToSelectedAccountView('gmail:compose-mail')
+          }
+        },
+        {
+          type: 'separator'
+        },
+        {
+          role: 'close'
+        }
+      ]
+    },
+    {
       label: 'Account',
       submenu: [
         ...getAccountsMenuItems(true),
