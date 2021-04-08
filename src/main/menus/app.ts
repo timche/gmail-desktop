@@ -633,6 +633,84 @@ export function getAppMenu() {
       ]
     },
     {
+      label: 'Go',
+      submenu: [
+        {
+          type: 'separator'
+        },
+        {
+          label: 'Inbox',
+          click() {
+            sendToSelectedAccountView('gmail:go-to', 'inbox')
+            const mainWindow = getMainWindow()
+            mainWindow.show()
+          }
+        },
+        {
+          label: 'Important',
+          click() {
+            sendToSelectedAccountView('gmail:go-to', 'imp')
+            const mainWindow = getMainWindow()
+            mainWindow.show()
+          }
+        },
+        {
+          label: 'Snoozed',
+          click() {
+            sendToSelectedAccountView('gmail:go-to', 'snoozed')
+            const mainWindow = getMainWindow()
+            mainWindow.show()
+          }
+        },
+        {
+          label: 'Starred',
+          click() {
+            sendToSelectedAccountView('gmail:go-to', 'starred')
+            const mainWindow = getMainWindow()
+            mainWindow.show()
+          }
+        },
+        {
+          type: 'separator'
+        },
+        {
+          label: 'Drafts',
+          click() {
+            sendToSelectedAccountView('gmail:go-to', 'drafts')
+            const mainWindow = getMainWindow()
+            mainWindow.show()
+          }
+        },
+        {
+          label: 'Scheduled',
+          click() {
+            sendToSelectedAccountView('gmail:go-to', 'scheduled')
+            const mainWindow = getMainWindow()
+            mainWindow.show()
+          }
+        },
+        {
+          label: 'Sent',
+          click() {
+            sendToSelectedAccountView('gmail:go-to', 'sent')
+            const mainWindow = getMainWindow()
+            mainWindow.show()
+          }
+        },
+        {
+          type: 'separator'
+        },
+        {
+          label: 'All Mail',
+          click() {
+            sendToSelectedAccountView('gmail:go-to', 'all')
+            const mainWindow = getMainWindow()
+            mainWindow.show()
+          }
+        }
+      ]
+    },
+    {
       label: 'Window',
       role: 'window',
       submenu: [
