@@ -291,6 +291,18 @@ export function getAppMenu() {
               }
             },
             {
+              label: 'Launch at Login',
+              visible: is.macos || is.windows,
+              type: 'checkbox',
+              checked: app.getLoginItemSettings().openAtLogin,
+              click(menuItem) {
+                app.setLoginItemSettings({
+                  openAtLogin: menuItem.checked,
+                  openAsHidden: menuItem.checked
+                })
+              }
+            },
+            {
               label: 'Hardware Acceleration',
               type: 'checkbox',
               checked: config.get(ConfigKey.HardwareAcceleration),
