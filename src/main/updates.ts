@@ -131,8 +131,7 @@ export function initUpdates(): void {
   })
 
   ipcMain.on('update:install', () => {
-    app.relaunch()
-    app.quit()
+    autoUpdater.quitAndInstall()
   })
 
   ipcMain.on('update:dismiss', () => {
