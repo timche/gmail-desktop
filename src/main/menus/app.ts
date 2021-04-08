@@ -138,6 +138,9 @@ export function getAppMenu() {
               ]
             },
             {
+              type: 'separator'
+            },
+            {
               label: 'Hide Menu bar',
               visible: !is.macos,
               click({ checked }) {
@@ -181,23 +184,6 @@ export function getAppMenu() {
               ]
             },
             {
-              label: is.macos ? 'Show Menu Bar Icon' : 'Show System Tray Icon',
-              type: 'checkbox',
-              checked: config.get(ConfigKey.EnableTrayIcon),
-              click({ checked }: { checked: boolean }) {
-                config.set(ConfigKey.EnableTrayIcon, checked)
-                showRestartDialog()
-              }
-            },
-            {
-              label: 'Confirm External Links before Opening',
-              type: 'checkbox',
-              checked: config.get(ConfigKey.ConfirmExternalLinks),
-              click({ checked }: { checked: boolean }) {
-                config.set(ConfigKey.ConfirmExternalLinks, checked)
-              }
-            },
-            {
               label: 'Default Mailto Client',
               type: 'checkbox',
               checked: app.isDefaultProtocolClient('mailto'),
@@ -210,20 +196,11 @@ export function getAppMenu() {
               }
             },
             {
-              label: 'Launch Minimized',
+              label: 'Confirm External Links before Opening',
               type: 'checkbox',
-              checked: config.get(ConfigKey.LaunchMinimized),
+              checked: config.get(ConfigKey.ConfirmExternalLinks),
               click({ checked }: { checked: boolean }) {
-                config.set(ConfigKey.LaunchMinimized, checked)
-              }
-            },
-            {
-              label: 'Hardware Acceleration',
-              type: 'checkbox',
-              checked: config.get(ConfigKey.HardwareAcceleration),
-              click({ checked }: { checked: boolean }) {
-                config.set(ConfigKey.HardwareAcceleration, checked)
-                showRestartDialog()
+                config.set(ConfigKey.ConfirmExternalLinks, checked)
               }
             },
             {
@@ -335,6 +312,32 @@ export function getAppMenu() {
               type: 'separator'
             },
             {
+              label: is.macos ? 'Show Menu Bar Icon' : 'Show System Tray Icon',
+              type: 'checkbox',
+              checked: config.get(ConfigKey.EnableTrayIcon),
+              click({ checked }: { checked: boolean }) {
+                config.set(ConfigKey.EnableTrayIcon, checked)
+                showRestartDialog()
+              }
+            },
+            {
+              label: 'Launch Minimized',
+              type: 'checkbox',
+              checked: config.get(ConfigKey.LaunchMinimized),
+              click({ checked }: { checked: boolean }) {
+                config.set(ConfigKey.LaunchMinimized, checked)
+              }
+            },
+            {
+              label: 'Hardware Acceleration',
+              type: 'checkbox',
+              checked: config.get(ConfigKey.HardwareAcceleration),
+              click({ checked }: { checked: boolean }) {
+                config.set(ConfigKey.HardwareAcceleration, checked)
+                showRestartDialog()
+              }
+            },
+            {
               label: 'Updates',
               submenu: [
                 {
@@ -380,36 +383,31 @@ export function getAppMenu() {
               ]
             },
             {
-              label: 'Advanced',
+              label: 'User Agent',
               submenu: [
                 {
-                  label: 'User Agent',
-                  submenu: [
-                    {
-                      label: 'Use User Agent Fix',
-                      type: 'checkbox',
-                      checked: config.get(ConfigKey.AutoFixUserAgent),
-                      click({ checked }) {
-                        enableAutoFixUserAgent({
-                          enable: checked,
-                          showRestartDialog: true
-                        })
-                      }
-                    },
-                    {
-                      label: 'Set Custom User Agent',
-                      click() {
-                        config.openInEditor()
-                      }
-                    },
-                    {
-                      label: 'Remove Custom User Agent',
-                      enabled: Boolean(config.get(ConfigKey.CustomUserAgent)),
-                      click() {
-                        removeCustomUserAgent()
-                      }
-                    }
-                  ]
+                  label: 'Use User Agent Fix',
+                  type: 'checkbox',
+                  checked: config.get(ConfigKey.AutoFixUserAgent),
+                  click({ checked }) {
+                    enableAutoFixUserAgent({
+                      enable: checked,
+                      showRestartDialog: true
+                    })
+                  }
+                },
+                {
+                  label: 'Set Custom User Agent',
+                  click() {
+                    config.openInEditor()
+                  }
+                },
+                {
+                  label: 'Remove Custom User Agent',
+                  enabled: Boolean(config.get(ConfigKey.CustomUserAgent)),
+                  click() {
+                    removeCustomUserAgent()
+                  }
                 }
               ]
             }
