@@ -4,7 +4,8 @@ import {
   Menu,
   MenuItemConstructorOptions,
   dialog,
-  nativeTheme
+  nativeTheme,
+  session
 } from 'electron'
 import * as fs from 'fs'
 import { is } from 'electron-util'
@@ -18,10 +19,11 @@ import {
   setCustomStyle,
   USER_CUSTOM_STYLE_PATH
 } from '../account-views/custom-styles'
-import { viewLogs } from '../utils/logs'
+import log from 'electron-log'
 import { showRestartDialog } from '../utils/dialog'
 import { enableAutoFixUserAgent, removeCustomUserAgent } from '../user-agent'
 import {
+  getAccounts,
   getAccountsMenuItems,
   getSelectedAccount,
   isDefaultAccount,
@@ -35,6 +37,7 @@ import {
   sendToSelectedAccountView
 } from '../account-views'
 import { gmailUrl } from '../../constants'
+import { openExternalUrl } from '../utils/url'
 
 interface AppearanceMenuItem {
   key: ConfigKey
@@ -399,22 +402,6 @@ export function getAppMenu() {
               label: 'Advanced',
               submenu: [
                 {
-                  label: 'Edit Config File',
-                  click() {
-                    config.openInEditor()
-                  }
-                },
-                {
-                  label: 'Reset Config File',
-                  click() {
-                    config.set(ConfigKey.ResetConfig, true)
-                    showRestartDialog()
-                  }
-                },
-                {
-                  type: 'separator'
-                },
-                {
                   label: 'User Agent',
                   submenu: [
                     {
@@ -635,24 +622,124 @@ export function getAppMenu() {
       role: 'help',
       submenu: [
         {
-          label: `${app.name} Website`,
+          label: 'Website',
           click() {
-            shell.openExternal('https://github.com/timche/gmail-desktop')
+            openExternalUrl('https://github.com/timche/gmail-desktop')
           }
         },
         {
-          label: 'Report an Issue',
+          label: 'Release Notes',
           click() {
-            shell.openExternal(
+            openExternalUrl('https://github.com/timche/gmail-desktop/releases')
+          }
+        },
+        {
+          label: 'Source Code',
+          click() {
+            openExternalUrl('https://github.com/timche/gmail-desktop')
+          }
+        },
+        {
+          type: 'separator'
+        },
+        {
+          label: 'Gmail Keyboard Shortcuts',
+          click() {
+            openExternalUrl('https://support.google.com/mail/answer/6594')
+          }
+        },
+        {
+          type: 'separator'
+        },
+        {
+          label: 'Ask Questions',
+          click() {
+            openExternalUrl(
+              'https://github.com/timche/gmail-desktop/discussions/categories/q-a'
+            )
+          }
+        },
+        {
+          label: 'Search Feature Requests',
+          click() {
+            openExternalUrl(
+              'https://github.com/timche/gmail-desktop/discussions/categories/feature-requests'
+            )
+          }
+        },
+        {
+          type: 'separator'
+        },
+        {
+          label: 'Report Issue',
+          click() {
+            openExternalUrl(
               'https://github.com/timche/gmail-desktop/issues/new/choose'
             )
           }
         },
         {
-          label: 'View Logs',
-          click() {
-            viewLogs()
-          }
+          label: 'Troubleshooting',
+          submenu: [
+            {
+              label: 'Edit Config',
+              click() {
+                config.openInEditor()
+              }
+            },
+            {
+              label: 'Reset Config',
+              click() {
+                config.set(ConfigKey.ResetConfig, true)
+                showRestartDialog()
+              }
+            },
+            {
+              type: 'separator'
+            },
+            {
+              label: 'Clear Cache',
+              click() {
+                const accounts = getAccounts()
+
+                for (const { id } of accounts) {
+                  if (isDefaultAccount(id)) {
+                    session.defaultSession.clearCache()
+                  } else {
+                    session.fromPartition(`persist:${id}`).clearCache()
+                  }
+                }
+
+                showRestartDialog()
+              }
+            },
+            {
+              label: 'Reset App Data',
+              click() {
+                const accounts = getAccounts()
+
+                for (const { id } of accounts) {
+                  if (isDefaultAccount(id)) {
+                    session.defaultSession.clearStorageData()
+                  } else {
+                    session.fromPartition(`persist:${id}`).clearStorageData()
+                  }
+                }
+
+                config.set(ConfigKey.ResetConfig, true)
+                showRestartDialog()
+              }
+            },
+            {
+              type: 'separator'
+            },
+            {
+              label: 'View Logs',
+              click() {
+                shell.openPath(log.transports.file.getFile().path)
+              }
+            }
+          ]
         }
       ]
     }
