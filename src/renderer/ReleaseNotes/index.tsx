@@ -15,7 +15,7 @@ export default function ReleaseNotes({ notes }: ReleaseNotesProps) {
       <Stack spacing={4}>
         {notes.map(({ version, note }) => (
           <Box key={version}>
-            <Heading size="md" mb="2">
+            <Heading size="lg" mb="2">
               <Link
                 href={`https://github.com/timche/gmail-desktop/releases/tag/v${version}`}
               >
