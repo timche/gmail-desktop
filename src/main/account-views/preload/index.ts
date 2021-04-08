@@ -62,10 +62,6 @@ function clickElement(selector: string) {
   }
 }
 
-ipc.on('compose', () => {
-  clickElement('div[gh="cm"]')
-})
-
 ipc.on('inbox', () => {
   clickElement('#\\:3d')
 })

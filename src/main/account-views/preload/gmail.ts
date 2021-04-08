@@ -199,6 +199,13 @@ function parseNewMails(feedDocument: Document) {
   return newMails
 }
 
+function clickElement(selector: string) {
+  const element = document.querySelector<HTMLDivElement>(selector)
+  if (element) {
+    element.click()
+  }
+}
+
 export function initGmail() {
   window.addEventListener('DOMContentLoaded', () => {
     observeUnreadInbox()
@@ -232,6 +239,42 @@ export function initGmail() {
 
     ipcRenderer.on('gmail:open-settings', () => {
       window.location.hash = `#settings/general`
+    })
+
+    ipcRenderer.on('gmail:compose-mail', async (_event, to?: string) => {
+      clickElement('div[gh="cm"]')
+
+      if (!to) {
+        return
+      }
+
+      const toElement = await elementReady<HTMLTextAreaElement>(
+        'textarea[name="to"]',
+        {
+          stopOnDomReady: false,
+          timeout: 60000
+        }
+      )
+
+      if (!toElement) {
+        return
+      }
+
+      toElement.focus()
+      toElement.value = to
+
+      const subjectElement = document.querySelector<HTMLInputElement>(
+        'input[name="subjectbox"]'
+      )
+
+      if (!subjectElement) {
+        return
+      }
+
+      // For some reason the subject input can't be focused immediately.
+      setTimeout(() => {
+        subjectElement.focus()
+      }, 200)
     })
 
     setInterval(() => {

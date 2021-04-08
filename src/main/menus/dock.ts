@@ -22,7 +22,7 @@ export function initOrUpdateDockMenu() {
         label: 'Compose',
         click() {
           mainWindow.show()
-          sendToSelectedAccountView('compose')
+          sendToSelectedAccountView('gmail:compose-mail')
         }
       },
       {
