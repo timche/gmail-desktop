@@ -120,6 +120,10 @@ export function handleGmail() {
 
   if (Notification.isSupported()) {
     ipcMain.on('gmail:new-mails', (event, mails: Mail[]) => {
+      if (config.get(ConfigKey.NotificationsDisabled)) {
+        return
+      }
+
       for (const mail of mails) {
         newMailNotification(mail, event.sender)
       }
