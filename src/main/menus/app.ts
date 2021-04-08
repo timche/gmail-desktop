@@ -320,6 +320,7 @@ export function getAppMenu() {
                 {
                   label: 'Show Summary',
                   type: 'checkbox',
+                  visible: is.macos,
                   checked: config.get(ConfigKey.NotificationsShowSummary),
                   click({ checked }) {
                     config.set(ConfigKey.NotificationsShowSummary, checked)

@@ -35,14 +35,26 @@ export function newMailNotification(
     return
   }
 
+  let subtitle: string | undefined
+
+  if (is.macos && config.get(ConfigKey.NotificationsShowSubject)) {
+    subtitle = subject
+  }
+
+  let body: string | undefined
+
+  if (is.macos && config.get(ConfigKey.NotificationsShowSummary)) {
+    body = summary
+  } else if (!is.macos && config.get(ConfigKey.NotificationsShowSubject)) {
+    body = subject
+  }
+
   const notification = new Notification({
     title: config.get(ConfigKey.NotificationsShowSender)
       ? sender.name
       : account.label,
-    subtitle: config.get(ConfigKey.NotificationsShowSubject)
-      ? subject
-      : undefined,
-    body: config.get(ConfigKey.NotificationsShowSummary) ? summary : undefined,
+    subtitle,
+    body,
     silent: !config.get(ConfigKey.NotificationsPlaySound),
     actions: [
       {
