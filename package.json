@@ -32,6 +32,9 @@
     "clean:all": "del build-js dist node_modules",
     "storybook": "start-storybook"
   },
+  "dependencies": {
+    "@sindresorhus/do-not-disturb": "^1.1.0"
+  },
   "devDependencies": {
     "@babel/core": "^7.13.10",
     "@chakra-ui/react": "^1.3.4",

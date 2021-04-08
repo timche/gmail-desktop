@@ -6,7 +6,7 @@ async function buildMain() {
       entryPoints: ['src/main/index.ts'],
       platform: 'node',
       target: 'node14.16.0',
-      external: ['electron'],
+      external: ['electron', '@sindresorhus/do-not-disturb'],
       loader: {
         '.json': 'json',
         '.css': 'text',
