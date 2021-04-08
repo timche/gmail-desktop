@@ -6,6 +6,7 @@ import config, { ConfigKey } from './config'
 import { is } from 'electron-util'
 import { updateTrayUnreadStatus } from './tray'
 import { Mail, UnreadCounts } from '../types'
+import { isEnabled as isDoNotDisturbEnabled } from '@sindresorhus/do-not-disturb'
 
 const unreadCounts: UnreadCounts = {}
 
@@ -131,8 +132,11 @@ export function handleGmail() {
   })
 
   if (Notification.isSupported()) {
-    ipcMain.on('gmail:new-mails', (event, mails: Mail[]) => {
-      if (!config.get(ConfigKey.NotificationsEnabled)) {
+    ipcMain.on('gmail:new-mails', async (event, mails: Mail[]) => {
+      if (
+        !config.get(ConfigKey.NotificationsEnabled) ||
+        (is.macos && (await isDoNotDisturbEnabled()))
+      ) {
         return
       }
 
