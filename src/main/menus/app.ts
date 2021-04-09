@@ -1,3 +1,4 @@
+import path from 'path'
 import {
   app,
   shell,
@@ -5,7 +6,8 @@ import {
   MenuItemConstructorOptions,
   dialog,
   nativeTheme,
-  session
+  session,
+  nativeImage
 } from 'electron'
 import * as fs from 'fs'
 import { is } from 'electron-util'
@@ -88,7 +90,17 @@ export function getAppMenu() {
       submenu: [
         {
           label: `About ${app.name}`,
-          role: 'about'
+          click() {
+            dialog.showMessageBox({
+              icon: nativeImage.createFromPath(
+                path.join(__dirname, '..', '..', 'static', 'icon.png')
+              ),
+              message: `${app.name}`,
+              detail: `Version: ${app.getVersion()} (${config.get(
+                ConfigKey.ReleaseChannel
+              )})\n\nCreated by Tim Cheung <tim@cheung.io>\n\nCopyright © 2021 Tim Cheung`
+            })
+          }
         },
         {
           label: 'Check for Updates...',
