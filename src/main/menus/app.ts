@@ -146,18 +146,6 @@ export function getAppMenu() {
               ]
             },
             {
-              label: 'Default Mailto Client',
-              type: 'checkbox',
-              checked: app.isDefaultProtocolClient('mailto'),
-              click() {
-                if (app.isDefaultProtocolClient('mailto')) {
-                  app.removeAsDefaultProtocolClient('mailto')
-                } else {
-                  app.setAsDefaultProtocolClient('mailto')
-                }
-              }
-            },
-            {
               label: 'Confirm External Links before Opening',
               type: 'checkbox',
               checked: config.get(ConfigKey.ConfirmExternalLinks),
@@ -266,6 +254,36 @@ export function getAppMenu() {
               type: 'separator'
             },
             {
+              label: 'Default Mail Client',
+              type: 'checkbox',
+              checked: app.isDefaultProtocolClient('mailto'),
+              click({ checked }) {
+                if (checked) {
+                  const isSetMailClient = app.setAsDefaultProtocolClient(
+                    'mailto'
+                  )
+
+                  dialog.showMessageBox({
+                    type: 'info',
+                    message: isSetMailClient
+                      ? `${app.name} is now set as default mail client.`
+                      : `There was a problem with setting ${app.name} as default mail client.`
+                  })
+                } else {
+                  const isUnsetMailClient = app.removeAsDefaultProtocolClient(
+                    'mailto'
+                  )
+
+                  dialog.showMessageBox({
+                    type: 'info',
+                    message: isUnsetMailClient
+                      ? `${app.name} has been removed as default mail client.`
+                      : `There was a problem with removing ${app.name} as default mail client.`
+                  })
+                }
+              }
+            },
+            {
               label: is.macos ? 'Show Menu Bar Icon' : 'Show System Tray Icon',
               type: 'checkbox',
               checked: config.get(ConfigKey.EnableTrayIcon),
@@ -293,6 +311,9 @@ export function getAppMenu() {
                   openAsHidden: menuItem.checked
                 })
               }
+            },
+            {
+              type: 'separator'
             },
             {
               label: 'Hardware Acceleration',
