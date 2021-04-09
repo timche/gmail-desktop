@@ -9,7 +9,7 @@ import {
   getSelectedAccountView,
   updateAllAccountViewBounds
 } from '../account-views'
-import { getIsQuitting, shouldStartMinimized } from '..'
+import { getIsQuittingApp, shouldLaunchMinimized } from '../app'
 import { openExternalUrl } from '../utils/url'
 import { getAppMenu } from '../menus/app'
 import debounce from 'lodash.debounce'
@@ -52,7 +52,7 @@ export function createMainWindow(): void {
       enableRemoteModule: false,
       preload: path.join(__dirname, 'preload', 'main-window.js')
     },
-    show: !shouldStartMinimized(),
+    show: !shouldLaunchMinimized(),
     icon: is.linux
       ? path.join(__dirname, '..', 'static', 'icon.png')
       : undefined,
@@ -98,7 +98,7 @@ export function createMainWindow(): void {
   })
 
   mainWindow.on('close', (event) => {
-    if (!getIsQuitting() && mainWindow) {
+    if (!getIsQuittingApp() && mainWindow) {
       event.preventDefault()
       mainWindow.blur()
       mainWindow.hide()
@@ -144,7 +144,7 @@ export function createMainWindow(): void {
   })
 
   mainWindow.webContents.on('dom-ready', () => {
-    if (!shouldStartMinimized() && mainWindow) {
+    if (!shouldLaunchMinimized() && mainWindow) {
       mainWindow.show()
     }
   })
