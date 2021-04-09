@@ -15,7 +15,7 @@ import { createNotification } from './utils/notifications'
 import { AppUpdateInfo } from '../types'
 import { setIsQuittingApp } from './app'
 
-const AUTO_UPDATE_CHECK_INTERVAL = 60000 * 60 * 3 // 4 Hours
+const AUTO_UPDATE_CHECK_INTERVAL = 60000 * 60 * 2 // Hours
 
 let autoUpdateInterval: ReturnType<typeof setInterval>
 let isUpdateAvailable = false
