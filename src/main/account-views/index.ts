@@ -14,6 +14,7 @@ import { addContextMenu } from './context-menu'
 import { getIsUpdateAvailable } from '../updates'
 import { openExternalUrl } from '../utils/url'
 import config, { ConfigKey } from '../config'
+import { initBlocker } from './blocker'
 
 const accountViews = new Map<string, BrowserView>()
 
@@ -165,6 +166,8 @@ export function createAccountView(accountId: string, setAsTopView?: boolean) {
       }
     }
   )
+
+  initBlocker(accountSession)
 
   const accountView = new BrowserView({
     webPreferences: {
