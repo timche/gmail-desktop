@@ -420,7 +420,6 @@ export function getAppMenu() {
       submenu: [
         {
           label: 'Compose',
-          accelerator: 'C',
           click() {
             sendToSelectedAccountView('gmail:compose-mail')
           }
