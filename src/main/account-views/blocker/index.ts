@@ -29,3 +29,24 @@ export function initBlocker(session: Session) {
     }
   )
 }
+
+export function initCleardotBlockFix() {
+  window.addEventListener('DOMContentLoaded', () => {
+    const observer = new MutationObserver(() => {
+      const cleardotElements = document.querySelectorAll<HTMLImageElement>(
+        'img[src*="cleardot.gif"'
+      )
+      for (const clearDotElement of cleardotElements) {
+        clearDotElement.src =
+          'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII='
+      }
+    })
+
+    observer.observe(document.body, {
+      subtree: true,
+      childList: true,
+      attributes: true,
+      attributeFilter: ['src']
+    })
+  })
+}
