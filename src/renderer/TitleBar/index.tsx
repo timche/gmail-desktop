@@ -6,15 +6,13 @@ import {
   Spacer,
   useColorModeValue
 } from '@chakra-ui/react'
-import {
-  VscEllipsis,
-  VscChromeMinimize,
-  VscChromeMaximize,
-  VscChromeRestore,
-  VscChromeClose
-} from 'react-icons/vsc'
 import { appRegionDragStyle, appRegionNoDragStyle } from '../helpers'
 import { Except } from 'type-fest'
+import CloseIcon from './icons/Close'
+import EllipsisIcon from './icons/Ellipsis'
+import MaximizeIcon from './icons/Maximize'
+import MinimizeIcon from './icons/Minimize'
+import RestoreIcon from './icons/Restore'
 
 const titleBarHeight = 30
 
@@ -86,15 +84,15 @@ function TitleBar({
       >
         Gmail Desktop
       </Center>
-      <IconButton icon={<VscEllipsis />} onClick={onClickMenu} />
+      <IconButton icon={<EllipsisIcon />} onClick={onClickMenu} />
       <Spacer />
-      <IconButton icon={<VscChromeMinimize />} onClick={onMinimze} />
+      <IconButton icon={<MinimizeIcon />} onClick={onMinimze} />
       {isMaximized ? (
-        <IconButton icon={<VscChromeRestore />} onClick={onUnmaximize} />
+        <IconButton icon={<RestoreIcon />} onClick={onUnmaximize} />
       ) : (
-        <IconButton icon={<VscChromeMaximize />} onClick={onMaximize} />
+        <IconButton icon={<MaximizeIcon />} onClick={onMaximize} />
       )}
-      <IconButton icon={<VscChromeClose />} onClick={onClose} />
+      <IconButton icon={<CloseIcon />} onClick={onClose} />
     </Flex>
   )
 }
