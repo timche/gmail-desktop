@@ -1,5 +1,5 @@
 import config, { ConfigKey } from '../config'
-import { shouldStartMinimized } from '..'
+import { shouldLaunchMinimized } from '../app'
 import { getAccountsMenuItems } from '../accounts'
 import { app, Menu, MenuItemConstructorOptions } from 'electron'
 import { is } from 'electron-util'
@@ -50,12 +50,12 @@ export function getTrayMenuTemplate() {
         getMainWindow().show()
       },
       label: 'Show',
-      visible: shouldStartMinimized(),
+      visible: shouldLaunchMinimized(),
       id: 'show-win'
     },
     {
       label: 'Hide',
-      visible: !shouldStartMinimized(),
+      visible: !shouldLaunchMinimized(),
       click: () => {
         getMainWindow().hide()
       },

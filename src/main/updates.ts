@@ -13,6 +13,7 @@ import {
 } from './account-views'
 import { createNotification } from './utils/notifications'
 import { AppUpdateInfo } from '../types'
+import { setIsQuittingApp } from './app'
 
 const AUTO_UPDATE_CHECK_INTERVAL = 60000 * 60 * 3 // 4 Hours
 
@@ -131,6 +132,7 @@ export function initUpdates(): void {
   })
 
   ipcMain.on('update:install', () => {
+    setIsQuittingApp(true)
     autoUpdater.quitAndInstall()
   })
 
