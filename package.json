@@ -160,14 +160,6 @@
     ],
     "appId": "io.cheung.gmail-desktop",
     "afterSign": "scripts/build-hook-after-sign.js",
-    "protocols": [
-      {
-        "name": "Gmail Desktop",
-        "schemes": [
-          "mailto"
-        ]
-      }
-    ],
     "mac": {
       "category": "public.app-category.productivity",
       "darkModeSupport": true
