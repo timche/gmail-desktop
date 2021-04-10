@@ -3,8 +3,7 @@ import {
   Button as ChakraButton,
   Text,
   Spacer,
-  CircularProgress,
-  CircularProgressLabel,
+  Progress,
   Alert,
   HStack
 } from '@chakra-ui/react'
@@ -100,16 +99,13 @@ export default function AppUpdate({
     if (status === 'downloading') {
       return (
         <>
-          <Text fontSize="xs">Downloading update {normalizedVersion} ...</Text>
-          <CircularProgress
+          <Text fontSize="xs">Downloading update {normalizedVersion}</Text>
+          <Progress
             value={downloadPercent}
-            size={`${topElementHeight - 8}px`}
-            thickness="6px"
-          >
-            <CircularProgressLabel>
-              {downloadPercent.toFixed(0)}%
-            </CircularProgressLabel>
-          </CircularProgress>
+            size="sm"
+            width="100px"
+            borderRadius="100px"
+          />
           <Button onClick={onCancelDownload}>Cancel</Button>
           {releaseNotesButton}
         </>
