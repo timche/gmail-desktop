@@ -5,7 +5,7 @@ import { initTray } from './tray'
 import { initOrUpdateDockMenu } from './menus/dock'
 import { initAccounts } from './accounts'
 import { createMainWindow } from './main-window'
-import { initDarkMode, initNativeThemeSource } from './dark-mode'
+import { initDarkMode } from './dark-mode'
 import { initUserAgent } from './user-agent'
 import { handleGmail } from './gmail'
 import { initOrUpdateTrayMenu } from './menus/tray'
@@ -21,7 +21,6 @@ async function initMain() {
   }
 
   initUserAgent()
-  initNativeThemeSource()
   initDarkMode()
   createMainWindow()
   handleGmail()
