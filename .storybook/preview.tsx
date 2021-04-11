@@ -1,6 +1,7 @@
 import { ChakraProvider, useColorMode } from '@chakra-ui/react'
 import { useEffect } from 'react'
 import theme from '../src/renderer/theme'
+import { mainWindowMinWidth } from '../src/constants'
 
 export const parameters = {
   layout: 'fullscreen',
@@ -10,7 +11,7 @@ export const parameters = {
       minWidth: {
         name: 'Minimum Width',
         styles: {
-          width: '780px',
+          width: `${mainWindowMinWidth}px`,
           height: '450px'
         }
       }

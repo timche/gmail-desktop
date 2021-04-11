@@ -2,6 +2,7 @@ import { app } from 'electron'
 import config, { ConfigKey } from './config'
 import { getMainWindow } from './main-window'
 import { sendToSelectedAccountView } from './account-views'
+import { appId } from '../constants'
 
 let isQuittingApp = false
 
@@ -22,7 +23,7 @@ export function shouldLaunchMinimized() {
 }
 
 export async function initApp() {
-  app.setAppUserModelId('io.cheung.gmail-desktop')
+  app.setAppUserModelId(appId)
 
   if (!app.requestSingleInstanceLock()) {
     app.quit()

@@ -15,6 +15,7 @@ import { getAppMenu } from '../menus/app'
 import debounce from 'lodash.debounce'
 import indexHTML from './index.html'
 import { darkTheme } from '../../theme'
+import { mainWindowMinWidth } from '../../constants'
 
 let mainWindow: BrowserWindow | undefined
 
@@ -40,7 +41,7 @@ export function createMainWindow(): void {
     titleBarStyle:
       config.get(ConfigKey.TitleBarStyle) === 'app' ? 'hiddenInset' : 'default',
     frame: config.get(ConfigKey.TitleBarStyle) === 'system',
-    minWidth: 780,
+    minWidth: mainWindowMinWidth,
     width: lastWindowState.bounds.width,
     minHeight: 200,
     height: lastWindowState.bounds.height,
