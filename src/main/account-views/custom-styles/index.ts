@@ -8,10 +8,7 @@ import css from './style.css'
 import macosCSS from './style.macos.css'
 import { is } from 'electron-util'
 
-export const USER_CUSTOM_STYLE_PATH = path.join(
-  app.getPath('userData'),
-  'custom.css'
-)
+export const userStylesPath = path.join(app.getPath('userData'), 'custom.css')
 
 export function addCustomCSS(view: BrowserView): void {
   view.webContents.insertCSS(css)
@@ -20,8 +17,8 @@ export function addCustomCSS(view: BrowserView): void {
     view.webContents.insertCSS(macosCSS)
   }
 
-  if (fs.existsSync(USER_CUSTOM_STYLE_PATH)) {
-    view.webContents.insertCSS(fs.readFileSync(USER_CUSTOM_STYLE_PATH, 'utf8'))
+  if (fs.existsSync(userStylesPath)) {
+    view.webContents.insertCSS(fs.readFileSync(userStylesPath, 'utf8'))
   }
 }
 
