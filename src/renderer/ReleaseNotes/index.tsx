@@ -2,6 +2,7 @@ import React from 'react'
 import { Box, Text, Container, Heading, Stack, Link } from '@chakra-ui/react'
 import HtmlParser from './HtmlParser'
 import { AppUpdateInfo } from '../../types'
+import { gitHubRepoUrl } from '../../constants'
 
 interface ReleaseNotesProps {
   notes: AppUpdateInfo['releaseNotes']
@@ -16,9 +17,7 @@ export default function ReleaseNotes({ notes }: ReleaseNotesProps) {
         {notes.map(({ version, note }) => (
           <Box key={version}>
             <Heading size="lg" mb="2">
-              <Link
-                href={`https://github.com/timche/gmail-desktop/releases/tag/v${version}`}
-              >
+              <Link href={`${gitHubRepoUrl}/releases/tag/v${version}`}>
                 v{version}
               </Link>
             </Heading>

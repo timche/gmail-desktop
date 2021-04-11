@@ -14,6 +14,7 @@ import {
 import { createNotification } from './utils/notifications'
 import { AppUpdateInfo } from '../types'
 import { setIsQuittingApp } from './app'
+import { appName } from '../constants'
 
 const AUTO_UPDATE_CHECK_INTERVAL = 60000 * 60 * 2 // Hours
 
@@ -63,7 +64,7 @@ function showUpToDate() {
   dialog.showMessageBox({
     type: 'info',
     message: `You're up to date!`,
-    detail: `${app.name} v${currentVersion} is currently the newest version available.`
+    detail: `${appName} v${currentVersion} is currently the newest version available.`
   })
 }
 

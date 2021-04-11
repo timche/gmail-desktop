@@ -12,6 +12,7 @@ import {
 } from '@chakra-ui/react'
 import { Account } from '../../types'
 import { Except } from 'type-fest'
+import { defaultAccountId } from '../../constants'
 
 interface EditAccountProps {
   account: Except<Account, 'selected'>
@@ -65,7 +66,7 @@ function EditAccount({
           onClick={() => {
             onRemove(id)
           }}
-          disabled={id === 'default'}
+          disabled={id === defaultAccountId}
         >
           Remove
         </Button>

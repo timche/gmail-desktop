@@ -13,6 +13,7 @@ import EllipsisIcon from './icons/Ellipsis'
 import MaximizeIcon from './icons/Maximize'
 import MinimizeIcon from './icons/Minimize'
 import RestoreIcon from './icons/Restore'
+import { appName } from '../../constants'
 
 const titleBarHeight = 30
 
@@ -82,7 +83,7 @@ function TitleBar({
         fontSize="xs"
         color="gray"
       >
-        Gmail Desktop
+        {appName}
       </Center>
       <IconButton icon={<EllipsisIcon />} onClick={onClickMenu} />
       <Spacer />

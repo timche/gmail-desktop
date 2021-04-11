@@ -38,7 +38,7 @@ import {
   hideAccountViews,
   sendToSelectedAccountView
 } from '../account-views'
-import { gmailUrl } from '../../constants'
+import { gitHubRepoUrl, gmailUrl } from '../../constants'
 import { openExternalUrl } from '../utils/url'
 
 interface AppearanceMenuItem {
@@ -794,19 +794,19 @@ export function getAppMenu() {
         {
           label: 'Website',
           click() {
-            openExternalUrl('https://github.com/timche/gmail-desktop')
+            openExternalUrl(gitHubRepoUrl)
           }
         },
         {
           label: 'Release Notes',
           click() {
-            openExternalUrl('https://github.com/timche/gmail-desktop/releases')
+            openExternalUrl(`${gitHubRepoUrl}/releases`)
           }
         },
         {
           label: 'Source Code',
           click() {
-            openExternalUrl('https://github.com/timche/gmail-desktop')
+            openExternalUrl(gitHubRepoUrl)
           }
         },
         {
@@ -824,16 +824,14 @@ export function getAppMenu() {
         {
           label: 'Ask Questions',
           click() {
-            openExternalUrl(
-              'https://github.com/timche/gmail-desktop/discussions/categories/q-a'
-            )
+            openExternalUrl(`${gitHubRepoUrl}/discussions/categories/q-a`)
           }
         },
         {
           label: 'Search Feature Requests',
           click() {
             openExternalUrl(
-              'https://github.com/timche/gmail-desktop/discussions/categories/feature-requests'
+              `${gitHubRepoUrl}/discussions/categories/feature-requests`
             )
           }
         },
@@ -843,9 +841,7 @@ export function getAppMenu() {
         {
           label: 'Report Issue',
           click() {
-            openExternalUrl(
-              'https://github.com/timche/gmail-desktop/issues/new/choose'
-            )
+            openExternalUrl(`${gitHubRepoUrl}/issues/new/choose`)
           }
         },
         {

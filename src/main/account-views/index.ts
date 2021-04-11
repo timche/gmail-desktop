@@ -1,5 +1,5 @@
 import * as path from 'path'
-import { BrowserView, BrowserWindow, app, dialog, session } from 'electron'
+import { BrowserView, BrowserWindow, dialog, session } from 'electron'
 import { addCustomCSS, initCustomStyles } from './custom-styles'
 import { enableAutoFixUserAgent } from '../user-agent'
 import { getMainWindow, sendToMainWindow } from '../main-window'
@@ -8,7 +8,13 @@ import {
   isDefaultAccount,
   selectAccount
 } from '../accounts'
-import { topElementHeight, gmailUrl } from '../../constants'
+import {
+  topElementHeight,
+  gmailUrl,
+  appName,
+  gitHubRepoUrl,
+  googleAccountsUrl
+} from '../../constants'
 import { is } from 'electron-util'
 import { addContextMenu } from './context-menu'
 import { getIsUpdateAvailable } from '../updates'
@@ -200,14 +206,14 @@ export function createAccountView(accountId: string, setAsTopView?: boolean) {
     if (accountView.webContents.getURL().includes('signin/rejected')) {
       const { response } = await dialog.showMessageBox({
         type: 'info',
-        message: `It looks like you are unable to sign-in, because Gmail is blocking the user agent ${app.name} is using.`,
-        detail: `Do you want ${app.name} to attempt to fix it automatically? If that doesn't work, you can try to set another user agent yourself or ask for help (see "Troubleshoot").`,
+        message: `It looks like you are unable to sign-in, because Gmail is blocking the user agent ${appName} is using.`,
+        detail: `Do you want ${appName} to attempt to fix it automatically? If that doesn't work, you can try to set another user agent yourself or ask for help (see "Troubleshoot").`,
         buttons: ['Yes', 'Cancel', 'Troubleshoot']
       })
 
       if (response === 2) {
         openExternalUrl(
-          'https://github.com/timche/gmail-desktop#i-cant-sign-in-this-browser-or-app-may-not-be-secure'
+          `${gitHubRepoUrl}#i-cant-sign-in-this-browser-or-app-may-not-be-secure`
         )
         return
       }
@@ -225,7 +231,7 @@ export function createAccountView(accountId: string, setAsTopView?: boolean) {
     if (url.startsWith('https://www.google.com')) {
       event.preventDefault()
       accountView.webContents.loadURL(
-        'https://accounts.google.com/ServiceLogin?service=mail'
+        `${googleAccountsUrl}/ServiceLogin?service=mail`
       )
     }
   })
@@ -237,7 +243,7 @@ export function createAccountView(accountId: string, setAsTopView?: boolean) {
       event.preventDefault()
 
       // `Add account` opens `accounts.google.com`
-      if (url.startsWith('https://accounts.google.com')) {
+      if (url.startsWith(googleAccountsUrl)) {
         sendToMainWindow('add-account-request')
         hideAccountViews()
         return

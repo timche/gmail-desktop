@@ -12,8 +12,7 @@ import { sendToMainWindow, getMainWindow } from './main-window'
 import { initOrUpdateDockMenu } from './menus/dock'
 import { initOrUpdateTrayMenu } from './menus/tray'
 import { Account } from '../types'
-
-export const DEFAULT_ACCOUNT_ID = 'default'
+import { defaultAccountId } from '../constants'
 
 export function getAccount(accountId: string) {
   return getAccounts().find(({ id }) => id === accountId)
@@ -24,7 +23,7 @@ export function getAccounts() {
 }
 
 export function isDefaultAccount(accountId: string) {
-  return accountId === DEFAULT_ACCOUNT_ID
+  return accountId === defaultAccountId
 }
 
 export function getDefaultAccount() {
@@ -77,7 +76,7 @@ export function addAccount(addedAccount: Account) {
 export function removeAccount(accountId: string) {
   const accounts = getAccounts().filter((account) => account.id !== accountId)
 
-  const defaultAccount = accounts.find(({ id }) => id === DEFAULT_ACCOUNT_ID)
+  const defaultAccount = accounts.find(({ id }) => id === defaultAccountId)
 
   if (defaultAccount) {
     defaultAccount.selected = true
