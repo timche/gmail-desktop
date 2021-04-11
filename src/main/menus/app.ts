@@ -17,10 +17,7 @@ import {
   setAutoUpdateCheck
 } from '../updater'
 import config, { ConfigKey } from '../config'
-import {
-  setCustomStyle,
-  USER_CUSTOM_STYLE_PATH
-} from '../account-views/custom-styles'
+import { setCustomStyle, userStylesPath } from '../account-views/custom-styles'
 import log from 'electron-log'
 import { showRestartDialog } from '../utils/dialog'
 import { enableAutoFixUserAgent, removeCustomUserAgent } from '../user-agent'
@@ -594,23 +591,22 @@ export function getAppMenu() {
           ]
         },
         {
-          type: 'separator'
-        },
-        {
           label: 'Gmail Appearance',
           submenu: [
             ...appearanceMenuItems.map((item) =>
               createAppearanceMenuItem(item)
             ),
             {
-              label: 'Edit Custom Styles',
+              type: 'separator'
+            },
+            {
+              label: 'Edit User Styles',
               click() {
-                // Create the custom style file if it doesn't exist
-                if (!fs.existsSync(USER_CUSTOM_STYLE_PATH)) {
-                  fs.closeSync(fs.openSync(USER_CUSTOM_STYLE_PATH, 'w'))
+                if (!fs.existsSync(userStylesPath)) {
+                  fs.closeSync(fs.openSync(userStylesPath, 'w'))
                 }
 
-                shell.openPath(USER_CUSTOM_STYLE_PATH)
+                shell.openPath(userStylesPath)
               }
             }
           ]
