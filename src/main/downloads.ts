@@ -4,31 +4,28 @@ import electronDl = require('electron-dl')
 import config, { ConfigKey } from './config'
 import { createNotification } from './utils/notifications'
 
-type State = 'cancelled' | 'completed' | 'interrupted'
-
 const messages = {
   cancelled: 'has been cancelled',
   completed: 'has completed',
   interrupted: 'has been interrupted'
 }
 
-function onDownloadComplete(filename: string, state: State): void {
-  createNotification(
-    `Download ${state}`,
-    `Download of file ${filename} ${messages[state]}.`,
-    () => {
-      shell.openPath(
-        path.join(config.get(ConfigKey.DownloadsLocation), filename)
-      )
-    }
-  )
-}
-
 export function initDownloads(): void {
   const openFolderWhenDone = config.get(ConfigKey.DownloadsOpenFolderWhenDone)
+
   const handleStarted = (item: Electron.DownloadItem) => {
     item.once('done', (_, state) => {
-      onDownloadComplete(item.getFilename(), state)
+      const fileName = item.getFilename()
+
+      createNotification(
+        `Download ${state}`,
+        `Download of file ${fileName} ${messages[state]}.`,
+        () => {
+          shell.openPath(
+            path.join(config.get(ConfigKey.DownloadsLocation), fileName)
+          )
+        }
+      )
     })
   }
 
