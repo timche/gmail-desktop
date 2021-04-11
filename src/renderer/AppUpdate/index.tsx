@@ -120,9 +120,9 @@ export default function AppUpdate({
           </Text>
           <Spacer />
           <Button variant="solid" onClick={onRestart}>
-            Restart Now
+            Restart
           </Button>
-          <Button onClick={onDismiss}>Restart Later</Button>
+          <Button onClick={onDismiss}>Later</Button>
           {releaseNotesButton}
         </>
       )

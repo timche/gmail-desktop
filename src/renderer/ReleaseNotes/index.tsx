@@ -12,7 +12,7 @@ export default function ReleaseNotes({ notes }: ReleaseNotesProps) {
   return (
     <Container>
       <Heading>Release Notes</Heading>
-      <Text mb={8}>Since current version</Text>
+      <Text mb={8}>Since Current Version</Text>
       <Stack spacing={4}>
         {notes.map(({ version, note }) => (
           <Box key={version}>
