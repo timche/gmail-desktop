@@ -12,10 +12,10 @@ import {
 import * as fs from 'fs'
 import { is } from 'electron-util'
 import {
-  manuallyCheckForUpdates,
+  checkForUpdatesWithFeedback,
   changeReleaseChannel,
   setAutoUpdateCheck
-} from '../updates'
+} from '../updater'
 import config, { ConfigKey } from '../config'
 import {
   setCustomStyle,
@@ -105,7 +105,7 @@ export function getAppMenu() {
         {
           label: 'Check for Updates...',
           click() {
-            manuallyCheckForUpdates()
+            checkForUpdatesWithFeedback()
           }
         },
         {

@@ -17,7 +17,7 @@ import {
 } from '../../constants'
 import { is } from 'electron-util'
 import { addContextMenu } from './context-menu'
-import { getIsUpdateAvailable } from '../updates'
+import { getIsUpdateAvailable } from '../updater'
 import { openExternalUrl } from '../utils/url'
 import config, { ConfigKey } from '../config'
 import { initBlocker } from './blocker'
