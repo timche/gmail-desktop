@@ -1,4 +1,4 @@
-import { initUpdates } from './updates'
+import { initUpdater } from './updater'
 import { initDownloads } from './downloads'
 import { initOrUpdateAppMenu } from './menus/app'
 import { initTray } from './tray'
@@ -30,7 +30,7 @@ async function initMain() {
   initTray()
   initOrUpdateTrayMenu()
   initOrUpdateDockMenu()
-  initUpdates()
+  initUpdater()
 }
 
 initMain()

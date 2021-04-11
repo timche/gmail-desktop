@@ -111,16 +111,16 @@ export function useAppUpdate() {
   const [isReleaseNotesVisible, setIsReleaseNotesVisible] = useState(false)
 
   useEffect(() => {
-    ipc.on('update:available', (updateInfo) => {
+    ipc.on('updater:available', (updateInfo) => {
       setUpdateInfo(updateInfo)
       setUpdateStatus('available')
     })
 
-    ipc.on('update:download-progress', (downloadPercent) => {
+    ipc.on('updater:download-progress', (downloadPercent) => {
       setUpdateDownloadPercent(downloadPercent)
     })
 
-    ipc.on('update:install', () => {
+    ipc.on('updater:install', () => {
       setUpdateStatus('install')
     })
   }, [])
@@ -137,27 +137,27 @@ export function useAppUpdate() {
     updateInfo,
     updateDownloadPercent,
     downloadUpdate: () => {
-      ipc.send('update:download')
+      ipc.send('updater:download')
       setUpdateStatus('downloading')
     },
     installUpdate: () => {
-      ipc.send('update:install')
+      ipc.send('updater:install')
     },
     dismissUpdate: () => {
-      ipc.send('update:dismiss')
+      ipc.send('updater:dismiss')
       resetStates()
     },
     cancelUpdateDownload: () => {
-      ipc.send('update:cancel-download')
+      ipc.send('updater:cancel-download')
       resetStates()
     },
     toggleReleaseNotes: (visible: boolean) => {
-      ipc.send('update:toggle-release-notes', visible)
+      ipc.send('updater:toggle-release-notes', visible)
       setIsReleaseNotesVisible(visible)
     },
     isReleaseNotesVisible,
     skipUpdateVersion: (version: string) => {
-      ipc.send('update:skip-version', version)
+      ipc.send('updater:skip-version', version)
       resetStates()
     }
   }
