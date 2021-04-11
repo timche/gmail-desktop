@@ -3,7 +3,7 @@ import config, { ConfigKey } from './config'
 import { getSelectedAccountView, sendToAccountViews } from './account-views'
 import { sendToMainWindow } from './main-window'
 
-export function initNativeThemeSource() {
+export async function initDarkMode() {
   switch (config.get(ConfigKey.DarkMode)) {
     case 'system':
       nativeTheme.themeSource = 'system'
@@ -14,9 +14,7 @@ export function initNativeThemeSource() {
     default:
       nativeTheme.themeSource = 'light'
   }
-}
 
-export async function initDarkMode() {
   ipcMain.handle('init-dark-mode', (event) => {
     const selectedAccountView = getSelectedAccountView()
     return {
