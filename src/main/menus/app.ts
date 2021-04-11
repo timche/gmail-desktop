@@ -413,7 +413,7 @@ export function getAppMenu() {
           ]
         },
         {
-          label: 'Gmail Preferences',
+          label: 'Gmail Settings',
           accelerator: 'Command+,',
           click() {
             sendToSelectedAccountView('gmail:go-to', 'settings')
@@ -565,7 +565,6 @@ export function getAppMenu() {
           label: 'Dark Mode',
           submenu: [
             {
-              id: 'dark-mode-system',
               label: 'Follow System Appearance',
               type: 'radio',
               checked: config.get(ConfigKey.DarkMode) === 'system',
@@ -575,7 +574,6 @@ export function getAppMenu() {
               }
             },
             {
-              id: 'dark-mode-enabled',
               label: 'Enabled',
               type: 'radio',
               checked: config.get(ConfigKey.DarkMode) === true,
@@ -585,7 +583,6 @@ export function getAppMenu() {
               }
             },
             {
-              id: 'dark-mode-disabled',
               label: 'Disabled',
               type: 'radio',
               checked: config.get(ConfigKey.DarkMode) === false,

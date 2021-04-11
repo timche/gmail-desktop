@@ -3,9 +3,11 @@ import { app, dialog } from 'electron'
 export async function showRestartDialog() {
   const { response } = await dialog.showMessageBox({
     type: 'info',
-    buttons: ['Restart', 'Cancel'],
+    buttons: ['Restart', 'Later'],
     message: 'Restart required',
-    detail: 'A restart is required to apply the settings'
+    detail: 'Do you want to restart the app now?',
+    defaultId: 0,
+    cancelId: 1
   })
 
   if (response === 0) {
