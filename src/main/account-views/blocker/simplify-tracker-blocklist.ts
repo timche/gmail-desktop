@@ -135,7 +135,8 @@ export const emailTrackers = {
   'GetNotify.com': 'email81.com',
   'GetPocket.com': 'email.getpocket.com\\/wf\\/open',
   'GetResponse.com': 'getresponse.com\\/open.html', // UglyEmail uses open.html/?x=
-  'Github.com': 'github.com\\/notifications\\/beacon',
+  // Don't block GitHub, because this is used to mark notifications as read.
+  // 'Github.com': 'github.com\\/notifications\\/beacon',
   'GlassDoor.com': 'mail.glassdoor.com\\/pub\\/as',
   'Gmass.com': [
     'ec2-52-26-194-35.us-west-2.compute.amazonaws.com',
