@@ -46,7 +46,11 @@ export enum ConfigKey {
   NotificationsShowSubject = 'notificationsShowSubject',
   NotificationsShowSummary = 'notificationsShowSummary',
   NotificationsEnabled = 'notificationsEnabled',
-  NotificationsPlaySound = 'notificationsPlaySound'
+  NotificationsPlaySound = 'notificationsPlaySound',
+  BlockerEnabled = 'blocker.enabled',
+  BlockerBlockAds = 'blocker.blockAds',
+  BlockerBlockAnalytics = 'blocker.blockAnalytics',
+  BlockerBlockEmailTrackers = 'blocker.blockTrackers'
 }
 
 type TypedStore = {
@@ -80,6 +84,10 @@ type TypedStore = {
   [ConfigKey.NotificationsShowSummary]: boolean
   [ConfigKey.NotificationsEnabled]: boolean
   [ConfigKey.NotificationsPlaySound]: boolean
+  [ConfigKey.BlockerEnabled]: boolean
+  [ConfigKey.BlockerBlockAds]: boolean
+  [ConfigKey.BlockerBlockAnalytics]: boolean
+  [ConfigKey.BlockerBlockEmailTrackers]: boolean
 }
 
 const defaults: TypedStore = {
@@ -127,12 +135,17 @@ const defaults: TypedStore = {
   [ConfigKey.NotificationsShowSubject]: true,
   [ConfigKey.NotificationsShowSummary]: true,
   [ConfigKey.NotificationsEnabled]: true,
-  [ConfigKey.NotificationsPlaySound]: false
+  [ConfigKey.NotificationsPlaySound]: false,
+  [ConfigKey.BlockerEnabled]: true,
+  [ConfigKey.BlockerBlockAds]: true,
+  [ConfigKey.BlockerBlockAnalytics]: true,
+  [ConfigKey.BlockerBlockEmailTrackers]: true
 }
 
 const config = new Store<TypedStore>({
   defaults,
   name: is.development ? 'config.dev' : 'config',
+  accessPropertiesByDotNotation: false,
   migrations: {
     '>=2.21.2': (store) => {
       const hideRightSidebar: boolean | undefined = store.get(
