@@ -334,6 +334,50 @@ export function getAppMenu() {
               }
             },
             {
+              label: 'Blocker',
+              submenu: [
+                {
+                  label: 'Enabled',
+                  type: 'checkbox',
+                  checked: config.get(ConfigKey.BlockerEnabled),
+                  click({ checked }) {
+                    config.set(ConfigKey.BlockerEnabled, checked)
+                    showRestartDialog()
+                  }
+                },
+                {
+                  type: 'separator'
+                },
+                {
+                  label: 'Block Ads',
+                  type: 'checkbox',
+                  checked: config.get(ConfigKey.BlockerBlockAds),
+                  click({ checked }) {
+                    config.set(ConfigKey.BlockerBlockAds, checked)
+                    showRestartDialog()
+                  }
+                },
+                {
+                  label: 'Block Analytics',
+                  type: 'checkbox',
+                  checked: config.get(ConfigKey.BlockerBlockAnalytics),
+                  click({ checked }) {
+                    config.set(ConfigKey.BlockerBlockAnalytics, checked)
+                    showRestartDialog()
+                  }
+                },
+                {
+                  label: 'Block Email Trackers',
+                  type: 'checkbox',
+                  checked: config.get(ConfigKey.BlockerBlockEmailTrackers),
+                  click({ checked }) {
+                    config.set(ConfigKey.BlockerBlockEmailTrackers, checked)
+                    showRestartDialog()
+                  }
+                }
+              ]
+            },
+            {
               label: 'Updates',
               submenu: [
                 {
