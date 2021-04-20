@@ -32,7 +32,7 @@ let feedVersion = 0
 let previousModifiedFeedDate = 0
 let currentModifiedFeedDate = 0
 let previousNewMails = new Set<string>()
-let unreadCountObserver: MutationObserver
+let unreadCountObserver: MutationObserver | undefined
 
 async function gmailRequest(
   path = '',
@@ -46,10 +46,10 @@ async function observeUnreadInbox() {
 
   if (inboxParentElement) {
     getUnreadInbox()
-    const observer = new MutationObserver(() => {
+    unreadCountObserver = new MutationObserver(() => {
       getUnreadInbox()
     })
-    observer.observe(inboxParentElement, { childList: true })
+    unreadCountObserver.observe(inboxParentElement, { childList: true })
   }
 }
 
@@ -126,8 +126,7 @@ function refreshInbox() {
 
 async function findInboxParentElement() {
   const inboxElement = await elementReady(inboxElementSelector, {
-    stopOnDomReady: false,
-    timeout: 60000
+    stopOnDomReady: false
   })
 
   inboxParentElement =
@@ -297,7 +296,8 @@ export function initGmail() {
   })
 
   window.addEventListener('unload', () => {
-    unreadCountObserver.disconnect()
+    unreadCountObserver?.disconnect()
+    unreadCountObserver = undefined
 
     actionToken = undefined
     inboxParentElement = undefined
