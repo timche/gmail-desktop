@@ -114,6 +114,8 @@ export function getAppMenu() {
             {
               label: 'Hide Menu bar',
               visible: !is.macos,
+              type: 'checkbox',
+              checked: config.get(ConfigKey.AutoHideMenuBar),
               click({ checked }) {
                 config.set(ConfigKey.AutoHideMenuBar, checked)
                 const mainWindow = getMainWindow()
