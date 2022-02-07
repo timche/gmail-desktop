@@ -460,6 +460,8 @@ export function getAppMenu() {
           accelerator: 'Command+,',
           click() {
             sendToSelectedAccountView('gmail:go-to', 'settings')
+            const mainWindow = getMainWindow()
+            mainWindow.show()
           }
         },
         {
@@ -498,6 +500,8 @@ export function getAppMenu() {
           label: 'Compose',
           click() {
             sendToSelectedAccountView('gmail:compose-mail')
+            const mainWindow = getMainWindow()
+            mainWindow.show()
           }
         },
         {
@@ -520,6 +524,8 @@ export function getAppMenu() {
           click() {
             sendToMainWindow('add-account-request')
             hideAccountViews()
+            const mainWindow = getMainWindow()
+            mainWindow.show()
           }
         },
         {
@@ -529,6 +535,8 @@ export function getAppMenu() {
             if (selectedAccount) {
               sendToMainWindow('edit-account-request', selectedAccount)
               hideAccountViews()
+              const mainWindow = getMainWindow()
+              mainWindow.show()
             }
           }
         },
@@ -538,6 +546,9 @@ export function getAppMenu() {
             const selectedAccount = getSelectedAccount()
 
             if (selectedAccount) {
+              const mainWindow = getMainWindow()
+              mainWindow.show()
+
               if (isDefaultAccount(selectedAccount.id)) {
                 dialog.showMessageBox({
                   type: 'info',
