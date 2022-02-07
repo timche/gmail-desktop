@@ -55,7 +55,7 @@ export function createMainWindow(): void {
     },
     show: !shouldLaunchMinimized(),
     icon: is.linux
-      ? path.join(__dirname, '..', 'static', 'icon.png')
+      ? path.join(__dirname, '..', '..', 'static', 'icon.png')
       : undefined,
     darkTheme: nativeTheme.shouldUseDarkColors,
     backgroundColor: nativeTheme.shouldUseDarkColors
