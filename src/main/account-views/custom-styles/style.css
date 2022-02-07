@@ -128,3 +128,20 @@
   width: 26px !important;
   height: 26px !important;
 }
+
+/* Labels */
+.aEe,
+.aEc.aHS-bnr .qj {
+  -webkit-mask: url('https://www.gstatic.com/images/icons/material/system_gm_filled/1x/label_gm_grey_24dp.png')
+    center/contain;
+}
+
+/* stylelint-disable media-feature-name-no-unknown */
+@media (min-resolution: 144dpi), (min-device-pixel-ratio: 1.5) {
+  .aEe,
+  .aEc.aHS-bnr .qj {
+    -webkit-mask: url('https://www.gstatic.com/images/icons/material/system_gm_filled/2x/label_gm_grey_24dp.png')
+      center/contain;
+  }
+}
+/* stylelint-enable media-feature-name-no-unknown */
