@@ -18,8 +18,8 @@
 .compactHeader header > div:nth-child(2) > div:nth-child(2) > div:last-of-type > div:first-of-type > a,
 /* Header: Google apps */
 .compactHeader header > div:nth-child(2) > div:nth-child(3) > div:first-of-type > div:first-of-type > div:first-of-type,
-/* Header: Google logo (Google Workspace) */
-.compactHeader header div[href*='accounts.google.com'] > div:first-of-type,
+/* Header: Google logo/Google Workspace */
+.compactHeader header > div:nth-child(2) > div:nth-child(3) > div:first-of-type > div:nth-child(2) > div:first-of-type,
 /* Footer */
 .hideFooter div[role='contentinfo'] {
   display: none !important;
@@ -92,7 +92,12 @@
 }
 
 /* Header: Account */
-.compactHeader header div[href*='accounts.google.com'] {
+.compactHeader
+  header
+  > div:nth-child(2)
+  > div:nth-child(3)
+  > div:first-of-type
+  > div:nth-child(2) {
   width: auto !important;
   border: none !important;
   max-height: none !important;
@@ -100,31 +105,74 @@
   background-color: transparent !important;
 }
 
-.compactHeader header div[href*='accounts.google.com']:hover {
+.compactHeader
+  header
+  > div:nth-child(2)
+  > div:nth-child(3)
+  > div:first-of-type
+  > div:nth-child(2):hover {
   background-color: rgb(60 64 67 / 8%) !important;
 }
 
-.compactHeader header div[href*='accounts.google.com']:focus {
+.compactHeader
+  header
+  > div:nth-child(2)
+  > div:nth-child(3)
+  > div:first-of-type
+  > div:nth-child(2):focus {
   background-color: rgb(95 99 104 / 24%) !important;
   box-shadow: none !important;
 }
 
-.compactHeader header div[href*='accounts.google.com'] > div:nth-child(2) {
+.compactHeader
+  header
+  > div:nth-child(2)
+  > div:nth-child(3)
+  > div:first-of-type
+  > div:nth-child(2)
+  > div:nth-child(2) {
   padding: 4px !important;
 }
 
-.compactHeader header div[href*='accounts.google.com'] a {
+.compactHeader
+  header
+  > div:nth-child(2)
+  > div:nth-child(3)
+  > div:first-of-type
+  > div:nth-child(2)
+  a {
   padding: 0 !important;
   height: 26px !important;
   width: 26px !important;
 }
 
-.compactHeader header div[href*='accounts.google.com'] a img:hover,
-.compactHeader header div[href*='accounts.google.com'] a img:focus {
+.compactHeader
+  header
+  > div:nth-child(2)
+  > div:nth-child(3)
+  > div:first-of-type
+  > div:nth-child(2)
+  a
+  img:hover,
+.compactHeader
+  header
+  > div:nth-child(2)
+  > div:nth-child(3)
+  > div:first-of-type
+  > div:nth-child(2)
+  a
+  img:focus {
   box-shadow: none !important;
 }
 
-.compactHeader header div[href*='accounts.google.com'] a img {
+.compactHeader
+  header
+  > div:nth-child(2)
+  > div:nth-child(3)
+  > div:first-of-type
+  > div:nth-child(2)
+  a
+  img {
   width: 26px !important;
   height: 26px !important;
 }
