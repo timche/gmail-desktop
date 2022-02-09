@@ -15,9 +15,10 @@ jobs:
         with:
           node-version: 14
       - uses: actions/checkout@v2
-      - run: yarn --frozen-lockfile
-      - run: yarn type-check
-      - run: yarn lint
+      - run: npm ci
+      - run: npm run type-check
+      - run: npm run lint
+      - run: npm run format:check
   build:
     needs: test
     strategy:
@@ -38,9 +39,9 @@ jobs:
         with:
           node-version: 14
       - uses: actions/checkout@v2
-      - run: yarn --frozen-lockfile
-      - run: yarn build
-      - run: yarn dist:${{ matrix.dist-target }} --publish never
+      - run: npm ci
+      - run: npm run build
+      - run: npm run dist:${{ matrix.dist-target }} -- --publish never
       - uses: actions/upload-artifact@v2
         with:
           name: ${{ github.event.repository.name }}-${{ matrix.dist-target }}

@@ -29,10 +29,10 @@ jobs:
         with:
           node-version: 14
       - uses: actions/checkout@v2
-      - run: yarn --frozen-lockfile
-      - run: yarn build
+      - run: npm ci
+      - run: npm run build
       - if: matrix.os == 'macos-latest'
-        run: yarn dist:macos --publish always
+        run: npm run dist:macos -- --publish always
         env:
           CSC_LINK: ${{ secrets.CSC_LINK }}
           CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
@@ -40,6 +40,6 @@ jobs:
           APPLE_ID_APP_PASSWORD: ${{ secrets.APPLE_ID_APP_PASSWORD }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - if: matrix.os != 'macos-latest'
-        run: yarn dist:${{ matrix.dist-target }} --publish always
+        run: npm run dist:${{ matrix.dist-target }} -- --publish always
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
