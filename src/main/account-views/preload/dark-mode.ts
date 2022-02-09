@@ -52,7 +52,7 @@ function enableDarkMode(): void {
         '.aj2',
         // Hangouts Phone
         '.a8V',
-        /* Labels */
+        // Labels
         '.aEe, .aEc.aHS-bnr .qj'
       ]
     }
