@@ -51,7 +51,9 @@ function enableDarkMode(): void {
         // Hangouts Conversations
         '.aj2',
         // Hangouts Phone
-        '.a8V'
+        '.a8V',
+        // Labels
+        '.aEe, .aEc.aHS-bnr .qj'
       ]
     }
   )
