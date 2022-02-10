@@ -52,7 +52,7 @@
     "babel-loader": "^8.2.2",
     "builder-util-runtime": "^8.7.3",
     "cross-env": "^7.0.3",
-    "darkreader": "^4.9.27",
+    "darkreader": "^4.9.44",
     "del-cli": "^3.0.1",
     "domhandler": "^4.0.0",
     "electron": "^15.3.6",

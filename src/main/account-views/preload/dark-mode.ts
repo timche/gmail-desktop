@@ -54,7 +54,8 @@ function enableDarkMode(): void {
         '.a8V',
         // Labels
         '.aEe, .aEc.aHS-bnr .qj'
-      ]
+      ],
+      disableStyleSheetsProxy: false
     }
   )
 }
