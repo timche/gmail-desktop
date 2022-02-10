@@ -50,7 +50,6 @@ export function createMainWindow(): void {
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
-      enableRemoteModule: false,
       preload: path.join(__dirname, 'preload', 'main-window.js')
     },
     show: !shouldLaunchMinimized(),
