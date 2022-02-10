@@ -55,7 +55,7 @@
     "darkreader": "^4.9.27",
     "del-cli": "^3.0.1",
     "domhandler": "^4.0.0",
-    "electron": "^17.0.0",
+    "electron": "^15.3.6",
     "electron-builder": "^22.10.5",
     "electron-context-menu": "^2.5.0",
     "electron-dl": "^3.2.0",
