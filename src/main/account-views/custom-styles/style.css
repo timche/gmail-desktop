@@ -177,6 +177,39 @@
   height: 26px !important;
 }
 
+/* Header: Google Chat status button */
+.compactHeader
+  header
+  > div:nth-child(2)
+  > div:nth-child(2)
+  > div:last-of-type
+  div[role='button'] {
+  height: 28px !important;
+  bottom: 4px !important;
+}
+
+/* Header: Google Chat status text and icon */
+.compactHeader
+  header
+  > div:nth-child(2)
+  > div:nth-child(2)
+  > div:last-of-type
+  > div[role='button']
+  > div:nth-child(1) {
+  bottom: 5px !important;
+}
+
+/* Header: Google Chat status dropdown arrow */
+.compactHeader
+  header
+  > div:nth-child(2)
+  > div:nth-child(2)
+  > div:last-of-type
+  > div[role='button']
+  > svg:nth-child(2) {
+  top: 1px !important;
+}
+
 /* Labels */
 .aEe,
 .aEc.aHS-bnr .qj {
