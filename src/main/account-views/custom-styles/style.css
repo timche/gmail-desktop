@@ -210,6 +210,18 @@
   top: 1px !important;
 }
 
+/* Header: Google One account ring */
+.compactHeader
+  header
+  > div:nth-child(2)
+  > div:nth-child(3)
+  > div:first-of-type
+  > div:nth-child(2)
+  a
+  svg {
+  display: none !important;
+}
+
 /* Labels */
 .aEe,
 .aEc.aHS-bnr .qj {
