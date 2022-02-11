@@ -87,8 +87,8 @@
   > div:last-of-type
   > div:last-of-type
   > a {
-  padding: 4px !important;
-  margin: 0 !important;
+  padding: 8px !important;
+  margin: 2px !important;
 }
 
 /* Header: Account */
