@@ -1,14 +1,12 @@
 import { app, Menu } from 'electron'
 import { is } from 'electron-util'
 import config, { ConfigKey } from '../config'
-import { getMainWindow } from '../main-window'
+import { showMainWindow } from '../main-window'
 import { sendToSelectedAccountView } from '../account-views'
 import { getAccountsMenuItems } from '../accounts'
 
 export function initOrUpdateDockMenu() {
-  const mainWindow = getMainWindow()
-
-  if (is.macos && mainWindow) {
+  if (is.macos) {
     if (!config.get(ConfigKey.ShowDockIcon)) {
       app.dock.hide()
     }
@@ -22,7 +20,7 @@ export function initOrUpdateDockMenu() {
         label: 'Compose',
         click() {
           sendToSelectedAccountView('gmail:compose-mail')
-          mainWindow.show()
+          showMainWindow()
         }
       },
       {
@@ -32,28 +30,28 @@ export function initOrUpdateDockMenu() {
         label: 'Inbox',
         click() {
           sendToSelectedAccountView('gmail:go-to', 'inbox')
-          mainWindow.show()
+          showMainWindow()
         }
       },
       {
         label: 'Important',
         click() {
           sendToSelectedAccountView('gmail:go-to', 'imp')
-          mainWindow.show()
+          showMainWindow()
         }
       },
       {
         label: 'Snoozed',
         click() {
           sendToSelectedAccountView('gmail:go-to', 'snoozed')
-          mainWindow.show()
+          showMainWindow()
         }
       },
       {
         label: 'Starred',
         click() {
           sendToSelectedAccountView('gmail:go-to', 'starred')
-          mainWindow.show()
+          showMainWindow()
         }
       },
       {
@@ -63,21 +61,21 @@ export function initOrUpdateDockMenu() {
         label: 'Drafts',
         click() {
           sendToSelectedAccountView('gmail:go-to', 'drafts')
-          mainWindow.show()
+          showMainWindow()
         }
       },
       {
         label: 'Scheduled',
         click() {
           sendToSelectedAccountView('gmail:go-to', 'scheduled')
-          mainWindow.show()
+          showMainWindow()
         }
       },
       {
         label: 'Sent',
         click() {
           sendToSelectedAccountView('gmail:go-to', 'sent')
-          mainWindow.show()
+          showMainWindow()
         }
       },
       {
@@ -87,7 +85,7 @@ export function initOrUpdateDockMenu() {
         label: 'All Mail',
         click() {
           sendToSelectedAccountView('gmail:go-to', 'all')
-          mainWindow.show()
+          showMainWindow()
         }
       }
     ])

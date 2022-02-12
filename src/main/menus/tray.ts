@@ -3,7 +3,7 @@ import { shouldLaunchMinimized } from '../app'
 import { getAccountsMenuItems } from '../accounts'
 import { app, Menu, MenuItemConstructorOptions } from 'electron'
 import { is } from 'electron-util'
-import { getMainWindow } from '../main-window'
+import { getMainWindow, showMainWindow } from '../main-window'
 import { getTray } from '../tray'
 
 let trayMenu: Menu | undefined
@@ -47,7 +47,7 @@ export function getTrayMenuTemplate() {
     },
     {
       click: () => {
-        getMainWindow().show()
+        showMainWindow()
       },
       label: 'Show',
       visible: shouldLaunchMinimized(),

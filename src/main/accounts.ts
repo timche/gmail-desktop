@@ -8,7 +8,7 @@ import {
 } from './account-views'
 import { initOrUpdateAppMenu } from './menus/app'
 import config, { ConfigKey } from './config'
-import { sendToMainWindow, getMainWindow } from './main-window'
+import { sendToMainWindow, showMainWindow } from './main-window'
 import { initOrUpdateDockMenu } from './menus/dock'
 import { initOrUpdateTrayMenu } from './menus/tray'
 import { Account } from '../types'
@@ -96,7 +96,7 @@ export function getAccountsMenuItems(withAccelerator?: boolean) {
     label,
     click() {
       selectAccount(id)
-      getMainWindow().show()
+      showMainWindow()
     },
     accelerator: withAccelerator ? `CommandOrControl+${index + 1}` : undefined
   }))
