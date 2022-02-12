@@ -49,6 +49,12 @@ export async function initApp() {
 
   app.on('open-url', (_event, mailto) => {
     sendToSelectedAccountView('gmail:compose-mail', mailto.split(':')[1])
+
+    const mainWindow = getMainWindow()
+
+    if (mainWindow) {
+      mainWindow.show()
+    }
   })
 
   app.on('activate', () => {
