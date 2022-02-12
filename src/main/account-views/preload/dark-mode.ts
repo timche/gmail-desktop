@@ -36,6 +36,29 @@ function enableDarkMode(): void {
           .z0 > .L3 {
             background-color: ${darkTheme.bg[1]} !important;
           }
+
+          /* Sign-in page - remove weird filled sections */
+          div#view_container > div > div[role='presentation'] > div[role='presentation'] > div[role='presentation'] {
+            border-color: transparent !important;
+          }
+
+          /* Sign-in page - fix border */
+          div#initialView > * {
+            background-color: transparent !important;
+            border-color: #776e62 !important; // Hard-coded border color
+          }
+
+          /* Sign-in page - add border to some buttons */
+          .VfPpkd-LgbsSe.VfPpkd-LgbsSe-OWXEXe-k8QpJ.VfPpkd-LgbsSe-OWXEXe-dgl2Hf.nCP5yc.AjY5Oe.DuMIQc.qIypjc.TrZEUc.lw1w4b {
+            border: 1px #776e62 solid !important; // Hard-coded border color
+            border-radius: 8px !important;
+          }
+
+          /* Sign-in page - fix button borders */
+          .VfPpkd-RLmnJb,
+          .VfPpkd-Jh9lGc {
+            background-color: transparent !important;
+          }
         `,
       ignoreImageAnalysis: [],
       ignoreInlineStyle: [],
