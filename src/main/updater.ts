@@ -5,7 +5,7 @@ import { CancellationToken, HttpError } from 'builder-util-runtime'
 import { is } from 'electron-util'
 import config, { ConfigKey } from './config'
 import { initOrUpdateAppMenu } from './menus/app'
-import { getMainWindow, sendToMainWindow } from './main-window'
+import { sendToMainWindow, showMainWindow } from './main-window'
 import {
   hideAccountViews,
   showAccountViews,
@@ -139,8 +139,8 @@ export function initUpdater(): void {
   autoUpdater.on('update-available', (updateInfo: AppUpdateInfo) => {
     const skipUpdateVersion = config.get(ConfigKey.SkipUpdateVersion)
     if (updateInfo.version !== skipUpdateVersion) {
+      showMainWindow()
       showUpdateAvailable(updateInfo)
-      getMainWindow().show()
     }
   })
 

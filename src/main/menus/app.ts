@@ -28,7 +28,7 @@ import {
   isDefaultAccount,
   removeAccount
 } from '../accounts'
-import { getMainWindow, sendToMainWindow } from '../main-window'
+import { getMainWindow, sendToMainWindow, showMainWindow } from '../main-window'
 import {
   forEachAccountView,
   getSelectedAccountView,
@@ -460,8 +460,7 @@ export function getAppMenu() {
           accelerator: 'Command+,',
           click() {
             sendToSelectedAccountView('gmail:go-to', 'settings')
-            const mainWindow = getMainWindow()
-            mainWindow.show()
+            showMainWindow()
           }
         },
         {
@@ -500,8 +499,7 @@ export function getAppMenu() {
           label: 'Compose',
           click() {
             sendToSelectedAccountView('gmail:compose-mail')
-            const mainWindow = getMainWindow()
-            mainWindow.show()
+            showMainWindow()
           }
         },
         {
@@ -524,8 +522,7 @@ export function getAppMenu() {
           click() {
             sendToMainWindow('add-account-request')
             hideAccountViews()
-            const mainWindow = getMainWindow()
-            mainWindow.show()
+            showMainWindow()
           }
         },
         {
@@ -535,8 +532,7 @@ export function getAppMenu() {
             if (selectedAccount) {
               sendToMainWindow('edit-account-request', selectedAccount)
               hideAccountViews()
-              const mainWindow = getMainWindow()
-              mainWindow.show()
+              showMainWindow()
             }
           }
         },
@@ -546,8 +542,7 @@ export function getAppMenu() {
             const selectedAccount = getSelectedAccount()
 
             if (selectedAccount) {
-              const mainWindow = getMainWindow()
-              mainWindow.show()
+              showMainWindow()
 
               if (isDefaultAccount(selectedAccount.id)) {
                 dialog.showMessageBox({
@@ -753,32 +748,28 @@ export function getAppMenu() {
           label: 'Inbox',
           click() {
             sendToSelectedAccountView('gmail:go-to', 'inbox')
-            const mainWindow = getMainWindow()
-            mainWindow.show()
+            showMainWindow()
           }
         },
         {
           label: 'Important',
           click() {
             sendToSelectedAccountView('gmail:go-to', 'imp')
-            const mainWindow = getMainWindow()
-            mainWindow.show()
+            showMainWindow()
           }
         },
         {
           label: 'Snoozed',
           click() {
             sendToSelectedAccountView('gmail:go-to', 'snoozed')
-            const mainWindow = getMainWindow()
-            mainWindow.show()
+            showMainWindow()
           }
         },
         {
           label: 'Starred',
           click() {
             sendToSelectedAccountView('gmail:go-to', 'starred')
-            const mainWindow = getMainWindow()
-            mainWindow.show()
+            showMainWindow()
           }
         },
         {
@@ -788,24 +779,21 @@ export function getAppMenu() {
           label: 'Drafts',
           click() {
             sendToSelectedAccountView('gmail:go-to', 'drafts')
-            const mainWindow = getMainWindow()
-            mainWindow.show()
+            showMainWindow()
           }
         },
         {
           label: 'Scheduled',
           click() {
             sendToSelectedAccountView('gmail:go-to', 'scheduled')
-            const mainWindow = getMainWindow()
-            mainWindow.show()
+            showMainWindow()
           }
         },
         {
           label: 'Sent',
           click() {
             sendToSelectedAccountView('gmail:go-to', 'sent')
-            const mainWindow = getMainWindow()
-            mainWindow.show()
+            showMainWindow()
           }
         },
         {
@@ -815,8 +803,7 @@ export function getAppMenu() {
           label: 'All Mail',
           click() {
             sendToSelectedAccountView('gmail:go-to', 'all')
-            const mainWindow = getMainWindow()
-            mainWindow.show()
+            showMainWindow()
           }
         }
       ]

@@ -27,6 +27,19 @@ export function getMainWindow() {
   return mainWindow
 }
 
+export function showMainWindow() {
+  if (!mainWindow) {
+    throw new Error('Main window is uninitialized or has been destroyed')
+  }
+
+  if (mainWindow.isMinimized()) {
+    mainWindow.restore()
+    return
+  }
+
+  mainWindow.show()
+}
+
 export function sendToMainWindow(channel: string, ...args: any[]) {
   if (mainWindow) {
     mainWindow.webContents.send(channel, ...args)
@@ -154,7 +167,7 @@ export function createMainWindow(): void {
 
   mainWindow.webContents.on('dom-ready', () => {
     if (!shouldLaunchMinimized() && mainWindow) {
-      mainWindow.show()
+      showMainWindow()
     }
   })
 

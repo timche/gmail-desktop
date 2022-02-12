@@ -2,7 +2,7 @@ import * as path from 'path'
 import { app, nativeImage, NativeImage, Tray } from 'electron'
 import { is } from 'electron-util'
 import config, { ConfigKey } from './config'
-import { getMainWindow } from './main-window'
+import { showMainWindow } from './main-window'
 import { getTrayMenu } from './menus/tray'
 
 let tray: Tray | undefined
@@ -72,9 +72,6 @@ export function initTray() {
   tray.setToolTip(app.name)
 
   tray.on('click', () => {
-    const mainWindow = getMainWindow()
-    if (mainWindow) {
-      mainWindow.show()
-    }
+    showMainWindow()
   })
 }

@@ -1,7 +1,7 @@
 import { app, ipcMain, Notification } from 'electron'
 import { getAccountIdByViewId } from './account-views'
 import { getAccount, selectAccount } from './accounts'
-import { getMainWindow, sendToMainWindow } from './main-window'
+import { sendToMainWindow, showMainWindow } from './main-window'
 import config, { ConfigKey } from './config'
 import { is } from 'electron-util'
 import { updateTrayUnreadStatus } from './tray'
@@ -94,9 +94,9 @@ export function newMailNotification(
   })
 
   notification.on('click', () => {
-    accountViewWebContents.send('gmail:open-mail', messageId)
+    showMainWindow()
     selectAccount(account.id)
-    getMainWindow().show()
+    accountViewWebContents.send('gmail:open-mail', messageId)
   })
 
   notification.show()

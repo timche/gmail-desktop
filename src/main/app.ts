@@ -1,6 +1,6 @@
 import { app } from 'electron'
 import config, { ConfigKey } from './config'
-import { getMainWindow } from './main-window'
+import { getMainWindow, showMainWindow } from './main-window'
 import { sendToSelectedAccountView } from './account-views'
 import { appId } from '../constants'
 
@@ -36,33 +36,17 @@ export async function initApp() {
   }
 
   app.on('second-instance', () => {
-    const mainWindow = getMainWindow()
-
-    if (mainWindow) {
-      if (mainWindow.isMinimized()) {
-        mainWindow.restore()
-      }
-
-      mainWindow.show()
-    }
+    showMainWindow()
   })
 
   app.on('open-url', (_event, mailto) => {
     sendToSelectedAccountView('gmail:compose-mail', mailto.split(':')[1])
 
-    const mainWindow = getMainWindow()
-
-    if (mainWindow) {
-      mainWindow.show()
-    }
+    showMainWindow()
   })
 
   app.on('activate', () => {
-    const mainWindow = getMainWindow()
-
-    if (mainWindow) {
-      mainWindow.show()
-    }
+    showMainWindow()
   })
 
   app.on('before-quit', () => {
@@ -70,13 +54,11 @@ export async function initApp() {
 
     const mainWindow = getMainWindow()
 
-    if (mainWindow) {
-      config.set(ConfigKey.LastWindowState, {
-        bounds: mainWindow.getBounds(),
-        fullscreen: mainWindow.isFullScreen(),
-        maximized: mainWindow.isMaximized()
-      })
-    }
+    config.set(ConfigKey.LastWindowState, {
+      bounds: mainWindow.getBounds(),
+      fullscreen: mainWindow.isFullScreen(),
+      maximized: mainWindow.isMaximized()
+    })
   })
 
   await app.whenReady()
