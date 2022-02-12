@@ -16,6 +16,8 @@
 /* Header: Support */
 .compactHeader header > div:nth-child(2) > div:nth-child(2) > div:last-of-type > a:first-of-type,
 .compactHeader header > div:nth-child(2) > div:nth-child(2) > div:last-of-type > div:first-of-type > a,
+/* Header: Support (with Google Chat enabled) */
+.compactHeader header > div:nth-child(2) > div:nth-child(2) > div:last-of-type > div:nth-child(2),
 /* Header: Google apps */
 .compactHeader header > div:nth-child(2) > div:nth-child(3) > div:first-of-type > div:first-of-type > div:first-of-type,
 /* Header: Google logo/Google Workspace */
