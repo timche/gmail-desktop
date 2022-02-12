@@ -220,8 +220,26 @@
   > div:first-of-type
   > div:nth-child(2)
   a
+  > div:first-of-type {
+  width: 26px !important;
+  height: 26px !important;
+}
+
+.compactHeader
+  header
+  > div:nth-child(2)
+  > div:nth-child(3)
+  > div:first-of-type
+  > div:nth-child(2)
+  a
+  > div:first-of-type
   svg {
-  display: none !important;
+  width: 30px !important;
+  height: 30px !important;
+  position: absolute !important;
+  z-index: 1 !important;
+  top: -2px !important;
+  left: -2px !important;
 }
 
 /* Labels */

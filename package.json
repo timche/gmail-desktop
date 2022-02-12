@@ -149,7 +149,8 @@
       "declaration-no-important": null,
       "selector-class-pattern": null,
       "property-no-vendor-prefix": null,
-      "no-descending-specificity": null
+      "no-descending-specificity": null,
+      "selector-max-compound-selectors": null
     }
   },
   "build": {
