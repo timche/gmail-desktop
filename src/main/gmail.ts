@@ -94,9 +94,12 @@ export function newMailNotification(
   })
 
   notification.on('click', () => {
-    accountViewWebContents.send('gmail:open-mail', messageId)
+    const mainWindow = getMainWindow()
+    mainWindow.show()
+
     selectAccount(account.id)
-    getMainWindow().show()
+
+    accountViewWebContents.send('gmail:open-mail', messageId)
   })
 
   notification.show()
