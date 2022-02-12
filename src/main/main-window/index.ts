@@ -98,6 +98,15 @@ export function createMainWindow(): void {
   })
 
   mainWindow.on('close', (event) => {
+    // Workaround: Closing the main window when on full screen leaves a black screen
+    // https://github.com/electron/electron/issues/20263
+    if (is.macos && mainWindow?.isFullScreen()) {
+      mainWindow.once('leave-full-screen', () => {
+        mainWindow?.hide()
+      })
+      mainWindow.setFullScreen(false)
+    }
+
     if (!getIsQuittingApp() && mainWindow) {
       event.preventDefault()
       mainWindow.blur()
