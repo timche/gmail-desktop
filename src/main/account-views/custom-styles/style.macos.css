@@ -1,25 +1,28 @@
 /* Header: Drag Region */
-.compactHeader header {
+.gmail-desktop_compact-header header {
   -webkit-user-select: none;
   -webkit-app-region: drag;
 }
 
 /* Header: Burger Menu */
-.compactHeader header > div:nth-child(2) > div:first-of-type > div:first-of-type,
+.gmail-desktop_compact-header header > div:nth-child(2) > div:first-of-type > div:first-of-type,
 /* Header: Search */
-.compactHeader form,
+.gmail-desktop_compact-header form,
 /* Header: Support */
-.compactHeader header > div:nth-child(2) > div:nth-child(2) > div:last-of-type > a:first-of-type,
-.compactHeader header > div:nth-child(2) > div:nth-child(2) > div:last-of-type > div:first-of-type,
+.gmail-desktop_compact-header header > div:nth-child(2) > div:nth-child(2) > div:last-of-type > a:first-of-type,
+.gmail-desktop_compact-header header > div:nth-child(2) > div:nth-child(2) > div:last-of-type > div:first-of-type,
 /* Header: Settings */
-.compactHeader header > div:nth-child(2) > div:nth-child(2) > div:last-of-type > div:last-of-type,
+.gmail-desktop_compact-header header > div:nth-child(2) > div:nth-child(2) > div:last-of-type > div:last-of-type,
 /* Header: Account */
-.compactHeader header div[href*='accounts.google.com'] {
+.gmail-desktop_compact-header header div[href*='accounts.google.com'] {
   -webkit-app-region: no-drag;
 }
 
 /* Header: Burger Menu */
-.compactHeader.burgerMenu header > div:nth-child(2) > div:first-of-type {
+.gmail-desktop_compact-header.gmail-desktop_burger-menu-offset
+  header
+  > div:nth-child(2)
+  > div:first-of-type {
   min-width: auto !important;
   margin-left: 70px !important;
   padding-right: 128px !important;

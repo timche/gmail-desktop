@@ -9,7 +9,7 @@ export function initUrlPreview() {
 
     if ('href' in target && !target.href.startsWith(gmailUrl)) {
       urlPreviewElement = document.createElement('div')
-      urlPreviewElement.className = 'urlPreview'
+      urlPreviewElement.className = 'gmail-desktop_url-preview'
       urlPreviewElement.style.color = darkTheme.text.mediumEmphasis
       urlPreviewElement.style.background = darkTheme.bg[2]
       urlPreviewElement.textContent = target.href

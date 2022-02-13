@@ -1,4 +1,4 @@
-.urlPreview {
+.gmail-desktop_url-preview {
   position: absolute;
   left: 0;
   bottom: 0;
@@ -11,31 +11,31 @@
 }
 
 /* Header: Gmail logo */
-.compactHeader header > div:first-of-type > div:first-of-type > div:first-of-type > div:first-of-type,
-.compactHeader header > div:nth-child(2) > div:first-of-type > div:nth-child(4),
+.gmail-desktop_compact-header header > div:first-of-type > div:first-of-type > div:first-of-type > div:first-of-type,
+.gmail-desktop_compact-header header > div:nth-child(2) > div:first-of-type > div:nth-child(4),
 /* Header: Support */
-.compactHeader header > div:nth-child(2) > div:nth-child(2) > div:last-of-type > a:first-of-type,
-.compactHeader header > div:nth-child(2) > div:nth-child(2) > div:last-of-type > div:first-of-type > a,
+.gmail-desktop_compact-header header > div:nth-child(2) > div:nth-child(2) > div:last-of-type > a:first-of-type,
+.gmail-desktop_compact-header header > div:nth-child(2) > div:nth-child(2) > div:last-of-type > div:first-of-type > a,
 /* Header: Support (with Google Chat enabled) */
-.compactHeader header > div:nth-child(2) > div:nth-child(2) > div:last-of-type > div:nth-child(2),
+.gmail-desktop_compact-header header > div:nth-child(2) > div:nth-child(2) > div:last-of-type > div:nth-child(2),
 /* Header: Google apps */
-.compactHeader header > div:nth-child(2) > div:nth-child(3) > div:first-of-type > div:first-of-type > div:first-of-type,
+.gmail-desktop_compact-header header > div:nth-child(2) > div:nth-child(3) > div:first-of-type > div:first-of-type > div:first-of-type,
 /* Header: Google logo/Google Workspace */
-.compactHeader header > div:nth-child(2) > div:nth-child(3) > div:first-of-type > div[role="button"] > div:first-of-type,
+.gmail-desktop_compact-header header > div:nth-child(2) > div:nth-child(3) > div:first-of-type > div[role="button"] > div:first-of-type,
 /* Footer */
-.hideFooter div[role='contentinfo'] {
+.gmail-desktop_hide-footer div[role='contentinfo'] {
   display: none !important;
 }
 
 /* Header: Inner Containers */
-.compactHeader header > div:nth-child(2) > div:first-of-type,
-.compactHeader header > div:nth-child(2) > div:nth-child(2),
-.compactHeader header > div:nth-child(2) > div:nth-child(3) {
+.gmail-desktop_compact-header header > div:nth-child(2) > div:first-of-type,
+.gmail-desktop_compact-header header > div:nth-child(2) > div:nth-child(2),
+.gmail-desktop_compact-header header > div:nth-child(2) > div:nth-child(3) {
   height: 22px !important;
 }
 
 /* Header: Burger Menu */
-.compactHeader
+.gmail-desktop_compact-header
   header
   > div:nth-child(2)
   > div:first-of-type
@@ -44,45 +44,49 @@
 }
 
 /* Header: Search */
-.compactHeader header > div:nth-child(2) > div:nth-child(2) > div:nth-child(2) {
+.gmail-desktop_compact-header
+  header
+  > div:nth-child(2)
+  > div:nth-child(2)
+  > div:nth-child(2) {
   height: 28px !important;
 }
 
-.compactHeader header form > div:nth-child(3) {
+.gmail-desktop_compact-header header form > div:nth-child(3) {
   height: 26px !important;
 }
 
-.compactHeader header form div table {
-  height: 26px !important;
-  font-size: 0.875rem !important;
-}
-
-.compactHeader header input {
+.gmail-desktop_compact-header header form div table {
   height: 26px !important;
   font-size: 0.875rem !important;
 }
 
-.compactHeader header form button {
+.gmail-desktop_compact-header header input {
+  height: 26px !important;
+  font-size: 0.875rem !important;
+}
+
+.gmail-desktop_compact-header header form button {
   height: 26px !important;
 }
 
-.compactHeader header form button svg {
+.gmail-desktop_compact-header header form button svg {
   padding: 1px !important;
   margin: 0 !important;
 }
 
-.compactHeader header form div table table td {
+.gmail-desktop_compact-header header form div table table td {
   padding: 0 !important;
   height: 26px !important;
 }
 
-.compactHeader header form input {
+.gmail-desktop_compact-header header form input {
   position: initial !important;
   height: 26px !important;
 }
 
 /* Header: Settings */
-.compactHeader
+.gmail-desktop_compact-header
   header
   > div:nth-child(2)
   > div:nth-child(2)
@@ -94,7 +98,7 @@
 }
 
 /* Header: Account */
-.compactHeader
+.gmail-desktop_compact-header
   header
   > div:nth-child(2)
   > div:nth-child(3)
@@ -107,7 +111,7 @@
   background-color: transparent !important;
 }
 
-.compactHeader
+.gmail-desktop_compact-header
   header
   > div:nth-child(2)
   > div:nth-child(3)
@@ -116,7 +120,7 @@
   background-color: rgb(60 64 67 / 8%) !important;
 }
 
-.compactHeader
+.gmail-desktop_compact-header
   header
   > div:nth-child(2)
   > div:nth-child(3)
@@ -126,7 +130,7 @@
   box-shadow: none !important;
 }
 
-.compactHeader
+.gmail-desktop_compact-header
   header
   > div:nth-child(2)
   > div:nth-child(3)
@@ -136,7 +140,7 @@
   padding: 4px !important;
 }
 
-.compactHeader
+.gmail-desktop_compact-header
   header
   > div:nth-child(2)
   > div:nth-child(3)
@@ -148,7 +152,7 @@
   width: 26px !important;
 }
 
-.compactHeader
+.gmail-desktop_compact-header
   header
   > div:nth-child(2)
   > div:nth-child(3)
@@ -156,7 +160,7 @@
   > div:nth-child(2)
   a
   img:hover,
-.compactHeader
+.gmail-desktop_compact-header
   header
   > div:nth-child(2)
   > div:nth-child(3)
@@ -167,7 +171,7 @@
   box-shadow: none !important;
 }
 
-.compactHeader
+.gmail-desktop_compact-header
   header
   > div:nth-child(2)
   > div:nth-child(3)
@@ -180,7 +184,7 @@
 }
 
 /* Header: Google Chat status button */
-.compactHeader
+.gmail-desktop_compact-header
   header
   > div:nth-child(2)
   > div:nth-child(2)
@@ -191,7 +195,7 @@
 }
 
 /* Header: Google Chat status text and icon */
-.compactHeader
+.gmail-desktop_compact-header
   header
   > div:nth-child(2)
   > div:nth-child(2)
@@ -202,7 +206,7 @@
 }
 
 /* Header: Google Chat status dropdown arrow */
-.compactHeader
+.gmail-desktop_compact-header
   header
   > div:nth-child(2)
   > div:nth-child(2)
@@ -213,7 +217,7 @@
 }
 
 /* Header: Google One account ring */
-.compactHeader
+.gmail-desktop_compact-header
   header
   > div:nth-child(2)
   > div:nth-child(3)
@@ -225,7 +229,7 @@
   height: 26px !important;
 }
 
-.compactHeader
+.gmail-desktop_compact-header
   header
   > div:nth-child(2)
   > div:nth-child(3)

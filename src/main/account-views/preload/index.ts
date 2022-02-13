@@ -56,5 +56,7 @@ ipc.on('set-full-screen', (_: Event, enabled: boolean) => {
 })
 
 ipc.on('burger-menu:set-offset', (_event, isOffset: boolean) => {
-  document.body.classList[isOffset ? 'add' : 'remove']('burgerMenu')
+  document.body.classList[isOffset ? 'add' : 'remove'](
+    'gmail-desktop_burger-menu-offset'
+  )
 })

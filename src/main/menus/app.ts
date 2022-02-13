@@ -17,7 +17,11 @@ import {
   setAutoUpdateCheck
 } from '../updater'
 import config, { ConfigKey } from '../config'
-import { setCustomStyle, userStylesPath } from '../account-views/custom-styles'
+import {
+  CustomStyleKey,
+  setCustomStyle,
+  userStylesPath
+} from '../account-views/custom-styles'
 import log from 'electron-log'
 import { showRestartDialog } from '../utils/dialog'
 import { enableAutoFixUserAgent, removeCustomUserAgent } from '../user-agent'
@@ -39,7 +43,7 @@ import { gitHubRepoUrl, gmailUrl } from '../../constants'
 import { openExternalUrl } from '../utils/url'
 
 interface AppearanceMenuItem {
-  key: ConfigKey
+  key: CustomStyleKey
   label: string
   restartRequired?: boolean
   click?: (checked?: boolean) => void
@@ -69,7 +73,7 @@ export function getAppMenu() {
   }: AppearanceMenuItem): MenuItemConstructorOptions => ({
     label,
     type: 'checkbox',
-    checked: config.get(key) as boolean,
+    checked: config.get(key)!,
     click({ checked }: { checked: boolean }) {
       config.set(key, checked)
 

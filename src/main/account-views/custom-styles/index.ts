@@ -30,8 +30,23 @@ export function setBurgerMenuOffset(view: BrowserView) {
   )
 }
 
-export function setCustomStyle(key: ConfigKey, enabled: boolean): void {
-  sendToAccountViews('set-custom-style', key, enabled)
+export type CustomStyleKey =
+  | ConfigKey.CompactHeader
+  | ConfigKey.HideFooter
+  | ConfigKey.HideSupport
+
+const keyToClassMap: Pick<Record<ConfigKey, string>, CustomStyleKey> = {
+  compactHeader: 'compact-header',
+  hideFooter: 'hide-footer',
+  hideSupport: 'hide-support'
+}
+
+export function setCustomStyle(key: CustomStyleKey, enabled: boolean): void {
+  sendToAccountViews(
+    'set-custom-style',
+    `gmail-desktop_${keyToClassMap[key]}`,
+    enabled
+  )
 }
 
 function initFullScreenStyles(view: BrowserView): void {
@@ -53,8 +68,8 @@ export function initCustomStyles(view: BrowserView): void {
     ConfigKey.CompactHeader,
     ConfigKey.HideFooter,
     ConfigKey.HideSupport
-  ]) {
-    setCustomStyle(key, config.get(key) as boolean)
+  ] as CustomStyleKey[]) {
+    setCustomStyle(key, config.get(key)!)
   }
 
   setBurgerMenuOffset(view)
