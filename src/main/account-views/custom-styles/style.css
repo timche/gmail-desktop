@@ -213,8 +213,12 @@
 }
 
 /* Header: Google Chat status dropdown menu */
-.compactHeader .tP {
+body:not([dir='rtl']).compactHeader .tP {
   transform: translateX(-100px);
+}
+
+body[dir='rtl'].compactHeader .tP {
+  transform: translateX(100px);
 }
 
 /* Header: Google One account ring */
