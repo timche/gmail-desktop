@@ -14,10 +14,10 @@
 .gmail-desktop_compact-header header > div:first-of-type > div:first-of-type > div:first-of-type > div:first-of-type,
 .gmail-desktop_compact-header header > div:nth-child(2) > div:first-of-type > div:nth-child(4),
 /* Header: Support */
-.gmail-desktop_compact-header header > div:nth-child(2) > div:nth-child(2) > div:last-of-type > a:first-of-type,
-.gmail-desktop_compact-header header > div:nth-child(2) > div:nth-child(2) > div:last-of-type > div:first-of-type > a,
+.gmail-desktop_compact-header.gmail-desktop_hide-support header > div:nth-child(2) > div:nth-child(2) > div:last-of-type > a:first-of-type,
+.gmail-desktop_compact-header.gmail-desktop_hide-support header > div:nth-child(2) > div:nth-child(2) > div:last-of-type > div:first-of-type > a,
 /* Header: Support (with Google Chat enabled) */
-.gmail-desktop_compact-header header > div:nth-child(2) > div:nth-child(2) > div:last-of-type > div:nth-child(2),
+.gmail-desktop_compact-header.gmail-desktop_hide-support header > div:nth-child(2) > div:nth-child(2) > div:last-of-type > div:nth-child(2),
 /* Header: Google apps */
 .gmail-desktop_compact-header header > div:nth-child(2) > div:nth-child(3) > div:first-of-type > div:first-of-type > div:first-of-type,
 /* Header: Google logo/Google Workspace */
