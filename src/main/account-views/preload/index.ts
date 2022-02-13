@@ -55,6 +55,6 @@ ipc.on('set-full-screen', (_: Event, enabled: boolean) => {
   document.body.classList[enabled ? 'add' : 'remove']('full-screen')
 })
 
-ipc.on('burger-menu-offset', (_event, offset: boolean) => {
-  document.body.classList[offset ? 'add' : 'remove']('burgerMenu')
+ipc.on('burger-menu:set-offset', (_event, isOffset: boolean) => {
+  document.body.classList[isOffset ? 'add' : 'remove']('burgerMenu')
 })

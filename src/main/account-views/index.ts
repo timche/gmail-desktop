@@ -1,6 +1,10 @@
 import * as path from 'path'
 import { BrowserView, BrowserWindow, dialog, session } from 'electron'
-import { addCustomCSS, initCustomStyles } from './custom-styles'
+import {
+  addCustomCSS,
+  initCustomStyles,
+  setBurgerMenuOffset
+} from './custom-styles'
 import { enableAutoFixUserAgent } from '../user-agent'
 import { getMainWindow, sendToMainWindow } from '../main-window'
 import {
@@ -43,6 +47,10 @@ export function getAccountIdByViewId(accountViewId: number) {
   return undefined
 }
 
+export function getHasMultipleAccounts() {
+  return accountViews.size > 1
+}
+
 export function sendToSelectedAccountView(channel: string, ...args: unknown[]) {
   const selectedAccount = getSelectedAccount()
   if (selectedAccount) {
@@ -75,18 +83,16 @@ export function forEachAccountView(
 }
 
 export function updateAccountViewBounds(accountView: BrowserView) {
-  const hasMultipleAccounts = accountViews.size > 1
-  const isUpdateAvailable = getIsUpdateAvailable()
   const { width, height } = getMainWindow().getBounds()
 
   let offset =
     is.macos || config.get(ConfigKey.TitleBarStyle) === 'system' ? 0 : 30 // Linux/Window Title Bar
 
-  if (hasMultipleAccounts) {
+  if (getHasMultipleAccounts()) {
     offset += topElementHeight
   }
 
-  if (isUpdateAvailable) {
+  if (getIsUpdateAvailable()) {
     offset += topElementHeight
   }
 
@@ -97,10 +103,7 @@ export function updateAccountViewBounds(accountView: BrowserView) {
     height: offset ? height - offset : height
   })
 
-  accountView.webContents.send(
-    'burger-menu-offset',
-    is.macos && !isUpdateAvailable && !hasMultipleAccounts
-  )
+  setBurgerMenuOffset(accountView)
 }
 
 export function updateAllAccountViewBounds() {

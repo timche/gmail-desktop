@@ -3,10 +3,11 @@ import * as path from 'path'
 import * as fs from 'fs'
 import config, { ConfigKey } from '../../config'
 import { getMainWindow } from '../../main-window'
-import { sendToAccountViews } from '..'
+import { getHasMultipleAccounts, sendToAccountViews } from '..'
 import css from './style.css'
 import macosCSS from './style.macos.css'
 import { is } from 'electron-util'
+import { getIsUpdateAvailable } from '../../updater'
 
 export const userStylesPath = path.join(app.getPath('userData'), 'custom.css')
 
@@ -20,6 +21,13 @@ export function addCustomCSS(view: BrowserView): void {
   if (fs.existsSync(userStylesPath)) {
     view.webContents.insertCSS(fs.readFileSync(userStylesPath, 'utf8'))
   }
+}
+
+export function setBurgerMenuOffset(view: BrowserView) {
+  view.webContents.send(
+    'burger-menu:set-offset',
+    is.macos && !getIsUpdateAvailable() && !getHasMultipleAccounts()
+  )
 }
 
 export function setCustomStyle(key: ConfigKey, enabled: boolean): void {
@@ -45,8 +53,10 @@ export function initCustomStyles(view: BrowserView): void {
     ConfigKey.CompactHeader,
     ConfigKey.HideFooter,
     ConfigKey.HideSupport
-  ])
+  ]) {
     setCustomStyle(key, config.get(key) as boolean)
+  }
 
+  setBurgerMenuOffset(view)
   initFullScreenStyles(view)
 }
