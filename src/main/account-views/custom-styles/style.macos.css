@@ -14,7 +14,7 @@
 /* Header: Settings */
 .gmail-desktop_compact-header header > div:nth-child(2) > div:nth-child(2) > div:last-of-type > div:last-of-type,
 /* Header: Account */
-.gmail-desktop_compact-header header div[href*='accounts.google.com'] {
+.gmail-desktop_compact-header header > div:nth-child(2) > div:nth-child(3) > div:first-of-type > div:nth-child(2) {
   -webkit-app-region: no-drag;
 }
 
