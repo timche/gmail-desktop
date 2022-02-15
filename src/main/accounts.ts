@@ -13,6 +13,7 @@ import { initOrUpdateDockMenu } from './menus/dock'
 import { initOrUpdateTrayMenu } from './menus/tray'
 import { Account } from '../types'
 import { defaultAccountId } from '../constants'
+import { is } from 'electron-util'
 
 export function getAccount(accountId: string) {
   return getAccounts().find(({ id }) => id === accountId)
@@ -98,7 +99,9 @@ export function getAccountsMenuItems(withAccelerator?: boolean) {
       selectAccount(id)
       showMainWindow()
     },
-    accelerator: withAccelerator ? `CommandOrControl+${index + 1}` : undefined
+    accelerator: withAccelerator
+      ? `${is.linux ? 'Alt' : 'CommandOrControl'}+${index + 1}`
+      : undefined
   }))
 }
 
