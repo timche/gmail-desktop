@@ -1,11 +1,9 @@
 import * as path from 'path'
 import { app, BrowserWindow, nativeTheme, ipcMain } from 'electron'
 import { is } from 'electron-util'
-import { getSelectedAccount } from '../accounts'
 import config, { ConfigKey } from '../config'
 import { toggleAppVisiblityTrayItem } from '../tray'
 import {
-  getAccountView,
   getSelectedAccountView,
   updateAllAccountViewBounds
 } from '../account-views'
@@ -90,25 +88,6 @@ export function createMainWindow(): void {
   }
 
   mainWindow.loadFile(path.resolve(__dirname, indexHTML))
-
-  mainWindow.on('app-command', (_event, command) => {
-    const selectedAccount = getSelectedAccount()
-
-    if (!selectedAccount) {
-      return
-    }
-
-    const accountView = getAccountView(selectedAccount.id)
-
-    if (command === 'browser-backward' && accountView.webContents.canGoBack()) {
-      accountView.webContents.goBack()
-    } else if (
-      command === 'browser-forward' &&
-      accountView.webContents.canGoForward()
-    ) {
-      accountView.webContents.goForward()
-    }
-  })
 
   mainWindow.on('close', (event) => {
     // Workaround: Closing the main window when on full screen leaves a black screen
