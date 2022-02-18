@@ -64,7 +64,9 @@ function enableDarkMode(): void {
         '#kbd > div:nth-child(2) span:empty',
         // Input tool - menu up/down and left/right icons
         'body > div[id*="ita-"] > div:nth-child(2) > div > div:nth-child(2) > div > a span:empty',
-        'body > div[id*="ita-"] > div:nth-child(2) > div > div:nth-child(3) > div > a span:empty'
+        'body > div[id*="ita-"] > div:nth-child(2) > div > div:nth-child(3) > div > a span:empty',
+        // Input tool - handwriting panel drag handle
+        'div[tabindex="-1"][style*="left:"][style*="top:"][style*="user-select: none"].notranslate > div:nth-child(5):empty'
       ],
       disableStyleSheetsProxy: false
     }
