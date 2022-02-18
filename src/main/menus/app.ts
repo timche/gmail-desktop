@@ -472,21 +472,27 @@ export function getAppMenu() {
         },
         {
           label: `Hide ${app.name}`,
-          accelerator: 'CommandOrControl+H',
+          visible: is.macos,
           role: 'hide'
         },
         {
           label: 'Hide Others',
-          accelerator: 'CommandOrControl+Shift+H',
+          visible: is.macos,
           role: 'hideOthers'
         },
         {
           label: 'Show All',
+          visible: is.macos,
           role: 'unhide'
         },
-        {
-          type: 'separator'
-        },
+        is.macos
+          ? {
+              type: 'separator'
+            }
+          : {
+              label: 'hidden separator',
+              visible: false
+            },
         {
           label: `Quit ${app.name}`,
           accelerator: 'CommandOrControl+Q',
