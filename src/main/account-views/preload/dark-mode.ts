@@ -53,7 +53,20 @@ function enableDarkMode(): void {
         // Hangouts Phone
         '.a8V',
         // Labels
-        '.aEe, .aEc.aHS-bnr .qj'
+        '.aEe, .aEc.aHS-bnr .qj',
+        // Input tool - most icons
+        '[class*="ita-icon-"]',
+        // Input tool - settings menu bar icons
+        'body > div[id*="ita-"] > div:nth-child(1) > div:last-child > span:empty',
+        // Input tool - virtual keyboard top right icons
+        '#kbd > div:nth-child(1) > div:nth-child(2) div:empty',
+        // Input tool - virtual keyboard button icons
+        '#kbd > div:nth-child(2) span:empty',
+        // Input tool - menu up/down and left/right icons
+        'body > div[id*="ita-"] > div:nth-child(2) > div > div:nth-child(2) > div > a span:empty',
+        'body > div[id*="ita-"] > div:nth-child(2) > div > div:nth-child(3) > div > a span:empty',
+        // Input tool - handwriting panel drag handle
+        'div[tabindex="-1"][style*="left:"][style*="top:"][style*="user-select: none"].notranslate > div:nth-child(5):empty'
       ],
       disableStyleSheetsProxy: false
     }
