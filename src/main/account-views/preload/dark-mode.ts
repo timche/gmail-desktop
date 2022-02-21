@@ -36,6 +36,29 @@ function enableDarkMode(): void {
           .z0 > .L3 {
             background-color: ${darkTheme.bg[1]} !important;
           }
+
+          /* [Custom User Agent only] Sign-in page: Random filled sections */
+          div#view_container > div > div[role='presentation'] > div[role='presentation'] > div[role='presentation'] {
+            border-color: transparent !important;
+          }
+
+          /* [Custom User Agent only] Sign-in page: Fix border */
+          div#initialView > * {
+            background-color: transparent !important;
+            border-color: #776e62 !important; // Hard-coded border color
+          }
+
+          /* [Custom User Agent only] Sign-in page: Buttons */
+          .VfPpkd-LgbsSe.VfPpkd-LgbsSe-OWXEXe-k8QpJ.VfPpkd-LgbsSe-OWXEXe-dgl2Hf.nCP5yc.AjY5Oe.DuMIQc.qIypjc.TrZEUc.lw1w4b {
+            border: 1px #776e62 solid !important; // Hard-coded border color
+            border-radius: 8px !important;
+          }
+
+          /* [Custom User Agent only] Sign-in page: Fix buttons */
+          .VfPpkd-RLmnJb,
+          .VfPpkd-Jh9lGc {
+            background-color: transparent !important;
+          }
         `,
       ignoreImageAnalysis: [],
       ignoreInlineStyle: [],
