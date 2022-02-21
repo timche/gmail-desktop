@@ -48,7 +48,7 @@ function enableDarkMode(): void {
             border-color: #776e62 !important; // Hard-coded border color
           }
 
-          /* Sign-in page - add border to some buttons */
+          /* [Custom User Agent only] Sign-in page - add border to some buttons */
           .VfPpkd-LgbsSe.VfPpkd-LgbsSe-OWXEXe-k8QpJ.VfPpkd-LgbsSe-OWXEXe-dgl2Hf.nCP5yc.AjY5Oe.DuMIQc.qIypjc.TrZEUc.lw1w4b {
             border: 1px #776e62 solid !important; // Hard-coded border color
             border-radius: 8px !important;
