@@ -42,7 +42,7 @@ function enableDarkMode(): void {
             border-color: transparent !important;
           }
 
-          /* Sign-in page - fix border */
+          /* [Custom User Agent only] Sign-in page - fix border */
           div#initialView > * {
             background-color: transparent !important;
             border-color: #776e62 !important; // Hard-coded border color
