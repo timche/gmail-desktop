@@ -216,6 +216,15 @@
   top: 1px !important;
 }
 
+/* Header: Google Chat status dropdown menu */
+:not([dir='rtl']).gmail-desktop_compact-header .tP {
+  transform: translateX(-100px);
+}
+
+[dir='rtl'].gmail-desktop_compact-header .tP {
+  transform: translateX(100px);
+}
+
 /* Header: Google One account ring */
 .gmail-desktop_compact-header
   header
