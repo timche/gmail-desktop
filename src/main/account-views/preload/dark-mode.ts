@@ -54,7 +54,7 @@ function enableDarkMode(): void {
             border-radius: 8px !important;
           }
 
-          /* Sign-in page - fix button borders */
+          /* [Custom User Agent only] Sign-in page - fix button borders */
           .VfPpkd-RLmnJb,
           .VfPpkd-Jh9lGc {
             background-color: transparent !important;
