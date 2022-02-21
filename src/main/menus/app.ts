@@ -50,6 +50,24 @@ interface AppearanceMenuItem {
 }
 
 export function getAppMenu() {
+  const macOSWindowItems: MenuItemConstructorOptions[] = [
+    {
+      label: `Hide ${app.name}`,
+      role: 'hide'
+    },
+    {
+      label: 'Hide Others',
+      role: 'hideOthers'
+    },
+    {
+      label: 'Show All',
+      role: 'unhide'
+    },
+    {
+      type: 'separator'
+    }
+  ]
+
   const appearanceMenuItems: AppearanceMenuItem[] = [
     {
       key: ConfigKey.CompactHeader,
@@ -470,23 +488,7 @@ export function getAppMenu() {
         {
           type: 'separator'
         },
-        {
-          label: `Hide ${app.name}`,
-          accelerator: 'CommandOrControl+H',
-          role: 'hide'
-        },
-        {
-          label: 'Hide Others',
-          accelerator: 'CommandOrControl+Shift+H',
-          role: 'hideOthers'
-        },
-        {
-          label: 'Show All',
-          role: 'unhide'
-        },
-        {
-          type: 'separator'
-        },
+        ...(is.macos ? macOSWindowItems : []),
         {
           label: `Quit ${app.name}`,
           accelerator: 'CommandOrControl+Q',
