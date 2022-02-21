@@ -37,7 +37,7 @@ function enableDarkMode(): void {
             background-color: ${darkTheme.bg[1]} !important;
           }
 
-          /* Sign-in page - remove weird filled sections */
+          /* [Custom User Agent only] Sign-in page - remove weird filled sections */
           div#view_container > div > div[role='presentation'] > div[role='presentation'] > div[role='presentation'] {
             border-color: transparent !important;
           }
