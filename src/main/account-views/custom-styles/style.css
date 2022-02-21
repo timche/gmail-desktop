@@ -213,13 +213,11 @@
 }
 
 /* Header: Google Chat status dropdown menu */
-:not([dir='rtl']).gmail-desktop_compact-header
-  [style*='top:'][style*='left:'][style*='visibility:'] {
+:not([dir='rtl']).gmail-desktop_compact-header .tP {
   transform: translateX(-100px);
 }
 
-[dir='rtl'].gmail-desktop_compact-header
-  [style*='top:'][style*='left:'][style*='visibility:'] {
+[dir='rtl'].gmail-desktop_compact-header .tP {
   transform: translateX(100px);
 }
 
