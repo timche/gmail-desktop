@@ -17,7 +17,7 @@
 - [Menu bar mode](#menu-bar-mode-macos) _(macOS)_
 - Unread badge in dock _(macOS)_
 - Unread icon in tray _(Linux/Windows)_
-- Desktop notifications (you must [enable desktop notifications in Gmail](https://support.google.com/mail/answer/1075549?hl=en-GB&co=GENIE.Platform%3DDesktop) for this to work)
+- Desktop notifications (you must [enable desktop notifications in Gmail](https://support.google.com/mail/answer/1075549?co=GENIE.Platform%3DDesktop) for this to work)
 - Silent auto-updates
 - Cross-platform
 
