@@ -9,7 +9,7 @@ export const darkTheme = {
   bg: ['#121212', '#1d1d1d', '#222222'] as const,
   selection: '#bee3f8',
   text: {
-    mediumEmphasis: 'rgba(255, 255, 255, 0.6)',
+    mediumEmphasis: '#e8e6e3',
     disabled: '#9e9e9e'
   }
 }

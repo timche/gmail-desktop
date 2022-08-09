@@ -59,6 +59,12 @@ function enableDarkMode(): void {
           .VfPpkd-Jh9lGc {
             background-color: transparent !important;
           }
+
+          /* Labels */
+          .aEc.aHS-bnr .qj {
+            background-color: ${darkTheme.text.mediumEmphasis} !important;
+            opacity: 0.71 !important;
+          }
         `,
       ignoreImageAnalysis: [],
       ignoreInlineStyle: [],
@@ -75,8 +81,6 @@ function enableDarkMode(): void {
         '.aj2',
         // Hangouts Phone
         '.a8V',
-        // Labels
-        '.aEe, .aEc.aHS-bnr .qj',
         // Input tool - most icons
         '[class*="ita-icon-"]',
         // Input tool - settings menu bar icons
