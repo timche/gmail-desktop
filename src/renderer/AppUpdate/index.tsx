@@ -75,23 +75,26 @@ export default function AppUpdate({
       return (
         <>
           <Text fontSize="xs">An update is available {normalizedVersion}</Text>
-          <Button
-            variant="solid"
-            onClick={() => {
-              onDownload()
-            }}
-          >
-            Download Now
-          </Button>
-          {releaseNotesButton}
-          <Button
-            onClick={() => {
-              onSkipVersion(version)
-            }}
-          >
-            Skip This Version
-          </Button>
-          <Button onClick={onDismiss}>Remind Me Later</Button>
+          <Spacer />
+          <HStack>
+            {releaseNotesButton}
+            <Button
+              onClick={() => {
+                onSkipVersion(version)
+              }}
+            >
+              Skip This Version
+            </Button>
+            <Button onClick={onDismiss}>Remind Me Later</Button>
+            <Button
+              variant="solid"
+              onClick={() => {
+                onDownload()
+              }}
+            >
+              Download Now
+            </Button>
+          </HStack>
         </>
       )
     }
@@ -99,15 +102,19 @@ export default function AppUpdate({
     if (status === 'downloading') {
       return (
         <>
-          <Text fontSize="xs">Downloading update {normalizedVersion}</Text>
-          <Progress
-            value={downloadPercent}
-            size="sm"
-            width="100px"
-            borderRadius="100px"
-          />
-          <Button onClick={onCancelDownload}>Cancel</Button>
-          {releaseNotesButton}
+          <HStack flex={1}>
+            <Text fontSize="xs">
+              Downloading update {normalizedVersion} ...
+            </Text>
+            {releaseNotesButton}
+            <Progress
+              value={downloadPercent}
+              size="sm"
+              flex={1}
+              borderRadius="100px"
+            />
+            <Button onClick={onCancelDownload}>Cancel</Button>
+          </HStack>
         </>
       )
     }
@@ -116,14 +123,16 @@ export default function AppUpdate({
       return (
         <>
           <Text fontSize="xs">
-            A restart is required to install the update {normalizedVersion}
+            An app restart is required to install the update {normalizedVersion}
           </Text>
           <Spacer />
-          <Button variant="solid" onClick={onRestart}>
-            Restart
-          </Button>
-          <Button onClick={onDismiss}>Later</Button>
-          {releaseNotesButton}
+          <HStack>
+            {releaseNotesButton}
+            <Button onClick={onDismiss}>Later</Button>
+            <Button variant="solid" onClick={onRestart}>
+              Restart now
+            </Button>
+          </HStack>
         </>
       )
     }
@@ -131,9 +140,5 @@ export default function AppUpdate({
     return null
   }
 
-  return (
-    <Alert height={`${topElementHeight}px`} justifyContent="center">
-      <HStack>{renderContent()}</HStack>
-    </Alert>
-  )
+  return <Alert height={`${topElementHeight}px`}>{renderContent()}</Alert>
 }
