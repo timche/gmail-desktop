@@ -9,7 +9,8 @@ import {
 } from '@chakra-ui/react'
 import { AppUpdateStatus } from '../../types'
 import { topElementHeight } from '../../constants'
-import { appRegionNoDragStyle } from '../helpers'
+import { appRegionNoDragStyle, isMacOS } from '../helpers'
+import TrafficLightsSpace from '../TrafficLightsSpace'
 
 function Button({
   onClick,
@@ -140,5 +141,10 @@ export default function AppUpdate({
     return null
   }
 
-  return <Alert height={`${topElementHeight}px`}>{renderContent()}</Alert>
+  return (
+    <Alert height={`${topElementHeight}px`}>
+      {isMacOS && <TrafficLightsSpace />}
+      {renderContent()}
+    </Alert>
+  )
 }
