@@ -6,7 +6,7 @@ export const lightTheme = {
 }
 
 export const darkTheme = {
-  bg: ['#121212', '#1d1d1d', '#222222'] as const,
+  bg: ['#121212', '#1e1e1e', '#1e1e1e', '#242424'] as const,
   selection: '#bee3f8',
   text: {
     mediumEmphasis: '#e8e6e3',

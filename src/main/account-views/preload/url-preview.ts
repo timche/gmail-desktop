@@ -11,7 +11,7 @@ export function initUrlPreview() {
       urlPreviewElement = document.createElement('div')
       urlPreviewElement.className = 'gmail-desktop_url-preview'
       urlPreviewElement.style.color = darkTheme.text.mediumEmphasis
-      urlPreviewElement.style.background = darkTheme.bg[2]
+      urlPreviewElement.style.background = darkTheme.bg[3]
       urlPreviewElement.textContent = target.href
       document.body.append(urlPreviewElement)
     }

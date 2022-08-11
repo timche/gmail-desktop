@@ -12,6 +12,11 @@ function enableDarkMode(): void {
     },
     {
       css: `
+          /* Search */
+          #aso_search_form_anchor {
+            background-color: ${darkTheme.bg[1]} !important;
+          }
+
           /* Read email */
           .yO {
             background-color: ${darkTheme.bg[0]} !important;
