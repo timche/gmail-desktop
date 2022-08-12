@@ -78,15 +78,6 @@ export default function AppUpdate({
           <Text fontSize="xs">An update is available {normalizedVersion}</Text>
           <Spacer />
           <HStack>
-            {releaseNotesButton}
-            <Button
-              onClick={() => {
-                onSkipVersion(version)
-              }}
-            >
-              Skip This Version
-            </Button>
-            <Button onClick={onDismiss}>Remind Me Later</Button>
             <Button
               variant="solid"
               onClick={() => {
@@ -95,6 +86,15 @@ export default function AppUpdate({
             >
               Download Now
             </Button>
+            <Button onClick={onDismiss}>Remind Later</Button>
+            <Button
+              onClick={() => {
+                onSkipVersion(version)
+              }}
+            >
+              Skip Version
+            </Button>
+            {releaseNotesButton}
           </HStack>
         </>
       )
@@ -107,7 +107,7 @@ export default function AppUpdate({
             <Text fontSize="xs">
               Downloading update {normalizedVersion} ...
             </Text>
-            {releaseNotesButton}
+            <Text fontSize="xs">{downloadPercent}%</Text>
             <Progress
               value={downloadPercent}
               size="sm"
@@ -115,6 +115,7 @@ export default function AppUpdate({
               borderRadius="100px"
             />
             <Button onClick={onCancelDownload}>Cancel</Button>
+            {releaseNotesButton}
           </HStack>
         </>
       )
@@ -128,11 +129,11 @@ export default function AppUpdate({
           </Text>
           <Spacer />
           <HStack>
-            {releaseNotesButton}
-            <Button onClick={onDismiss}>Later</Button>
             <Button variant="solid" onClick={onRestart}>
-              Restart now
+              Restart Now
             </Button>
+            <Button onClick={onDismiss}>Later</Button>
+            {releaseNotesButton}
           </HStack>
         </>
       )
