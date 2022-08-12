@@ -3,6 +3,10 @@ const path = require('path')
 const toPath = (_path) => path.join(process.cwd(), _path)
 
 module.exports = {
+  core: {
+    builder: 'webpack5',
+    disableTelemetry: true
+  },
   stories: ['../src/renderer/**/stories.tsx'],
   addons: [
     '@storybook/addon-toolbars',

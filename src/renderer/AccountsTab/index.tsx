@@ -48,7 +48,6 @@ function AccountsTab({
         {accounts.map(({ id, label, unreadCount, selected }) => {
           return (
             <Tab
-              colorScheme="gray"
               key={id}
               _active={{
                 bg: activeBg,
