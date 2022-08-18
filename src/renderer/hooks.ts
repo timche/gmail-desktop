@@ -20,6 +20,9 @@ export function useDarkMode() {
 
 export function useAccounts() {
   const [accounts, setAccounts] = useState<Account[]>([])
+  const [isEditingAccounts, setIsEditingAccounts] = useState(false)
+  const [editAccount, setEditAccount] = useState<Account>()
+  const [isAddingAccount, setIsAddingAccount] = useState(false)
   const [unreadCounts, setUnreadCounts] = useState<UnreadCounts>({})
 
   useEffect(() => {
@@ -32,10 +35,64 @@ export function useAccounts() {
     ipc.on('unread-counts-updated', (updatedUnreadCounts: UnreadCounts) => {
       setUnreadCounts(updatedUnreadCounts)
     })
+
+    ipc.on('edit-accounts', () => {
+      setIsEditingAccounts(true)
+    })
+
+    ipc.on('add-account', () => {
+      setIsEditingAccounts(true)
+      setIsAddingAccount(true)
+    })
   }, [])
 
   const selectAccount = (accountId: string) => {
     ipc.send('select-account', accountId)
+  }
+
+  const closeEditAccounts = () => {
+    ipc.send('close-edit-accounts')
+    setIsEditingAccounts(false)
+  }
+
+  const editAccountById = (accountId: string) => {
+    const account = accounts.find(({ id }) => id === accountId)
+
+    if (account) {
+      setEditAccount(account)
+    }
+  }
+
+  const isEditingAccount = Boolean(editAccount)
+
+  const cancelEditAccount = () => {
+    setEditAccount(undefined)
+  }
+
+  const saveEditAccount = (account: Except<Account, 'selected'>) => {
+    ipc.send('save-edit-account', account)
+    setEditAccount(undefined)
+  }
+
+  const removeAccount = (accountId: string) => {
+    ipc.send('remove-account', accountId)
+
+    if (isEditingAccount) {
+      setEditAccount(undefined)
+    }
+  }
+
+  const addAccount = () => {
+    setIsAddingAccount(true)
+  }
+
+  const saveAddAccount = (account: Except<Account, 'selected'>) => {
+    ipc.send('save-add-account', account)
+    setIsAddingAccount(false)
+  }
+
+  const cancelAddAccount = () => {
+    setIsAddingAccount(false)
   }
 
   return {
@@ -43,62 +100,23 @@ export function useAccounts() {
       ...account,
       unreadCount: unreadCounts[account.id]
     })),
-    selectAccount
-  }
-}
+    selectAccount,
 
-export function useAddAccount() {
-  const [isAddingAccount, setIsAddingAccount] = useState(false)
+    isEditingAccounts,
+    closeEditAccounts,
 
-  useEffect(() => {
-    ipc.on('add-account-request', () => {
-      setIsAddingAccount(true)
-    })
-  }, [])
-
-  const addAccount = (account: Except<Account, 'selected'>) => {
-    ipc.send('add-account', account)
-    setIsAddingAccount(false)
-  }
-
-  const cancelAddAccount = () => {
-    ipc.send('add-account-cancel')
-    setIsAddingAccount(false)
-  }
-
-  return { isAddingAccount, addAccount, cancelAddAccount }
-}
-
-export function useEditAccount() {
-  const [editingAccount, setEditingAccount] = useState<Account>()
-
-  useEffect(() => {
-    ipc.on('edit-account-request', (account: Account) => {
-      setEditingAccount(account)
-    })
-  }, [])
-
-  const saveEditAccount = (account: Except<Account, 'selected'>) => {
-    ipc.send('edit-account-save', account)
-    setEditingAccount(undefined)
-  }
-
-  const cancelEditAccount = () => {
-    ipc.send('edit-account-cancel')
-    setEditingAccount(undefined)
-  }
-
-  const removeAccount = (accountId: string) => {
-    ipc.send('remove-account', accountId)
-    setEditingAccount(undefined)
-  }
-
-  return {
-    isEditingAccount: Boolean(editingAccount),
-    editingAccount,
-    saveEditAccount,
+    editAccountById,
+    isEditingAccount,
+    editAccount,
     cancelEditAccount,
-    removeAccount
+    saveEditAccount,
+
+    removeAccount,
+
+    isAddingAccount,
+    addAccount,
+    cancelAddAccount,
+    saveAddAccount
   }
 }
 

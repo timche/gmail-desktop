@@ -63,6 +63,7 @@ function EditAccount({
       <Flex justifyContent="flex-end">
         <Button
           colorScheme="red"
+          variant="outline"
           onClick={() => {
             onRemove(id)
           }}

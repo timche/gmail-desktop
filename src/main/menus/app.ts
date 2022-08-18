@@ -131,6 +131,17 @@ export function getAppMenu() {
           type: 'separator'
         },
         {
+          label: 'Accounts',
+          click() {
+            const accounts = getAccounts()
+            if (accounts) {
+              sendToMainWindow('edit-accounts')
+              hideAccountViews()
+              showMainWindow()
+            }
+          }
+        },
+        {
           label: 'Preferences',
           submenu: [
             {
@@ -517,63 +528,6 @@ export function getAppMenu() {
       ]
     },
     {
-      label: 'Account',
-      submenu: [
-        ...getAccountsMenuItems(true),
-        {
-          type: 'separator'
-        },
-        {
-          label: 'Add Account',
-          click() {
-            sendToMainWindow('add-account-request')
-            hideAccountViews()
-            showMainWindow()
-          }
-        },
-        {
-          label: 'Edit Account',
-          click() {
-            const selectedAccount = getSelectedAccount()
-            if (selectedAccount) {
-              sendToMainWindow('edit-account-request', selectedAccount)
-              hideAccountViews()
-              showMainWindow()
-            }
-          }
-        },
-        {
-          label: 'Remove Account',
-          async click() {
-            const selectedAccount = getSelectedAccount()
-
-            if (selectedAccount) {
-              showMainWindow()
-
-              if (isDefaultAccount(selectedAccount.id)) {
-                dialog.showMessageBox({
-                  type: 'info',
-                  message: "The default account can't be removed."
-                })
-                return
-              }
-
-              const { response } = await dialog.showMessageBox({
-                type: 'warning',
-                message:
-                  'Do you really want to remove the currently selected account?',
-                buttons: ['Confirm', 'Cancel']
-              })
-
-              if (response === 0) {
-                removeAccount(selectedAccount.id)
-              }
-            }
-          }
-        }
-      ]
-    },
-    {
       role: 'editMenu',
       submenu: [
         {
@@ -616,6 +570,10 @@ export function getAppMenu() {
     {
       label: 'View',
       submenu: [
+        ...getAccountsMenuItems(true),
+        {
+          type: 'separator'
+        },
         {
           label: 'Dark Mode',
           submenu: [

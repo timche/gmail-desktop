@@ -6,27 +6,29 @@ import AddAccount from './AddAccount'
 import EditAccount from './EditAccount'
 import AppUpdate from './AppUpdate'
 import ReleaseNotes from './ReleaseNotes'
-import {
-  useAccounts,
-  useAddAccount,
-  useDarkMode,
-  useEditAccount,
-  useAppUpdate,
-  useTitleBar
-} from './hooks'
+import { useAccounts, useDarkMode, useAppUpdate, useTitleBar } from './hooks'
 import TitleBar from './TitleBar'
 import { appRegionDragStyle } from './helpers'
+import Accounts from './Accounts'
 
 export default function App() {
-  const { accounts, selectAccount } = useAccounts()
-  const { isAddingAccount, addAccount, cancelAddAccount } = useAddAccount()
   const {
+    accounts,
+    selectAccount,
+    isEditingAccounts,
+    closeEditAccounts,
+    editAccountById,
     isEditingAccount,
-    editingAccount,
-    saveEditAccount,
+    editAccount,
     cancelEditAccount,
-    removeAccount
-  } = useEditAccount()
+    saveEditAccount,
+    removeAccount,
+    isAddingAccount,
+    addAccount,
+    cancelAddAccount,
+    saveAddAccount
+  } = useAccounts()
+
   const {
     updateStatus,
     updateInfo,
@@ -39,6 +41,7 @@ export default function App() {
     isReleaseNotesVisible,
     skipUpdateVersion
   } = useAppUpdate()
+
   const {
     isTitleBarEnabled,
     isWindowMaximized,
@@ -84,16 +87,28 @@ export default function App() {
 
   const renderContent = () => {
     if (isAddingAccount) {
-      return <AddAccount onAdd={addAccount} onCancel={cancelAddAccount} />
+      return <AddAccount onAdd={saveAddAccount} onCancel={cancelAddAccount} />
     }
 
-    if (isEditingAccount && editingAccount) {
+    if (editAccount) {
       return (
         <EditAccount
-          account={editingAccount}
+          account={editAccount}
           onSave={saveEditAccount}
           onCancel={cancelEditAccount}
           onRemove={removeAccount}
+        />
+      )
+    }
+
+    if (isEditingAccounts) {
+      return (
+        <Accounts
+          accounts={accounts}
+          onEdit={editAccountById}
+          onRemove={removeAccount}
+          onAdd={addAccount}
+          onClose={closeEditAccounts}
         />
       )
     }
@@ -122,7 +137,10 @@ export default function App() {
         accounts={accounts}
         onSelectAccount={selectAccount}
         isDisabled={
-          isAddingAccount || isEditingAccount || isReleaseNotesVisible
+          isEditingAccounts ||
+          isEditingAccount ||
+          isAddingAccount ||
+          isReleaseNotesVisible
         }
         style={isTitleBarEnabled ? undefined : appRegionDragStyle}
       >

@@ -139,12 +139,14 @@ export function showAccountViews() {
   const mainWindow = getMainWindow()
 
   for (const [_accountId, accountView] of accountViews) {
+    console.log('>', _accountId)
     mainWindow.addBrowserView(accountView)
   }
 
   const selectedAccount = getSelectedAccount()
 
   if (selectedAccount) {
+    console.log('>>', selectAccount)
     selectAccountView(selectedAccount.id)
   }
 }
@@ -190,11 +192,11 @@ export function createAccountView(accountId: string, setAsTopView?: boolean) {
 
   const mainWindow = getMainWindow()
 
-  mainWindow.addBrowserView(accountView)
-
   if (setAsTopView) {
     mainWindow.setTopBrowserView(accountView)
   }
+
+  mainWindow.addBrowserView(accountView)
 
   addContextMenu(accountView)
 
@@ -247,7 +249,7 @@ export function createAccountView(accountId: string, setAsTopView?: boolean) {
 
       // `Add account` opens `accounts.google.com`
       if (url.startsWith(googleAccountsUrl)) {
-        sendToMainWindow('add-account-request')
+        sendToMainWindow('add-account')
         hideAccountViews()
         return
       }

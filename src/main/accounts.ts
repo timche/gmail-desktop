@@ -66,8 +66,7 @@ export function addAccount(addedAccount: Account) {
     .map((account) => ({ ...account, selected: false }))
     .concat({ ...addedAccount, selected: true })
   sendToMainWindow('accounts-updated', accounts)
-  createAccountView(addedAccount.id, true)
-  updateAllAccountViewBounds()
+  createAccountView(addedAccount.id)
   config.set(ConfigKey.Accounts, accounts)
   initOrUpdateAppMenu()
   initOrUpdateDockMenu()
@@ -75,7 +74,7 @@ export function addAccount(addedAccount: Account) {
 }
 
 export function removeAccount(accountId: string) {
-  const accounts = getAccounts().filter((account) => account.id !== accountId)
+  const accounts = getAccounts().filter(({ id }) => id !== accountId)
 
   const defaultAccount = accounts.find(({ id }) => id === defaultAccountId)
 
@@ -93,16 +92,20 @@ export function removeAccount(accountId: string) {
 }
 
 export function getAccountsMenuItems(withAccelerator?: boolean) {
-  return config.get(ConfigKey.Accounts).map(({ id, label }, index) => ({
-    label,
-    click() {
-      selectAccount(id)
-      showMainWindow()
-    },
-    accelerator: withAccelerator
-      ? `${is.linux ? 'Alt' : 'CommandOrControl'}+${index + 1}`
-      : undefined
-  }))
+  const accountsMenuItems = config
+    .get(ConfigKey.Accounts)
+    .map(({ id, label }, index) => ({
+      label,
+      click() {
+        selectAccount(id)
+        showMainWindow()
+      },
+      accelerator: withAccelerator
+        ? `${is.linux ? 'Alt' : 'CommandOrControl'}+${index + 1}`
+        : undefined
+    }))
+
+  return accountsMenuItems.length > 1 ? accountsMenuItems : []
 }
 
 export function initAccounts() {
@@ -114,26 +117,19 @@ export function initAccounts() {
     selectAccount(accountId)
   })
 
-  ipcMain.on('edit-account-save', (_event, account: Account) => {
+  ipcMain.on('close-edit-accounts', () => {
     showAccountViews()
+  })
+
+  ipcMain.on('save-edit-account', (_event, account: Account) => {
     editAccount(account)
   })
 
-  ipcMain.on('edit-account-cancel', () => {
-    showAccountViews()
-  })
-
-  ipcMain.on('add-account', (_event, account: Account) => {
-    showAccountViews()
+  ipcMain.on('save-add-account', (_event, account: Account) => {
     addAccount(account)
   })
 
-  ipcMain.on('add-account-cancel', () => {
-    showAccountViews()
-  })
-
   ipcMain.on('remove-account', (_event, accountId: string) => {
-    showAccountViews()
     removeAccount(accountId)
   })
 
