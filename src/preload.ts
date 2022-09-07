@@ -13,9 +13,7 @@ initDarkMode()
 
 function getUnreadCount(): number {
   // Find the number next to the inbox label
-  const navigation = document.querySelector(
-    'div[role=navigation] [href*="#inbox"]'
-  )
+  const navigation = document.querySelector('span > a[href*="#inbox"]')
 
   if (navigation) {
     const label: HTMLLabelElement | null = navigation.parentElement!.parentElement!.querySelector(
