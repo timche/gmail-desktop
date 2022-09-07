@@ -41,6 +41,7 @@ function enableDarkMode(): void {
         `,
       ignoreImageAnalysis: [],
       ignoreInlineStyle: [],
+      disableStyleSheetsProxy: false,
       invert: [
         // Mail (e.g. Search Dropdown)
         '.gsoi_0',
