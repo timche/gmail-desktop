@@ -12,58 +12,55 @@ import {
 import htmlReactParser, {
   domToReact,
   attributesToProps,
-  DOMNode,
-  HTMLReactParserOptions
+  HTMLReactParserOptions,
+  Element
 } from 'html-react-parser'
-import { Element as ElementNode } from 'domhandler/lib/node'
-
-function parseDom(nodes: DOMNode[]) {
-  return domToReact(nodes, htmlReactParserOptions)
-}
 
 const htmlReactParserOptions: HTMLReactParserOptions = {
   replace: (domNode) => {
-    if (domNode instanceof ElementNode) {
+    if (domNode instanceof Element) {
       const { name, attribs, children } = domNode
+
+      const parseDom = () => domToReact(children, htmlReactParserOptions)
 
       switch (name) {
         case 'h2':
           return (
             <Heading size="md" mt={4} mb={2}>
-              {parseDom(children)}
+              {parseDom()}
             </Heading>
           )
         case 'p':
-          return <Text mb={3}>{parseDom(children)}</Text>
+          return <Text mb={3}>{parseDom()}</Text>
         case 'ul':
           return (
             <UnorderedList spacing={2} my={2}>
-              {parseDom(children)}
+              {parseDom()}
             </UnorderedList>
           )
         case 'li':
-          return <ListItem>{parseDom(children)}</ListItem>
+          return <ListItem>{parseDom()}</ListItem>
         case 'a':
           return (
             <Link {...attributesToProps(attribs)} color="blue.400">
-              {parseDom(children)}
+              {parseDom()}
             </Link>
           )
         case 'tt':
           return (
             <Code fontSize="xs" color="gray.400">
-              {parseDom(children)}
+              {parseDom()}
             </Code>
           )
         case 'img':
           return <Image {...attributesToProps(attribs)} />
         case 'kbd':
-          return <Kbd>{parseDom(children)}</Kbd>
+          return <Kbd>{parseDom()}</Kbd>
         case 'code':
-          return <Code>{parseDom(children)}</Code>
+          return <Code>{parseDom()}</Code>
         default:
           if (name.startsWith('h')) {
-            return <Heading size="sm">{parseDom(children)}</Heading>
+            return <Heading size="sm">{parseDom()}</Heading>
           }
       }
     }
