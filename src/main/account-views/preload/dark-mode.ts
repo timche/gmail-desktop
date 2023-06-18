@@ -1,6 +1,7 @@
 import { ipcRenderer } from 'electron'
 import * as DarkReader from 'darkreader'
 import { darkTheme } from '../../../theme'
+import { googleAccountsUrl } from '../../../constants'
 
 DarkReader.setFetchMethod(window.fetch)
 
@@ -114,6 +115,10 @@ async function initDarkMode(): Promise<void> {
         enableDarkMode()
       })
     } else {
+      if (window.location.origin === googleAccountsUrl) {
+        return
+      }
+
       window.addEventListener('DOMContentLoaded', () => {
         enableDarkMode()
       })

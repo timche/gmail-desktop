@@ -234,7 +234,15 @@ export function createAccountView(accountId: string, setAsTopView?: boolean) {
     if (url.startsWith('https://www.google.com')) {
       event.preventDefault()
       accountView.webContents.loadURL(
-        `${googleAccountsUrl}/ServiceLogin?service=mail`
+        `${googleAccountsUrl}/ServiceLogin?service=mail&color_scheme=dark`
+      )
+    }
+
+    // Apply dark theme on login page
+    if (url.startsWith(googleAccountsUrl)) {
+      event.preventDefault()
+      accountView.webContents.loadURL(
+        `${url.replace('WebLiteSignIn', 'GlifWebSignIn')}&color_scheme=dark`
       )
     }
   })
