@@ -40,6 +40,7 @@
     "@babel/core": "^7.18.10",
     "@chakra-ui/icons": "^2.0.6",
     "@chakra-ui/react": "^2.2.6",
+    "@electron/notarize": "^2.1.0",
     "@emotion/react": "^11.10.0",
     "@emotion/styled": "^11.10.0",
     "@sindresorhus/tsconfig": "^0.9.0",
@@ -59,11 +60,10 @@
     "del-cli": "^3.0.1",
     "domhandler": "^4.0.0",
     "electron": "^15.3.6",
-    "electron-builder": "^22.10.5",
+    "electron-builder": "^24.4.0",
     "electron-context-menu": "^2.5.0",
     "electron-dl": "^3.2.0",
     "electron-log": "^4.3.2",
-    "electron-notarize": "^1.0.0",
     "electron-store": "^7.0.2",
     "electron-updater": "^4.3.8",
     "electron-util": "^0.14.2",
@@ -164,7 +164,6 @@
       "static/"
     ],
     "appId": "io.cheung.gmail-desktop",
-    "afterSign": "scripts/build-hook-after-sign.js",
     "mac": {
       "category": "public.app-category.productivity",
       "darkModeSupport": true
