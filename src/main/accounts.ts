@@ -35,6 +35,35 @@ export function getSelectedAccount() {
   return getAccounts().find(({ selected }) => selected)
 }
 
+export function getSelectedAccountIndex() {
+  return getAccounts().findIndex(({ selected }) => selected)
+}
+
+export function selectNextAccount() {
+  const accounts = getAccounts()
+  const selectedAccountIndex = getSelectedAccountIndex()
+  const nextAccount = accounts[selectedAccountIndex + 1] ?? accounts[0]
+
+  if (!nextAccount) {
+    return
+  }
+
+  selectAccount(nextAccount.id)
+}
+
+export function selectPreviousAccount() {
+  const accounts = getAccounts()
+  const selectedAccountIndex = getSelectedAccountIndex()
+  const previousAccount =
+    accounts[selectedAccountIndex - 1] ?? accounts[accounts.length - 1]
+
+  if (!previousAccount) {
+    return
+  }
+
+  selectAccount(previousAccount.id)
+}
+
 export function selectAccount(accountId: string) {
   const accounts = getAccounts().map((account) => ({
     ...account,

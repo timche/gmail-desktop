@@ -30,7 +30,9 @@ import {
   getAccountsMenuItems,
   getSelectedAccount,
   isDefaultAccount,
-  removeAccount
+  removeAccount,
+  selectNextAccount,
+  selectPreviousAccount
 } from '../accounts'
 import { getMainWindow, sendToMainWindow, showMainWindow } from '../main-window'
 import {
@@ -520,6 +522,65 @@ export function getAppMenu() {
       label: 'Account',
       submenu: [
         ...getAccountsMenuItems(true),
+        {
+          type: 'separator'
+        },
+        {
+          label: 'Select Next Account',
+          accelerator: 'Ctrl+Tab',
+          click() {
+            selectNextAccount()
+            showMainWindow()
+          }
+        },
+        {
+          label: 'Select Next Account (hidden shortcut 1)',
+          accelerator: 'Cmd+Shift+]',
+          visible: is.development,
+          acceleratorWorksWhenHidden: true,
+          click() {
+            selectNextAccount()
+            showMainWindow()
+          }
+        },
+        {
+          label: 'Select Next Account (hidden shortcut 1)',
+          accelerator: 'Cmd+Option+Right',
+          visible: is.development,
+          acceleratorWorksWhenHidden: true,
+          click() {
+            selectNextAccount()
+            showMainWindow()
+          }
+        },
+        {
+          label: 'Select Previous Account',
+          accelerator: 'Ctrl+Shift+Tab',
+          click() {
+            selectPreviousAccount()
+            showMainWindow()
+          }
+        },
+        {
+          label: 'Select Previous Account (hidden shortcut 1)',
+          accelerator: 'Cmd+Shift+[',
+          visible: is.development,
+          acceleratorWorksWhenHidden: true,
+          click() {
+            selectPreviousAccount()
+            showMainWindow()
+          }
+        },
+        {
+          label: 'Select Previous Account (hidden shortcut 2)',
+          accelerator: 'Cmd+Option+Left',
+          visible: is.development,
+          acceleratorWorksWhenHidden: true,
+          click() {
+            selectPreviousAccount()
+            showMainWindow()
+          }
+        },
         {
           type: 'separator'
         },
