@@ -1,5 +1,4 @@
 import { shell } from 'electron'
-import * as path from 'path'
 import electronDl = require('electron-dl')
 import config, { ConfigKey } from './config'
 import { createNotification } from './utils/notifications'
@@ -10,11 +9,10 @@ export function initDownloads(): void {
   const handleStarted = (item: Electron.DownloadItem) => {
     item.once('done', (_, state) => {
       const fileName = item.getFilename()
+      const filePath = item.getSavePath()
 
       createNotification(`Download ${state}`, fileName, () => {
-        shell.openPath(
-          path.join(config.get(ConfigKey.DownloadsLocation), fileName)
-        )
+        shell.openPath(filePath)
       })
     })
   }
