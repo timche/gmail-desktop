@@ -1,4 +1,4 @@
-import { dialog, shell } from 'electron'
+import { clipboard, dialog, shell } from 'electron'
 import config, { ConfigKey } from '../config'
 
 export function cleanURLFromGoogle(url: string): string {
@@ -19,11 +19,16 @@ export async function openExternalUrl(url: string): Promise<void> {
     if (!trustedHosts.includes(origin)) {
       const { response, checkboxChecked } = await dialog.showMessageBox({
         type: 'info',
-        buttons: ['Open Link', 'Cancel'],
+        buttons: ['Open Link', 'Copy Link', 'Cancel'],
         message: `Do you want to open this external link in your default browser?`,
         checkboxLabel: `Trust all links on ${origin}`,
         detail: cleanURL
       })
+
+      if (response === 1) {
+        clipboard.writeText(cleanURL)
+        return
+      }
 
       if (response !== 0) return
 
