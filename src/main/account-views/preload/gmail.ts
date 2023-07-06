@@ -22,7 +22,7 @@ const mailActions = {
   markAsSpam: 'sp'
 }
 
-const inboxElementSelector = 'div[role=navigation] a[href*="#inbox"]'
+const inboxElementSelector = 'span > a[href*="#inbox"]'
 
 let actionToken: string | undefined
 let inboxParentElement: Element | undefined
