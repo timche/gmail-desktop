@@ -70,7 +70,7 @@ export function selectAccountView(accountId: string) {
   const mainWindow = getMainWindow()
 
   mainWindow.setTopBrowserView(accountView)
-  accountView.webContents.focus()
+  // AccountView.webContents.focus()
   accountView.webContents.send('account-selected')
 }
 
@@ -247,65 +247,78 @@ export function createAccountView(accountId: string, setAsTopView?: boolean) {
     }
   })
 
-  accountView.webContents.on(
-    'new-window',
-    // eslint-disable-next-line max-params
-    (event: any, url, _1, _2, options) => {
-      event.preventDefault()
+  const onNewWindowHandler = function (
+    event: any,
+    url: string,
+    _1: string,
+    _2:
+      | 'default'
+      | 'new-window'
+      | 'foreground-tab'
+      | 'background-tab'
+      | 'save-to-disk'
+      | 'other',
+    options: Electron.BrowserWindowConstructorOptions
+  ) {
+    event.preventDefault()
 
-      // `Add account` opens `accounts.google.com`
-      if (url.startsWith(googleAccountsUrl)) {
-        sendToMainWindow('add-account-request')
-        hideAccountViews()
-        return
-      }
-
-      if (url.startsWith(gmailUrl)) {
-        selectAccount(accountId)
-
-        // Center the new window on the screen
-        event.newGuest = new BrowserWindow({
-          ...options,
-          titleBarStyle: 'default',
-          x: undefined,
-          y: undefined
-        })
-
-        event.newGuest.webContents.on('dom-ready', () => {
-          addCustomCSS(event.newGuest)
-        })
-
-        event.newGuest.webContents.on(
-          'new-window',
-          (event: Event, url: string) => {
-            event.preventDefault()
-            openExternalUrl(url)
-          }
-        )
-
-        // Workaround for dark mode initialization
-        event.newGuest.webContents.send('account-selected')
-
-        return
-      }
-
-      if (url.startsWith('about:blank')) {
-        const win = new BrowserWindow({
-          ...options,
-          show: false
-        })
-
-        win.webContents.once('will-redirect', (_event, url) => {
-          openExternalUrl(url)
-          win.destroy()
-        })
-
-        event.newGuest = win
-
-        return
-      }
-
-      openExternalUrl(url)
+    // `Add account` opens `accounts.google.com`
+    if (url.startsWith(googleAccountsUrl)) {
+      sendToMainWindow('add-account-request')
+      hideAccountViews()
+      return
     }
-  )
+
+    if (url.startsWith(gmailUrl)) {
+      selectAccount(accountId)
+
+      // Is a link to download a email
+      if (url.includes('&view=att&')) {
+        event.sender.downloadURL(url)
+        return
+      }
+
+      // Center the new window on the screen
+      event.newGuest = new BrowserWindow({
+        ...options,
+        titleBarStyle: 'default',
+        x: undefined,
+        y: undefined
+      })
+
+      event.newGuest.webContents.on('dom-ready', () => {
+        addCustomCSS(event.newGuest)
+      })
+
+      event.newGuest.webContents.on('new-window', onNewWindowHandler)
+
+      // Workaround for dark mode initialization
+      event.newGuest.webContents.send('account-selected')
+
+      // Add context menu to sub windows
+      addContextMenu(event.newGuest)
+
+      return
+    }
+
+    if (url.startsWith('about:blank')) {
+      const win = new BrowserWindow({
+        ...options,
+        show: false
+      })
+
+      win.webContents.once('will-redirect', (_event, url) => {
+        openExternalUrl(url)
+        win.destroy()
+      })
+
+      event.newGuest = win
+
+      return
+    }
+
+    openExternalUrl(url)
+  }
+
+  accountView.webContents.on('new-window', onNewWindowHandler)
 }
