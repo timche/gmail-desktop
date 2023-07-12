@@ -253,42 +253,161 @@ export function initGmail() {
       }
     )
 
-    ipcRenderer.on('gmail:compose-mail', async (_event, to?: string) => {
-      clickElement('div[gh="cm"]')
-
-      if (!to) {
-        return
-      }
-
-      const toElement = await elementReady<HTMLTextAreaElement>(
-        'textarea[name="to"]',
-        {
-          stopOnDomReady: false,
-          timeout: 60000
+    ipcRenderer.on(
+      'gmail:compose-mail',
+      async (_event, mailtoString?: string) => {
+        if (!mailtoString) {
+          return
         }
-      )
 
-      if (!toElement) {
-        return
+        // Decode mailto string
+        const url = new URL(mailtoString)
+
+        const to = decodeURIComponent(url.pathname)
+        const parameters = new URLSearchParams(url.search)
+
+        const cc = parameters.get('cc')
+        const bcc = parameters.get('bcc')
+        const subject = parameters.get('subject')
+        const body = parameters.get('body')
+
+        if (!to) {
+          return
+        }
+
+        clickElement('div[gh="cm"]')
+
+        const newMessageElement = await elementReady<HTMLTextAreaElement>(
+          'div[aria-label="New Message"]:not([aria-checked])',
+          {
+            stopOnDomReady: false,
+            timeout: 60000
+          }
+        )
+
+        if (!newMessageElement) {
+          return
+        }
+
+        newMessageElement.ariaChecked = 'true'
+
+        const toDivElement = newMessageElement.querySelector<HTMLInputElement>(
+          'div[name="to"]'
+        )
+
+        if (!toDivElement) {
+          return
+        }
+
+        toDivElement.focus()
+        await new Promise((resolve) => {
+          setTimeout(resolve, 200)
+        })
+
+        const toElement = toDivElement.querySelector<HTMLInputElement>('input')
+        if (!toElement) {
+          return
+        }
+
+        toElement.focus()
+        toElement.value = to
+
+        if (cc) {
+          const ccButtonElement = await elementReady<HTMLTextAreaElement>(
+            'span[class="aB gQ pE"]',
+            {
+              target: newMessageElement,
+              stopOnDomReady: false,
+              timeout: 60000
+            }
+          )
+          if (!ccButtonElement) {
+            return
+          }
+
+          ccButtonElement.click()
+
+          const ccElement = await elementReady<HTMLTextAreaElement>(
+            'div[name="cc"] input',
+            {
+              target: newMessageElement,
+              stopOnDomReady: false,
+              timeout: 60000
+            }
+          )
+          if (!ccElement) {
+            return
+          }
+
+          ccElement.focus()
+          ccElement.value = cc
+        }
+
+        if (bcc) {
+          const bccButtonElement = await elementReady<HTMLTextAreaElement>(
+            'span[class="aB  gQ pB"]',
+            {
+              target: newMessageElement,
+              stopOnDomReady: false,
+              timeout: 60000
+            }
+          )
+          if (!bccButtonElement) {
+            return
+          }
+
+          bccButtonElement.click()
+
+          const bccElement = await elementReady<HTMLTextAreaElement>(
+            'div[name="bcc"] input',
+            {
+              target: newMessageElement,
+              stopOnDomReady: false,
+              timeout: 60000
+            }
+          )
+          if (!bccElement) {
+            return
+          }
+
+          bccElement.focus()
+          bccElement.value = bcc
+        }
+
+        const subjectElement = newMessageElement.querySelector<HTMLInputElement>(
+          'input[name="subjectbox"]'
+        )
+        if (!subjectElement) {
+          return
+        }
+
+        let subjectSet = false
+
+        // The subject input can't be focused immediately after
+        // settings the "to" input value for an unknown reason.
+        setTimeout(() => {
+          subjectElement.focus()
+          if (subject) {
+            subjectElement.value = subject
+            subjectSet = true
+          }
+        }, 200)
+
+        if (body || subjectSet) {
+          const bodyElement = newMessageElement.querySelector<HTMLInputElement>(
+            'div[role="textbox"]'
+          )
+          if (!bodyElement) {
+            return
+          }
+
+          if (body) {
+            bodyElement.focus()
+            bodyElement.textContent = body
+          }
+        }
       }
-
-      toElement.focus()
-      toElement.value = to
-
-      const subjectElement = document.querySelector<HTMLInputElement>(
-        'input[name="subjectbox"]'
-      )
-
-      if (!subjectElement) {
-        return
-      }
-
-      // The subject input can't be focused immediately after
-      // settings the "to" input value for an unknown reason.
-      setTimeout(() => {
-        subjectElement.focus()
-      }, 200)
-    })
+    )
 
     setInterval(() => {
       previousNewMails.clear()
