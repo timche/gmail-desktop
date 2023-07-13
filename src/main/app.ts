@@ -1,7 +1,7 @@
 import { app } from 'electron'
 import config, { ConfigKey } from './config'
+import { handleMailto } from './mailto'
 import { getMainWindow, showMainWindow } from './main-window'
-import { sendToSelectedAccountView } from './account-views'
 import { appId } from '../constants'
 
 let isQuittingApp = false
@@ -36,11 +36,15 @@ export async function initApp() {
   }
 
   app.on('second-instance', () => {
+    if (getMainWindow()) {
+      handleMailto(argv[argv.length - 1])
+    }
+
     showMainWindow()
   })
 
   app.on('open-url', (_event, mailto) => {
-    sendToSelectedAccountView('gmail:compose-mail', mailto.split(':')[1])
+    handleMailto(mailto)
 
     showMainWindow()
   })
