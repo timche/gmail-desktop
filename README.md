@@ -160,7 +160,6 @@ The build output can be found in the `dist/` folder.
 ## Maintainers
 
 - [Tim Cheung](https://github.com/timche)
-- [Mark Skelton](https://github.com/mskelton)
 
 ## Contributors
 
