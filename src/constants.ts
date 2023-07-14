@@ -4,7 +4,7 @@ export const appName = 'Gmail Desktop'
 // Keep in sync with `build.appId` in `package.json`
 export const appId = 'io.cheung.gmail-desktop'
 
-export const gmailUrl = 'https://mail.google.com/mail/u/0/'
+export const gmailUrl = 'https://mail.google.com/mail/u/'
 
 export const googleAccountsUrl = 'https://accounts.google.com'
 
