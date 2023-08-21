@@ -35,12 +35,18 @@ export async function initApp() {
     app.disableHardwareAcceleration()
   }
 
-  app.on('second-instance', () => {
+  app.on('second-instance', (_event, argv, _workingDirectory) => {
+    const mailtoString = argv.find((s) => s.startsWith('mailto:'))
+
+    if (mailtoString) {
+      sendToSelectedAccountView('gmail:compose-mail', mailtoString)
+    }
+
     showMainWindow()
   })
 
   app.on('open-url', (_event, mailto) => {
-    sendToSelectedAccountView('gmail:compose-mail', mailto.split(':')[1])
+    sendToSelectedAccountView('gmail:compose-mail', mailto)
 
     showMainWindow()
   })

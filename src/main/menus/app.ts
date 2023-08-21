@@ -11,6 +11,7 @@ import {
 } from 'electron'
 import * as fs from 'fs'
 import { is } from 'electron-util'
+import Registry from 'winreg'
 import {
   checkForUpdatesWithFeedback,
   changeReleaseChannel,
@@ -41,7 +42,7 @@ import {
   hideAccountViews,
   sendToSelectedAccountView
 } from '../account-views'
-import { gitHubRepoUrl, gmailUrl } from '../../constants'
+import { appId, gitHubRepoUrl, gmailUrl } from '../../constants'
 import { openExternalUrl } from '../utils/url'
 
 interface AppearanceMenuItem {
@@ -289,11 +290,86 @@ export function getAppMenu() {
               type: 'separator'
             },
             {
-              label: 'Default Mail Client',
-              type: 'checkbox',
+              label: is.windows
+                ? 'Set as Default Mail Client'
+                : 'Default Mail Client',
+              type: is.windows ? 'normal' : 'checkbox',
               checked: app.isDefaultProtocolClient('mailto'),
               click({ checked }) {
-                if (checked) {
+                if (is.windows) {
+                  const exePath = app.getPath('exe')
+
+                  const registryData = new Map()
+                  registryData.set(
+                    `\\Software\\Classes\\${appId}.Mailto\\`,
+                    'URL:mailto'
+                  )
+                  registryData.set(
+                    `\\Software\\Classes\\${appId}.Mailto\\URL Protocol`,
+                    ''
+                  )
+                  registryData.set(
+                    `\\Software\\Classes\\${appId}.Mailto\\shell\\open\\command\\`,
+                    `"${exePath}" %1`
+                  )
+                  registryData.set(
+                    `\\Software\\RegisteredApplications\\Gmail-Desktop`,
+                    `SOFTWARE\\${appId}\\Capabilities`
+                  )
+                  registryData.set(
+                    `\\Software\\${appId}\\Capabilities\\ApplicationDescription`,
+                    `Open mailto in Gmail Desktop`
+                  )
+                  registryData.set(
+                    `\\Software\\${appId}\\Capabilities\\UrlAssociations\\mailto`,
+                    `${appId}.Mailto`
+                  )
+                  registryData.set(
+                    `\\Software\\Wow6432Node\\RegisteredApplications\\Gmail-Desktop`,
+                    `SOFTWARE\\${appId}\\Capabilities`
+                  )
+                  registryData.set(
+                    `\\Software\\Wow6432Node\\${appId}\\Capabilities\\ApplicationDescription`,
+                    `Open mailto in Gmail Desktop`
+                  )
+                  registryData.set(
+                    `\\Software\\Wow6432Node\\${appId}\\Capabilities\\UrlAssociations\\mailto`,
+                    `${appId}.Mailto`
+                  )
+
+                  for (const [key, value] of registryData) {
+                    const parts = key.split('\\')
+                    const name = parts.pop()
+                    const keyPath = parts.join('\\')
+
+                    const regKey = new Registry({
+                      hive: Registry.HKCU,
+                      key: keyPath
+                    })
+
+                    regKey.set(name, Registry.REG_SZ, value, (error) => {
+                      if (error) {
+                        dialog.showMessageBox({
+                          type: 'error',
+                          message: `Error setting as default mail client. ${JSON.stringify(
+                            error
+                          )}`
+                        })
+                      }
+                    })
+                  }
+
+                  app.setAsDefaultProtocolClient('mailto')
+
+                  dialog.showMessageBoxSync(getMainWindow(), {
+                    type: 'info',
+                    message: `The Windows Default Applications settings menu will now open, please wait for it to load, and change the Default MAILTO handler to ${app.name}.`
+                  })
+
+                  shell.openExternal(
+                    `ms-settings:defaultapps?registeredAppUser=Gmail-Desktop`
+                  )
+                } else if (checked) {
                   const isSetMailClient = app.setAsDefaultProtocolClient(
                     'mailto'
                   )
