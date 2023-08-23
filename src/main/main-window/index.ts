@@ -1,5 +1,11 @@
 import * as path from 'path'
-import { app, BrowserWindow, nativeTheme, ipcMain } from 'electron'
+import {
+  app,
+  BrowserWindow,
+  nativeTheme,
+  ipcMain,
+  globalShortcut
+} from 'electron'
 import { is } from 'electron-util'
 import config, { ConfigKey } from '../config'
 import { toggleAppVisiblityTrayItem } from '../tray'
@@ -120,6 +126,28 @@ export function createMainWindow(): void {
       selectedAccountView.webContents.focus()
     }
   })
+
+  // Register global shortcuts for navigating back and forward on macOS.
+  if (is.macos) {
+    mainWindow.on('focus', () => {
+      globalShortcut.register('Command+Left', () => {
+        const selectedAccountView = getSelectedAccountView()
+        if (selectedAccountView?.webContents.canGoBack()) {
+          selectedAccountView.webContents.goBack()
+        }
+      })
+
+      globalShortcut.register('Command+Right', () => {
+        const selectedAccountView = getSelectedAccountView()
+        if (selectedAccountView?.webContents.canGoForward()) {
+          selectedAccountView.webContents.goForward()
+        }
+      })
+    })
+    mainWindow.on('blur', () => {
+      globalShortcut.unregisterAll()
+    })
+  }
 
   let debouncedUpdateAllAccountViewBounds: () => void
 
