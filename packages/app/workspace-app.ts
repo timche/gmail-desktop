@@ -90,6 +90,13 @@ type WorkspaceAppOptions = {
   url: string;
   window?: BrowserWindowConstructorOptions;
   view?: WebContentsViewConstructorOptions;
+  /**
+   * Appended to the view's renderer command line, which is where the
+   * workspace-app preload reads its switches from. A view with no opener
+   * starts a process of its own, so a caller that wants the preload to see a
+   * flag has to pass it here — nothing else reaches that command line.
+   */
+  additionalArguments?: string[];
   asWindow?: boolean;
   savedAsWindow?: boolean;
   pinned?: boolean;
@@ -534,6 +541,7 @@ export class WorkspaceApp {
     url,
     window,
     view,
+    additionalArguments,
     asWindow,
     savedAsWindow,
     pinned,
@@ -558,7 +566,7 @@ export class WorkspaceApp {
       this._window = this.createBrowserWindow(window);
     }
 
-    this.view = this.createView({ url, options: view, navigationHistory });
+    this.view = this.createView({ url, options: view, additionalArguments, navigationHistory });
 
     this.updateViewBounds();
     this.registerViewListeners();
@@ -625,15 +633,18 @@ export class WorkspaceApp {
   private createView({
     url,
     options,
+    additionalArguments,
     navigationHistory,
   }: {
     url: string;
     options?: WebContentsViewConstructorOptions;
+    additionalArguments?: string[];
     navigationHistory?: RestoreOptions;
   }) {
     const view = createChildWebContentsView({
       session: this.account.instance.session,
       preload: getPreloadPath("workspace-app"),
+      additionalArguments,
       viewOptions: {
         ...options,
         webPreferences: {
