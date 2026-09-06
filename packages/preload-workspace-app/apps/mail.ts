@@ -90,9 +90,17 @@ function darkThemeMail() {
   }
 }
 
+/*
+ * Gmail's own pop-out is recognized by its URL, which the page navigates to
+ * itself. A compose window Meru opened says so on the command line instead:
+ * Gmail redirects the `?extsrc=mailto` form somewhere that is not `/popout`,
+ * and the side that opened the window is the side that knows what it is.
+ */
+const isComposeWindow = process.argv.includes(GMAIL_PRELOAD_ARGUMENTS.composeWindow);
+
 export function initMailPreload() {
   document.addEventListener("DOMContentLoaded", () => {
-    if (isGmailComposeWindowUrl(window.location.href)) {
+    if (isComposeWindow || isGmailComposeWindowUrl(window.location.href)) {
       observeBodyMutations(() => {
         closeComposeWindowAfterSend();
         darkThemeMail();

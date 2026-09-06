@@ -542,6 +542,11 @@ export class Gmail {
               url,
               window: { width: 800, height: 600 },
               view: options,
+              // Changes nothing today: a pop-out is a `window.open` from the
+              // page, so Chromium hosts it in the opener's process and it finds
+              // these on that process's command line already. Passed so the
+              // pop-out's theme does not depend on where Chromium puts it.
+              additionalArguments: this.additionalArguments,
               asWindow: true,
             });
 
@@ -920,6 +925,9 @@ export class Gmail {
       accountId: this.accountId,
       url: `${GMAIL_URL}/?extsrc=mailto&url=${encodeURIComponent(url)}`,
       window: { width: 800, height: 600 },
+      // A view with no opener starts a renderer process of its own, so this
+      // window only sees the Gmail switches if they are passed here.
+      additionalArguments: [...this.additionalArguments, GMAIL_PRELOAD_ARGUMENTS.composeWindow],
       asWindow: true,
     });
   }

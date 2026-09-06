@@ -27,6 +27,13 @@ export const GMAIL_PRELOAD_ARGUMENTS = {
   closeComposeWindowAfterSend: "--meru-close-compose-after-send",
   replyForwardInPopOut: "--meru-reply-forward-in-pop-out",
   extendDarkTheme: "--meru-extend-dark-theme",
+  /**
+   * Says the view is a compose window Meru opened itself, rather than a
+   * setting. The preload cannot tell from the URL: Gmail redirects the
+   * `?extsrc=mailto` form somewhere that is not the `/popout` a pop-out lands
+   * on, and the side that opened the window is the side that knows.
+   */
+  composeWindow: "--meru-gmail-compose-window",
 };
 
 export function createGmailDelegatedAccountUrl(delegatedAccountId: string) {
