@@ -1,64 +1,80 @@
-# Meru Claude Code guidelines
+# Meru
 
-## Setup
+The code is public here. The board and the docs are in the private sibling
+`zoidsh/meru-internal`, checked out at `~/meru-internal`, docs under its
+`docs/`, and a pull request here closes `zoidsh/meru-internal#<n>`. Read
+`docs/architecture.md` there before touching `packages/app`: it carries the
+process model, the startup order and the invariants a change must keep.
 
-```sh
-bun install --frozen-lockfile
-```
+Setup is `bun install --frozen-lockfile`. Lefthook formats and lint-fixes the
+staged files at every commit.
 
-## Commands
+## Checks
 
-```sh
-bun run dev        # run the app in development
-bun run types      # type check every package (CI runs `bun run types:ci`)
-bun run lint       # oxlint
-bun run fmt:check  # oxfmt check; `bun run fmt` writes
-bun test           # tests across every package
-bun run test:e2e   # end-to-end suite against the built app
-bun run test:perf  # memory, CPU and bundle-size report against the built app
-```
+- **Fast**, in the edit loop: `bun run lint && bun run types`.
+- **Task**, before the pull request: `bun run fmt:check`, `bun run lint`,
+  `bun run types` and `bun test`. Each is a CI job, so a task check that
+  passes here is green there.
+- **Full**, in CI: the task checks plus `bun run test:e2e` on macOS, Windows
+  and Linux, which builds the app and launches it. Here the same run is
+  `xvfb-run -a bun run test:e2e`, since the sandbox has no display and the
+  suite fails on the display before it reaches the app; it reads the license
+  key from `.env.test.local`, which every worktree carries.
+  `MERU_SKIP_BUILD=1` reruns against the build already in `dist`.
+  `bun run test:perf` measures memory, CPU and bundle size against the same
+  build, run the same way.
+  <!-- 2026-08-25, with the perf project: the display note came with the
+  suites; no incident recorded. -->
 
-- `bun run types`, `bun run lint`, and `bun run fmt:check` must pass before pushing.
-- Both `test:e2e` and `test:perf` build the app first, and both need a display: on a machine without one, wrap them as `xvfb-run -a bun run test:e2e`. Set `MERU_SKIP_BUILD=1` to run against a build already in `dist`.
+## Boundaries
 
-## Dependencies
+On top of the global never tier.
 
-- Always install packages as dev dependencies with `bun add -d <package>`. Rolldown and Vite bundle everything at build time, and Electron builder re-bundles anything in `dependencies` into the shipped app, so normal deps would ship duplicated. The only exception is packages with native modules that Electron needs to load at runtime — those must go in `dependencies` so electron-builder can package them correctly.
+- **Always** `bun add -d`. Rolldown and Vite bundle everything at build time,
+  and electron-builder ships anything under `dependencies` a second time; the
+  one exception is a native module Electron loads at runtime, which goes in
+  `dependencies` so electron-builder packages it.
+  <!-- 2026-04-20, #520, with a feature; no incident recorded. The reason
+  is electron-builder's packaging and still holds: `dependencies` is
+  empty today. -->
+- **Always** land a style change through `@timche/oxc-configs`, checked out
+  at `~/oxc-configs` and extended by `oxlint.config.ts`, as a rule: the code
+  converts once the rule is on, and a feature pull request carries no style
+  sweep. New code matches the neighboring function until then.
+  <!-- 2026-08-18: asked why one function used .then() like its neighbor,
+  the answer was a lint rule in the shared package, not a rewrite. -->
+- **Ask first** before an Electron or electron-builder bump: the end-to-end
+  job builds unsigned, so signing and installer packaging run for the first
+  time in the release itself, and a bump is a release risk Tim weighs.
+- **Ask first** before a config migration in
+  `packages/app/lib/config-migrations.ts`. Every migration guards every key it
+  reads and branches on a legacy key, never on a value equal to a default;
+  the docs decision of 2026-09-04 says why.
+  <!-- 2026-09-04: the 3.60 migration read a key without a guard and bricked
+  every fresh install of the first beta; nothing but a release build ran it. -->
+- **Ask first** before a change to `tests/memory-budget.json` or
+  `tests/bundle-budget.json`: a budget moves only when the issue asks for it.
+- **Ask first** before a change to licensing, the trial or Pro gating,
+  `licenseKey`, validate and the settings behind them: it is a paid product's
+  fence and every plan decision spans both repositories.
+- **Never** bump the version, tag or cut a release: a release is Tim's word
+  through the `release` skill, and an updater ships whatever is tagged.
+- **Never** put the license key from `.env.test.local` in a commit, a comment
+  or a pull request.
 
-## UI components
+## Practices
 
-- Components in `packages/ui` follow shadcn conventions. Many are compound components with named sub-components — `Item` → `ItemContent`, `ItemActions`, `ItemTitle`, `ItemDescription`, for example. Always read the component file before use to find available sub-components and use them instead of plain `<div>` wrappers.
-- Never repeat shared classes across the branches of a conditional `className`. Hoist them and merge with the `cn` helper (`@meru/ui/lib/utils`): `cn("absolute hidden", isWide ? "size-5" : "size-4")`.
-- Consider the platform when showing platform-specific information such as modifier keys and OS names. Branch on the existing `platform` helper — `@/lib/utils` in the renderer, `@electron-toolkit/utils` in the main process — as in `platform.isMacOS ? "Cmd" : "Ctrl"`.
-- In Electron accelerators, `Command` and `Option` are only honored on macOS. Use `CommandOrControl` and `Alt` for menu items that exist on every platform, and reach for bare `Command`/`Option` only when the shortcut is deliberately macOS-only.
-- Render keyboard keys in user-facing text with the `Kbd` component (`@meru/ui/components/kbd`), not as plain text: `Hold <Kbd>Shift</Kbd> to …`.
-- Child `WebContentsView`s always paint above the main window's HTML, so renderer-drawn overlays such as dropdowns, tooltips, and dialogs get covered wherever a view sits. Keep overlays inside the regions the renderer owns, meaning the titlebar and the vertical tabs — vertical tabs menus open with `side="top"` at anchor width, for example. For overlays over view content, use a native `Menu.popup` or a dedicated `WebContentsView`. See `Popup` in `packages/app/lib/popup.ts`.
+- Time and duration values come from `ms` in `@meru/shared/ms`, never the
+  `ms` package: `import { ms } from "@meru/shared/ms"; ms("1d")`.
+  <!-- 2026-04-20, #515, with a feature; no incident recorded. -->
+- A writing-style pass leaves marketing and identity copy alone: taglines,
+  product descriptions, the README header, the `description` in
+  `package.json`. Positioning copy is a product decision; raise a line that
+  breaks a rule as a question instead of editing it.
+  <!-- PR #868: a tagline rewrite and a README header cleanup were both
+  reverted mid-pass. -->
+- A macOS-only behavior, accelerators, menus, signing, cannot be verified on
+  this Linux sandbox: do what can be done, and say so under `## Not verified`.
 
-## Settings UI patterns
-
-- Structure settings fields like this: `Field` > `FieldLabel` + `FieldDescription` + control component.
-- Render config-backed fields with the existing wrapper components rather than hand-rolling `Field` + control: `ConfigSwitchField` for a boolean key, `ConfigSelectField` for a string-union key, both in `packages/renderer/components/`. Each enforces its key's type at runtime, so the value type dictates the component — a fixed set of named choices must be modeled as a string union with `ConfigSelectField`, not a boolean with a switch.
-- In a `ConfigSelectField`, list the option matching the config default first in `items`, unless the options carry an order of their own. A scale keeps its own order and lets the default fall where it does, as `workspaceAppsHibernationTimeouts` runs 30 Minutes through 6 Hours with a default of `1h` in second place.
-- Read the config with `useConfig()` and persist changes with `useConfigMutation()`.
-- Use `toast.error()` for validation errors — never throw or console.error for user-facing feedback.
-
-## Config keys
-
-- Follow the existing `"section.camelCase"` dot-notation pattern, as in `"notifications.times"`.
-- When combining a global config check with more specific conditions such as per-account flags, counts, or local state, always check the global setting first so that it short-circuits the rest:
-
-  ```ts
-  // correct
-  if (config.get("unifiedInbox.enabled") && accounts.length > 1) { ... }
-
-  // wrong
-  if (accounts.length > 1 && config.get("unifiedInbox.enabled")) { ... }
-  ```
-
-## Config change listeners
-
-- Register a `config.onDidChange("some.key", ...)` listener once at the manager or collection level, as in `Accounts.init`, and iterate over instances inside the handler. Never register one listener per view or instance — that creates N duplicate listeners for the same key. See the `spellchecker.languages` listener in `packages/app/accounts.ts`.
-
-## Shared utilities
-
-- For time and duration values, import `ms` from `@meru/shared/ms` — don't install or import the `ms` npm package. Example: `import { ms } from "@meru/shared/ms"; const delay = ms("1d");`
+Rules for the renderer and for the main process load from `.claude/rules/`
+when those files are read.
