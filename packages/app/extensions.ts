@@ -12,7 +12,11 @@ import {
   registerExtensionBridgeScheme,
   uninstallExtension,
 } from "@meru/electron-extensions";
-import { curatedExtensions, isCuratedExtensionId } from "@meru/shared/extensions";
+import {
+  curatedExtensions,
+  hostnameToMatchPattern,
+  isCuratedExtensionId,
+} from "@meru/shared/extensions";
 import { ms } from "@meru/shared/ms";
 import type { ExtensionUpdateResult, InstalledExtensionState } from "@meru/shared/types";
 import { app, session, type WebContents } from "electron";
@@ -144,13 +148,27 @@ async function getExtensionDirs() {
 }
 
 /**
- * Where a curated extension's content scripts may run, from the catalog entry it
- * is offered under. An extension the catalog says nothing about — a development
- * folder — runs its content scripts as its author declared them.
+ * Where a curated extension's content scripts may run: the catalog entry it is
+ * offered under, plus the sites the user added for it. An extension the catalog
+ * says nothing about — a development folder — runs its content scripts as its
+ * author declared them, and additional sites never start clamping one.
+ *
+ * Read per call rather than through a listener, because the derive reads the
+ * applied list while a session is set up and stamps it into the copy, so a
+ * change lands on the next launch like every other extension change.
  */
 function getContentScriptMatches(extensionId: string) {
-  return curatedExtensions.find((curatedExtension) => curatedExtension.id === extensionId)
-    ?.contentScriptMatches;
+  const contentScriptMatches = curatedExtensions.find(
+    (curatedExtension) => curatedExtension.id === extensionId,
+  )?.contentScriptMatches;
+
+  if (!contentScriptMatches) {
+    return;
+  }
+
+  const additionalSites = config.get("extensions.additionalSites")[extensionId] ?? [];
+
+  return [...contentScriptMatches, ...additionalSites.map(hostnameToMatchPattern)];
 }
 
 /**

@@ -1,9 +1,11 @@
 import {
   type CuratedExtension,
   curatedExtensions,
+  normalizeExtensionSiteHostname,
   ONEPASSWORD_EXTENSION_ID,
 } from "@meru/shared/extensions";
 import { ipc } from "@meru/shared/renderer/ipc";
+import type { Config } from "@meru/shared/types";
 import { Alert, AlertDescription, AlertTitle } from "@meru/ui/components/alert";
 import { Badge } from "@meru/ui/components/badge";
 import { Button } from "@meru/ui/components/button";
@@ -17,17 +19,22 @@ import {
   DialogTitle,
 } from "@meru/ui/components/dialog";
 import {
+  Field,
   FieldDescription,
+  FieldError,
   FieldGroup,
+  FieldLabel,
   FieldLegend,
   FieldSeparator,
   FieldSet,
 } from "@meru/ui/components/field";
+import { Input } from "@meru/ui/components/input";
 import {
   Item,
   ItemActions,
   ItemContent,
   ItemDescription,
+  ItemFooter,
   ItemGroup,
   ItemTitle,
 } from "@meru/ui/components/item";
@@ -36,7 +43,7 @@ import { Switch } from "@meru/ui/components/switch";
 import { cn } from "@meru/ui/lib/utils";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { ExternalLinkIcon, FlaskConicalIcon, KeyRoundIcon } from "lucide-react";
-import { type ComponentProps, useState } from "react";
+import { type ComponentProps, useId, useState } from "react";
 import { toast } from "sonner";
 import { ConfigSwitchField } from "@/components/config-switch-field";
 import { CopyButton } from "@/components/copy-button";
@@ -45,7 +52,7 @@ import { LicenseKeyRequiredFieldBadge } from "@/components/license-key-required-
 import { MaturityFieldBadge } from "@/components/maturity-field-badge";
 import { Settings, SettingsContent, SettingsHeader, SettingsTitle } from "@/components/settings";
 import { useIsLicenseKeyValid } from "@/lib/hooks";
-import { queryClient, useConfig } from "@/lib/react-query";
+import { queryClient, useConfig, useConfigMutation } from "@/lib/react-query";
 import { restartRequiredToast } from "@/lib/toast";
 import { platform } from "@/lib/utils";
 
@@ -169,16 +176,118 @@ function ExtensionErrorDialog({
   );
 }
 
+/**
+ * The sites the user added on top of the ones the extension is offered for,
+ * which only exist for an extension the catalog clamps to begin with.
+ */
+function ExtensionAdditionalSites({
+  extension,
+  additionalSites,
+}: {
+  extension: CuratedExtension;
+  additionalSites: Config["extensions.additionalSites"];
+}) {
+  const siteInputId = useId();
+
+  const [siteInput, setSiteInput] = useState("");
+
+  const [siteInputError, setSiteInputError] = useState<string | null>(null);
+
+  const configMutation = useConfigMutation({ onSuccess: restartRequiredToast });
+
+  const sites = additionalSites[extension.id] ?? [];
+
+  const saveSites = (updatedSites: string[]) => {
+    configMutation.mutate({
+      "extensions.additionalSites": { ...additionalSites, [extension.id]: updatedSites },
+    });
+  };
+
+  const addSite = () => {
+    const hostname = normalizeExtensionSiteHostname(siteInput);
+
+    if (!hostname) {
+      setSiteInputError("Enter a website address, like sso.example.com.");
+
+      return;
+    }
+
+    setSiteInput("");
+
+    setSiteInputError(null);
+
+    if (sites.includes(hostname)) {
+      return;
+    }
+
+    saveSites([...sites, hostname]);
+  };
+
+  return (
+    <Field>
+      <FieldLabel htmlFor={siteInputId}>Additional sites</FieldLabel>
+      <FieldDescription>
+        {extension.name} runs on Google's sign-in pages only. Add a site to run it there too, such
+        as your company's single sign-on provider. Sites apply after a restart.
+      </FieldDescription>
+      {sites.length > 0 && (
+        <div className="space-y-2">
+          {sites.map((site) => (
+            <div className="flex items-center gap-2 text-sm" key={site}>
+              <div className="flex-1">{site}</div>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  saveSites(sites.filter((keptSite) => keptSite !== site));
+                }}
+                aria-label={`Remove ${site}`}
+              >
+                Remove
+              </Button>
+            </div>
+          ))}
+        </div>
+      )}
+      <form
+        className="flex gap-2"
+        onSubmit={(event) => {
+          event.preventDefault();
+
+          addSite();
+        }}
+      >
+        <Input
+          id={siteInputId}
+          value={siteInput}
+          onChange={(event) => {
+            setSiteInput(event.target.value);
+
+            setSiteInputError(null);
+          }}
+          placeholder="sso.example.com"
+        />
+        <Button type="submit" variant="outline">
+          Add
+        </Button>
+      </form>
+      {siteInputError && <FieldError>{siteInputError}</FieldError>}
+    </Field>
+  );
+}
+
 function ExtensionItem({
   extension,
   extensionsEnabled,
   installed,
   installedVersion,
+  additionalSites,
 }: {
   extension: CuratedExtension;
   extensionsEnabled: boolean;
   installed: boolean;
   installedVersion: string | undefined;
+  additionalSites: Config["extensions.additionalSites"];
 }) {
   const isLicenseKeyValid = useIsLicenseKeyValid();
 
@@ -274,6 +383,13 @@ function ExtensionItem({
             aria-label={`Install ${extension.name}`}
           />
         </ItemActions>
+        {/* Same gate as the setup button: nothing to scope until the extension
+            is installed and loaded, which needs Meru Pro and the master switch */}
+        {extension.contentScriptMatches && extensionsEnabled && isLicenseKeyValid && installed && (
+          <ItemFooter className="mt-1 flex-col items-stretch">
+            <ExtensionAdditionalSites extension={extension} additionalSites={additionalSites} />
+          </ItemFooter>
+        )}
       </Item>
       {isOnePassword && (
         <OnePasswordSetupDialog open={isSetupDialogOpen} onOpenChange={setIsSetupDialogOpen} />
@@ -491,6 +607,7 @@ export function ExtensionsSettings() {
                     installedVersion={
                       installedExtensions?.find(({ id }) => id === extension.id)?.version
                     }
+                    additionalSites={config["extensions.additionalSites"]}
                   />
                 ))}
             </ItemGroup>

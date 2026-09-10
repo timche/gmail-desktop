@@ -4,6 +4,10 @@ This file is the draft of the next release, written one line at a time as work l
 
 ## [Unreleased]
 
+### Added
+
+- Settings → Extensions lets you add sites where 1Password runs, such as your company's single sign-on provider, beside Google's sign-in pages
+
 ### Changed
 
 - The 1Password extension's description in Settings → Extensions now says it needs the 1Password desktop app, and is no longer cut off after two lines
