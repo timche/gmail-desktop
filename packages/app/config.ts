@@ -434,5 +434,12 @@ export const config = new Store<Config>({
         store.set("accounts", accounts);
       }
     },
+    ">=3.60.1": (store) => {
+      // @ts-expect-error: `extensions.showTitlebarButton` has been removed
+      if (store.has("extensions.showTitlebarButton")) {
+        // @ts-expect-error
+        store.delete("extensions.showTitlebarButton");
+      }
+    },
   },
 });
