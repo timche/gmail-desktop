@@ -53,7 +53,7 @@ Things that take more than one file to see:
 - Add packages with `bun add -d`. Everything is bundled, and electron-builder would ship a runtime `dependencies` entry a second time. The one exception is a native module Electron loads at runtime.
 - Style lands as a rule in `@timche/oxc-configs`, checked out at `~/oxc-configs` and extended by `oxlint.config.ts`, never as a sweep inside a feature pull request. New code matches its neighbors until a rule lands.
 - Ask before bumping Electron or electron-builder. CI builds unsigned, so signing and installer packaging first run in the release itself.
-- Ask before adding a config migration in `packages/app/lib/config-migrations.ts`. Every migration guards every key it reads and branches on a legacy key, never on a value equal to a default. An unguarded read bricked every fresh install of a 3.60 beta, and only a release build runs a new migration.
+- Ask before adding a config migration to the ladder in `packages/app/config.ts`. Every migration guards every key it reads and branches on a legacy key, never on a value equal to a default. An unguarded read bricked every fresh install of a 3.60 beta, and only a release build runs a new migration. Nothing runs the ladder against an empty store, so the guards are held by review alone.
 - Ask before changing `tests/memory-budget.json` or `tests/bundle-budget.json`; a budget moves only when the issue asks for it.
 - Ask before touching licensing, the trial, Pro gating or the settings behind them. Plan decisions span both repositories.
 - Never bump the version, tag or cut a release. That is the `release` skill, run by Tim, and the updater ships whatever is tagged.
