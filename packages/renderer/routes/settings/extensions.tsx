@@ -34,7 +34,6 @@ import {
   ItemActions,
   ItemContent,
   ItemDescription,
-  ItemFooter,
   ItemGroup,
   ItemTitle,
 } from "@meru/ui/components/item";
@@ -180,12 +179,16 @@ function ExtensionErrorDialog({
  * The sites the user added on top of the ones the extension is offered for,
  * which only exist for an extension the catalog clamps to begin with.
  */
-function ExtensionAdditionalSites({
+function ExtensionSitesDialog({
   extension,
   additionalSites,
+  open,
+  onOpenChange,
 }: {
   extension: CuratedExtension;
   additionalSites: Config["extensions.additionalSites"];
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
 }) {
   const siteInputId = useId();
 
@@ -224,55 +227,67 @@ function ExtensionAdditionalSites({
   };
 
   return (
-    <Field>
-      <FieldLabel htmlFor={siteInputId}>Additional sites</FieldLabel>
-      <FieldDescription>
-        {extension.name} runs on Google's sign-in pages only. Add a site to run it there too, such
-        as your company's single sign-on provider. Sites apply after a restart.
-      </FieldDescription>
-      {sites.length > 0 && (
-        <div className="space-y-2">
-          {sites.map((site) => (
-            <div className="flex items-center gap-2 text-sm" key={site}>
-              <div className="flex-1">{site}</div>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => {
-                  saveSites(sites.filter((keptSite) => keptSite !== site));
-                }}
-                aria-label={`Remove ${site}`}
-              >
-                Remove
-              </Button>
-            </div>
-          ))}
-        </div>
-      )}
-      <form
-        className="flex gap-2"
-        onSubmit={(event) => {
-          event.preventDefault();
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Sites for {extension.name}</DialogTitle>
+        </DialogHeader>
+        <DialogDescription>
+          {extension.name} runs on Google's sign-in pages only. Add a site to run it there too, such
+          as your company's single sign-on provider. Sites apply after a restart.
+        </DialogDescription>
+        {sites.length > 0 && (
+          <div className="space-y-2">
+            {sites.map((site) => (
+              <div className="flex items-center gap-2 text-sm" key={site}>
+                <div className="flex-1">{site}</div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    saveSites(sites.filter((keptSite) => keptSite !== site));
+                  }}
+                  aria-label={`Remove ${site}`}
+                >
+                  Remove
+                </Button>
+              </div>
+            ))}
+          </div>
+        )}
+        <Field>
+          <FieldLabel htmlFor={siteInputId} className="sr-only">
+            Site to add
+          </FieldLabel>
+          <form
+            className="flex gap-2"
+            onSubmit={(event) => {
+              event.preventDefault();
 
-          addSite();
-        }}
-      >
-        <Input
-          id={siteInputId}
-          value={siteInput}
-          onChange={(event) => {
-            setSiteInput(event.target.value);
+              addSite();
+            }}
+          >
+            <Input
+              id={siteInputId}
+              value={siteInput}
+              onChange={(event) => {
+                setSiteInput(event.target.value);
 
-            setSiteInputError(null);
-          }}
-          placeholder="sso.example.com"
-        />
-        <Button type="submit" variant="outline">
-          Add
-        </Button>
-      </form>
-      {siteInputError && <FieldError>{siteInputError}</FieldError>}
-    </Field>
+                setSiteInputError(null);
+              }}
+              placeholder="sso.example.com"
+            />
+            <Button type="submit" variant="outline">
+              Add
+            </Button>
+          </form>
+          {siteInputError && <FieldError>{siteInputError}</FieldError>}
+        </Field>
+        <DialogFooter>
+          <DialogClose render={<Button>Done</Button>} />
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }
 
@@ -300,6 +315,12 @@ function ExtensionItem({
   const isOnePassword = extension.id === ONEPASSWORD_EXTENSION_ID;
 
   const [isSetupDialogOpen, setIsSetupDialogOpen] = useState(false);
+
+  const [isSitesDialogOpen, setIsSitesDialogOpen] = useState(false);
+
+  // Both dialogs act on an extension that is installed and loaded, which needs
+  // Meru Pro and the master switch
+  const dialogsLocked = !extensionsEnabled || !isLicenseKeyValid || !installed;
 
   const [extensionError, setExtensionError] = useState<ExtensionError | null>(null);
 
@@ -354,22 +375,39 @@ function ExtensionItem({
             <LicenseKeyRequiredFieldBadge />
           </ItemTitle>
           <ItemDescription>{extension.description}</ItemDescription>
-          {isOnePassword && (
-            <Button
-              variant="outline"
-              size="sm"
-              className="mt-1 self-start"
-              // The dialog explains how to pair the extension with 1Password's
-              // desktop app, which there is nothing to pair until it is
-              // installed and loaded. Installing needs Meru Pro and loading
-              // needs the master switch, so this locks with both.
-              disabled={!extensionsEnabled || !isLicenseKeyValid || !installed}
-              onClick={() => {
-                setIsSetupDialogOpen(true);
-              }}
-            >
-              Set up desktop app
-            </Button>
+          {(isOnePassword || extension.contentScriptMatches) && (
+            <div className="mt-1 flex flex-wrap gap-2 self-start">
+              {isOnePassword && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  // The dialog explains how to pair the extension with
+                  // 1Password's desktop app, which there is nothing to pair
+                  // until it is installed and loaded. Installing needs Meru Pro
+                  // and loading needs the master switch, so this locks with both.
+                  disabled={dialogsLocked}
+                  onClick={() => {
+                    setIsSetupDialogOpen(true);
+                  }}
+                >
+                  Set up desktop app
+                </Button>
+              )}
+              {extension.contentScriptMatches && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  // Locked with the setup button: nothing to scope until the
+                  // extension is installed and loaded
+                  disabled={dialogsLocked}
+                  onClick={() => {
+                    setIsSitesDialogOpen(true);
+                  }}
+                >
+                  Add sites
+                </Button>
+              )}
+            </div>
           )}
         </ItemContent>
         <ItemActions>
@@ -383,16 +421,17 @@ function ExtensionItem({
             aria-label={`Install ${extension.name}`}
           />
         </ItemActions>
-        {/* Same gate as the setup button: nothing to scope until the extension
-            is installed and loaded, which needs Meru Pro and the master switch */}
-        {extension.contentScriptMatches && extensionsEnabled && isLicenseKeyValid && installed && (
-          <ItemFooter className="mt-1 flex-col items-stretch">
-            <ExtensionAdditionalSites extension={extension} additionalSites={additionalSites} />
-          </ItemFooter>
-        )}
       </Item>
       {isOnePassword && (
         <OnePasswordSetupDialog open={isSetupDialogOpen} onOpenChange={setIsSetupDialogOpen} />
+      )}
+      {extension.contentScriptMatches && (
+        <ExtensionSitesDialog
+          extension={extension}
+          additionalSites={additionalSites}
+          open={isSitesDialogOpen}
+          onOpenChange={setIsSitesDialogOpen}
+        />
       )}
       <ExtensionErrorDialog
         error={extensionError}
