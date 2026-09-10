@@ -8,7 +8,7 @@ import type { Config } from "@meru/shared/types";
 import { NodeHttpExecutor } from "builder-util/out/nodeHttpExecutor";
 import { AppImageUpdater } from "electron-updater/out/AppImageUpdater";
 import { getChannelFilename } from "electron-updater/out/util";
-import { resolveUpdateChannel } from "./update-channel";
+import { resolveUpdateChannel } from "./channel";
 
 const stableVersion = { prerelease: [] };
 const prereleaseVersion = { prerelease: ["beta", 2] };
@@ -259,7 +259,7 @@ async function createUpdater(currentVersion: string, host: string) {
   return updater;
 }
 
-/** `AppUpdater.applyChannel` in updater.ts, in the order it assigns. */
+/** `AppUpdater.applyChannel` in index.ts, in the order it assigns. */
 function applyChannel(updater: AppImageUpdater, channel: Config["updates.channel"]) {
   const resolved = resolveUpdateChannel(channel, updater.currentVersion);
 
