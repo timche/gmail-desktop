@@ -475,13 +475,6 @@ export function ExtensionsSettings() {
             licenseKeyRequired
             restartRequired
           />
-          <ConfigSwitchField
-            label="Show extensions button"
-            description="Show a titlebar button that lists the installed extensions and opens their popups."
-            configKey="extensions.showTitlebarButton"
-            licenseKeyRequired
-            disabled={!extensionsEnabled}
-          />
           <FieldSeparator />
           <FieldSet>
             <FieldLegend>Password managers</FieldLegend>

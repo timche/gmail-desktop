@@ -24,7 +24,7 @@ class Bookmarks {
 
   togglePopup(parentWindow: BrowserWindow, placement: BookmarksPopupPlacement) {
     return this.popup.toggle(parentWindow, {
-      content: { page: "bookmarks" },
+      page: "bookmarks",
       width: BASE_SPACING * 40,
       height: "fill",
       anchor:

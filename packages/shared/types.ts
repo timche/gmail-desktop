@@ -51,18 +51,6 @@ export type NotificationTime = {
 /** Which button asked for the bookmarks popup, and so where it hangs. */
 export type BookmarksPopupPlacement = "titlebar" | "verticalTabs";
 
-/**
- * One loaded extension's entry in the extensions menu. Everything here comes
- * from the extension's manifest and never changes while it runs — Electron
- * implements no part of `chrome.action`, so an extension setting an icon, a
- * badge or a title at runtime changes nothing and leaves no state to read.
- */
-export type ExtensionActionState = {
-  extensionId: string;
-  title: string;
-  iconDataUrl: string | null;
-};
-
 /** A curated extension as it is installed on disk, which config alone can't tell. */
 export type InstalledExtensionState = {
   id: string;
@@ -74,9 +62,6 @@ export type ExtensionUpdateResult =
   | { id: string; status: "updated"; version: string }
   | { id: string; status: "upToDate" }
   | { id: string; status: "failed"; error: string };
-
-/** The extensions titlebar button's rect, in its window's content coordinates. */
-export type ExtensionActionAnchorRect = { x: number; y: number; width: number; height: number };
 
 export type WorkspaceAppNotification = {
   title: string;
@@ -198,7 +183,6 @@ export type Config = {
   "verticalTabs.showAppLinksBadge": boolean;
   "extensions.enabled": boolean;
   "extensions.installed": string[];
-  "extensions.showTitlebarButton": boolean;
 };
 
 export type IpcMainEvents =
@@ -257,7 +241,6 @@ export type IpcMainEvents =
         bookmarkId: Bookmark["id"],
         targetIndex: number,
       ];
-      "extensions.showActionsMenu": [anchorRect: ExtensionActionAnchorRect];
       "doNotDisturb.toggle": [];
       "doNotDisturb.showOptions": [];
       "downloads.toggleRecentDownloadHistoryPopup": [];
@@ -288,7 +271,6 @@ export type IpcMainEvents =
       "workspaceApp.getLoadingState": (workspaceAppId?: string) => boolean;
       "workspaceApp.getBookmarkState": (workspaceAppId: string) => WorkspaceAppBookmarkState;
       "bookmarks.getBookmarks": () => BookmarkState[];
-      "extensions.getActions": () => ExtensionActionState[];
       "extensions.getInstalled": () => InstalledExtensionState[];
       "extensions.install": (extensionId: string) => { error?: string };
       "extensions.uninstall": (extensionId: string) => { error?: string };
@@ -307,7 +289,6 @@ export type IpcRendererEvent = {
   "accounts.changed": [accounts: AccountInstances];
   "tabs.changed": [accountsTabs: AccountTabsState[]];
   "bookmarks.changed": [bookmarks: BookmarkState[]];
-  "extensions.actionsChanged": [actions: ExtensionActionState[]];
   "findInPage.activate": [];
   "findInPage.result": [result: { activeMatch: number; totalMatches: number }];
   "trial.daysLeftChanged": [daysLeft: number];

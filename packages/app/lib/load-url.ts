@@ -9,8 +9,8 @@ import { log } from "./log";
  * happened and answers whether the page arrived.
  *
  * Lives apart from `web-contents.ts`, which reaches into app modules that in
- * turn import `popup.ts`: importing it from `popup.ts` or `window.ts` closes an
- * import cycle that leaves `Popup` undefined at app launch.
+ * turn import `popup.ts`: importing it from `window.ts` closes an import cycle
+ * that leaves `Popup` undefined at app launch.
  */
 export function loadUrl(webContents: WebContents, url: string) {
   return webContents
