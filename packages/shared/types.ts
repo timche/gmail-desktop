@@ -283,6 +283,7 @@ export type IpcMainEvents =
       "app.getIsDefaultMailtoClient": () => boolean;
       "app.setAsDefaultMailtoClient": () => void;
       "about.getInfo": () => { version: string; os: string; deviceId: string };
+      "updates.isBelowMinimumMacOSVersion": () => boolean;
       "about.exportLogs": () => { canceled: boolean };
       "workspaceApp.getLoadingState": (workspaceAppId?: string) => boolean;
       "workspaceApp.getBookmarkState": (workspaceAppId: string) => WorkspaceAppBookmarkState;

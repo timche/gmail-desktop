@@ -1,6 +1,7 @@
 import { ipc } from "@meru/shared/renderer/ipc";
 import type { Config } from "@meru/shared/types";
 import { QueryClient, queryOptions, useMutation, useQuery } from "@tanstack/react-query";
+import { platform } from "./utils";
 
 export const queryClient = new QueryClient();
 
@@ -41,6 +42,19 @@ export function useBookmarks() {
   );
 
   return { bookmarks: data };
+}
+
+export function useIsBelowMinimumMacOSVersion() {
+  const { data } = useQuery(
+    queryOptions({
+      queryKey: ["updates", "isBelowMinimumMacOSVersion"],
+      queryFn: () => ipc.main.invoke("updates.isBelowMinimumMacOSVersion"),
+      enabled: platform.isMacOS,
+      staleTime: Number.POSITIVE_INFINITY,
+    }),
+  );
+
+  return data ?? false;
 }
 
 export function useConfigMutation({

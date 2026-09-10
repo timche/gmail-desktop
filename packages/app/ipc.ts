@@ -727,6 +727,8 @@ class Ipc {
       }
     });
 
+    ipc.main.handle("updates.isBelowMinimumMacOSVersion", () => !appUpdater.isUpdateSupported());
+
     ipc.main.handle("about.getInfo", async () => ({
       version: app.getVersion(),
       os: `${os.type()} ${os.release()} (${os.arch()})`,

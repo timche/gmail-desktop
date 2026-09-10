@@ -1,6 +1,7 @@
 import { WEBSITE_URL } from "@meru/shared/constants";
 import { type SupportedWorkspaceApp, workspaceApps } from "@meru/shared/workspace-apps";
 import { app, dialog } from "electron";
+import { config } from "./config";
 import { main } from "./main";
 import { openExternalUrl } from "./url";
 
@@ -16,6 +17,22 @@ export async function showRestartDialog() {
   if (response === 0) {
     app.relaunch();
     app.quit();
+  }
+}
+
+export async function showUnsupportedMacOSDialog() {
+  const { checkboxChecked } = await dialog.showMessageBox(main.window, {
+    type: "info",
+    message: "This is the last version of Meru for this Mac.",
+    detail: `Meru ${app.getVersion()} is the last version that runs on macOS ${process.getSystemVersion()}. Newer versions need macOS 13 or later, so Meru won't check for updates on this Mac. This version keeps working, but it gets no further fixes, security fixes included, so using it long term is at your own risk.`,
+    buttons: ["OK"],
+    defaultId: 0,
+    cancelId: 0,
+    checkboxLabel: "Don't show again",
+  });
+
+  if (checkboxChecked) {
+    config.set("updates.autoCheck", false);
   }
 }
 

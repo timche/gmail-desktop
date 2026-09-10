@@ -287,6 +287,7 @@ export class AppMenu {
           },
           {
             label: "Check for Updates…",
+            enabled: appUpdater.isUpdateSupported(),
             click: () => {
               appUpdater.checkForUpdates();
             },
