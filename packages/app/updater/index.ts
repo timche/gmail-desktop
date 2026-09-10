@@ -1,10 +1,12 @@
 import { is } from "@electron-toolkit/utils";
 import { autoUpdater } from "electron-updater";
 import { config } from "@/config";
+import { showUnsupportedMacOSDialog } from "../dialogs";
 import { ipc } from "../ipc";
 import { log } from "../lib/log";
 import { main } from "../main";
 import { resolveUpdateChannel } from "./channel";
+import { isUpdateSupported, MINIMUM_MACOS_VERSION } from "./support";
 
 class AppUpdater {
   private applyChannel() {
@@ -19,10 +21,16 @@ class AppUpdater {
     autoUpdater.allowDowngrade = allowDowngrade;
   }
 
+  isUpdateSupported() {
+    return isUpdateSupported(process.platform, process.getSystemVersion());
+  }
+
   init() {
     autoUpdater.logger = log;
 
     this.applyChannel();
+
+    autoUpdater.isUpdateSupported = () => this.isUpdateSupported();
 
     config.onDidChange("updates.channel", () => {
       this.applyChannel();
@@ -40,6 +48,18 @@ class AppUpdater {
       });
     }
 
+    const systemVersion = process.getSystemVersion();
+
+    if (!this.isUpdateSupported()) {
+      log.info(`Updates need macOS ${MINIMUM_MACOS_VERSION}, this Mac reports ${systemVersion}`);
+
+      if (config.get("updates.autoCheck")) {
+        showUnsupportedMacOSDialog();
+      }
+
+      return;
+    }
+
     if (is.dev || !config.get("updates.autoCheck")) {
       return;
     }
@@ -55,7 +75,7 @@ class AppUpdater {
   }
 
   checkForUpdates() {
-    if (is.dev) {
+    if (is.dev || !this.isUpdateSupported()) {
       return;
     }
 
