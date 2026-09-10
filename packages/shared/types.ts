@@ -183,6 +183,12 @@ export type Config = {
   "verticalTabs.showAppLinksBadge": boolean;
   "extensions.enabled": boolean;
   "extensions.installed": string[];
+  /**
+   * Hostnames the user added to a curated extension's content-script clamp,
+   * keyed by extension id. They survive an uninstall, so a reinstall keeps
+   * them.
+   */
+  "extensions.additionalSites": Record<string, string[]>;
 };
 
 export type IpcMainEvents =

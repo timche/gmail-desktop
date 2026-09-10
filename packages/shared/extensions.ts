@@ -10,7 +10,8 @@ export type CuratedExtension = {
   /**
    * Match patterns the derive writes over every `content_scripts[].matches` of
    * the extension, so its content scripts only reach the sites it is offered
-   * for. Absent leaves the manifest's own patterns in place.
+   * for. Absent leaves the manifest's own patterns in place, and the sites the
+   * user adds in settings never start a clamp — they are appended to this one.
    */
   contentScriptMatches?: string[];
   /**
@@ -78,7 +79,10 @@ export const curatedExtensions: CuratedExtension[] = [
     // Sign-in runs on accounts.google.com, and account settings — creating a
     // passkey, changing a password — on myaccount.google.com. Both hosts, not
     // the settings paths alone: Google reshuffles those and redirects between
-    // them, and a path that falls outside the clamp offers nothing, silently
+    // them, and a path that falls outside the clamp offers nothing, silently.
+    // A Workspace account behind third-party single sign-on redirects off both
+    // hosts mid-sign-in, which is what the sites the user adds in settings are
+    // for; the app appends them here
     contentScriptMatches: ["https://accounts.google.com/*", "https://myaccount.google.com/*"],
     telemetryUrls: [
       // Observability: every console line the worker writes, forwarded as a
@@ -115,4 +119,51 @@ export const curatedExtensions: CuratedExtension[] = [
 
 export function isCuratedExtensionId(extensionId: string) {
   return curatedExtensions.some((curatedExtension) => curatedExtension.id === extensionId);
+}
+
+/** The pattern a site the user added stands for: every path of it over HTTPS. */
+export function hostnameToMatchPattern(hostname: string) {
+  return `https://${hostname}/*`;
+}
+
+const SCHEME = /^[a-z][a-z0-9+.-]*:\/\//;
+
+const HOSTNAME_LABEL = /^[a-z0-9-]+$/;
+
+/**
+ * The hostname a site the user typed holds, lowercased, or `undefined` when what
+ * they typed carries more than a hostname can: a port, credentials, a wildcard,
+ * a scheme other than HTTPS. A whole URL is taken as well as a bare hostname,
+ * since the address of the sign-in page is what a user has at hand.
+ *
+ * The result reaches a manifest inside a match pattern, and Chromium refuses an
+ * entire manifest over one pattern it can't parse, so only a hostname `URL`
+ * itself produced ever gets stored.
+ */
+export function normalizeExtensionSiteHostname(site: string) {
+  const input = site.trim().toLowerCase();
+
+  if (!input) {
+    return;
+  }
+
+  let url: URL;
+
+  try {
+    url = new URL(SCHEME.test(input) ? input : `https://${input}`);
+  } catch {
+    return;
+  }
+
+  if (url.protocol !== "https:" || url.port || url.username || url.password) {
+    return;
+  }
+
+  const labels = url.hostname.split(".");
+
+  if (labels.length < 2 || !labels.every((label) => HOSTNAME_LABEL.test(label))) {
+    return;
+  }
+
+  return url.hostname;
 }
