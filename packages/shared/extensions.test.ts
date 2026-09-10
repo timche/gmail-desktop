@@ -1,5 +1,9 @@
 import { describe, expect, test } from "bun:test";
-import { curatedExtensions } from "./extensions";
+import {
+  curatedExtensions,
+  hostnameToMatchPattern,
+  normalizeExtensionSiteHostname,
+} from "./extensions";
 
 /**
  * Hosts the extensions have to keep reaching, one per shape the catalog could
@@ -121,5 +125,77 @@ describe("curated extension telemetry URLs", () => {
         expect(parseTelemetryUrl(telemetryUrl)).not.toBe(productHost);
       }
     }
+  });
+});
+
+describe("hostnameToMatchPattern", () => {
+  test("covers every path of the site over HTTPS", () => {
+    expect(hostnameToMatchPattern("sso.okta.com")).toBe("https://sso.okta.com/*");
+  });
+});
+
+describe("normalizeExtensionSiteHostname", () => {
+  test("takes a bare hostname", () => {
+    expect(normalizeExtensionSiteHostname("sso.okta.com")).toBe("sso.okta.com");
+    expect(normalizeExtensionSiteHostname("login.microsoftonline.com")).toBe(
+      "login.microsoftonline.com",
+    );
+    expect(normalizeExtensionSiteHostname("my-company.onelogin.com")).toBe(
+      "my-company.onelogin.com",
+    );
+  });
+
+  test("lowercases and trims what it takes", () => {
+    expect(normalizeExtensionSiteHostname("  SSO.Okta.com ")).toBe("sso.okta.com");
+  });
+
+  /*
+   * The address bar of the sign-in page is what a user has at hand, so a pasted
+   * URL keeps only the host it names.
+   */
+  test("takes the hostname out of a pasted URL", () => {
+    expect(normalizeExtensionSiteHostname("https://sso.okta.com")).toBe("sso.okta.com");
+    expect(normalizeExtensionSiteHostname("https://sso.okta.com/app/x?y=1#z")).toBe("sso.okta.com");
+    expect(normalizeExtensionSiteHostname("sso.okta.com/app/x")).toBe("sso.okta.com");
+  });
+
+  test("refuses an empty entry", () => {
+    expect(normalizeExtensionSiteHostname("")).toBeUndefined();
+    expect(normalizeExtensionSiteHostname("   ")).toBeUndefined();
+  });
+
+  test("refuses a hostname without a dot", () => {
+    expect(normalizeExtensionSiteHostname("localhost")).toBeUndefined();
+    expect(normalizeExtensionSiteHostname("okta")).toBeUndefined();
+  });
+
+  /*
+   * A pattern's host is the whole of what the clamp grants, so anything the
+   * host part cannot carry is refused rather than dropped: a port, credentials
+   * and a scheme the clamp doesn't grant all change what was asked for.
+   */
+  test("refuses what a hostname cannot carry", () => {
+    expect(normalizeExtensionSiteHostname("sso.okta.com:8443")).toBeUndefined();
+    expect(normalizeExtensionSiteHostname("user@sso.okta.com")).toBeUndefined();
+    expect(normalizeExtensionSiteHostname("user:secret@sso.okta.com")).toBeUndefined();
+    expect(normalizeExtensionSiteHostname("http://sso.okta.com")).toBeUndefined();
+    expect(normalizeExtensionSiteHostname("sso okta.com")).toBeUndefined();
+  });
+
+  /*
+   * A user-typed pattern is never written into a manifest: Chromium refuses the
+   * whole manifest over one pattern it can't parse, which would take the
+   * extension down rather than the entry.
+   */
+  test("refuses a match pattern of its own", () => {
+    expect(normalizeExtensionSiteHostname("*.okta.com")).toBeUndefined();
+    expect(normalizeExtensionSiteHostname("https://*.okta.com/*")).toBeUndefined();
+    expect(normalizeExtensionSiteHostname("<all_urls>")).toBeUndefined();
+  });
+
+  test("refuses empty labels", () => {
+    expect(normalizeExtensionSiteHostname("sso..okta.com")).toBeUndefined();
+    expect(normalizeExtensionSiteHostname(".okta.com")).toBeUndefined();
+    expect(normalizeExtensionSiteHostname("okta.com.")).toBeUndefined();
   });
 });
