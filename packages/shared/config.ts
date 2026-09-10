@@ -142,6 +142,5 @@ export function createDefaultConfig({
     "verticalTabs.showAppLinksBadge": true,
     "extensions.enabled": false,
     "extensions.installed": [],
-    "extensions.showTitlebarButton": false,
   };
 }

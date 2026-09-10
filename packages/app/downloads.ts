@@ -22,7 +22,7 @@ class Downloads {
 
   toggleRecentDownloadHistoryPopup(parentWindow: BrowserWindow) {
     return this.recentDownloadHistoryPopup.toggle(parentWindow, {
-      content: { page: "recent-download-history" },
+      page: "recent-download-history",
       width: BASE_SPACING * 48,
       height: BASE_SPACING * 44,
     });
