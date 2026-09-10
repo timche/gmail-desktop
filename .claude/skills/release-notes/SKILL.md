@@ -8,14 +8,14 @@ description: Write release notes for Meru. Use when drafting or updating GitHub 
 ## Gather the changes
 
 - The release being written is the one the version commit at `HEAD` bumps to — a commit whose subject is the bare version number, matching `version` in `package.json`, such as `3.58.0` or `3.60.0-beta.1`, tagged `v3.58.0` or `v3.60.0-beta.1`.
-- The range runs from the previous release's tag to that commit, and which tag counts as previous depends on the channel:
+- The source is the `[Unreleased]` section of `CHANGELOG.md` as it stood before the version commit, which emptied it: `git show HEAD~1:CHANGELOG.md`. Every change that landed since the last release added its line there in the same commit, so the section is the draft: read it in full before anything else.
+- Cross-check it against the commit log, because a line can be missed. The range runs from the previous release's tag to the version commit, and which tag counts as previous depends on the channel:
   - **Stable** — the last stable tag, from `gh release list --exclude-pre-releases -L 1`. Never `gh release list -L 2`, which picks up an interleaved `-beta.N` tag and truncates the notes to the tail of the cycle.
   - **Beta** — the last release of any kind, from `gh release list -L 1`, so each prerelease covers only what's new since the previous one.
-- Every release gets its own notes, prereleases included, written exactly the same way. A stable that promotes a cycle of beta releases therefore restates the changes those already carried, because its range runs back to the last stable. That repetition is intended: the stable notes have to be complete for the users who never saw a prerelease.
-- Triage the log before opening a single diff. Drop on the commit subject alone: comment and docs edits, refactors and extractions, `TODO.md` notes, tests, CI, and dependency bumps other than Electron. A release of 40 commits usually has around 10 user-facing ones.
-- For the commits that survive, `gh pr view <number>` is the fastest read — the PR body states what changed for the user, and the commit subject often doesn't. Fall back to `git show` when there's no PR.
+  - Triage the log on subjects alone and drop comment and docs edits, refactors, tests, CI, and dependency bumps other than Electron. For a surviving commit with no changelog line, `gh pr view <number>` says what changed for the user; fall back to `git show`. Add the missing bullet to the notes and mention it in the review, since the commit that should have carried it didn't.
+- A stable that promotes a cycle of beta releases must be complete for the users who never saw a prerelease. `[Unreleased]` is emptied at every release, prereleases included, so for a stable that follows betas also read the notes of those beta releases (`gh release view v<version> --json body -q .body`) and fold their bullets in. That repetition is intended.
 - Don't trust a commit message's scope — verify the actual fix from the diff. Messages often name a single platform or quote a GitHub issue title, such as "fix window position resetting after Windows reboot", when the underlying bug affects every platform. Only scope a note to a platform with `**macOS:**` or `**Windows:**` when the code confirms the fix is platform-specific.
-- Describe the end state at the tag, not the journey. A feature that landed and was then renamed, redesigned, or extended over several commits in the same release gets one bullet describing how it works now.
+- Describe the end state at the tag, not the journey. A feature that landed and was then renamed, redesigned, or extended over several commits in the same release gets one bullet describing how it works now, however many changelog lines it accumulated.
 - Drop fixes to code newly introduced in the same release — a bug that only existed between merge and tag is invisible to users upgrading from the previous public release.
 - Skip changes that aren't user-observable given the constraints already in place. Don't mention gating a feature behind Pro, for example, if free-tier limits already put it out of reach.
 
@@ -48,7 +48,7 @@ description: Write release notes for Meru. Use when drafting or updating GitHub 
 
 ## Output
 
-- Release notes live only on GitHub Releases — don't commit a `RELEASE_NOTES.md` or `CHANGELOG.md` file, and don't write the notes anywhere inside the repo. Match the style of recent published releases at https://github.com/zoidsh/meru/releases.
+- Release notes live only on GitHub Releases. `CHANGELOG.md` holds nothing but the `[Unreleased]` draft — it never gets a versioned section, and the finished notes aren't written anywhere inside the repo. Match the style of recent published releases at https://github.com/zoidsh/meru/releases.
 - Write the finished notes onto the release for the version commit's tag: `gh release edit v<version> --notes-file <path>`, with the notes in a temporary file outside the repo. Pass a file rather than `--notes` so the markdown, backticks, and `<kbd>` tags survive the shell.
 - Read the current body first with `gh release view v<version> --json body -q .body`. When the release already has notes, fold the changes into them — editing replaces the body wholesale, so always pass the complete set of notes, never just the new bullets.
 - If no release exists for the tag yet, stop and ask — creating one triggers the build-and-publish workflow, which isn't this skill's job.

@@ -23,7 +23,7 @@ Check all of these first. If one fails, report it and stop — never work around
 
 ## Choose the bump
 
-Read `git log --oneline <lastTag>..HEAD` — a release usually runs to a few dozen commits. Triage on subjects; open `gh pr view <number>` only for the few whose subject doesn't reveal whether users see the change.
+Read the `[Unreleased]` section of `CHANGELOG.md` first — every user-facing change lands with a line there, so its subsections say most of what the release holds. Then read `git log --oneline <lastTag>..HEAD` — a release usually runs to a few dozen commits — to catch a change that missed its line. Triage on subjects; open `gh pr view <number>` only for the few whose subject doesn't reveal whether users see the change.
 
 - **patch** — the range holds nothing but fixes, refactors, docs, tests, CI, and dependency bumps. Also the answer when the only user-facing changes fix something already released (`3.56.1`, `3.56.2`, `3.56.3` were all this).
 - **minor** — anything users gain or notice: a new feature, a new setting, a renamed or changed default, an Electron upgrade. This is the usual answer.
@@ -51,9 +51,10 @@ Always confirm before editing `package.json`, even when the bump is obvious.
 
 ## Commit the bump
 
-- Edit `version` in the root `package.json` and nothing else — workspace packages stay at `0.0.0`, and `bun.lock` doesn't record the version.
+- Edit `version` in the root `package.json` — workspace packages stay at `0.0.0`, and `bun.lock` doesn't record the version.
+- Empty the `[Unreleased]` section of `CHANGELOG.md`: delete every entry and subsection under the heading so only `## [Unreleased]` remains. The lines are not promoted to a versioned section — the `release-notes` skill reads them from this commit's parent and puts them on the GitHub Release.
 - Don't reach for `npm version` or `bun pm version`, because they commit and tag on their own terms.
-- Commit that one file with the bare version as the subject — no prefix, no body: `git commit -m "3.59.0"`.
+- Commit those two files with the bare version as the subject — no prefix, no body: `git commit -m "3.59.0"`.
 - `git push`.
 
 ## Create the release
