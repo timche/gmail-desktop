@@ -11,7 +11,7 @@ mock.module("electron", () => ({
   BrowserWindow: undefined,
 }));
 
-const { buildRegistration, parseUserChoiceProgId } = await import("./windows-mail-client");
+const { buildRegistration, parseUserChoiceProgIds } = await import("./windows-mail-client");
 
 const EXECUTABLE_PATH = String.raw`C:\Program Files\Meru\Meru.exe`;
 
@@ -54,29 +54,46 @@ describe("buildRegistration", () => {
   });
 });
 
-describe("parseUserChoiceProgId", () => {
-  test("reads the prog id out of a reg query", () => {
+describe("parseUserChoiceProgIds", () => {
+  test("reads the prog id value off the legacy key", () => {
     expect(
-      parseUserChoiceProgId(
+      parseUserChoiceProgIds(
         [
           String.raw`HKEY_CURRENT_USER\Software\Microsoft\Windows\Shell\Associations\UrlAssociations\mailto\UserChoice`,
           "    ProgId    REG_SZ    Meru.mailto",
+          "    Hash    REG_SZ    +74McxYCd8A=",
           "",
         ].join("\r\n"),
       ),
-    ).toBe("Meru.mailto");
+    ).toEqual(["Meru.mailto"]);
+  });
+
+  test("reads the prog id out of the subkey Windows 11 24H2 writes", () => {
+    expect(
+      parseUserChoiceProgIds(
+        [
+          String.raw`HKEY_CURRENT_USER\Software\Microsoft\Windows\Shell\Associations\UrlAssociations\mailto\UserChoiceLatest`,
+          "    Hash    REG_SZ    9aiJBKu2x/s=",
+          "",
+          String.raw`HKEY_CURRENT_USER\Software\Microsoft\Windows\Shell\Associations\UrlAssociations\mailto\UserChoiceLatest\ProgId`,
+          "    ProgId    REG_SZ    Meru.mailto",
+          "    Hash    REG_SZ    abc=",
+          "",
+        ].join("\r\n"),
+      ),
+    ).toEqual(["Meru.mailto"]);
   });
 
   test("ignores the padding around the value", () => {
-    expect(parseUserChoiceProgId("    ProgId    REG_SZ    Microsoft.Outlook.Mail.15    \r\n")).toBe(
-      "Microsoft.Outlook.Mail.15",
-    );
+    expect(
+      parseUserChoiceProgIds("    ProgId    REG_SZ    Microsoft.Outlook.Mail.15    \r\n"),
+    ).toEqual(["Microsoft.Outlook.Mail.15"]);
   });
 
-  test("returns undefined when the value is not there", () => {
-    expect(parseUserChoiceProgId("")).toBeUndefined();
+  test("returns nothing when no value is there", () => {
+    expect(parseUserChoiceProgIds("")).toEqual([]);
     expect(
-      parseUserChoiceProgId("ERROR: The system was unable to find the specified registry key"),
-    ).toBeUndefined();
+      parseUserChoiceProgIds("ERROR: The system was unable to find the specified registry key"),
+    ).toEqual([]);
   });
 });

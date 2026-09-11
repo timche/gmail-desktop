@@ -15,7 +15,7 @@ const MAILTO_PROG_ID = "Meru.mailto";
 
 const USER_CHOICE_KEY = String.raw`HKCU\Software\Microsoft\Windows\Shell\Associations\UrlAssociations\mailto`;
 
-const USER_CHOICE_SUBKEYS = ["UserChoice", "UserChoiceLatest"];
+const USER_CHOICE_SUBKEYS = ["UserChoiceLatest", "UserChoice"];
 
 /**
  * Windows 11 22H2 added Meru's own page under Default apps, which
@@ -141,35 +141,43 @@ export async function registerWindowsMailClient() {
   }
 }
 
-export function parseUserChoiceProgId(output: string) {
-  return output.match(/^\s*ProgId\s+REG_SZ\s+(\S.*?)\s*$/m)?.[1];
+/**
+ * Every `REG_SZ` value in a `reg query` dump except the hash. Windows 11 24H2
+ * moved the choice from a `ProgId` value on `UserChoice` to a `ProgId` subkey
+ * of `UserChoiceLatest`, so the value's name is not relied on, only its data.
+ */
+export function parseUserChoiceProgIds(output: string) {
+  return [...output.matchAll(/^\s*(?!Hash\s)\S+\s+REG_SZ\s+(\S.*?)\s*$/gm)].map(
+    (match) => match[1],
+  );
 }
 
-async function queryUserChoiceProgId(subKey: string) {
+async function queryUserChoiceProgIds(subKey: string) {
   try {
     const { stdout } = await execFile(
       getRegExePath(),
-      ["query", `${USER_CHOICE_KEY}\\${subKey}`, "/v", "ProgId"],
+      ["query", `${USER_CHOICE_KEY}\\${subKey}`, "/s"],
       { timeout: ms("10s") },
     );
 
-    return parseUserChoiceProgId(stdout);
+    return parseUserChoiceProgIds(stdout);
   } catch {
-    // `reg.exe` exits non-zero when the key or the value is absent
-    return undefined;
+    // `reg.exe` exits non-zero when the key is absent
+    return [];
   }
 }
 
 /**
- * Windows keeps the association the user picked in `UserChoice`, which only it
- * can write, and newer builds mirror it into `UserChoiceLatest`. Not
+ * Windows keeps the association the user picked under `UserChoice`, which only
+ * it can write. Windows 11 24H2 writes `UserChoiceLatest` instead and leaves the
+ * old key stale, so the newer key wins whenever it has an answer. Not
  * `app.isDefaultProtocolClient`: it reads back the key Electron wrote itself, so
  * it answers yes for a Meru that no mailto link reaches.
  */
 export async function isWindowsDefaultMailClient() {
-  const progIds = await Promise.all(USER_CHOICE_SUBKEYS.map(queryUserChoiceProgId));
+  const [latest, legacy] = await Promise.all(USER_CHOICE_SUBKEYS.map(queryUserChoiceProgIds));
 
-  return progIds.includes(MAILTO_PROG_ID);
+  return (latest.length > 0 ? latest : legacy).includes(MAILTO_PROG_ID);
 }
 
 export function openWindowsDefaultAppsSettings() {
