@@ -71,9 +71,9 @@ function LaunchAtLoginField() {
 const DEFAULT_MAILTO_CLIENT_QUERY_KEY = ["default-mailto-client"];
 
 function DefaultMailClientField() {
-  const { data: defaultMailtoClientState } = useQuery({
+  const { data: isDefaultMailtoClient } = useQuery({
     queryKey: DEFAULT_MAILTO_CLIENT_QUERY_KEY,
-    queryFn: () => ipc.main.invoke("app.getDefaultMailtoClientState"),
+    queryFn: () => ipc.main.invoke("app.getIsDefaultMailtoClient"),
   });
 
   const isDefaultMailtoClientMutation = useMutation({
@@ -111,11 +111,9 @@ function DefaultMailClientField() {
     };
   }, []);
 
-  if (!defaultMailtoClientState) {
+  if (typeof isDefaultMailtoClient !== "boolean") {
     return;
   }
-
-  const { isDefault, isPortableBuild } = defaultMailtoClientState;
 
   const heading = (
     <>
@@ -124,21 +122,17 @@ function DefaultMailClientField() {
   );
 
   if (platform.isWindows) {
-    let description = "Choose Meru as the default mail client in Windows Settings.";
-
-    if (isDefault) {
-      description = "Meru is set as the default mail client.";
-    } else if (isPortableBuild) {
-      description = "The portable version of Meru can't be set as the default mail client.";
-    }
-
     return (
       <Field orientation="horizontal">
         <FieldContent>
           <FieldTitle>{heading}</FieldTitle>
-          <FieldDescription>{description}</FieldDescription>
+          <FieldDescription>
+            {isDefaultMailtoClient
+              ? "Meru is set as the default mail client."
+              : "Choose Meru as the default mail client in Windows Settings."}
+          </FieldDescription>
         </FieldContent>
-        {!isDefault && !isPortableBuild && (
+        {!isDefaultMailtoClient && (
           <Button
             variant="outline"
             onClick={() => {
@@ -162,21 +156,21 @@ function DefaultMailClientField() {
          * row states the fact instead — and a `label` naming an id that nothing
          * on the page carries is read as unlabelled by assistive technology.
          */}
-        {isDefault ? (
+        {isDefaultMailtoClient ? (
           <FieldTitle>{heading}</FieldTitle>
         ) : (
           <FieldLabel htmlFor={fieldId}>{heading}</FieldLabel>
         )}
         <FieldDescription>
-          {isDefault
+          {isDefaultMailtoClient
             ? "Meru is set as the default mail client."
             : "Set Meru as the default mail client to handle email links and related protocols."}
         </FieldDescription>
       </FieldContent>
-      {!isDefault && (
+      {!isDefaultMailtoClient && (
         <Switch
           id={fieldId}
-          checked={isDefault}
+          checked={isDefaultMailtoClient}
           onCheckedChange={(checked) => {
             if (checked) {
               isDefaultMailtoClientMutation.mutate();

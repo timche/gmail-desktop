@@ -16,6 +16,7 @@ import {
 import { ipc } from "@/ipc";
 import { initLinuxWindowControls } from "@/lib/linux";
 import { log } from "@/lib/log";
+import { registerWindowsMailClient } from "@/lib/windows-mail-client";
 import { licenseKey } from "@/license-key";
 import { main } from "@/main";
 import { appMenu } from "@/menu";
@@ -177,6 +178,8 @@ async function init() {
   extensionUpdater.init();
 
   doNotDisturb.init();
+
+  registerWindowsMailClient();
 
   if (!platform.isMacOS) {
     if (PROCESS_MAILTO_URL_ARG) {

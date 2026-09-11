@@ -1,10 +1,11 @@
 import path from "node:path";
 import { platform } from "@electron-toolkit/utils";
-import { app, dialog, shell } from "electron";
+import { app, dialog } from "electron";
 import { accounts } from "./accounts";
 import { showProUpgradeDialog } from "./dialogs";
 import { ipc } from "./ipc";
 import { isMeruUrl, MERU_PROTOCOL, type MeruDeepLink, parseMeruUrl } from "./lib/deep-link";
+import { isWindowsDefaultMailClient } from "./lib/windows-mail-client";
 import { licenseKey } from "./license-key";
 import { main } from "./main";
 
@@ -21,12 +22,6 @@ export const PROCESS_MAILTO_URL_ARG = !platform.isMacOS
 export function isMailtoUrl(url: string) {
   return url.startsWith(`${MAILTO_PROTOCOL}:`);
 }
-
-/**
- * electron-builder sets this on the process the portable executable launches.
- * That build never runs the installer, so nothing registers it as a mail client.
- */
-const IS_PORTABLE_BUILD = Boolean(process.env.PORTABLE_EXECUTABLE_FILE);
 
 /**
  * Under `electron .` the executable is Electron itself, so the handler has to
@@ -46,25 +41,14 @@ function setAsDefaultProtocolClient(protocol: string) {
   }
 }
 
-export function getDefaultMailtoClientState() {
-  return {
-    isDefault: platform.isWindows
-      ? // Electron reads back the key it writes itself, which Windows ignores
-        // in favor of the hash-protected UserChoice association.
-        app.getApplicationNameForProtocol(`${MAILTO_PROTOCOL}:`) === app.name
-      : app.isDefaultProtocolClient(MAILTO_PROTOCOL),
-    isPortableBuild: IS_PORTABLE_BUILD,
-  };
+export async function getIsDefaultMailtoClient() {
+  return platform.isWindows
+    ? isWindowsDefaultMailClient()
+    : app.isDefaultProtocolClient(MAILTO_PROTOCOL);
 }
 
 export function setAsDefaultMailtoClient() {
   setAsDefaultProtocolClient(MAILTO_PROTOCOL);
-}
-
-export function openDefaultAppsSettings() {
-  // Not `openExternalUrl`: its trusted-host dialog and origin check are for web
-  // links, and `ms-settings:` has no origin to show.
-  shell.openExternal("ms-settings:defaultapps");
 }
 
 /**

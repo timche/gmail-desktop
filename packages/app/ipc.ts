@@ -49,16 +49,13 @@ import {
 import { GMAIL_USER_STYLES_PATH } from "./gmail";
 import { hibernatesTabWhenIdle } from "./lib/hibernation";
 import { log } from "./lib/log";
+import { openWindowsDefaultAppsSettings } from "./lib/windows-mail-client";
 import {
   areWorkspaceAppNotificationsAllowed,
   createNewEmailNotification,
   createNotification,
 } from "./notifications";
-import {
-  getDefaultMailtoClientState,
-  openDefaultAppsSettings,
-  setAsDefaultMailtoClient,
-} from "./protocol";
+import { getIsDefaultMailtoClient, setAsDefaultMailtoClient } from "./protocol";
 import { appUpdater } from "./updater";
 import { openExternalUrl } from "./url";
 
@@ -709,14 +706,14 @@ class Ipc {
       app.setLoginItemSettings(settings);
     });
 
-    ipc.main.handle("app.getDefaultMailtoClientState", () => getDefaultMailtoClientState());
+    ipc.main.handle("app.getIsDefaultMailtoClient", () => getIsDefaultMailtoClient());
 
     ipc.main.handle("app.setAsDefaultMailtoClient", () => {
       setAsDefaultMailtoClient();
     });
 
     ipc.main.on("app.openDefaultAppsSettings", () => {
-      openDefaultAppsSettings();
+      openWindowsDefaultAppsSettings();
     });
 
     ipc.main.handle("updates.isBelowMinimumMacOSVersion", () => !appUpdater.isUpdateSupported());

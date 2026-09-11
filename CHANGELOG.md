@@ -16,6 +16,6 @@ This file is the draft of the next release, written one line at a time as work l
 
 ### Fixed
 
-- On Windows, Meru now appears under Settings → Default apps as a choice for email links, and Settings → General opens Windows Settings to pick it there instead of showing a switch that couldn't take effect
+- On Windows, Meru registers itself as a mail client at launch, so it now appears under Settings → Default apps as a choice for email links, and Settings → General opens Meru's page there instead of showing a switch that couldn't take effect
 - With Extend dark theme on, mail composed in Gmail no longer carries the dark theme's light text colors into drafts and sent messages, which made them unreadable in light-themed mail clients
 - Help → Report Issue, Ask Question and Request Feature open a compose window that follows Extend dark theme and Close compose window after send
