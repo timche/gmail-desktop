@@ -1,6 +1,6 @@
 import path from "node:path";
 import { platform } from "@electron-toolkit/utils";
-import { app, dialog } from "electron";
+import { app, dialog, shell } from "electron";
 import { accounts } from "./accounts";
 import { showProUpgradeDialog } from "./dialogs";
 import { ipc } from "./ipc";
@@ -20,6 +20,51 @@ export const PROCESS_MAILTO_URL_ARG = !platform.isMacOS
 
 export function isMailtoUrl(url: string) {
   return url.startsWith(`${MAILTO_PROTOCOL}:`);
+}
+
+/**
+ * electron-builder sets this on the process the portable executable launches.
+ * That build never runs the installer, so nothing registers it as a mail client.
+ */
+const IS_PORTABLE_BUILD = Boolean(process.env.PORTABLE_EXECUTABLE_FILE);
+
+/**
+ * Under `electron .` the executable is Electron itself, so the handler has to
+ * carry the app entry as an argument to be launched back into this app.
+ */
+function setAsDefaultProtocolClient(protocol: string) {
+  if (process.defaultApp) {
+    if (process.argv.length >= 2) {
+      if (!process.argv[1]) {
+        throw new Error('Could not find "process.argv[1]"');
+      }
+
+      app.setAsDefaultProtocolClient(protocol, process.execPath, [path.resolve(process.argv[1])]);
+    }
+  } else {
+    app.setAsDefaultProtocolClient(protocol);
+  }
+}
+
+export function getDefaultMailtoClientState() {
+  return {
+    isDefault: platform.isWindows
+      ? // Electron reads back the key it writes itself, which Windows ignores
+        // in favor of the hash-protected UserChoice association.
+        app.getApplicationNameForProtocol(`${MAILTO_PROTOCOL}:`) === app.name
+      : app.isDefaultProtocolClient(MAILTO_PROTOCOL),
+    isPortableBuild: IS_PORTABLE_BUILD,
+  };
+}
+
+export function setAsDefaultMailtoClient() {
+  setAsDefaultProtocolClient(MAILTO_PROTOCOL);
+}
+
+export function openDefaultAppsSettings() {
+  // Not `openExternalUrl`: its trusted-host dialog and origin check are for web
+  // links, and `ms-settings:` has no origin to show.
+  shell.openExternal("ms-settings:defaultapps");
 }
 
 /**
@@ -77,19 +122,7 @@ export function findMeruUrlArg(argv: string[]) {
 export const PROCESS_MERU_URL_ARG = !platform.isMacOS ? findMeruUrlArg(process.argv) : undefined;
 
 export function setMeruProtocolClient() {
-  if (process.defaultApp) {
-    if (process.argv.length >= 2) {
-      if (!process.argv[1]) {
-        throw new Error('Could not find "process.argv[1]"');
-      }
-
-      app.setAsDefaultProtocolClient(MERU_PROTOCOL, process.execPath, [
-        path.resolve(process.argv[1]),
-      ]);
-    }
-  } else {
-    app.setAsDefaultProtocolClient(MERU_PROTOCOL);
-  }
+  setAsDefaultProtocolClient(MERU_PROTOCOL);
 }
 
 function openMessageDeepLink({ email, messageId }: Extract<MeruDeepLink, { type: "message" }>) {

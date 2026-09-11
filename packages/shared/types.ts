@@ -222,6 +222,7 @@ export type IpcMainEvents =
       "appUpdater.quitAndInstall": [];
       "appUpdater.openVersionHistory": [];
       "app.relaunch": [];
+      "app.openDefaultAppsSettings": [];
       "theme.setTheme": [theme: "system" | "light" | "dark"];
       "notifications.showTestNotification": [];
       "tabs.selectTab": [accountId: AccountConfig["id"], tabId: string];
@@ -269,7 +270,7 @@ export type IpcMainEvents =
       "downloads.setLocation": () => { canceled: boolean };
       "app.getLoginItemSettings": () => LoginItemSettings;
       "app.setLoginItemSettings": (settings: Partial<LoginItemSettings>) => void;
-      "app.getIsDefaultMailtoClient": () => boolean;
+      "app.getDefaultMailtoClientState": () => { isDefault: boolean; isPortableBuild: boolean };
       "app.setAsDefaultMailtoClient": () => void;
       "about.getInfo": () => { version: string; os: string; deviceId: string };
       "updates.isBelowMinimumMacOSVersion": () => boolean;

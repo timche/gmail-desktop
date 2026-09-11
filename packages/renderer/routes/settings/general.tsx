@@ -1,4 +1,5 @@
 import { ipc } from "@meru/shared/renderer/ipc";
+import { Button } from "@meru/ui/components/button";
 import {
   Field,
   FieldContent,
@@ -13,7 +14,7 @@ import {
 import { Switch } from "@meru/ui/components/switch";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import type { LoginItemSettings } from "electron";
-import { useId } from "react";
+import { useEffect, useId } from "react";
 import { ConfigSwitchField } from "@/components/config-switch-field";
 import { LicenseKeyRequiredBanner } from "@/components/license-key-required-banner";
 import { LicenseKeyRequiredFieldBadge } from "@/components/license-key-required-field-badge";
@@ -67,19 +68,19 @@ function LaunchAtLoginField() {
   );
 }
 
-function DefaultMailClientField() {
-  const queryKey = ["default-mailto-client"];
+const DEFAULT_MAILTO_CLIENT_QUERY_KEY = ["default-mailto-client"];
 
-  const { data: isDefaultMailtoClient } = useQuery({
-    queryKey,
-    queryFn: () => ipc.main.invoke("app.getIsDefaultMailtoClient"),
+function DefaultMailClientField() {
+  const { data: defaultMailtoClientState } = useQuery({
+    queryKey: DEFAULT_MAILTO_CLIENT_QUERY_KEY,
+    queryFn: () => ipc.main.invoke("app.getDefaultMailtoClientState"),
   });
 
   const isDefaultMailtoClientMutation = useMutation({
     mutationFn: () => ipc.main.invoke("app.setAsDefaultMailtoClient"),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey,
+        queryKey: DEFAULT_MAILTO_CLIENT_QUERY_KEY,
       });
     },
   });
@@ -88,15 +89,69 @@ function DefaultMailClientField() {
 
   const isLicenseKeyValid = useIsLicenseKeyValid();
 
-  if (typeof isDefaultMailtoClient !== "boolean") {
+  /**
+   * Windows takes the choice in its own settings, so the row cannot tell when it
+   * was made; asking again on every focus is the closest it gets.
+   */
+  useEffect(() => {
+    if (!platform.isWindows) {
+      return;
+    }
+
+    const handleWindowFocus = () => {
+      queryClient.invalidateQueries({
+        queryKey: DEFAULT_MAILTO_CLIENT_QUERY_KEY,
+      });
+    };
+
+    window.addEventListener("focus", handleWindowFocus);
+
+    return () => {
+      window.removeEventListener("focus", handleWindowFocus);
+    };
+  }, []);
+
+  if (!defaultMailtoClientState) {
     return;
   }
+
+  const { isDefault, isPortableBuild } = defaultMailtoClientState;
 
   const heading = (
     <>
       Default mail client <LicenseKeyRequiredFieldBadge />
     </>
   );
+
+  if (platform.isWindows) {
+    let description = "Choose Meru as the default mail client in Windows Settings.";
+
+    if (isDefault) {
+      description = "Meru is set as the default mail client.";
+    } else if (isPortableBuild) {
+      description = "The portable version of Meru can't be set as the default mail client.";
+    }
+
+    return (
+      <Field orientation="horizontal">
+        <FieldContent>
+          <FieldTitle>{heading}</FieldTitle>
+          <FieldDescription>{description}</FieldDescription>
+        </FieldContent>
+        {!isDefault && !isPortableBuild && (
+          <Button
+            variant="outline"
+            onClick={() => {
+              ipc.main.send("app.openDefaultAppsSettings");
+            }}
+            disabled={!isLicenseKeyValid}
+          >
+            Open Windows Settings
+          </Button>
+        )}
+      </Field>
+    );
+  }
 
   return (
     <Field orientation="horizontal">
@@ -107,21 +162,21 @@ function DefaultMailClientField() {
          * row states the fact instead — and a `label` naming an id that nothing
          * on the page carries is read as unlabelled by assistive technology.
          */}
-        {isDefaultMailtoClient ? (
+        {isDefault ? (
           <FieldTitle>{heading}</FieldTitle>
         ) : (
           <FieldLabel htmlFor={fieldId}>{heading}</FieldLabel>
         )}
         <FieldDescription>
-          {isDefaultMailtoClient
+          {isDefault
             ? "Meru is set as the default mail client."
             : "Set Meru as the default mail client to handle email links and related protocols."}
         </FieldDescription>
       </FieldContent>
-      {!isDefaultMailtoClient && (
+      {!isDefault && (
         <Switch
           id={fieldId}
-          checked={isDefaultMailtoClient}
+          checked={isDefault}
           onCheckedChange={(checked) => {
             if (checked) {
               isDefaultMailtoClientMutation.mutate();
