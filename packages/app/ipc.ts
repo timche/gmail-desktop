@@ -49,13 +49,13 @@ import {
 import { GMAIL_USER_STYLES_PATH } from "./gmail";
 import { hibernatesTabWhenIdle } from "./lib/hibernation";
 import { log } from "./lib/log";
-import { openWindowsDefaultAppsSettings } from "./lib/windows-mail-client";
 import {
   areWorkspaceAppNotificationsAllowed,
   createNewEmailNotification,
   createNotification,
 } from "./notifications";
 import { getIsDefaultMailtoClient, setAsDefaultMailtoClient } from "./protocol";
+import { openWindowsDefaultAppsSettings } from "./protocol/windows-mail-client";
 import { appUpdater } from "./updater";
 import { openExternalUrl } from "./url";
 

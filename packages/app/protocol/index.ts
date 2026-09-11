@@ -1,13 +1,13 @@
 import path from "node:path";
 import { platform } from "@electron-toolkit/utils";
 import { app, dialog } from "electron";
-import { accounts } from "./accounts";
-import { showProUpgradeDialog } from "./dialogs";
-import { ipc } from "./ipc";
-import { isMeruUrl, MERU_PROTOCOL, type MeruDeepLink, parseMeruUrl } from "./lib/deep-link";
-import { isWindowsDefaultMailClient } from "./lib/windows-mail-client";
-import { licenseKey } from "./license-key";
-import { main } from "./main";
+import { accounts } from "@/accounts";
+import { showProUpgradeDialog } from "@/dialogs";
+import { ipc } from "@/ipc";
+import { isMeruUrl, MERU_PROTOCOL, type MeruDeepLink, parseMeruUrl } from "@/lib/deep-link";
+import { licenseKey } from "@/license-key";
+import { main } from "@/main";
+import { isWindowsDefaultMailClient } from "./windows-mail-client";
 
 export const MAILTO_PROTOCOL = "mailto";
 

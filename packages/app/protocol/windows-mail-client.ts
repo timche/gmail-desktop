@@ -7,7 +7,7 @@ import { is, platform } from "@electron-toolkit/utils";
 import { ms } from "@meru/shared/ms";
 import { app, shell } from "electron";
 import { serializeError } from "serialize-error";
-import { log } from "./log";
+import { log } from "@/lib/log";
 import {
   buildRegistration,
   MAILTO_PROG_ID,
