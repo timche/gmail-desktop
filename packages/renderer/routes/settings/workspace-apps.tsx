@@ -1,7 +1,7 @@
 import { move } from "@dnd-kit/helpers";
 import { DragDropProvider } from "@dnd-kit/react";
 import { useSortable } from "@dnd-kit/react/sortable";
-import { GMAIL_TAB_ID, verticalTabsWidths } from "@meru/shared/tabs";
+import { GMAIL_TAB_ID, verticalTabsGmailUnreadBadges, verticalTabsWidths } from "@meru/shared/tabs";
 import {
   DEV_WORKSPACE_APPS_HIBERNATION_TIMEOUT,
   launcherAndBookmarksPlacements,
@@ -257,11 +257,15 @@ export function WorkspaceAppsSettings() {
                   configKey="verticalTabs.showWidthToggle"
                   licenseKeyRequired
                 />
-                <ConfigSwitchField
-                  label="Hide Gmail unread badge when active"
-                  description="Hide the unread badge on the Gmail tab while it is the active tab, because the inbox is already in front. Accounts that need attention are still flagged."
-                  configKey="verticalTabs.hideUnreadBadgeWhenActive"
+                <ConfigSelectField
+                  label="Show Gmail unread badge"
+                  description="Show the unread count on the Gmail tab. When another tab is active hides it while Gmail is in front, where the inbox already shows it. Accounts that need attention are still flagged whichever you pick."
+                  configKey="verticalTabs.gmailUnreadBadge"
                   licenseKeyRequired
+                  items={Object.entries(verticalTabsGmailUnreadBadges).map(([value, label]) => ({
+                    value,
+                    label,
+                  }))}
                 />
                 <ConfigSwitchField
                   label="Show app links badge"
