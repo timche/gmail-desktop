@@ -227,6 +227,7 @@ export type IpcMainEvents =
       "appUpdater.quitAndInstall": [];
       "appUpdater.openVersionHistory": [];
       "app.relaunch": [];
+      "app.openDefaultAppsSettings": [];
       "theme.setTheme": [theme: "system" | "light" | "dark"];
       "notifications.showTestNotification": [];
       "tabs.selectTab": [accountId: AccountConfig["id"], tabId: string];

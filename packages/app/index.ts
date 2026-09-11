@@ -19,11 +19,6 @@ import { log } from "@/lib/log";
 import { licenseKey } from "@/license-key";
 import { main } from "@/main";
 import { appMenu } from "@/menu";
-import { theme } from "@/theme";
-import { appTray } from "@/tray";
-import { appUpdater } from "@/updater";
-import { doNotDisturb } from "./do-not-disturb";
-import { isMeruUrl } from "./lib/deep-link";
 import {
   findMailtoUrlArg,
   findMeruUrlArg,
@@ -33,7 +28,13 @@ import {
   PROCESS_MAILTO_URL_ARG,
   PROCESS_MERU_URL_ARG,
   setMeruProtocolClient,
-} from "./protocol";
+} from "@/protocol";
+import { registerWindowsMailClient } from "@/protocol/windows-mail-client";
+import { theme } from "@/theme";
+import { appTray } from "@/tray";
+import { appUpdater } from "@/updater";
+import { doNotDisturb } from "./do-not-disturb";
+import { isMeruUrl } from "./lib/deep-link";
 import { spellchecker } from "./spellchecker";
 import { trial } from "./trial";
 
@@ -177,6 +178,8 @@ async function init() {
   extensionUpdater.init();
 
   doNotDisturb.init();
+
+  registerWindowsMailClient();
 
   if (!platform.isMacOS) {
     if (PROCESS_MAILTO_URL_ARG) {

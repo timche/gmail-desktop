@@ -1,6 +1,5 @@
 import fs from "node:fs";
 import os from "node:os";
-import path from "node:path";
 import { IpcEmitter, IpcListener } from "@electron-toolkit/typed-ipc/main";
 import { platform } from "@electron-toolkit/utils";
 import { isExtensionId } from "@meru/electron-extensions";
@@ -55,7 +54,8 @@ import {
   createNewEmailNotification,
   createNotification,
 } from "./notifications";
-import { MAILTO_PROTOCOL } from "./protocol";
+import { getIsDefaultMailtoClient, setAsDefaultMailtoClient } from "./protocol";
+import { openWindowsDefaultAppsSettings } from "./protocol/windows-mail-client";
 import { appUpdater } from "./updater";
 import { openExternalUrl } from "./url";
 
@@ -706,24 +706,14 @@ class Ipc {
       app.setLoginItemSettings(settings);
     });
 
-    ipc.main.handle("app.getIsDefaultMailtoClient", () =>
-      app.isDefaultProtocolClient(MAILTO_PROTOCOL),
-    );
+    ipc.main.handle("app.getIsDefaultMailtoClient", () => getIsDefaultMailtoClient());
 
     ipc.main.handle("app.setAsDefaultMailtoClient", () => {
-      if (process.defaultApp) {
-        if (process.argv.length >= 2) {
-          if (!process.argv[1]) {
-            throw new Error('Could not find "process.argv[1]"');
-          }
+      setAsDefaultMailtoClient();
+    });
 
-          app.setAsDefaultProtocolClient(MAILTO_PROTOCOL, process.execPath, [
-            path.resolve(process.argv[1]),
-          ]);
-        }
-      } else {
-        app.setAsDefaultProtocolClient(MAILTO_PROTOCOL);
-      }
+    ipc.main.on("app.openDefaultAppsSettings", () => {
+      openWindowsDefaultAppsSettings();
     });
 
     ipc.main.handle("updates.isBelowMinimumMacOSVersion", () => !appUpdater.isUpdateSupported());

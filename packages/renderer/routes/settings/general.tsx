@@ -1,4 +1,5 @@
 import { ipc } from "@meru/shared/renderer/ipc";
+import { Button } from "@meru/ui/components/button";
 import {
   Field,
   FieldContent,
@@ -13,7 +14,7 @@ import {
 import { Switch } from "@meru/ui/components/switch";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import type { LoginItemSettings } from "electron";
-import { useId } from "react";
+import { useEffect, useId } from "react";
 import { ConfigSwitchField } from "@/components/config-switch-field";
 import { LicenseKeyRequiredBanner } from "@/components/license-key-required-banner";
 import { LicenseKeyRequiredFieldBadge } from "@/components/license-key-required-field-badge";
@@ -67,11 +68,11 @@ function LaunchAtLoginField() {
   );
 }
 
-function DefaultMailClientField() {
-  const queryKey = ["default-mailto-client"];
+const DEFAULT_MAILTO_CLIENT_QUERY_KEY = ["default-mailto-client"];
 
+function DefaultMailClientField() {
   const { data: isDefaultMailtoClient } = useQuery({
-    queryKey,
+    queryKey: DEFAULT_MAILTO_CLIENT_QUERY_KEY,
     queryFn: () => ipc.main.invoke("app.getIsDefaultMailtoClient"),
   });
 
@@ -79,7 +80,7 @@ function DefaultMailClientField() {
     mutationFn: () => ipc.main.invoke("app.setAsDefaultMailtoClient"),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey,
+        queryKey: DEFAULT_MAILTO_CLIENT_QUERY_KEY,
       });
     },
   });
@@ -87,6 +88,28 @@ function DefaultMailClientField() {
   const fieldId = useId();
 
   const isLicenseKeyValid = useIsLicenseKeyValid();
+
+  /**
+   * Windows takes the choice in its own settings, so the row cannot tell when it
+   * was made; asking again on every focus is the closest it gets.
+   */
+  useEffect(() => {
+    if (!platform.isWindows) {
+      return;
+    }
+
+    const handleWindowFocus = () => {
+      queryClient.invalidateQueries({
+        queryKey: DEFAULT_MAILTO_CLIENT_QUERY_KEY,
+      });
+    };
+
+    window.addEventListener("focus", handleWindowFocus);
+
+    return () => {
+      window.removeEventListener("focus", handleWindowFocus);
+    };
+  }, []);
 
   if (typeof isDefaultMailtoClient !== "boolean") {
     return;
@@ -97,6 +120,32 @@ function DefaultMailClientField() {
       Default mail client <LicenseKeyRequiredFieldBadge />
     </>
   );
+
+  if (platform.isWindows) {
+    return (
+      <Field orientation="horizontal">
+        <FieldContent>
+          <FieldTitle>{heading}</FieldTitle>
+          <FieldDescription>
+            {isDefaultMailtoClient
+              ? "Meru is set as the default mail client."
+              : "Choose Meru as the default mail client in Windows Settings."}
+          </FieldDescription>
+        </FieldContent>
+        {!isDefaultMailtoClient && (
+          <Button
+            variant="outline"
+            onClick={() => {
+              ipc.main.send("app.openDefaultAppsSettings");
+            }}
+            disabled={!isLicenseKeyValid}
+          >
+            Open Windows Settings
+          </Button>
+        )}
+      </Field>
+    );
+  }
 
   return (
     <Field orientation="horizontal">
