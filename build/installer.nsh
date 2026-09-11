@@ -17,8 +17,10 @@
 
   WriteRegStr HKCU "Software\RegisteredApplications" "Meru" "Software\Clients\Mail\Meru\Capabilities"
 
-  # SHCNE_ASSOCCHANGED, SHCNF_DWORD | SHCNF_FLUSH: Windows only rescans registered handlers on this notification
-  System::Call 'shell32::SHChangeNotify(i 0x08000000, i 0x1003, p 0, p 0)'
+  # SHCNE_ASSOCCHANGED: Windows only rescans registered handlers on this notification.
+  # No SHCNF_FLUSH: it blocks until every shell window has handled the event, and from
+  # the installer's UI thread that deadlocked against Explorer and hung the install.
+  System::Call 'shell32::SHChangeNotify(i 0x08000000, i 0, p 0, p 0)'
 !macroend
 
 !macro customUnInstall
@@ -27,6 +29,8 @@
   DeleteRegKey HKCU "Software\Classes\Meru.mailto"
   DeleteRegValue HKCU "Software\RegisteredApplications" "Meru"
 
-  # SHCNE_ASSOCCHANGED, SHCNF_DWORD | SHCNF_FLUSH: Windows only rescans registered handlers on this notification
-  System::Call 'shell32::SHChangeNotify(i 0x08000000, i 0x1003, p 0, p 0)'
+  # SHCNE_ASSOCCHANGED: Windows only rescans registered handlers on this notification.
+  # No SHCNF_FLUSH: it blocks until every shell window has handled the event, and from
+  # the installer's UI thread that deadlocked against Explorer and hung the install.
+  System::Call 'shell32::SHChangeNotify(i 0x08000000, i 0, p 0, p 0)'
 !macroend
