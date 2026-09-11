@@ -7,6 +7,7 @@ This file is the draft of the next release, written one line at a time as work l
 ### Added
 
 - Settings → Extensions lets you add sites where 1Password runs, such as your company's single sign-on provider, beside Google's sign-in pages
+- **Linux:** AppImageLauncher, AppImageUpdate, AM and other AppImage tools can now update the AppImage in place, downloading only the parts that changed
 
 ### Changed
 

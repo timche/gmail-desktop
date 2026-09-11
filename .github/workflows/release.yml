@@ -45,6 +45,18 @@ jobs:
           # Uploads into a release published over two hours ago; without it a
           # re-run skips every asset and still exits zero.
           EP_GH_IGNORE_TIME: true
+      - if: startsWith(matrix.os, 'ubuntu') && !github.event.release.prerelease
+        # A prerelease keeps an empty .upd_info and gets no .zsync, because the
+        # update information resolves `latest` to the newest non-prerelease and
+        # would move beta users onto stable.
+        #
+        # The runtime is patched before the build because electron-builder
+        # embeds it verbatim and then writes the AppImage's sha512 into
+        # latest-linux.yml, which patching afterwards would invalidate.
+        run: |
+          sudo apt-get install -y zsync
+          bun scripts/appimage-update-info.ts "$RUNNER_TEMP/appimage-tools"
+          echo "APPIMAGE_TOOLS_PATH=$RUNNER_TEMP/appimage-tools" >> "$GITHUB_ENV"
       - if: startsWith(matrix.os, 'ubuntu')
         run: bun run build:linux -- --publish always ${{ github.event.release.prerelease && '--config.publish.channel=beta' || '' }}
         env:
