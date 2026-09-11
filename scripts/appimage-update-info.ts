@@ -18,6 +18,7 @@ import path from "node:path";
 import { getAppImageTools } from "app-builder-lib/out/toolsets/linux";
 import { Arch } from "builder-util";
 import { findElfSection } from "./lib/elf";
+import { readReleaseRepository } from "./lib/release-repository";
 
 const UPDATE_INFO_SECTION = ".upd_info";
 
@@ -41,14 +42,9 @@ const packageJson = JSON.parse(
 ) as {
   build: { toolsets: { appimage: Parameters<typeof getAppImageTools>[0] } };
   productName: string;
-  repository: string;
 };
 
-const [owner, repository] = packageJson.repository.split("/");
-
-if (!owner || !repository) {
-  throw new Error(`The package repository "${packageJson.repository}" is not <owner>/<repository>`);
-}
+const { owner, repo } = await readReleaseRepository(repositoryRoot);
 
 async function writeUpdateInfo(runtimePath: string, updateInfo: string) {
   const runtime = await open(runtimePath, "r+");
@@ -99,6 +95,6 @@ for (const { arch, appImageArch } of RUNTIMES) {
 
   await writeUpdateInfo(
     path.join(outputDir, path.relative(toolsetRoot, runtime)),
-    `gh-releases-zsync|${owner}|${repository}|latest|${packageJson.productName}-*-${appImageArch}.AppImage.zsync`,
+    `gh-releases-zsync|${owner}|${repo}|latest|${packageJson.productName}-*-${appImageArch}.AppImage.zsync`,
   );
 }

@@ -6,9 +6,9 @@
  * Usage: `bun scripts/appimage-zsync.ts <tag>`.
  */
 
-import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { $, Glob } from "bun";
+import { readReleaseRepository } from "./lib/release-repository";
 
 const APP_IMAGE_EXTENSION = ".AppImage";
 
@@ -20,9 +20,7 @@ if (!tag) {
 
 const repositoryRoot = path.join(import.meta.dirname, "..");
 
-const { repository } = JSON.parse(
-  await readFile(path.join(repositoryRoot, "package.json"), "utf8"),
-) as { repository: string };
+const { owner, repo } = await readReleaseRepository(repositoryRoot);
 
 const distDir = path.join(repositoryRoot, "dist");
 
@@ -38,7 +36,7 @@ for await (const appImage of new Glob(`*${APP_IMAGE_EXTENSION}`).scan(distDir)) 
     name.endsWith("-arm64") ? `${appImage}.zsync` : `${name}-x86_64${APP_IMAGE_EXTENSION}.zsync`,
   );
 
-  const url = `https://github.com/${repository}/releases/download/${tag}/${appImage}`;
+  const url = `https://github.com/${owner}/${repo}/releases/download/${tag}/${appImage}`;
 
   await $`zsyncmake -u ${url} -o ${zsyncFile} ${path.join(distDir, appImage)}`;
 
@@ -49,4 +47,4 @@ if (zsyncFiles.length === 0) {
   throw new Error(`No AppImage to write a .zsync file for in ${distDir}`);
 }
 
-await $`gh release upload ${tag} ${zsyncFiles} --clobber`;
+await $`gh release upload ${tag} ${zsyncFiles} --clobber --repo ${owner}/${repo}`;
