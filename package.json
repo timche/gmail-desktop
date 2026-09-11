@@ -166,8 +166,8 @@
       "verifyUpdateCodeSignature": false,
       "icon": "build/icon.ico",
       "azureSignOptions": {
-        "endpoint": "https://REPLACE-REGION.codesigning.azure.net",
-        "codeSigningAccountName": "REPLACE-TRUSTED-SIGNING-ACCOUNT",
+        "endpoint": "https://neu.codesigning.azure.net",
+        "codeSigningAccountName": "zoid",
         "certificateProfileName": "REPLACE-CERTIFICATE-PROFILE",
         "publisherName": "REPLACE-CERTIFICATE-SUBJECT"
       },
