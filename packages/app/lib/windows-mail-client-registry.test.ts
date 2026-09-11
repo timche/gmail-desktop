@@ -1,17 +1,5 @@
-import { describe, expect, mock, test } from "bun:test";
-
-// `@electron-toolkit/utils` imports four of these and reads `app.isPackaged` as
-// it loads; the three it only passes on stay undefined so that `electron-log`,
-// which reaches for them defensively, takes its no-Electron path
-mock.module("electron", () => ({
-  app: { isPackaged: true, getPath: () => "" },
-  shell: { openExternal: () => {} },
-  session: undefined,
-  ipcMain: undefined,
-  BrowserWindow: undefined,
-}));
-
-const { buildRegistration, parseUserChoiceProgIds } = await import("./windows-mail-client");
+import { describe, expect, test } from "bun:test";
+import { buildRegistration, parseUserChoiceProgIds } from "./windows-mail-client-registry";
 
 const EXECUTABLE_PATH = String.raw`C:\Program Files\Meru\Meru.exe`;
 
