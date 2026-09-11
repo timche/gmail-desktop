@@ -165,6 +165,12 @@
     "win": {
       "verifyUpdateCodeSignature": false,
       "icon": "build/icon.ico",
+      "azureSignOptions": {
+        "endpoint": "https://REPLACE-REGION.codesigning.azure.net",
+        "codeSigningAccountName": "REPLACE-TRUSTED-SIGNING-ACCOUNT",
+        "certificateProfileName": "REPLACE-CERTIFICATE-PROFILE",
+        "publisherName": "REPLACE-CERTIFICATE-SUBJECT"
+      },
       "target": [
         {
           "target": "nsis",
