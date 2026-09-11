@@ -165,6 +165,12 @@
     "win": {
       "verifyUpdateCodeSignature": false,
       "icon": "build/icon.ico",
+      "azureSignOptions": {
+        "endpoint": "https://neu.codesigning.azure.net",
+        "codeSigningAccountName": "zoid",
+        "certificateProfileName": "REPLACE-CERTIFICATE-PROFILE",
+        "publisherName": "REPLACE-CERTIFICATE-SUBJECT"
+      },
       "target": [
         {
           "target": "nsis",
