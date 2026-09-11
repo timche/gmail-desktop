@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { getVisibleVerticalTabs } from "./tabs";
+import { getVisibleVerticalTabs, showsGmailUnreadCount } from "./tabs";
 
 type VerticalTab = { id: string; dormant: boolean; pinned: boolean; windowed: boolean };
 
@@ -51,5 +51,22 @@ describe("getVisibleVerticalTabs", () => {
     });
 
     expect(visibleTabs).toEqual(tabs);
+  });
+});
+
+describe("showsGmailUnreadCount", () => {
+  test("shows the count in always mode whichever tab is active", () => {
+    expect(showsGmailUnreadCount("always", true)).toBe(true);
+    expect(showsGmailUnreadCount("always", false)).toBe(true);
+  });
+
+  test("hides the count in whenInactive mode only while the Gmail tab is active", () => {
+    expect(showsGmailUnreadCount("whenInactive", true)).toBe(false);
+    expect(showsGmailUnreadCount("whenInactive", false)).toBe(true);
+  });
+
+  test("hides the count in never mode whichever tab is active", () => {
+    expect(showsGmailUnreadCount("never", true)).toBe(false);
+    expect(showsGmailUnreadCount("never", false)).toBe(false);
   });
 });

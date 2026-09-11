@@ -11,7 +11,12 @@ import type {
   GmailLabelColors,
   GmailSavedSearches,
 } from "./schemas";
-import type { AccountTabsState, VerticalTabsSessionWidth, VerticalTabsWidth } from "./tabs";
+import type {
+  AccountTabsState,
+  VerticalTabsGmailUnreadBadge,
+  VerticalTabsSessionWidth,
+  VerticalTabsWidth,
+} from "./tabs";
 import type { VerificationCodeCopyMode } from "./verification-codes";
 import type {
   LauncherAndBookmarksPlacement,
@@ -179,7 +184,7 @@ export type Config = {
   "verticalTabs.showWindows": boolean;
   "verticalTabs.width": VerticalTabsWidth;
   "verticalTabs.showWidthToggle": boolean;
-  "verticalTabs.hideUnreadBadgeWhenActive": boolean;
+  "verticalTabs.gmailUnreadBadge": VerticalTabsGmailUnreadBadge;
   "verticalTabs.showAppLinksBadge": boolean;
   "extensions.enabled": boolean;
   "extensions.installed": string[];

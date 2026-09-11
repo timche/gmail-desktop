@@ -4,7 +4,12 @@ import { useSortable } from "@dnd-kit/react/sortable";
 import { VERTICAL_TABS_WIDE_WIDTH } from "@meru/shared/constants";
 import { ipc } from "@meru/shared/renderer/ipc";
 import type { AccountConfig } from "@meru/shared/schemas";
-import { GMAIL_TAB_ID, getTabSection, type TabState } from "@meru/shared/tabs";
+import {
+  GMAIL_TAB_ID,
+  getTabSection,
+  showsGmailUnreadCount,
+  type TabState,
+} from "@meru/shared/tabs";
 import { workspaceApps } from "@meru/shared/workspace-apps";
 import { Button } from "@meru/ui/components/button";
 import { ScrollArea } from "@meru/ui/components/scroll-area";
@@ -441,15 +446,16 @@ export function VerticalTabs() {
   const showsWidthToggle = config?.["verticalTabs.showWidthToggle"] ?? true;
 
   // Gmail is already in front while its tab is active, so the count can be
-  // taken as read there. Attention is still flagged either way.
-  const hidesUnreadCount =
-    config?.["verticalTabs.hideUnreadBadgeWhenActive"] &&
-    selectedAccountTabs.some((tab) => tab.id === GMAIL_TAB_ID && tab.active);
+  // taken as read there. Attention is still flagged in every mode.
+  const showsUnreadCount = showsGmailUnreadCount(
+    config?.["verticalTabs.gmailUnreadBadge"] ?? "always",
+    selectedAccountTabs.some((tab) => tab.id === GMAIL_TAB_ID && tab.active),
+  );
 
   const gmailTabStatus = {
     attentionRequired: selectedAccount.gmail.attentionRequired,
     unreadCount:
-      config?.["accounts.unreadBadge"] && !hidesUnreadCount
+      config?.["accounts.unreadBadge"] && showsUnreadCount
         ? selectedAccount.gmail.unreadCount
         : null,
   };

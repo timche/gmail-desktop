@@ -23,6 +23,25 @@ export type VerticalTabsWidth = keyof typeof verticalTabsWidths;
  */
 export type VerticalTabsSessionWidth = Exclude<VerticalTabsWidth, "auto">;
 
+export const verticalTabsGmailUnreadBadges = {
+  always: "Always",
+  whenInactive: "When another tab is active",
+  never: "Never",
+} as const;
+
+export type VerticalTabsGmailUnreadBadge = keyof typeof verticalTabsGmailUnreadBadges;
+
+export function showsGmailUnreadCount(
+  mode: VerticalTabsGmailUnreadBadge,
+  gmailTabActive: boolean,
+): boolean {
+  if (mode === "never") {
+    return false;
+  }
+
+  return !(mode === "whenInactive" && gmailTabActive);
+}
+
 export type TabState = {
   id: string;
   app: SupportedWorkspaceApp | undefined;

@@ -440,6 +440,20 @@ export const config = new Store<Config>({
         // @ts-expect-error
         store.delete("extensions.showTitlebarButton");
       }
+
+      // @ts-expect-error: `verticalTabs.hideUnreadBadgeWhenActive` is now the
+      // `verticalTabs.gmailUnreadBadge` union
+      const hideUnreadBadgeWhenActive = store.get("verticalTabs.hideUnreadBadgeWhenActive");
+
+      if (typeof hideUnreadBadgeWhenActive === "boolean") {
+        store.set(
+          "verticalTabs.gmailUnreadBadge",
+          hideUnreadBadgeWhenActive ? "whenInactive" : "always",
+        );
+
+        // @ts-expect-error
+        store.delete("verticalTabs.hideUnreadBadgeWhenActive");
+      }
     },
   },
 });

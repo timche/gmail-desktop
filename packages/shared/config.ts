@@ -138,7 +138,7 @@ export function createDefaultConfig({
     "verticalTabs.showWindows": true,
     "verticalTabs.width": "auto",
     "verticalTabs.showWidthToggle": true,
-    "verticalTabs.hideUnreadBadgeWhenActive": false,
+    "verticalTabs.gmailUnreadBadge": "always",
     "verticalTabs.showAppLinksBadge": true,
     "extensions.enabled": false,
     "extensions.installed": [],
