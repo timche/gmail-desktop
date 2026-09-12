@@ -7,9 +7,11 @@ This file is the draft of the next release, written one line at a time as work l
 ### Added
 
 - Settings → Extensions lets you add sites where 1Password runs, such as your company's single sign-on provider, beside Google's sign-in pages
+- **Linux:** AppImageLauncher, AppImageUpdate, AM and other AppImage tools can now update the AppImage in place, downloading only the parts that changed
 
 ### Changed
 
+- **Linux:** the AppImage for Intel and AMD machines is now named `Meru-<version>-x86_64.AppImage`, matching the arm64 one
 - The 1Password extension's description in Settings → Extensions now says it needs the 1Password desktop app, and is no longer cut off after two lines
 - Hide Gmail unread badge when active in Settings → Workspace apps is now Show Gmail unread badge, with a Never choice that hides the unread count on the Gmail tab altogether
 - The Show extensions button setting and the titlebar button it showed are gone: the 1Password popup that button opened isn't fully supported in Meru, and 1Password is meant to be used on the Google sign-in pages, through its inline menu and the prompts it shows there

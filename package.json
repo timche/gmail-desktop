@@ -133,6 +133,9 @@
         "NSMicrophoneUsageDescription": "Meru uses your microphone for calls and voice input in Google apps such as Meet and Chat."
       }
     },
+    "appImage": {
+      "artifactName": "${productName}-${version}-${arch}.${ext}"
+    },
     "linux": {
       "icon": "build/icons/",
       "target": [
