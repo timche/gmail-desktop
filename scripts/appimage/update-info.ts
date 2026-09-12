@@ -4,7 +4,7 @@
  * AppImageUpdate, AppImageLauncher and the like can update an installed
  * AppImage in place.
  *
- * Usage: `bun scripts/appimage-update-info.ts <outputDir>`, then build with
+ * Usage: `bun scripts/appimage/update-info.ts <outputDir>`, then build with
  * `APPIMAGE_TOOLS_PATH` pointing at that directory.
  *
  * The runtime is patched before the build rather than the finished AppImage
@@ -17,8 +17,8 @@ import { cp, open, readFile } from "node:fs/promises";
 import path from "node:path";
 import { getAppImageTools } from "app-builder-lib/out/toolsets/linux";
 import { Arch } from "builder-util";
-import { findElfSection } from "./lib/elf";
-import { readReleaseRepository } from "./lib/release-repository";
+import { readReleaseRepository } from "../lib/release-repository";
+import { findElfSection } from "./elf";
 
 const UPDATE_INFO_SECTION = ".upd_info";
 
@@ -32,10 +32,10 @@ const RUNTIMES = [
 const outputDir = Bun.argv[2];
 
 if (!outputDir) {
-  throw new Error("Usage: bun scripts/appimage-update-info.ts <outputDir>");
+  throw new Error("Usage: bun scripts/appimage/update-info.ts <outputDir>");
 }
 
-const repositoryRoot = path.join(import.meta.dirname, "..");
+const repositoryRoot = path.join(import.meta.dirname, "..", "..");
 
 const packageJson = JSON.parse(
   await readFile(path.join(repositoryRoot, "package.json"), "utf8"),

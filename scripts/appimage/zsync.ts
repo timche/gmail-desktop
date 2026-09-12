@@ -3,22 +3,22 @@
  * the release, which is what the update information embedded in the runtime
  * sends AppImage update tools looking for.
  *
- * Usage: `bun scripts/appimage-zsync.ts <tag>`.
+ * Usage: `bun scripts/appimage/zsync.ts <tag>`.
  */
 
 import path from "node:path";
 import { $, Glob } from "bun";
-import { readReleaseRepository } from "./lib/release-repository";
+import { readReleaseRepository } from "../lib/release-repository";
 
 const APP_IMAGE_EXTENSION = ".AppImage";
 
 const tag = Bun.argv[2];
 
 if (!tag) {
-  throw new Error("Usage: bun scripts/appimage-zsync.ts <tag>");
+  throw new Error("Usage: bun scripts/appimage/zsync.ts <tag>");
 }
 
-const repositoryRoot = path.join(import.meta.dirname, "..");
+const repositoryRoot = path.join(import.meta.dirname, "..", "..");
 
 const { owner, repo } = await readReleaseRepository(repositoryRoot);
 

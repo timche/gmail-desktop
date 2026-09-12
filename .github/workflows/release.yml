@@ -51,7 +51,7 @@ jobs:
         # users onto stable. It runs before the build because the runtime it
         # patches goes into the sha512 electron-builder publishes.
         run: |
-          bun scripts/appimage-update-info.ts "$RUNNER_TEMP/appimage-tools"
+          bun scripts/appimage/update-info.ts "$RUNNER_TEMP/appimage-tools"
           echo "APPIMAGE_TOOLS_PATH=$RUNNER_TEMP/appimage-tools" >> "$GITHUB_ENV"
       - if: startsWith(matrix.os, 'ubuntu')
         run: bun run build:linux -- --publish always ${{ github.event.release.prerelease && '--config.publish.channel=beta' || '' }}
@@ -65,7 +65,7 @@ jobs:
         # 404s without an update first.
         run: |
           sudo apt-get update && sudo apt-get install -y zsync
-          bun scripts/appimage-zsync.ts "${{ github.event.release.tag_name }}"
+          bun scripts/appimage/zsync.ts "${{ github.event.release.tag_name }}"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - if: startsWith(matrix.os, 'windows')
