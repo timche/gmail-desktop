@@ -16,7 +16,7 @@
 import { cp, open, readFile } from "node:fs/promises";
 import path from "node:path";
 import { getAppImageTools } from "app-builder-lib/out/toolsets/linux";
-import { Arch } from "builder-util";
+import { Arch, getArtifactArchName } from "builder-util";
 import { readReleaseRepository } from "../lib/release-repository";
 import { findElfSection } from "./elf";
 
@@ -75,23 +75,25 @@ async function writeUpdateInfo(runtimePath: string, updateInfo: string) {
 // over from an earlier run would make the copy source the copy itself
 delete process.env.APPIMAGE_TOOLS_PATH;
 
-async function resolveRuntime(arch: Arch, appImageArch: string) {
+async function resolveRuntime(arch: Arch) {
   const { runtime } = await getAppImageTools(packageJson.build.toolsets.appimage, arch);
 
-  return { appImageArch, runtime };
+  return { arch, runtime };
 }
 
-const x64 = await resolveRuntime(Arch.x64, "x86_64");
+const x64 = await resolveRuntime(Arch.x64);
 
-const arm64 = await resolveRuntime(Arch.arm64, "arm64");
+const arm64 = await resolveRuntime(Arch.arm64);
 
 const toolsetRoot = path.dirname(path.dirname(x64.runtime));
 
 await cp(toolsetRoot, outputDir, { recursive: true, verbatimSymlinks: true });
 
-for (const { appImageArch, runtime } of [x64, arm64]) {
+for (const { arch, runtime } of [x64, arm64]) {
+  // The glob has to match the AppImage's own name, which `build.appImage.artifactName`
+  // fixes to product-version-arch, with the arch spelled as electron-builder spells it
   await writeUpdateInfo(
     path.join(outputDir, path.relative(toolsetRoot, runtime)),
-    `gh-releases-zsync|${owner}|${repo}|latest|${packageJson.productName}-*-${appImageArch}.AppImage.zsync`,
+    `gh-releases-zsync|${owner}|${repo}|latest|${packageJson.productName}-*-${getArtifactArchName(arch, "AppImage")}.AppImage.zsync`,
   );
 }

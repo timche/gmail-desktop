@@ -27,14 +27,7 @@ const distDir = path.join(repositoryRoot, "dist");
 const zsyncFiles: string[] = [];
 
 for await (const appImage of new Glob(`*${APP_IMAGE_EXTENSION}`).scan(distDir)) {
-  const name = appImage.slice(0, -APP_IMAGE_EXTENSION.length);
-
-  // The x64 AppImage carries no architecture in its name, and the update
-  // information's `-x86_64` glob has to not match the arm64 file
-  const zsyncFile = path.join(
-    distDir,
-    name.endsWith("-arm64") ? `${appImage}.zsync` : `${name}-x86_64${APP_IMAGE_EXTENSION}.zsync`,
-  );
+  const zsyncFile = path.join(distDir, `${appImage}.zsync`);
 
   const url = `https://github.com/${owner}/${repo}/releases/download/${tag}/${appImage}`;
 
