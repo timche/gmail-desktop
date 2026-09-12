@@ -22,13 +22,6 @@ import { findElfSection } from "./elf";
 
 const UPDATE_INFO_SECTION = ".upd_info";
 
-// The architecture as it appears in the AppImage file name, which is what the
-// update information globs over
-const RUNTIMES = [
-  { arch: Arch.x64, appImageArch: "x86_64" },
-  { arch: Arch.arm64, appImageArch: "arm64" },
-];
-
 const outputDir = Bun.argv[2];
 
 if (!outputDir) {
@@ -78,21 +71,25 @@ async function writeUpdateInfo(runtimePath: string, updateInfo: string) {
   }
 }
 
-let toolsetRoot: string | undefined;
+// electron-builder honors this before its checksummed cache, so a value left
+// over from an earlier run would make the copy source the copy itself
+delete process.env.APPIMAGE_TOOLS_PATH;
 
-for (const { arch, appImageArch } of RUNTIMES) {
+async function resolveRuntime(arch: Arch, appImageArch: string) {
   const { runtime } = await getAppImageTools(packageJson.build.toolsets.appimage, arch);
 
-  const root = path.dirname(path.dirname(runtime));
+  return { appImageArch, runtime };
+}
 
-  if (toolsetRoot === undefined) {
-    toolsetRoot = root;
+const x64 = await resolveRuntime(Arch.x64, "x86_64");
 
-    await cp(toolsetRoot, outputDir, { recursive: true });
-  } else if (root !== toolsetRoot) {
-    throw new Error(`The ${appImageArch} runtime is in ${root} rather than in ${toolsetRoot}`);
-  }
+const arm64 = await resolveRuntime(Arch.arm64, "arm64");
 
+const toolsetRoot = path.dirname(path.dirname(x64.runtime));
+
+await cp(toolsetRoot, outputDir, { recursive: true, verbatimSymlinks: true });
+
+for (const { appImageArch, runtime } of [x64, arm64]) {
   await writeUpdateInfo(
     path.join(outputDir, path.relative(toolsetRoot, runtime)),
     `gh-releases-zsync|${owner}|${repo}|latest|${packageJson.productName}-*-${appImageArch}.AppImage.zsync`,

@@ -49,8 +49,12 @@ jobs:
         # A prerelease keeps an empty .upd_info, because the update information
         # resolves `latest` to the newest non-prerelease and would move beta
         # users onto stable. It runs before the build because the runtime it
-        # patches goes into the sha512 electron-builder publishes.
+        # patches goes into the sha512 electron-builder publishes, and zsync is
+        # installed here so an apt failure stops the job before anything is
+        # uploaded. The apt lists are a snapshot, and a superseded package
+        # there 404s without an update first.
         run: |
+          sudo apt-get update && sudo apt-get install -y zsync
           bun scripts/appimage/update-info.ts "$RUNNER_TEMP/appimage-tools"
           echo "APPIMAGE_TOOLS_PATH=$RUNNER_TEMP/appimage-tools" >> "$GITHUB_ENV"
       - if: startsWith(matrix.os, 'ubuntu')
@@ -61,11 +65,7 @@ jobs:
           # re-run skips every asset and still exits zero.
           EP_GH_IGNORE_TIME: true
       - if: startsWith(matrix.os, 'ubuntu') && !github.event.release.prerelease
-        # The image's apt lists are a snapshot, and a superseded package there
-        # 404s without an update first.
-        run: |
-          sudo apt-get update && sudo apt-get install -y zsync
-          bun scripts/appimage/zsync.ts "${{ github.event.release.tag_name }}"
+        run: bun scripts/appimage/zsync.ts "${{ github.event.release.tag_name }}"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - if: startsWith(matrix.os, 'windows')

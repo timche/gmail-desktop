@@ -1,34 +1,46 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
+import { getRepositoryInfo } from "app-builder-lib/out/util/repositoryInfo";
 
 export type ReleaseRepository = { owner: string; repo: string };
+
+type PublishConfiguration = { provider?: string; owner?: string; repo?: string };
 
 /**
  * The GitHub repository releases are published to, which is where the shipped
  * updater looks and so where the AppImage update information has to point too.
- * `build.publish` may redirect it away from `repository`, as the staging
- * harness does.
+ * Resolved the way electron-builder resolves it, so a `build.publish` that
+ * redirects releases, as the staging harness does, redirects these as well.
  */
 export async function readReleaseRepository(repositoryRoot: string): Promise<ReleaseRepository> {
   const packageJson = JSON.parse(
     await readFile(path.join(repositoryRoot, "package.json"), "utf8"),
   ) as {
-    build?: { publish?: { provider?: string; owner?: string; repo?: string } };
-    repository: string;
+    build?: { publish?: PublishConfiguration | PublishConfiguration[] | string };
+    repository?: string;
   };
 
-  const publish = packageJson.build?.publish;
+  const publish = [packageJson.build?.publish]
+    .flat()
+    .find(
+      (entry): entry is PublishConfiguration =>
+        typeof entry === "object" && entry.provider === "github",
+    );
 
-  if (publish?.provider === "github" && publish.owner && publish.repo) {
-    return { owner: publish.owner, repo: publish.repo };
-  }
+  let owner = publish?.owner;
 
-  const [owner, repo] = packageJson.repository.split("/");
+  let repo = publish?.repo;
 
   if (!owner || !repo) {
-    throw new Error(
-      `The package repository "${packageJson.repository}" is not <owner>/<repository>`,
-    );
+    const info = await getRepositoryInfo(repositoryRoot, { repository: packageJson.repository });
+
+    if (info === null) {
+      throw new Error(`The repository in ${repositoryRoot} cannot be resolved to <owner>/<repo>`);
+    }
+
+    owner ??= info.user;
+
+    repo ??= info.project;
   }
 
   return { owner, repo };
